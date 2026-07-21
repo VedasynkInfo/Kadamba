@@ -1,3 +1,4 @@
+
 # Kadamba — Production Deployment Guide
 
 Frontend on **Vercel**, backend on **Render**, database on **MongoDB Atlas**,
@@ -74,31 +75,42 @@ Set in Vercel → Project → **Settings → Environment Variables** (Production
 
 ## 4. Deploy order (first launch)
 
+**Current live targets (Render):**
+- Frontend (Static Site): `https://kadamba-3lc7.onrender.com`
+- Backend (Web Service): `https://kadamba-api.onrender.com`
+
 1. **MongoDB Atlas** — create cluster, DB user, allow network access
    (`0.0.0.0/0` or Render's IPs), copy the SRV `MONGODB_URI`.
 2. **Cloudinary** — copy cloud name / key / secret.
 3. **SMTP** — obtain host/port/user/pass.
-4. **Render (backend)**
-   - New → Blueprint → point at the repo (`render.yaml` is picked up), or create
-     a Web Service manually with root `backend`, build `npm ci && npm run build`,
-     start `npm run start`.
-   - Fill all `sync: false` env vars from steps 1–3.
-   - Deploy and confirm `GET /api/health/ready` → `200`.
-5. **Seed the first admin** (Render → Shell, or locally against Atlas):
-   ```bash
-   ADMIN_NAME="Studio Admin" \
-   ADMIN_EMAIL="admin@kadambastudio.com" \
-   ADMIN_PASSWORD="a-strong-password" \
+4. **Render (backend Web Service)**
+   - Root Directory: `backend`
+   - Build: `NPM_CONFIG_PRODUCTION=false npm install && npm run build`
+   - Start: `npm run start`
+   - Set env (critical for CORS):
+     - `FRONTEND_URL=https://kadamba-3lc7.onrender.com` (no trailing slash)
+     - `MONGODB_URI`, Cloudinary keys, `JWT_SECRET` (≥32 chars), `NODE_ENV=production`, `TRUST_PROXY=1`
+   - Confirm `GET https://kadamba-api.onrender.com/api/health/ready` → `200`.
+5. **Seed the first admin** (locally against Atlas — free tier has no Shell):
+   ```powershell
+   cd backend
+   $env:ADMIN_NAME="Studio Admin"
+   $env:ADMIN_EMAIL="admin@kadambastudio.com"
+   $env:ADMIN_PASSWORD="a-strong-password"
    npm run seed:admin
    ```
-   Then remove `ADMIN_*` from the environment.
-6. **Vercel (frontend)**
-   - Import the repo, set root directory to `frontend`.
-   - Add `VITE_API_URL` (Render URL + `/api`) and `VITE_SITE_URL`.
-   - Deploy. `frontend/vercel.json` handles SPA rewrites + asset caching.
-7. **Domain & CORS**
-   - Point DNS at Vercel; add the domain in Vercel.
-   - Set Render's `FRONTEND_URL` to the final domain(s) and redeploy the API.
+6. **Render (frontend Static Site)**
+   - Root Directory: `frontend`
+   - Build: `npm ci && npm run build` (or `npm install && npm run build`)
+   - Publish: `dist`
+   - Env (must redeploy after changing — Vite bakes these in):
+     - `VITE_API_URL=https://kadamba-api.onrender.com/api`
+     - `VITE_SITE_URL=https://kadamba-3lc7.onrender.com`
+     - `VITE_APP_NAME=Kadamba's Designer Studio`
+   - Add SPA rewrite: `/*` → `/index.html`
+7. **CORS check**
+   - Backend `FRONTEND_URL` must exactly match the browser origin (scheme + host, no path/slash).
+   - Open the site, DevTools → Network: API calls should succeed with no CORS errors.
 
 ---
 

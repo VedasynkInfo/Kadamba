@@ -5,7 +5,8 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 15000,
+  // Render free-tier cold starts can exceed 15s; keep headroom for first wake.
+  timeout: 45000,
 });
 
 api.interceptors.request.use(

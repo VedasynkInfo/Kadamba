@@ -7,7 +7,9 @@ services:
     plan: free
     region: singapore
     rootDir: backend
-    buildCommand: npm ci --include=dev && npm run build
+    # Force full install (NODE_ENV=production would skip TypeScript). Prefer
+    # npm install over npm ci so optional peer lock drift does not block deploys.
+    buildCommand: NPM_CONFIG_PRODUCTION=false npm install && npm run build
     startCommand: npm run start
     healthCheckPath: /api/health/ready
     autoDeploy: true

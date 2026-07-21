@@ -1,0 +1,35 @@
+---
+description: Brand identity and content positioning for Kadamba's Designer Studio
+globs: frontend/**/*.{tsx,ts,md} 
+alwaysApply: true
+---
+
+# Kadamba Brand Content (all phases)
+
+## Official positioning
+
+**Kadamba's Designer Studio** in **Kurnool** is a well-known local **boutique and tailoring** business specializing in **women's traditional and bridal wear**.
+
+Use this identity in every phase (About, Services, Gallery, Portfolio, Blogs, Contact, admin copy, SEO).
+
+## Do say
+
+- Boutique and custom tailoring in Kurnool
+- Women's traditional wear (sarees, lehengas, festive ethnic)
+- Bridal wear and bridal fittings
+- Local trust, measurements, trials, finishing
+
+## Do not say (outdated)
+
+- Interior design / residential spaces / architecture
+- Home décor, foyer, salon interiors as the core offer
+- Generic "luxury interiors" studio positioning
+
+## Content source
+
+Canonical copy helpers live in `frontend/src/pages/home/data.ts` → `brand` object.
+Reuse `brand.summary`, `brand.tagline`, and `brand.location` wherever possible.
+
+## Future phases
+
+Phase 4+ pages must keep the same business story: Kurnool boutique · traditional + bridal · tailoring.

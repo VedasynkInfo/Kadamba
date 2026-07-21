@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Builds
+dist/
+**/dist/
+build/
+**/build/
+
+# Environment
+.env
+.env.local
+.env.*.local
+!**/.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Coverage / cache
+coverage/
+.turbo/
+*.tsbuildinfo
+
+# Uploads / local data
+uploads/
+db/backups/

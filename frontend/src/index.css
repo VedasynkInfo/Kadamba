@@ -1,0 +1,190 @@
+@import 'tailwindcss';
+
+/*
+  Design tokens — luxury black / gold / cream.
+
+  CRITICAL: Do NOT redefine --spacing-sm|md|lg|xl in @theme.
+  Tailwind v4 maps max-w-sm/md/lg/xl to those keys, which collapses
+  body copy into ~1–6rem columns. Use --kadamba-space-* instead.
+*/
+@theme {
+  --color-black: #000000;
+  --color-gold: #ffd700;
+  --color-cream: #fffdd0;
+  --color-elevated: #111111;
+  --color-muted: rgba(255, 253, 208, 0.7);
+
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+
+  --text-h1: 3rem;
+  --text-h2: 2.25rem;
+  --text-h3: 1.5rem;
+  --text-body: 1.0625rem;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+
+  --shadow-gold: 0 8px 32px rgba(255, 215, 0, 0.15);
+  --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.2);
+
+  --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Readable measures for section copy (classic typography) */
+  --container-measure: 38rem;
+  --container-measure-wide: 44rem;
+}
+
+:root {
+  --color-black: #000000;
+  --color-gold: #ffd700;
+  --color-cream: #fffdd0;
+  --color-dark-bg: #000000;
+  --color-light-bg: #fffdd0;
+  --color-elevated: #111111;
+  --color-primary-text: #ffffff;
+  --color-secondary-text: #ffd700;
+  --color-muted: rgba(255, 253, 208, 0.7);
+
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-size-h1: 3rem;
+  --font-size-h2: 2.25rem;
+  --font-size-h3: 1.5rem;
+  --font-size-body: 1.0625rem;
+
+  /* Section rhythm — namespaced so they never collide with Tailwind spacing */
+  --kadamba-space-xs: 0.5rem;
+  --kadamba-space-sm: 1rem;
+  --kadamba-space-md: 2rem;
+  --kadamba-space-lg: 4rem;
+  --kadamba-space-xl: 6rem;
+
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 400ms;
+  --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --measure: 38rem;
+  --measure-wide: 44rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  line-height: 1.65;
+  letter-spacing: 0.01em;
+  background-color: var(--color-cream);
+  color: var(--color-black);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+/* Classic section copy — always full-width of parent up to a readable measure */
+.text-measure {
+  width: 100%;
+  max-width: var(--measure);
+}
+
+.text-measure-wide {
+  width: 100%;
+  max-width: var(--measure-wide);
+}
+
+.text-lede {
+  width: 100%;
+  max-width: var(--measure);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+  text-wrap: pretty;
+}
+
+@media (min-width: 640px) {
+  .text-lede {
+    font-size: 1.125rem;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up var(--duration-slow) var(--ease-luxury) both;
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    110deg,
+    transparent 25%,
+    rgba(255, 215, 0, 0.35) 50%,
+    transparent 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.5s linear infinite;
+}
+
+.animate-spin-luxury {
+  animation: spin 0.8s linear infinite;
+}
+
+.animate-toast-in {
+  animation: toast-in var(--duration-base) var(--ease-luxury) both;
+}

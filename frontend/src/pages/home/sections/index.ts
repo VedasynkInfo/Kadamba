@@ -1,0 +1,10 @@
+export { HeroSection } from './HeroSection';
+export { ServicesSection } from './ServicesSection';
+export { FeaturedCollectionsSection } from './FeaturedCollectionsSection';
+export { MarqueeSection } from './MarqueeSection';
+export { TestimonialsSection } from './TestimonialsSection';
+export { WhyChooseUsSection } from './WhyChooseUsSection';
+export { ProcessTimelineSection } from './ProcessTimelineSection';
+export { StatisticsSection } from './StatisticsSection';
+export { LatestBlogsSection } from './LatestBlogsSection';
+export { CtaBannerSection } from './CtaBannerSection';

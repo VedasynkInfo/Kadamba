@@ -1,0 +1,58 @@
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { Button, Section, SectionIntro } from '@/components/ui';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { brand, type BlogPost } from '../data';
+
+interface BlogCtaSectionProps {
+  post: BlogPost;
+}
+
+/**
+ * End-of-article consult CTA — kept off the masthead banner.
+ */
+export function BlogCtaSection({ post }: BlogCtaSectionProps) {
+  const navigate = useNavigate();
+  const reduced = usePrefersReducedMotion();
+
+  return (
+    <Section tone="dark" className="relative overflow-hidden py-20 md:py-28" contained={false}>
+      <div
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_70%_40%,rgba(255,215,0,0.12),transparent_55%)]"
+        aria-hidden
+      />
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+        <motion.div
+          initial={reduced ? false : { opacity: 0, y: 20 }}
+          whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <p className="text-center font-heading text-sm uppercase tracking-[0.25em] text-gold">
+            {brand.shortName}
+          </p>
+          <SectionIntro
+            tone="dark"
+            align="center"
+            className="mt-4"
+            title="Bring this idea to the boutique"
+            description={`Inspired by “${post.title}”? Request a consultation in ${brand.location} — measurements, trials, and finishing for traditional and bridal wear.`}
+          />
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Button variant="primary" size="lg" onClick={() => navigate('/request-service')}>
+              Book consultation
+            </Button>
+            <Button
+              variant="secondary"
+              size="lg"
+              className="!text-cream"
+              onClick={() => navigate('/blogs')}
+            >
+              Back to journal
+            </Button>
+          </div>
+        </motion.div>
+      </div>
+    </Section>
+  );
+}

@@ -1,0 +1,48 @@
+---
+description: Typography, measure, and Tailwind theme rules for Kadamba UI
+globs: frontend/**/*.{tsx,ts,css}
+alwaysApply: false
+---
+
+# Kadamba Typography & Layout Rules
+
+## Critical Tailwind v4 theme rule
+
+Never redefine `--spacing-sm`, `--spacing-md`, `--spacing-lg`, or `--spacing-xl` inside `@theme`.
+
+In this Tailwind version, `max-w-sm|md|lg|xl` resolve to those spacing tokens. Overriding them collapses body copy into ~1–6rem columns (one word per line).
+
+Use namespaced tokens instead:
+
+- `--kadamba-space-xs|sm|md|lg|xl` for section rhythm
+- `--measure` / `--measure-wide` (or `.text-lede` / `.text-measure`) for readable line length
+
+## Professional classic copy structure
+
+Every major section must use `SectionIntro` from `@/components/ui`:
+
+- One clear heading (Playfair / `Heading`)
+- One lede paragraph with comfortable measure (~38rem), `leading-relaxed`, `text-lede`
+- Optional actions (filters, links) aligned on large screens — never squeeze the lede
+
+Do **not** place section descriptions in ad-hoc `max-w-sm|md|lg|xl` unless you verified the compiled CSS uses container widths.
+
+Safe max-width choices:
+
+- Prefer `.text-lede`, `.text-measure`, `max-w-2xl`+ (container scale), or arbitrary `max-w-[36rem]`
+- Avoid `max-w-sm|md|lg|xl` for prose unless confirmed safe in the built CSS
+
+## Hierarchy
+
+1. Brand / section title — serif, confident scale
+2. Lede — one short supporting sentence, readable measure
+3. Body / meta — smaller, muted, relaxed leading
+
+Keep copy professional and classic: no cramped columns, no decorative vertical stacking of words, no orphan one-word lines caused by broken widths.
+
+## Accessibility
+
+- Maintain heading order (`h1` → `h2` → `h3`)
+- Ensure contrast on cream and black surfaces
+- Respect `prefers-reduced-motion` for animated text swaps
+- Touch targets for filters/controls ≥ 40px where practical

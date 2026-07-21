@@ -1,4 +1,4 @@
-# Render Blueprint for the Kadamba backend API.
+# Render Blueprint — Kadamba API + static frontend.
 # Secrets (sync: false) must be filled in the Render dashboard after import.
 services:
   - type: web
@@ -22,7 +22,7 @@ services:
         value: info
       # PORT is provided automatically by Render.
       - key: FRONTEND_URL
-        sync: false          # e.g. https://kadambastudio.com
+        sync: false          # e.g. https://kadamba-3lc7.onrender.com
       - key: MONGODB_URI
         sync: false          # MongoDB Atlas SRV connection string
       - key: JWT_SECRET
@@ -55,3 +55,30 @@ services:
         sync: false          # e.g. admin@kadambastudio.com
       - key: ADMIN_PASSWORD
         sync: false          # strong password, >= 8 chars
+
+  # Frontend SPA — rewrite all paths to index.html so /admin/login etc. work.
+  - type: web
+    name: kadamba
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    autoDeploy: true
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /sw.js
+        name: Cache-Control
+        value: no-cache
+    envVars:
+      - key: VITE_API_URL
+        sync: false          # https://kadamba-api.onrender.com/api
+      - key: VITE_SITE_URL
+        sync: false          # https://kadamba-3lc7.onrender.com
+      - key: VITE_APP_NAME
+        value: "Kadamba's Designer Studio"

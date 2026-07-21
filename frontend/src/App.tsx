@@ -48,6 +48,22 @@ export default function App() {
           <BrowserRouter>
             <Suspense fallback={<RouteFallback />}>
               <Routes>
+                {/* Admin routes first so they are not swallowed by the public catch-all. */}
+                <Route path="admin/login" element={<AdminLoginPage />} />
+
+                <Route path="admin" element={<AdminLayout />}>
+                  <Route index element={<AdminDashboardPage />} />
+                  <Route path="gallery" element={<GalleryAdminPage />} />
+                  <Route path="services" element={<ServicesAdminPage />} />
+                  <Route path="portfolio" element={<PortfolioAdminPage />} />
+                  <Route path="blogs" element={<BlogsAdminPage />} />
+                  <Route path="leads" element={<AdminLeadsDashboardPage />} />
+                  <Route path="leads/list" element={<AdminLeadsListPage />} />
+                  <Route path="leads/:id" element={<AdminLeadDetailPage />} />
+                  <Route path="settings" element={<SettingsAdminPage />} />
+                  <Route path="profile" element={<ProfileAdminPage />} />
+                </Route>
+
                 <Route element={<MainLayout />}>
                   <Route index element={<HomePage />} />
                   <Route path="about" element={<AboutPage />} />
@@ -62,21 +78,6 @@ export default function App() {
                   <Route path="request-service" element={<RequestServicePage />} />
                   <Route path="design-system" element={<DesignSystemPage />} />
                   <Route path="*" element={<NotFoundPage />} />
-                </Route>
-
-                <Route path="admin/login" element={<AdminLoginPage />} />
-
-                <Route path="admin" element={<AdminLayout />}>
-                  <Route index element={<AdminDashboardPage />} />
-                  <Route path="gallery" element={<GalleryAdminPage />} />
-                  <Route path="services" element={<ServicesAdminPage />} />
-                  <Route path="portfolio" element={<PortfolioAdminPage />} />
-                  <Route path="blogs" element={<BlogsAdminPage />} />
-                  <Route path="leads" element={<AdminLeadsDashboardPage />} />
-                  <Route path="leads/list" element={<AdminLeadsListPage />} />
-                  <Route path="leads/:id" element={<AdminLeadDetailPage />} />
-                  <Route path="settings" element={<SettingsAdminPage />} />
-                  <Route path="profile" element={<ProfileAdminPage />} />
                 </Route>
               </Routes>
             </Suspense>

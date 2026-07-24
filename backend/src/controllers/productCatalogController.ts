@@ -21,7 +21,7 @@ export const createCategoryHandler = asyncHandler(async (req: Request, res: Resp
 });
 
 export const updateCategoryHandler = asyncHandler(async (req: Request, res: Response) => {
-  const category = await catalogService.updateCategory(req.params.id, req.body);
+  const category = await catalogService.updateCategory(String(req.params.id), req.body);
   if (!category) {
     res.status(404).json({ success: false, message: 'Category not found' });
     return;
@@ -65,7 +65,7 @@ export const listProductTypesHandler = asyncHandler(async (req: Request, res: Re
 });
 
 export const getProductTypeHandler = asyncHandler(async (req: Request, res: Response) => {
-  const productType = await catalogService.getProductType(req.params.id);
+  const productType = await catalogService.getProductType(String(req.params.id));
   if (!productType) {
     res.status(404).json({ success: false, message: 'Product type not found' });
     return;
@@ -86,7 +86,7 @@ export const createProductTypeHandler = asyncHandler(async (req: Request, res: R
 });
 
 export const updateProductTypeHandler = asyncHandler(async (req: Request, res: Response) => {
-  const productType = await catalogService.updateProductType(req.params.id, req.body);
+  const productType = await catalogService.updateProductType(String(req.params.id), req.body);
   if (!productType) {
     res.status(404).json({ success: false, message: 'Product type not found' });
     return;

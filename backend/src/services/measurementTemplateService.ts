@@ -5,10 +5,23 @@ import { toDto } from '../utils/serialize';
 import { buildPaginationMeta, parsePagination } from '../utils/pagination';
 import { searchRegex, parseBooleanQuery } from '../utils/query';
 
-export type MeasurementTemplateDto = IMeasurementTemplate & { id: string };
+export type MeasurementTemplateDto = {
+  id: string;
+  code: string;
+  name: string;
+  category: string;
+  fieldDefs: unknown[];
+  active: boolean;
+  createdBy: string;
+  version: number;
+  notes: string;
+  createdAt: string;
+  updatedAt: string;
+};
 
 function serialize(doc: IMeasurementTemplate | Record<string, unknown>): MeasurementTemplateDto {
-  return toDto<MeasurementTemplateDto>(doc);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return toDto<MeasurementTemplateDto>(doc as any);
 }
 
 async function templateExists(code: string, excludeId?: string): Promise<boolean> {
@@ -73,7 +86,7 @@ export async function updateTemplate(code: string, input: Record<string, unknown
   if (!existing) throw new ApiError(404, 'Measurement template not found');
 
   if (input.code && input.code !== code) {
-    if (await templateExists(input.code, existing._id.toString())) {
+    if (await templateExists(input.code as string, existing._id.toString())) {
       throw new ApiError(409, 'Measurement template with this code already exists');
     }
     (existing as unknown as Record<string, unknown>).code = input.code;

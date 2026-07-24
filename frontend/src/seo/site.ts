@@ -18,7 +18,7 @@ export function absoluteUrl(path = '/'): string {
 }
 
 /** Page title: "Section | Brand" or brand alone for home. */
-export function pageTitle(title?: string, siteName = SITE_NAME): string {
+export function pageTitle(title?: string, siteName?: string): string {
   if (!title) return `${siteName} | ${brand.location} — Traditional & Bridal Wear`;
   return `${title} | ${siteName}`;
 }

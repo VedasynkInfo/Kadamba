@@ -31,7 +31,7 @@ export function PageMeta({
     ? resolveSeoFromSettings(publicContent.settings.seo)
     : undefined;
 
-  const siteName = seo?.siteName || SITE_NAME;
+  const siteName: string = seo?.siteName || SITE_NAME;
   const fullTitle =
     titleAbsolute && title
       ? title

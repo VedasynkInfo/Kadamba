@@ -47,7 +47,7 @@ export interface UpdateStaffInput {
   status?: StaffStatus;
 }
 
-export interface StaffDto {
+export type StaffDto = {
   id: string;
   fullName: string;
   phone: string;

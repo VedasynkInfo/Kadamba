@@ -3,7 +3,7 @@ import type { Document } from 'mongoose';
 /**
  * Convert a Mongoose document (or lean object) into a plain DTO with `id`.
  */
-export function toDto<T extends Record<string, unknown>>(
+export function toDto<T>(
   doc: Document | Record<string, unknown>,
 ): T {
   const raw =

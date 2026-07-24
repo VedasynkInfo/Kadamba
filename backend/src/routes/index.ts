@@ -7,7 +7,7 @@ import dashboardRoutes from './dashboardRoutes';
 import galleryRoutes from './galleryRoutes';
 import healthRoutes from './healthRoutes';
 import leadRoutes from './leadRoutes';
-import { templatesRouter, profilesRouter } from '../../routes/measurementRoutes';
+import { templatesRouter, profilesRouter } from './measurementRoutes';
 import orderRoutes from './orderRoutes';
 import portalRoutes, { adminPortalExtrasRouter } from './portalRoutes';
 import portfolioRoutes from './portfolioRoutes';

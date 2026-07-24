@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { authenticate, authorize } from '../src/middleware/auth';
+import { authenticate, authorize } from '../middleware/auth';
 import {
   listTemplatesHandler,
   getTemplateHandler,
@@ -15,7 +15,7 @@ import {
   duplicateProfileHandler,
   getProfileHistoryHandler,
   seedDataHandler,
-} from '../src/controllers/measurementController';
+} from '../controllers/measurementController';
 
 // ── Templates router — mounted at /measurement-templates ──
 export const templatesRouter = Router();

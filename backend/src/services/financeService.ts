@@ -58,10 +58,10 @@ export async function recordPayment(input: RecordPaymentInput) {
 
   const remaining = order.paymentSummary.totalQuoted - currentPaidSum;
   if (input.amount > remaining && !input.bypassBalanceCheck) {
-    throw new ApiError(400, 'Payment exceeds remaining balance', {
+    throw new ApiError(400, 'Payment exceeds remaining balance', [{
       remaining,
       message: `Payment amount ₹${input.amount} exceeds the remaining balance ₹${remaining}. Please confirm override if intended.`,
-    });
+    }]);
   }
 
   const payment = new Payment({

@@ -14,6 +14,9 @@ build/
 .env.*.local
 !**/.env.example
 
+# Temp files
+commit_msg.txt
+
 # Logs
 logs/
 *.log

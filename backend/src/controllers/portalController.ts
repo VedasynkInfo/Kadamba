@@ -75,7 +75,7 @@ export const portalOrdersHandler = asyncHandler(async (req: Request, res: Respon
 });
 
 export const portalOrderDetailHandler = asyncHandler(async (req: Request, res: Response) => {
-  const data = await getPortalOrder(customerIdFromReq(req), req.params.id);
+  const data = await getPortalOrder(customerIdFromReq(req), String(req.params.id));
   res.status(200).json({ success: true, message: 'Order', data });
 });
 
@@ -85,7 +85,7 @@ export const portalMeasurementsListHandler = asyncHandler(async (req: Request, r
 });
 
 export const portalMeasurementTemplateHandler = asyncHandler(async (req: Request, res: Response) => {
-  const data = await getPortalMeasurementTemplate(req.params.code);
+  const data = await getPortalMeasurementTemplate(String(req.params.code));
   res.status(200).json({ success: true, message: 'Template', data });
 });
 
@@ -124,7 +124,7 @@ export const portalPaymentsHandler = asyncHandler(async (req: Request, res: Resp
 });
 
 export const portalInvoiceHandler = asyncHandler(async (req: Request, res: Response) => {
-  const data = await getPortalInvoice(customerIdFromReq(req), req.params.id as string);
+  const data = await getPortalInvoice(customerIdFromReq(req), String(req.params.id));
   res.status(200).json({ success: true, message: 'Invoice', data });
 });
 
@@ -140,13 +140,13 @@ export const portalRequestHandler = asyncHandler(async (req: Request, res: Respo
 
 export const adminPortalChatListHandler = asyncHandler(async (req: Request, res: Response) => {
   const orderId = typeof req.query.orderId === 'string' ? req.query.orderId : undefined;
-  const data = await adminListPortalChat(req.params.customerId, orderId);
+  const data = await adminListPortalChat(String(req.params.customerId), orderId);
   res.status(200).json({ success: true, message: 'Chat', data });
 });
 
 export const adminPortalChatReplyHandler = asyncHandler(async (req: Request, res: Response) => {
   const data = await adminReplyPortalChat({
-    customerId: req.params.customerId,
+    customerId: String(req.params.customerId),
     orderId: req.body.orderId,
     body: req.body.body,
     attachments: req.body.attachments,
@@ -157,6 +157,6 @@ export const adminPortalChatReplyHandler = asyncHandler(async (req: Request, res
 });
 
 export const approveMeasurementHandler = asyncHandler(async (req: Request, res: Response) => {
-  const data = await approveMeasurementProfile(req.params.id);
+  const data = await approveMeasurementProfile(String(req.params.id));
   res.status(200).json({ success: true, message: 'Measurement approved', data });
 });

@@ -195,7 +195,7 @@ export async function updateService(id: string, input: Record<string, unknown>) 
     existing.cardImage = existing.bannerImage || '';
   }
 
-  const rawDocObj = existing.toObject() as Record<string, unknown>;
+  const rawDocObj = existing.toObject() as unknown as Record<string, unknown>;
   await applySeoDefaults(rawDocObj);
   for (const field of [
     'bannerAlt',

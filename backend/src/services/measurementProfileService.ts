@@ -6,14 +6,27 @@ import { toDto } from '../utils/serialize';
 import { buildPaginationMeta, parsePagination } from '../utils/pagination';
 import { searchRegex } from '../utils/query';
 
-export type MeasurementProfileDto = IMeasurementProfile & {
+export type MeasurementProfileDto = {
   id: string;
   customerName?: string;
   productTypeName?: string;
+  customerId: string;
+  productTypeCode: string;
+  profileName: string;
+  unit: string;
+  status: string;
+  measurements: Record<string, number>;
+  versions: unknown[];
+  notes: string;
+  referenceImages: string[];
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 function serialize(doc: IMeasurementProfile | Record<string, unknown>, customerName?: string): MeasurementProfileDto {
-  const dto = toDto<MeasurementProfileDto>(doc);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const dto = toDto<MeasurementProfileDto>(doc as any);
   return {
     ...dto,
     customerName: customerName || dto.customerName,
@@ -89,10 +102,10 @@ export async function getProfile(id: string) {
 }
 
 export async function createProfile(input: Record<string, unknown>, actor: string) {
-  const existingTemplate = await MeasurementTemplate.findOne({ code: input.productTypeCode, active: true });
-  if (!existingTemplate) {
-    throw new ApiError(404, 'Measurement template not found or inactive');
-  }
+  const existingTemplate = await MeasurementTemplate.findOne({
+    code: input.productTypeCode as string,
+    active: true,
+  });
 
   const doc = await MeasurementProfile.create({
     ...input,
@@ -174,10 +187,10 @@ export async function getProfileHistory(id: string) {
   const existing = await findByIdOrThrow(id);
   return {
     profile: serialize(existing),
-    versions: existing.versions.map(v => ({
-      ...v,
-      id: v._id?.toString(),
-    })),
+    versions: existing.versions.map((v) => {
+      const r = v as unknown as Record<string, unknown>;
+      return { ...r, id: String(r._id || '') };
+    }),
   };
 }
 

@@ -23,6 +23,7 @@ export interface ReportDateParams {
   to: string;
   groupBy?: GroupBy;
   asOf?: string;
+  [key: string]: unknown;
 }
 
 export interface OrdersByStatusReport {

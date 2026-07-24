@@ -86,7 +86,7 @@ export function applySeoPack<T extends Record<string, unknown>>(
     const keys = Array.isArray(altKeys) ? altKeys : [altKeys];
     for (const key of keys) next[key] = pack.imageAlt;
   }
-  return next as T;
+  return next as unknown as T;
 }
 
 export { defaultSeoAutoFlags };

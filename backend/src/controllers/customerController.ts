@@ -114,9 +114,10 @@ export const getCustomerHandler = asyncHandler(async (req: Request, res: Respons
 
   // Aggregate summaries
   const [orderCount, activeOrderCount, measurementCount, orders] = await Promise.all([
-    Order.countDocuments({ customerId: customer._id }),
-    Order.countDocuments({ customerId: customer._id, status: { $nin: ['delivery', 'cancelled'] } }),
-    MeasurementProfile.countDocuments({ customerId: customer._id }),
+    Order.countDocuments({ customerId: String(customer._id) }),
+    Order.countDocuments({ customerId: String(customer._id), status: { $nin: ['delivery', 'cancelled'] } }),
+    MeasurementProfile.countDocuments({ customerId: String(customer._id) }),
+    Order.find({ customerId: customer._id }).lean(),
     Order.find({ customerId: customer._id }).lean(),
   ]);
 
@@ -224,7 +225,7 @@ export const updateCustomerHandler = asyncHandler(async (req: Request, res: Resp
   if (archive) {
     // Soft Delete check
     const activeOrders = await Order.countDocuments({
-      customerId: customer._id,
+      customerId: String(customer._id),
       status: { $nin: ['delivery', 'cancelled'] },
     });
 

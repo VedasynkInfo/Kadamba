@@ -18,12 +18,16 @@ export interface CreateLeadInput {
   phone: string;
   email: string;
   city: string;
+  locality?: string;
   service: string;
+  garmentType?: string;
+  fabricStatus?: string;
   occasion: string;
   budget: string;
   preferredDate: string;
   message: string;
   inspirationFiles?: Express.Multer.File[];
+  customerId?: string;
 }
 
 export type LeadDto = {
@@ -32,7 +36,10 @@ export type LeadDto = {
   phone: string;
   email: string;
   city: string;
+  locality?: string;
   service: string;
+  garmentType?: string;
+  fabricStatus?: string;
   occasion: string;
   budget: string;
   preferredDate: string;
@@ -41,6 +48,9 @@ export type LeadDto = {
   status: LeadStatus;
   source: LeadSource;
   assignee: string;
+  orderId?: string;
+  orderNumber?: number;
+  referenceId?: string;
   notes: Array<{ id: string; body: string; author: string; createdAt: string }>;
   timeline: Array<{
     id: string;
@@ -54,9 +64,13 @@ export type LeadDto = {
 };
 
 function cloudinaryConfigured(): boolean {
-  return Boolean(
-    env.cloudinary.cloudName && env.cloudinary.apiKey && env.cloudinary.apiSecret,
-  );
+  const { cloudName, apiKey, apiSecret } = env.cloudinary;
+  if (!cloudName || !apiKey || !apiSecret) return false;
+  // Guard against placeholder values in .env during local development
+  if (cloudName.startsWith('your_') || apiKey.startsWith('your_') || apiSecret.startsWith('your_')) {
+    return false;
+  }
+  return true;
 }
 
 async function uploadInspirationBuffers(
@@ -121,7 +135,10 @@ function serializeLead(doc: ILead | Record<string, unknown>): LeadDto {
     phone: String(raw.phone),
     email: String(raw.email),
     city: String(raw.city),
+    locality: raw.locality ? String(raw.locality) : undefined,
     service: String(raw.service),
+    garmentType: raw.garmentType ? String(raw.garmentType) : undefined,
+    fabricStatus: raw.fabricStatus ? String(raw.fabricStatus) : undefined,
     occasion: String(raw.occasion),
     budget: String(raw.budget),
     preferredDate,
@@ -132,6 +149,9 @@ function serializeLead(doc: ILead | Record<string, unknown>): LeadDto {
     status: raw.status as LeadStatus,
     source: raw.source as LeadSource,
     assignee: String(raw.assignee ?? 'Unassigned'),
+    orderId: raw.orderId ? String(raw.orderId) : undefined,
+    orderNumber: typeof raw.orderNumber === 'number' ? raw.orderNumber : undefined,
+    referenceId: raw.referenceId ? String(raw.referenceId) : undefined,
     notes,
     timeline,
     createdAt: String(raw.createdAt ?? ''),
@@ -141,6 +161,7 @@ function serializeLead(doc: ILead | Record<string, unknown>): LeadDto {
 
 /**
  * Create a CRM lead from the public request-service form.
+ * Also creates/links a soft Customer stub and an enquiry Order so it appears in Orders + Leads.
  */
 export async function createLeadFromRequest(input: CreateLeadInput): Promise<ILead> {
   const inspirationImages = await uploadInspirationBuffers(input.inspirationFiles ?? []);
@@ -150,7 +171,10 @@ export async function createLeadFromRequest(input: CreateLeadInput): Promise<ILe
     phone: input.phone,
     email: input.email,
     city: input.city,
+    locality: input.locality,
     service: input.service,
+    garmentType: input.garmentType,
+    fabricStatus: input.fabricStatus,
     occasion: input.occasion,
     budget: input.budget,
     preferredDate: new Date(input.preferredDate),
@@ -170,7 +194,61 @@ export async function createLeadFromRequest(input: CreateLeadInput): Promise<ILe
     ],
   });
 
-  return lead;
+  // Soft customer stub — no password / portal until order confirmation.
+  let customerId: string | undefined;
+  try {
+    const { Customer } = await import('../models/Customer');
+    const phone = input.phone.trim();
+    let customer = await Customer.findOne({ phone });
+    if (!customer && input.email) {
+      customer = await Customer.findOne({ email: input.email.toLowerCase() });
+    }
+    if (!customer) {
+      customer = await Customer.create({
+        name: input.name.trim(),
+        phone,
+        email: input.email.toLowerCase(),
+        source: 'website',
+        address: {
+          city: input.city,
+          locality: input.locality,
+        },
+        portalStatus: 'none',
+        leadIds: [lead._id],
+        tags: input.garmentType ? [input.garmentType] : [],
+      });
+    } else {
+      customer.leadIds = [...(customer.leadIds || []), lead._id as mongoose.Types.ObjectId];
+      if (!customer.email && input.email) customer.email = input.email.toLowerCase();
+      if (input.locality && customer.address) {
+        customer.address.locality = input.locality;
+      }
+      await customer.save();
+    }
+    customerId = String(customer._id);
+  } catch (err) {
+    console.warn('Customer stub creation failed for lead', String(lead._id), err);
+  }
+
+  // Auto-create enquiry order so request appears in Orders desk immediately
+  if (customerId) {
+    try {
+      const { createEnquiryOrderForLead } = await import('./orderService');
+      await createEnquiryOrderForLead({
+        lead,
+        customerId,
+        actorId: 'system:request-service',
+        title: `${input.service} — ${input.name.trim()}`,
+        sourceNote: `Public request-service enquiry.\nOccasion: ${input.occasion}\nBudget: ${input.budget}\nMessage: ${input.message}`,
+      });
+    } catch (err) {
+      console.warn('Enquiry order creation failed for lead', String(lead._id), err);
+    }
+  }
+
+  // Reload to return orderId / orderNumber fields
+  const refreshed = await Lead.findById(lead._id);
+  return refreshed ?? lead;
 }
 
 export async function listLeads(query: Record<string, unknown>) {
@@ -194,7 +272,20 @@ export async function listLeads(query: Record<string, unknown>) {
 
   const q = searchRegex(typeof query.q === 'string' ? query.q : undefined);
   if (q) {
-    filter.$or = [{ name: q }, { email: q }, { phone: q }, { city: q }, { service: q }];
+    filter.$or = [
+      { name: q },
+      { email: q },
+      { phone: q },
+      { city: q },
+      { service: q },
+      { referenceId: q },
+    ];
+  }
+
+  // Allow searching by order number (exact numeric)
+  if (typeof query.q === 'string' && /^\d+$/.test(query.q.trim())) {
+    const n = Number(query.q.trim());
+    filter.$or = [...((filter.$or as unknown[]) || []), { orderNumber: n }];
   }
 
   const [docs, total] = await Promise.all([

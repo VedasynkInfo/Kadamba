@@ -1,10 +1,12 @@
 import mongoose from 'mongoose';
 import { Service, SERVICE_CATEGORIES, type IService, type ServiceCategory } from '../models/Service';
+import { Order } from '../models/Order';
 import { ApiError } from '../utils/ApiError';
 import { buildPaginationMeta, parsePagination } from '../utils/pagination';
 import { parseBooleanQuery, searchRegex } from '../utils/query';
 import { toDto } from '../utils/serialize';
-import { uniqueSlug } from '../utils/slugify';
+import { resolveClientSlug } from '../utils/slugify';
+import { generateSeoWithSettings } from '../utils/generateSeo';
 
 export type ServiceDto = Record<string, unknown> & { id: string; slug: string; title: string };
 
@@ -18,6 +20,31 @@ async function slugExists(slug: string, excludeId?: string): Promise<boolean> {
     filter._id = { $ne: excludeId };
   }
   return Boolean(await Service.exists(filter));
+}
+
+async function applySeoDefaults(
+  doc: Record<string, any>,
+  opts?: { forceEmptyOnly?: boolean },
+) {
+  const seo = await generateSeoWithSettings({
+    title: String(doc.title || ''),
+    summary: String(doc.summary || ''),
+    imageUrl: String(doc.bannerImage || ''),
+  });
+  const emptyOnly = opts?.forceEmptyOnly !== false;
+  if (!emptyOnly || !doc.bannerAlt) doc.bannerAlt = doc.bannerAlt || seo.imageAlt;
+  if (!emptyOnly || !doc.metaTitle) doc.metaTitle = doc.metaTitle || seo.metaTitle;
+  if (!emptyOnly || !doc.metaDescription) {
+    doc.metaDescription = doc.metaDescription || seo.metaDescription;
+  }
+  if (!emptyOnly || !doc.ogTitle) doc.ogTitle = doc.ogTitle || seo.ogTitle;
+  if (!emptyOnly || !doc.ogDescription) doc.ogDescription = doc.ogDescription || seo.ogDescription;
+  if (!emptyOnly || !doc.ogImage) doc.ogImage = doc.ogImage || seo.ogImage;
+  if (!emptyOnly || !doc.twitterTitle) doc.twitterTitle = doc.twitterTitle || seo.twitterTitle;
+  if (!emptyOnly || !doc.twitterDescription) {
+    doc.twitterDescription = doc.twitterDescription || seo.twitterDescription;
+  }
+  if (!emptyOnly || !doc.twitterImage) doc.twitterImage = doc.twitterImage || seo.twitterImage;
 }
 
 export async function listServices(
@@ -34,19 +61,24 @@ export async function listServices(
     if (published !== undefined) filter.published = published;
   }
 
+  const fulfillable = parseBooleanQuery(query.fulfillable);
+  if (fulfillable !== undefined) {
+    filter.isFulfillable = fulfillable;
+  }
+
   if (typeof query.category === 'string' && query.category && query.category !== 'All') {
     filter.category = query.category;
   }
 
   const q = searchRegex(typeof query.q === 'string' ? query.q : undefined);
   if (q) {
-    filter.$or = [{ title: q }, { summary: q }, { slug: q }];
+    filter.$or = [{ title: q }, { summary: q }, { slug: q }, { tags: q }];
   }
 
   const sort: Record<string, 1 | -1> =
-    query.sort === 'newest'
-      ? { createdAt: -1 }
-      : { sortOrder: 1, createdAt: -1 };
+      query.sort === 'newest'
+          ? { createdAt: -1 }
+          : { sortOrder: 1, createdAt: -1 };
 
   const [docs, total] = await Promise.all([
     Service.find(filter).sort(sort).skip(skip).limit(limit).lean(),
@@ -61,8 +93,8 @@ export async function listServices(
 
 export async function getService(idOrSlug: string, options: { admin: boolean }) {
   const filter: Record<string, unknown> = mongoose.isValidObjectId(idOrSlug)
-    ? { $or: [{ _id: idOrSlug }, { slug: idOrSlug }] }
-    : { slug: idOrSlug };
+      ? { $or: [{ _id: idOrSlug }, { slug: idOrSlug }] }
+      : { slug: idOrSlug };
 
   if (!options.admin) filter.published = true;
 
@@ -72,15 +104,20 @@ export async function getService(idOrSlug: string, options: { admin: boolean }) 
 }
 
 export async function createService(input: Record<string, unknown> & { title: string }) {
-  const slug = await uniqueSlug(
-    input.title,
-    (s) => slugExists(s),
-    typeof input.slug === 'string' ? input.slug : undefined,
+  const slug = await resolveClientSlug(
+      input.title,
+      typeof input.slug === 'string' ? input.slug : undefined,
+      (s) => slugExists(s),
   );
   const category = (SERVICE_CATEGORIES as readonly string[]).includes(String(input.category))
-    ? (input.category as ServiceCategory)
-    : 'Boutique';
-  const doc = await Service.create({
+      ? (input.category as ServiceCategory)
+      : 'Boutique';
+
+  const linkedProductTypeIds = Array.isArray(input.linkedProductTypeIds)
+      ? input.linkedProductTypeIds.filter((id) => mongoose.isValidObjectId(id)).map((id) => new mongoose.Types.ObjectId(String(id)))
+      : [];
+
+  const rawDoc: Record<string, any> = {
     title: input.title,
     slug,
     category,
@@ -88,27 +125,44 @@ export async function createService(input: Record<string, unknown> & { title: st
     description: Array.isArray(input.description) ? (input.description as string[]) : [],
     bannerImage: String(input.bannerImage ?? ''),
     bannerAlt: String(input.bannerAlt ?? ''),
-    cardImage: String(input.cardImage ?? ''),
+    cardImage: String(input.cardImage || input.bannerImage || ''),
     icon: (['bridal', 'traditional', 'tailoring', 'boutique'].includes(String(input.icon))
-      ? input.icon
-      : 'boutique') as 'bridal' | 'traditional' | 'tailoring' | 'boutique',
+        ? input.icon
+        : 'boutique') as 'bridal' | 'traditional' | 'tailoring' | 'boutique',
     gallery: Array.isArray(input.gallery) ? input.gallery : [],
     features: Array.isArray(input.features) ? input.features : [],
     pricing: {
       note: String((input.pricing as { note?: string } | undefined)?.note ?? ''),
       startingFrom: String(
-        (input.pricing as { startingFrom?: string } | undefined)?.startingFrom ?? '',
+          (input.pricing as { startingFrom?: string } | undefined)?.startingFrom ?? '',
       ),
       tiers: Array.isArray((input.pricing as { tiers?: unknown } | undefined)?.tiers)
-        ? ((input.pricing as { tiers: Array<{ id: string; name: string; priceLabel: string; detail: string }> }).tiers)
-        : [],
+          ? ((input.pricing as { tiers: Array<{ id: string; name: string; priceLabel: string; detail: string }> }).tiers)
+          : [],
     },
     includes: Array.isArray(input.includes) ? (input.includes as string[]) : [],
     durationNote: String(input.durationNote ?? ''),
     ctaLabel: String(input.ctaLabel || 'Request consultation'),
     published: Boolean(input.published ?? true),
     sortOrder: Number(input.sortOrder ?? 0),
-  });
+    isFulfillable: Boolean(input.isFulfillable ?? true),
+    linkedProductTypeIds,
+    defaultLeadTimeDays: Number(input.defaultLeadTimeDays ?? 0),
+    basePriceFrom: Number(input.basePriceFrom ?? 0),
+    tags: Array.isArray(input.tags) ? input.tags.map(String) : [],
+    metaTitle: String(input.metaTitle ?? ''),
+    metaDescription: String(input.metaDescription ?? ''),
+    ogTitle: String(input.ogTitle ?? ''),
+    ogDescription: String(input.ogDescription ?? ''),
+    ogImage: String(input.ogImage ?? ''),
+    twitterTitle: String(input.twitterTitle ?? ''),
+    twitterDescription: String(input.twitterDescription ?? ''),
+    twitterImage: String(input.twitterImage ?? ''),
+  };
+
+  await applySeoDefaults(rawDoc);
+
+  const doc = await Service.create(rawDoc);
   return serialize(doc);
 }
 
@@ -118,17 +172,43 @@ export async function updateService(id: string, input: Record<string, unknown>) 
   if (!existing) throw new ApiError(404, 'Service not found');
 
   if (input.slug || input.title) {
-    existing.slug = await uniqueSlug(
-      String(input.title || existing.title),
-      (s) => slugExists(s, id),
-      typeof input.slug === 'string' ? input.slug : existing.slug,
+    existing.slug = await resolveClientSlug(
+        String(input.title || existing.title),
+        typeof input.slug === 'string' ? input.slug : existing.slug,
+        (s) => slugExists(s, id),
     );
   }
 
   const skip = new Set(['id', '_id', 'slug', 'createdAt', 'updatedAt']);
   for (const [key, value] of Object.entries(input)) {
     if (skip.has(key) || value === undefined) continue;
-    (existing as unknown as Record<string, unknown>)[key] = value;
+    if (key === 'linkedProductTypeIds' && Array.isArray(value)) {
+      existing.linkedProductTypeIds = value
+          .filter((v) => mongoose.isValidObjectId(v))
+          .map((v) => new mongoose.Types.ObjectId(String(v)));
+    } else {
+      (existing as unknown as Record<string, unknown>)[key] = value;
+    }
+  }
+
+  if (!existing.cardImage) {
+    existing.cardImage = existing.bannerImage || '';
+  }
+
+  const rawDocObj = existing.toObject() as Record<string, unknown>;
+  await applySeoDefaults(rawDocObj);
+  for (const field of [
+    'bannerAlt',
+    'metaTitle',
+    'metaDescription',
+    'ogTitle',
+    'ogDescription',
+    'ogImage',
+    'twitterTitle',
+    'twitterDescription',
+    'twitterImage',
+  ] as const) {
+    (existing as unknown as Record<string, unknown>)[field] = rawDocObj[field];
   }
 
   await existing.save();
@@ -137,6 +217,16 @@ export async function updateService(id: string, input: Record<string, unknown>) 
 
 export async function deleteService(id: string) {
   if (!mongoose.isValidObjectId(id)) throw new ApiError(400, 'Invalid service id');
+
+  // Block hard delete if open or closed orders reference this service
+  const orderExists = await Order.exists({ 'lineItems.serviceId': id });
+  if (orderExists) {
+    throw new ApiError(
+        400,
+        'Cannot delete service because it is referenced by existing orders. Please unpublish/archive it instead.'
+    );
+  }
+
   const doc = await Service.findByIdAndDelete(id);
   if (!doc) throw new ApiError(404, 'Service not found');
   return serialize(doc);

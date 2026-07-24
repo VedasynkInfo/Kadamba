@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button, Section, SectionIntro } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { usePublicContent } from '@/hooks/usePublicContent';
 import { brand, type ServiceDetail } from '../data';
 
 interface ServiceCtaSectionProps {
@@ -9,11 +10,12 @@ interface ServiceCtaSectionProps {
 }
 
 /**
- * Service detail conversion CTA → request / contact.
+ * Service detail conversion CTA → request / WhatsApp.
  */
 export function ServiceCtaSection({ service }: ServiceCtaSectionProps) {
   const navigate = useNavigate();
   const reduced = usePrefersReducedMotion();
+  const { whatsappHref } = usePublicContent();
 
   return (
     <Section tone="dark" className="relative overflow-hidden py-20 md:py-28" contained={false}>
@@ -50,9 +52,9 @@ export function ServiceCtaSection({ service }: ServiceCtaSectionProps) {
               variant="secondary"
               size="lg"
               className="!text-cream"
-              onClick={() => navigate('/contact')}
+              onClick={() => window.open(whatsappHref(), '_blank', 'noopener,noreferrer')}
             >
-              Contact the studio
+              WhatsApp the studio
             </Button>
           </div>
         </motion.div>

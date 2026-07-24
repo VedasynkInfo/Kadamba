@@ -2,7 +2,8 @@ import { motion } from 'framer-motion';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
 import { Button } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-import { contactBanner, whatsappHref } from '../data';
+import { usePublicContent } from '@/hooks/usePublicContent';
+import { contactBanner } from '../data';
 
 /**
  * Contact banner — centered editorial invitation.
@@ -10,6 +11,7 @@ import { contactBanner, whatsappHref } from '../data';
  */
 export function ContactBannerSection() {
   const reduced = usePrefersReducedMotion();
+  const { whatsappHref } = usePublicContent();
 
   function scrollToForm() {
     document.getElementById('contact-form')?.scrollIntoView({

@@ -3,6 +3,7 @@ import {
   CtaBannerSection,
   FeaturedCollectionsSection,
   HeroSection,
+  HowItWorksPortalSection,
   LatestBlogsSection,
   MarqueeSection,
   ProcessTimelineSection,
@@ -26,6 +27,7 @@ export default function HomePage() {
       <MarqueeSection />
       <TestimonialsSection />
       <WhyChooseUsSection />
+      <HowItWorksPortalSection />
       <ProcessTimelineSection />
       <StatisticsSection />
       <LatestBlogsSection />

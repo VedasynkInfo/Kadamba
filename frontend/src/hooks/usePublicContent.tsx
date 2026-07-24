@@ -11,10 +11,13 @@ import { galleryItems, type GalleryItem } from '@/pages/gallery/data';
 import { serviceDetails, type ServiceDetail } from '@/pages/services/data';
 import { portfolioProjects, type PortfolioProject } from '@/pages/portfolio/data';
 import { blogPosts, type BlogPost } from '@/pages/blogs/data';
+import { defaultWebsiteSettings, type WebsiteSettings } from '@/pages/admin/data';
 import { galleryApi } from '@/services/gallery/galleryService';
 import { servicesApi } from '@/services/services/servicesService';
 import { portfolioApi } from '@/services/portfolio/portfolioService';
 import { blogsApi } from '@/services/blogs/blogsService';
+import { settingsApi } from '@/services/settings/settingsService';
+import { whatsappDeepLink } from '@/utils/whatsapp';
 
 interface PublicContentStore {
   loading: boolean;
@@ -22,6 +25,9 @@ interface PublicContentStore {
   services: ServiceDetail[];
   portfolio: PortfolioProject[];
   blogs: BlogPost[];
+  /** Settings win for contact/address/logo/social — brand prose stays in home/data.ts */
+  settings: WebsiteSettings;
+  whatsappHref: (prefill?: string) => string;
   refresh: () => Promise<void>;
 }
 
@@ -37,21 +43,42 @@ export function PublicContentProvider({ children }: { children: ReactNode }) {
   const [services, setServices] = useState<ServiceDetail[]>(serviceDetails);
   const [portfolio, setPortfolio] = useState<PortfolioProject[]>(portfolioProjects);
   const [blogs, setBlogs] = useState<BlogPost[]>(blogPosts);
+  const [settings, setSettings] = useState<WebsiteSettings>(defaultWebsiteSettings);
 
   const refresh = useCallback(async () => {
     setLoading(true);
     try {
-      const [g, s, p, b] = await Promise.all([
+      const [g, s, p, b, site] = await Promise.all([
         galleryApi.list({ published: true, limit: 100 }),
         servicesApi.list({ published: true, limit: 100 }),
         portfolioApi.list({ published: true, limit: 100 }),
         blogsApi.list({ published: true, limit: 100 }),
+        settingsApi.get().catch(() => null),
       ]);
 
       setGallery(g.items.length ? g.items : galleryItems);
       setServices(s.items.length ? s.items : serviceDetails);
       setPortfolio(p.items.length ? p.items : portfolioProjects);
       setBlogs(b.items.length ? b.items : blogPosts);
+      if (site) {
+        setSettings({
+          ...defaultWebsiteSettings,
+          ...site,
+          addressLines: site.addressLines?.length ? site.addressLines : defaultWebsiteSettings.addressLines,
+          hours: site.hours?.length ? site.hours : defaultWebsiteSettings.hours,
+          social: site.social?.length ? site.social : defaultWebsiteSettings.social,
+          socialNamed: { ...defaultWebsiteSettings.socialNamed, ...(site.socialNamed || {}) },
+          seo: { ...defaultWebsiteSettings.seo, ...(site.seo || {}) },
+          media: {
+            ...defaultWebsiteSettings.media,
+            ...(site.media || {}),
+            bannerPresets: site.media?.bannerPresets?.length
+              ? site.media.bannerPresets
+              : defaultWebsiteSettings.media.bannerPresets,
+          },
+          theme: { ...defaultWebsiteSettings.theme, ...(site.theme || {}) },
+        });
+      }
     } catch (err) {
       console.warn('Public content API unavailable — using seed data', err);
       setGallery(galleryItems);
@@ -78,9 +105,18 @@ export function PublicContentProvider({ children }: { children: ReactNode }) {
     return () => document.removeEventListener('visibilitychange', onVisible);
   }, [refresh]);
 
+  const whatsappHref = useCallback(
+    (prefill?: string) =>
+      whatsappDeepLink(
+        settings.whatsappNumber || settings.phoneTel,
+        prefill ?? settings.whatsappPrefill,
+      ),
+    [settings.whatsappNumber, settings.phoneTel, settings.whatsappPrefill],
+  );
+
   const value = useMemo(
-    () => ({ loading, gallery, services, portfolio, blogs, refresh }),
-    [loading, gallery, services, portfolio, blogs, refresh],
+    () => ({ loading, gallery, services, portfolio, blogs, settings, whatsappHref, refresh }),
+    [loading, gallery, services, portfolio, blogs, settings, whatsappHref, refresh],
   );
 
   return (
@@ -94,4 +130,9 @@ export function usePublicContent(): PublicContentStore {
     throw new Error('usePublicContent must be used within PublicContentProvider');
   }
   return ctx;
+}
+
+/** Safe for SEO/meta outside the public layout (admin/portal). */
+export function usePublicContentOptional(): PublicContentStore | null {
+  return useContext(PublicContentContext);
 }

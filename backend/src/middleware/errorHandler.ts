@@ -4,6 +4,24 @@ import { ApiError } from '../utils/ApiError';
 import { env } from '../config/env';
 import { logger } from '../config/logger';
 
+/** Extract a human-readable message from any thrown value. */
+function extractMessage(err: unknown): string {
+  if (typeof err === 'string') return err;
+  if (err instanceof Error) return err.message;
+  if (err && typeof err === 'object' && 'message' in err) {
+    const msg = (err as { message: unknown }).message;
+    if (typeof msg === 'string') return msg;
+  }
+  // Last resort — guard against "[object Object]" garbage.
+  try {
+    const json = JSON.stringify(err);
+    if (json !== undefined && json !== '{}') return json;
+  } catch {
+    // Circular references — ignore.
+  }
+  return 'An unexpected error occurred';
+}
+
 export function errorHandler(err: unknown, req: Request, res: Response, _next: NextFunction) {
   if (err instanceof ApiError) {
     return res.status(err.statusCode).json({
@@ -35,7 +53,7 @@ export function errorHandler(err: unknown, req: Request, res: Response, _next: N
 
   return res.status(500).json({
     success: false,
-    message: env.isProduction ? 'Internal server error' : String(err),
+    message: env.isProduction ? 'Internal server error' : extractMessage(err),
     requestId,
   });
 }

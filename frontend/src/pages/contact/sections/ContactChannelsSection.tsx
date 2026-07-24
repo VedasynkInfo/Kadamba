@@ -1,45 +1,47 @@
 import { motion } from 'framer-motion';
 import { Section, SectionIntro } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { usePublicContent } from '@/hooks/usePublicContent';
 import { fadeUp, staggerChildren } from '@/motion/variants';
-import { channelsIntro, studioContact, whatsappHref } from '../data';
-
-const channels = [
-  {
-    id: 'visit',
-    label: 'Visit',
-    value: studioContact.addressLines.slice(1).join(' · '),
-    href: studioContact.mapLink,
-    external: true,
-  },
-  {
-    id: 'call',
-    label: 'Call',
-    value: studioContact.phoneDisplay,
-    href: `tel:${studioContact.phoneTel}`,
-    external: false,
-  },
-  {
-    id: 'email',
-    label: 'Email',
-    value: studioContact.email,
-    href: `mailto:${studioContact.email}`,
-    external: false,
-  },
-  {
-    id: 'whatsapp',
-    label: 'WhatsApp',
-    value: 'Chat with the studio',
-    href: whatsappHref(),
-    external: true,
-  },
-] as const;
+import { channelsIntro } from '../data';
 
 /**
- * Direct contact channels — typography row, no cards.
+ * Direct contact channels — typography row, settings-driven.
  */
 export function ContactChannelsSection() {
   const reduced = usePrefersReducedMotion();
+  const { settings, whatsappHref } = usePublicContent();
+
+  const channels = [
+    {
+      id: 'visit',
+      label: 'Visit',
+      value: settings.addressLines.filter(Boolean).slice(1).join(' · ') || settings.location,
+      href: settings.mapLink || '#',
+      external: true,
+    },
+    {
+      id: 'call',
+      label: 'Call',
+      value: settings.phoneDisplay,
+      href: `tel:${settings.phoneTel}`,
+      external: false,
+    },
+    {
+      id: 'email',
+      label: 'Email',
+      value: settings.email,
+      href: `mailto:${settings.email}`,
+      external: false,
+    },
+    {
+      id: 'whatsapp',
+      label: 'WhatsApp',
+      value: 'Chat with the studio',
+      href: whatsappHref(),
+      external: true,
+    },
+  ] as const;
 
   return (
     <Section tone="light" className="py-16 md:py-24">
@@ -75,7 +77,7 @@ export function ContactChannelsSection() {
           Boutique hours
         </p>
         <ul className="mt-4 space-y-2">
-          {studioContact.hours.map((row) => (
+          {settings.hours.map((row) => (
             <li
               key={row.day}
               className="flex max-w-md flex-wrap items-baseline justify-between gap-x-6 gap-y-1 text-sm text-black/75"

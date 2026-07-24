@@ -2,13 +2,15 @@
  * Create a URL-safe slug from a title.
  */
 export function slugify(input: string): string {
-  return input
-    .toLowerCase()
-    .trim()
-    .replace(/['’]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 80) || 'item';
+  return (
+    input
+      .toLowerCase()
+      .trim()
+      .replace(/['']/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 80) || 'item'
+  );
 }
 
 type ExistsFn = (slug: string) => Promise<boolean>;
@@ -29,4 +31,24 @@ export async function uniqueSlug(
     n += 1;
   }
   return candidate;
+}
+
+/**
+ * When the client sends an explicit slug that is taken, block with suggestion (409).
+ * When empty, auto-assign via uniqueSlug.
+ */
+export async function resolveClientSlug(
+  title: string,
+  preferred: string | undefined,
+  exists: ExistsFn,
+): Promise<string> {
+  const { ApiError } = await import('./ApiError');
+  const explicit = preferred?.trim();
+  if (!explicit) {
+    return uniqueSlug(title, exists);
+  }
+  const slug = slugify(explicit);
+  if (!(await exists(slug))) return slug;
+  const suggestion = await uniqueSlug(slug, exists);
+  throw new ApiError(409, `Slug already in use. Try "${suggestion}"`);
 }

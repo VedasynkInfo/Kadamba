@@ -36,12 +36,19 @@ function serializeDates(obj: Record<string, unknown>): Record<string, unknown> {
       out[key] = value.map((item) => {
         if (item instanceof Date) return item.toISOString();
         if (item && typeof item === 'object') {
+          if (item.constructor?.name === 'ObjectId' || typeof (item as { toHexString?: () => string }).toHexString === 'function') {
+            return item.toString();
+          }
           return serializeNested(item as Record<string, unknown>);
         }
         return item;
       });
     } else if (value && typeof value === 'object' && !(value instanceof Date)) {
-      out[key] = serializeNested(value as Record<string, unknown>);
+      if (value.constructor?.name === 'ObjectId' || typeof (value as { toHexString?: () => string }).toHexString === 'function') {
+        out[key] = value.toString();
+      } else {
+        out[key] = serializeNested(value as Record<string, unknown>);
+      }
     } else {
       out[key] = value;
     }

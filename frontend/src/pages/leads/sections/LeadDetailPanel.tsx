@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Button, Select, Textarea } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { cn } from '@/utils/cn';
+import { whatsappDeepLink } from '@/utils/whatsapp';
 import {
   formatLeadDate,
   leadAssignees,
@@ -18,6 +19,7 @@ interface LeadDetailPanelProps {
   onStatus: (status: LeadStatus) => void;
   onAssignee: (assignee: string) => void;
   onAddNote: (body: string) => void;
+  onConvertToOrder?: () => void;
 }
 
 /**
@@ -28,6 +30,7 @@ export function LeadDetailPanel({
   onStatus,
   onAssignee,
   onAddNote,
+  onConvertToOrder,
 }: LeadDetailPanelProps) {
   const navigate = useNavigate();
   const reduced = usePrefersReducedMotion();
@@ -87,6 +90,12 @@ export function LeadDetailPanel({
               ['Occasion', lead.occasion || '—'],
               ['Budget', lead.budget || '—'],
               ['Preferred date', lead.preferredDate || '—'],
+              [
+                'Order',
+                lead.orderNumber
+                  ? `#${lead.orderNumber}${lead.referenceId ? ` · ${lead.referenceId}` : ' (enquiry)'}`
+                  : '—',
+              ],
             ].map(([label, value]) => (
               <div key={label} className="border-t border-black/10 pt-3">
                 <dt className="text-[0.65rem] uppercase tracking-[0.2em] text-black/40">{label}</dt>
@@ -94,6 +103,33 @@ export function LeadDetailPanel({
               </div>
             ))}
           </dl>
+
+          <div className="mt-6">
+            <a
+              href={whatsappDeepLink(
+                lead.phone,
+                `Hi ${lead.name}, this is Kadamba's Designer Studio (Kurnool) regarding your ${lead.service} enquiry.`,
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center rounded-sm border border-emerald-700/30 bg-emerald-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-emerald-800 transition hover:bg-emerald-100"
+            >
+              WhatsApp client
+            </a>
+          </div>
+
+          {lead.orderId ? (
+            <div className="mt-6">
+              <Button
+                type="button"
+                variant="secondary"
+                className="w-full"
+                onClick={() => navigate(`/admin/orders/${lead.orderId}`)}
+              >
+                Open linked order #{lead.orderNumber}
+              </Button>
+            </div>
+          ) : null}
 
           <div className="mt-8 border-t border-black/10 pt-6">
             <p className="text-[0.65rem] uppercase tracking-[0.2em] text-black/40">Message</p>
@@ -116,6 +152,18 @@ export function LeadDetailPanel({
               options={leadAssignees.map((a) => ({ value: a, label: a }))}
             />
           </div>
+
+          {onConvertToOrder && !lead.orderId && lead.status !== 'Qualified' && (
+            <div className="mt-6">
+              <Button
+                type="button"
+                onClick={onConvertToOrder}
+                className="w-full bg-gold text-black hover:bg-gold/90 font-semibold cursor-pointer py-3"
+              >
+                Convert to workshop order
+              </Button>
+            </div>
+          )}
         </div>
 
         <div className="space-y-10">

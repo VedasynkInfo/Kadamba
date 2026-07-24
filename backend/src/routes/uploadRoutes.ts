@@ -15,10 +15,15 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
+/** True when real (non-placeholder) Cloudinary credentials are configured. */
 function cloudinaryReady(): boolean {
-  return Boolean(
-    env.cloudinary.cloudName && env.cloudinary.apiKey && env.cloudinary.apiSecret,
-  );
+  const { cloudName, apiKey, apiSecret } = env.cloudinary;
+  if (!cloudName || !apiKey || !apiSecret) return false;
+  // Guard against placeholder values in .env during local development.
+  if (cloudName.startsWith('your_') || apiKey.startsWith('your_') || apiSecret.startsWith('your_')) {
+    return false;
+  }
+  return true;
 }
 
 const cloudStorage = new CloudinaryStorage({

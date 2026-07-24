@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
 import { Button } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { usePublicContent } from '@/hooks/usePublicContent';
 import { cn } from '@/utils/cn';
 import { heroSlides } from '../data';
 
@@ -14,6 +15,7 @@ const AUTO_MS = 6500;
  */
 export function HeroSection() {
   const navigate = useNavigate();
+  const { whatsappHref } = usePublicContent();
   const reduced = usePrefersReducedMotion();
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -150,9 +152,11 @@ export function HeroSection() {
                 variant="secondary"
                 size="lg"
                 className="!text-cream"
-                onClick={() => navigate('/portfolio')}
+                onClick={() => {
+                  window.open(whatsappHref(), '_blank', 'noopener,noreferrer');
+                }}
               >
-                View portfolio
+                WhatsApp the studio
               </Button>
             </div>
           </div>

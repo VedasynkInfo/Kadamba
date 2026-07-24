@@ -2,13 +2,15 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button, Section, SectionIntro } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { usePublicContent } from '@/hooks/usePublicContent';
 
 /**
- * Conversion-focused CTA banner.
+ * Conversion-focused CTA banner — Request + WhatsApp from settings.
  */
 export function CtaBannerSection() {
   const navigate = useNavigate();
   const reduced = usePrefersReducedMotion();
+  const { whatsappHref } = usePublicContent();
 
   return (
     <Section tone="dark" className="relative overflow-hidden py-20 md:py-28" contained={false}>
@@ -31,7 +33,7 @@ export function CtaBannerSection() {
             align="center"
             className="mt-4"
             title="Begin your bridal or traditional look"
-            description="Visit Kadamba's Designer Studio in Kurnool — or request a consultation for custom tailoring."
+            description="Visit Kadamba's Designer Studio in Kurnool — request a consultation or message us on WhatsApp."
           />
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Button variant="primary" size="lg" onClick={() => navigate('/request-service')}>
@@ -41,9 +43,9 @@ export function CtaBannerSection() {
               variant="secondary"
               size="lg"
               className="!text-cream"
-              onClick={() => navigate('/contact')}
+              onClick={() => window.open(whatsappHref(), '_blank', 'noopener,noreferrer')}
             >
-              Contact the studio
+              WhatsApp the studio
             </Button>
           </div>
         </motion.div>

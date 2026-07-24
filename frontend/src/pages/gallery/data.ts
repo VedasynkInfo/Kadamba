@@ -30,6 +30,14 @@ export interface GalleryItem {
   height: number;
   published: boolean;
   sortOrder: number;
+  metaTitle?: string;
+  metaDescription?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  twitterTitle?: string;
+  twitterDescription?: string;
+  twitterImage?: string;
 }
 
 export const galleryCategories = [

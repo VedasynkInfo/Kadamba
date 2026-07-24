@@ -24,7 +24,6 @@ import {
   occasionOptions,
   serviceLabelFromSlug,
   serviceOptions as seedServiceOptions,
-  whatsappHref,
   type FormStepId,
 } from '../data';
 
@@ -33,7 +32,10 @@ interface FormState {
   phone: string;
   email: string;
   city: string;
+  locality: string;
   service: string;
+  garmentType: string;
+  fabricStatus: string;
   occasion: string;
   budget: string;
   preferredDate: string;
@@ -64,7 +66,10 @@ const emptyForm: FormState = {
   phone: '',
   email: '',
   city: '',
+  locality: '',
   service: '',
+  garmentType: '',
+  fabricStatus: '',
   occasion: '',
   budget: '',
   preferredDate: '',
@@ -88,7 +93,7 @@ export function RequestFormSection() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const reduced = usePrefersReducedMotion();
-  const { services } = usePublicContent();
+  const { services, whatsappHref } = usePublicContent();
   const serviceOptions = useMemo(
     () =>
       services.length
@@ -105,6 +110,7 @@ export function RequestFormSection() {
   const [images, setImages] = useState<InspirationPreview[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submittedOrderNumber, setSubmittedOrderNumber] = useState<number | null>(null);
 
   const stepId = stepOrder[stepIndex] ?? 'you';
   const progressValue = ((stepIndex + 1) / stepOrder.length) * 100;
@@ -241,12 +247,15 @@ export function RequestFormSection() {
 
     setSubmitting(true);
     try {
-      await submitLeadRequest({
+      const created = await submitLeadRequest({
         name: form.name.trim(),
         phone: form.phone.trim(),
         email: form.email.trim(),
         city: form.city.trim(),
+        locality: form.locality.trim() || undefined,
         service: form.service,
+        garmentType: form.garmentType.trim() || undefined,
+        fabricStatus: form.fabricStatus || undefined,
         occasion: form.occasion,
         budget: form.budget,
         preferredDate: form.preferredDate,
@@ -255,10 +264,13 @@ export function RequestFormSection() {
       });
       images.forEach((img) => URL.revokeObjectURL(img.url));
       setImages([]);
+      setSubmittedOrderNumber(created.orderNumber ?? null);
       setSubmitted(true);
       toast({
         title: formCopy.successTitle,
-        description: formCopy.successBody,
+        description: created.orderNumber
+          ? `Enquiry Order #${created.orderNumber} is with the boutique. ${formCopy.successBody}`
+          : formCopy.successBody,
         tone: 'success',
       });
     } catch {
@@ -284,6 +296,20 @@ export function RequestFormSection() {
           <p className="font-heading text-sm uppercase tracking-[0.28em] text-gold">Kadamba</p>
           <h2 className="mt-4 font-heading text-3xl text-black md:text-4xl">{formCopy.successTitle}</h2>
           <p className="text-lede mt-4 text-black/75">{formCopy.successBody}</p>
+          {submittedOrderNumber ? (
+            <p className="mt-4 text-sm text-black/70">
+              Your enquiry is registered as{' '}
+              <span className="font-heading text-gold">Order #{submittedOrderNumber}</span>. The
+              boutique will confirm and share a Reference ID when ready.
+            </p>
+          ) : null}
+          <p className="mt-6 rounded-sm border border-black/10 bg-black/[0.03] px-4 py-3 text-sm text-black/70">
+            After confirmation you&apos;ll receive a <strong>Reference ID</strong> to{' '}
+            <a href="/portal/activate" className="underline decoration-gold/50 underline-offset-2 hover:text-black">
+              activate your customer portal
+            </a>{' '}
+            — track orders, measurements, and chat with the boutique.
+          </p>
           <p className="mt-8 text-sm text-black/60">{formCopy.successWhatsApp}</p>
           <div className="mt-4 flex flex-wrap justify-center gap-3">
             <Button
@@ -395,6 +421,13 @@ export function RequestFormSection() {
                     error={errors.city}
                     onChange={(e) => update('city', e.target.value)}
                   />
+                  <Input
+                    label="Locality (optional)"
+                    name="locality"
+                    value={form.locality}
+                    onChange={(e) => update('locality', e.target.value)}
+                    hint="Area within Kurnool or your town"
+                  />
                 </>
               ) : null}
 
@@ -409,6 +442,25 @@ export function RequestFormSection() {
                     value={form.service}
                     error={errors.service}
                     onChange={(e) => update('service', e.target.value)}
+                  />
+                  <Input
+                    label="Garment type (optional)"
+                    name="garmentType"
+                    value={form.garmentType}
+                    onChange={(e) => update('garmentType', e.target.value)}
+                    hint="e.g. Bridal lehenga, maggam blouse, gown"
+                  />
+                  <Select
+                    label="Fabric status (optional)"
+                    name="fabricStatus"
+                    placeholder="Select if known"
+                    options={[
+                      { value: 'have_fabric', label: 'I already have fabric' },
+                      { value: 'need_sourcing', label: 'Need fabric sourcing' },
+                      { value: 'undecided', label: 'Not sure yet' },
+                    ]}
+                    value={form.fabricStatus}
+                    onChange={(e) => update('fabricStatus', e.target.value)}
                   />
                   <Select
                     label="Occasion"

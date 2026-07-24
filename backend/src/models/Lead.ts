@@ -39,15 +39,23 @@ export interface ILead extends Document {
   phone: string;
   email: string;
   city: string;
+  locality?: string;
   service: string;
+  garmentType?: string;
+  fabricStatus?: string;
   occasion: string;
   budget: string;
   preferredDate: Date;
+  preferredTime?: string;
   message: string;
   inspirationImages: string[];
   status: LeadStatus;
   source: LeadSource;
   assignee: string;
+  /** Linked workshop order created from this request */
+  orderId?: mongoose.Types.ObjectId;
+  orderNumber?: number;
+  referenceId?: string;
   notes: ILeadNote[];
   timeline: ILeadTimelineEvent[];
   createdAt: Date;
@@ -105,11 +113,26 @@ const leadSchema = new Schema<ILead>(
       trim: true,
       maxlength: 80,
     },
+    locality: {
+      type: String,
+      trim: true,
+      maxlength: 120,
+    },
     service: {
       type: String,
       required: [true, 'Service is required'],
       trim: true,
       maxlength: 120,
+    },
+    garmentType: {
+      type: String,
+      trim: true,
+      maxlength: 80,
+    },
+    fabricStatus: {
+      type: String,
+      trim: true,
+      maxlength: 80,
     },
     occasion: {
       type: String,
@@ -126,6 +149,11 @@ const leadSchema = new Schema<ILead>(
     preferredDate: {
       type: Date,
       required: [true, 'Preferred date is required'],
+    },
+    preferredTime: {
+      type: String,
+      trim: true,
+      maxlength: 40,
     },
     message: {
       type: String,
@@ -157,6 +185,21 @@ const leadSchema = new Schema<ILead>(
       default: 'Unassigned',
       trim: true,
       maxlength: 80,
+    },
+    orderId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Order',
+      index: true,
+    },
+    orderNumber: {
+      type: Number,
+      index: true,
+    },
+    referenceId: {
+      type: String,
+      trim: true,
+      maxlength: 40,
+      index: true,
     },
     notes: {
       type: [leadNoteSchema],

@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Input, Select } from '@/components/ui';
 import { cn } from '@/utils/cn';
+import { whatsappDeepLink } from '@/utils/whatsapp';
 import {
   downloadCsv,
   filterLeads,
@@ -40,6 +41,13 @@ export function LeadsTableSection({
 
   function exportCsv() {
     downloadCsv(`kadamba-leads-${new Date().toISOString().slice(0, 10)}.csv`, leadsToCsv(filtered));
+  }
+
+  function waHref(lead: Lead) {
+    return whatsappDeepLink(
+      lead.phone,
+      `Hi ${lead.name}, this is Kadamba's Designer Studio (Kurnool) regarding your ${lead.service} enquiry.`,
+    );
   }
 
   return (
@@ -93,6 +101,7 @@ export function LeadsTableSection({
               <tr className="border-b border-black/15 text-[0.65rem] uppercase tracking-[0.2em] text-black/45">
                 <th className="py-3 pr-4 font-medium">Lead</th>
                 <th className="py-3 pr-4 font-medium">Service</th>
+                <th className="py-3 pr-4 font-medium">Order</th>
                 <th className="py-3 pr-4 font-medium">Status</th>
                 <th className="py-3 pr-4 font-medium">Desk</th>
                 <th className="py-3 pr-4 font-medium">Updated</th>
@@ -115,6 +124,27 @@ export function LeadsTableSection({
                     {lead.service}
                     <span className="mt-0.5 block text-xs text-black/45">{lead.source}</span>
                   </td>
+                  <td className="py-4 pr-4 text-sm text-black/75">
+                    {lead.orderNumber ? (
+                      <button
+                        type="button"
+                        className="text-left hover:text-gold"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (lead.orderId) navigate(`/admin/orders/${lead.orderId}`);
+                        }}
+                      >
+                        #{lead.orderNumber}
+                        {lead.referenceId ? (
+                          <span className="mt-0.5 block text-xs text-black/45">{lead.referenceId}</span>
+                        ) : (
+                          <span className="mt-0.5 block text-xs text-black/45">Enquiry</span>
+                        )}
+                      </button>
+                    ) : (
+                      <span className="text-black/35">—</span>
+                    )}
+                  </td>
                   <td className="py-4 pr-4">
                     <span
                       className={cn(
@@ -130,14 +160,25 @@ export function LeadsTableSection({
                     {formatLeadDate(lead.updatedAt)}
                   </td>
                   <td className="py-4 text-right">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="border border-black/15"
-                      onClick={() => navigate(`/admin/leads/${lead.id}`)}
-                    >
-                      Open
-                    </Button>
+                    <div className="flex flex-wrap items-center justify-end gap-2">
+                      <a
+                        href={waHref(lead)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs font-semibold text-emerald-700 hover:underline"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        WhatsApp
+                      </a>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="border border-black/15"
+                        onClick={() => navigate(`/admin/leads/${lead.id}`)}
+                      >
+                        Open
+                      </Button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -169,9 +210,19 @@ export function LeadsTableSection({
                   </span>
                 </div>
                 <p className="mt-2 text-xs text-black/45">
+                  {lead.orderNumber ? `Order #${lead.orderNumber} · ` : ''}
                   {lead.assignee} · {formatLeadDate(lead.updatedAt)}
                 </p>
               </button>
+              <a
+                href={waHref(lead)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 inline-block text-xs font-semibold text-emerald-700"
+                onClick={(e) => e.stopPropagation()}
+              >
+                WhatsApp
+              </a>
             </li>
           ))}
         </ul>

@@ -77,6 +77,15 @@ export interface PortfolioProject {
   clientStory?: PortfolioClientStory;
   tags: string[];
   ctaLabel: string;
+  published?: boolean;
+  metaTitle?: string;
+  metaDescription?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  twitterTitle?: string;
+  twitterDescription?: string;
+  twitterImage?: string;
 }
 
 export const portfolioCategories = [

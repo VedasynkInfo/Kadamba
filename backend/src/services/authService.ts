@@ -17,6 +17,9 @@ function sanitizeUser(user: IUser) {
     name: user.name,
     email: user.email,
     role: user.role,
+    customerId: user.customerId ? String(user.customerId) : undefined,
+    referenceId: user.referenceId,
+    status: user.status,
   };
 }
 
@@ -56,7 +59,23 @@ export async function loginUser(input: { email: string; password: string }) {
     throw new ApiError(401, 'Invalid email or password');
   }
 
-  const token = signToken({ id: String(user._id), role: user.role });
+  if (user.status === 'disabled') {
+    throw new ApiError(403, 'Account is disabled');
+  }
+
+  // Customer accounts use the portal login — keep admin console separate.
+  if (user.role === 'customer') {
+    throw new ApiError(403, 'Use the customer portal to sign in');
+  }
+
+  user.lastLoginAt = new Date();
+  await user.save();
+
+  const token = signToken({
+    id: String(user._id),
+    role: user.role,
+    customerId: user.customerId ? String(user.customerId) : undefined,
+  });
   return { user: sanitizeUser(user), token };
 }
 
@@ -73,7 +92,14 @@ export async function refreshToken(userId: string) {
   if (!user) {
     throw new ApiError(404, 'User not found');
   }
-  const token = signToken({ id: String(user._id), role: user.role });
+  if (user.status === 'disabled') {
+    throw new ApiError(403, 'Account is disabled');
+  }
+  const token = signToken({
+    id: String(user._id),
+    role: user.role,
+    customerId: user.customerId ? String(user.customerId) : undefined,
+  });
   return { user: sanitizeUser(user), token };
 }
 
@@ -112,6 +138,10 @@ export async function updateProfile(
   }
 
   await user.save();
-  const token = signToken({ id: String(user._id), role: user.role });
+  const token = signToken({
+    id: String(user._id),
+    role: user.role,
+    customerId: user.customerId ? String(user.customerId) : undefined,
+  });
   return { user: sanitizeUser(user), token };
 }

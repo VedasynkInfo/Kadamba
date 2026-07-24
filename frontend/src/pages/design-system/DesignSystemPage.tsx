@@ -26,7 +26,7 @@ export default function DesignSystemPage() {
   const { toast } = useToast();
   const [modalOpen, setModalOpen] = useState(false);
   const [page, setPage] = useState(1);
-  const [service, setService] = useState('interior');
+  const [service, setService] = useState('bridal');
 
   return (
     <>
@@ -117,9 +117,9 @@ export default function DesignSystemPage() {
             name="service"
             placeholder="Select a service"
             options={[
-              { value: 'interior', label: 'Interior Design' },
-              { value: 'branding', label: 'Branding' },
-              { value: 'styling', label: 'Styling' },
+              { value: 'bridal', label: 'Bridal Wear' },
+              { value: 'traditional', label: 'Traditional Wear' },
+              { value: 'tailoring', label: 'Custom Tailoring' },
             ]}
           />
           <Checkbox label="Send me project updates" name="updates" />
@@ -129,9 +129,9 @@ export default function DesignSystemPage() {
             value={service}
             onChange={setService}
             options={[
-              { value: 'interior', label: 'Interior' },
-              { value: 'branding', label: 'Branding' },
-              { value: 'styling', label: 'Styling' },
+              { value: 'bridal', label: 'Bridal' },
+              { value: 'traditional', label: 'Traditional' },
+              { value: 'tailoring', label: 'Tailoring' },
             ]}
           />
         </div>

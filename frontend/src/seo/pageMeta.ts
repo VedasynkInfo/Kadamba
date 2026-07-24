@@ -10,6 +10,8 @@ export interface SeoMeta {
   robots?: string;
   publishedTime?: string;
   modifiedTime?: string;
+  /** When true, `title` is the full document title (skip site template). */
+  titleAbsolute?: boolean;
 }
 
 /** Static marketing-route SEO copy. */

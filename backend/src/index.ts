@@ -3,6 +3,7 @@ import { createApp } from './app';
 import { connectDB, disconnectDB } from './config/database';
 import { env } from './config/env';
 import { logger } from './config/logger';
+import { initPortalSocket } from './realtime/portalSocket';
 
 async function bootstrap() {
   await connectDB();
@@ -12,6 +13,7 @@ async function bootstrap() {
     logger.info(`Server running on port ${env.port} (${env.nodeEnv})`);
   });
 
+  initPortalSocket(server);
   setupGracefulShutdown(server);
 }
 

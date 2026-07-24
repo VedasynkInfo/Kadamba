@@ -1,6 +1,4 @@
 import type { Request, Response } from 'express';
-import { sendEmail } from '../config/email';
-import { env } from '../config/env';
 import {
   addLeadNote,
   createLeadFromRequest,
@@ -9,19 +7,11 @@ import {
   listLeads,
   updateLead,
 } from '../services/leadService';
+import { notifyRequestReceived } from '../services/notificationService';
 import { asyncHandler } from '../utils/asyncHandler';
 
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
 /**
- * Public request-service form — persists a CRM lead and emails the studio.
+ * Public request-service form — persists a CRM lead and notifies studio + customer.
  */
 export const createLead = asyncHandler(async (req: Request, res: Response) => {
   const {
@@ -29,7 +19,10 @@ export const createLead = asyncHandler(async (req: Request, res: Response) => {
     phone,
     email,
     city,
+    locality,
     service,
+    garmentType,
+    fabricStatus,
     occasion,
     budget,
     preferredDate,
@@ -39,7 +32,10 @@ export const createLead = asyncHandler(async (req: Request, res: Response) => {
     phone: string;
     email: string;
     city: string;
+    locality?: string;
     service: string;
+    garmentType?: string;
+    fabricStatus?: string;
     occasion: string;
     budget: string;
     preferredDate: string;
@@ -53,7 +49,10 @@ export const createLead = asyncHandler(async (req: Request, res: Response) => {
     phone,
     email,
     city,
+    locality,
     service,
+    garmentType,
+    fabricStatus,
     occasion,
     budget,
     preferredDate,
@@ -61,72 +60,19 @@ export const createLead = asyncHandler(async (req: Request, res: Response) => {
     inspirationFiles: files,
   });
 
-  const to = env.email.to || env.email.user;
-  const safeName = escapeHtml(name);
-  const imageList =
-    lead.inspirationImages.length > 0
-      ? lead.inspirationImages.map((url) => `<li><a href="${escapeHtml(url)}">${escapeHtml(url)}</a></li>`).join('')
-      : '<li>None</li>';
-
   const leadId = String(lead._id);
 
-  if (!to) {
-    console.warn('Lead created — EMAIL_TO / EMAIL_USER not set; skipping outbound mail');
-    console.info({
-      id: leadId,
-      name,
-      email,
-      phone,
-      service,
-      occasion,
-    });
-  } else {
-    await sendEmail({
-      to,
-      subject: `New service request — ${name}`,
-      text: [
-        `New lead from request-service`,
-        `Name: ${name}`,
-        `Phone: ${phone}`,
-        `Email: ${email}`,
-        `City: ${city}`,
-        `Service: ${service}`,
-        `Occasion: ${occasion}`,
-        `Budget: ${budget}`,
-        `Preferred date: ${preferredDate}`,
-        `Message: ${message}`,
-        `Inspiration: ${lead.inspirationImages.join(', ') || 'None'}`,
-        `Lead ID: ${leadId}`,
-      ].join('\n'),
-      html: `
-      <h2>New service request</h2>
-      <p><strong>Name:</strong> ${safeName}</p>
-      <p><strong>Phone:</strong> ${escapeHtml(phone)}</p>
-      <p><strong>Email:</strong> ${escapeHtml(email)}</p>
-      <p><strong>City:</strong> ${escapeHtml(city)}</p>
-      <p><strong>Service:</strong> ${escapeHtml(service)}</p>
-      <p><strong>Occasion:</strong> ${escapeHtml(occasion)}</p>
-      <p><strong>Budget:</strong> ${escapeHtml(budget)}</p>
-      <p><strong>Preferred date:</strong> ${escapeHtml(preferredDate)}</p>
-      <p><strong>Message:</strong></p>
-      <p>${escapeHtml(message).replace(/\n/g, '<br />')}</p>
-      <p><strong>Inspiration images:</strong></p>
-      <ul>${imageList}</ul>
-      <p><strong>Lead ID:</strong> ${escapeHtml(leadId)}</p>
-    `,
-    });
-
-    await sendEmail({
-      to: email,
-      subject: "We received your consultation request — Kadamba's Designer Studio",
-      text: `Hi ${name},\n\nThank you for requesting a consultation with Kadamba's Designer Studio in Kurnool. We will review your details and get back to you shortly.\n\n— Kadamba's Designer Studio`,
-      html: `
-      <p>Hi ${safeName},</p>
-      <p>Thank you for requesting a consultation with <strong>Kadamba's Designer Studio</strong> in Kurnool. We will review your details and get back to you shortly.</p>
-      <p>— Kadamba's Designer Studio</p>
-    `,
-    });
-  }
+  void notifyRequestReceived({
+    leadId,
+    name,
+    phone,
+    email,
+    service,
+    occasion,
+    orderId: lead.orderId ? String(lead.orderId) : undefined,
+    orderNumber: lead.orderNumber,
+    source: 'Request Service',
+  }).catch((err) => console.warn('notifyRequestReceived failed', err));
 
   res.status(201).json({
     success: true,
@@ -134,6 +80,9 @@ export const createLead = asyncHandler(async (req: Request, res: Response) => {
     data: {
       id: leadId,
       status: lead.status,
+      orderId: lead.orderId ? String(lead.orderId) : undefined,
+      orderNumber: lead.orderNumber,
+      referenceId: lead.referenceId,
     },
   });
 });

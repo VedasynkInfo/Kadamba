@@ -48,6 +48,19 @@ export interface IService extends Document {
   ctaLabel: string;
   published: boolean;
   sortOrder: number;
+  isFulfillable?: boolean;
+  linkedProductTypeIds?: mongoose.Types.ObjectId[];
+  defaultLeadTimeDays?: number;
+  basePriceFrom?: number;
+  tags?: string[];
+  metaTitle?: string;
+  metaDescription?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  twitterTitle?: string;
+  twitterDescription?: string;
+  twitterImage?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -108,11 +121,24 @@ const serviceSchema = new Schema<IService>(
     ctaLabel: { type: String, default: 'Request consultation' },
     published: { type: Boolean, default: true },
     sortOrder: { type: Number, default: 0 },
+    isFulfillable: { type: Boolean, default: true },
+    linkedProductTypeIds: { type: [{ type: Schema.Types.ObjectId, ref: 'ProductType' }], default: [] },
+    defaultLeadTimeDays: { type: Number, default: 0 },
+    basePriceFrom: { type: Number, default: 0 },
+    tags: { type: [String], default: [] },
+    metaTitle: { type: String, default: '' },
+    metaDescription: { type: String, default: '' },
+    ogTitle: { type: String, default: '' },
+    ogDescription: { type: String, default: '' },
+    ogImage: { type: String, default: '' },
+    twitterTitle: { type: String, default: '' },
+    twitterDescription: { type: String, default: '' },
+    twitterImage: { type: String, default: '' },
   },
   { timestamps: true },
 );
 
 serviceSchema.index({ category: 1, published: 1, sortOrder: 1 });
-serviceSchema.index({ title: 'text', summary: 'text' });
+serviceSchema.index({ title: 'text', summary: 'text', tags: 'text' });
 
 export const Service = mongoose.model<IService>('Service', serviceSchema);

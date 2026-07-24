@@ -23,6 +23,14 @@ export interface IGalleryItem extends Document {
   height: number;
   published: boolean;
   sortOrder: number;
+  metaTitle?: string;
+  metaDescription?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  twitterTitle?: string;
+  twitterDescription?: string;
+  twitterImage?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -85,6 +93,14 @@ const galleryItemSchema = new Schema<IGalleryItem>(
       type: Number,
       default: 0,
     },
+    metaTitle: { type: String, default: '' },
+    metaDescription: { type: String, default: '' },
+    ogTitle: { type: String, default: '' },
+    ogDescription: { type: String, default: '' },
+    ogImage: { type: String, default: '' },
+    twitterTitle: { type: String, default: '' },
+    twitterDescription: { type: String, default: '' },
+    twitterImage: { type: String, default: '' },
   },
   { timestamps: true },
 );

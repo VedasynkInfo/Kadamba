@@ -4,7 +4,8 @@ import { ApiError } from '../utils/ApiError';
 import { buildPaginationMeta, parsePagination } from '../utils/pagination';
 import { parseBooleanQuery, searchRegex } from '../utils/query';
 import { toDto } from '../utils/serialize';
-import { uniqueSlug } from '../utils/slugify';
+import { uniqueSlug, resolveClientSlug } from '../utils/slugify';
+import { generateSeoWithSettings } from '../utils/generateSeo';
 
 export type BlogDto = Record<string, unknown> & {
   id: string;
@@ -83,17 +84,24 @@ export async function getBlog(idOrSlug: string, options: { admin: boolean }) {
 }
 
 export async function createBlog(input: Record<string, unknown> & { title: string }) {
-  const slug = await uniqueSlug(
+  const slug = await resolveClientSlug(
     input.title,
-    (s) => slugExists(s),
     typeof input.slug === 'string' ? input.slug : undefined,
+    (s) => slugExists(s),
   );
+
+  const seo = await generateSeoWithSettings({
+    title: input.title,
+    summary: String(input.excerpt ?? ''),
+    imageUrl: String(input.coverImage ?? ''),
+  });
+
   const doc = await Blog.create({
     title: input.title,
     excerpt: String(input.excerpt ?? ''),
     category: (input.category as 'Bridal' | 'Traditional' | 'Tailoring' | 'Studio Notes') || 'Studio Notes',
     coverImage: String(input.coverImage ?? ''),
-    coverAlt: String(input.coverAlt ?? ''),
+    coverAlt: String(input.coverAlt || seo.imageAlt),
     slug,
     date: input.date ? new Date(String(input.date)) : new Date(),
     published: Boolean(input.published ?? true),
@@ -102,6 +110,14 @@ export async function createBlog(input: Record<string, unknown> & { title: strin
     author: String(input.author || "Kadamba's Designer Studio"),
     content: Array.isArray(input.content) ? (input.content as string[]) : [],
     tags: Array.isArray(input.tags) ? (input.tags as string[]) : [],
+    metaTitle: String(input.metaTitle || seo.metaTitle),
+    metaDescription: String(input.metaDescription || seo.metaDescription),
+    ogTitle: String(input.ogTitle || seo.ogTitle),
+    ogDescription: String(input.ogDescription || seo.ogDescription),
+    ogImage: String(input.ogImage || seo.ogImage),
+    twitterTitle: String(input.twitterTitle || seo.twitterTitle),
+    twitterDescription: String(input.twitterDescription || seo.twitterDescription),
+    twitterImage: String(input.twitterImage || seo.twitterImage),
   });
   return serialize(doc);
 }
@@ -112,10 +128,10 @@ export async function updateBlog(id: string, input: Record<string, unknown>) {
   if (!existing) throw new ApiError(404, 'Blog post not found');
 
   if (input.slug || input.title) {
-    existing.slug = await uniqueSlug(
+    existing.slug = await resolveClientSlug(
       String(input.title || existing.title),
-      (s) => slugExists(s, id),
       typeof input.slug === 'string' ? input.slug : existing.slug,
+      (s) => slugExists(s, id),
     );
   }
 
@@ -127,6 +143,23 @@ export async function updateBlog(id: string, input: Record<string, unknown>) {
       continue;
     }
     (existing as unknown as Record<string, unknown>)[key] = value;
+  }
+
+  if (!existing.metaTitle || !existing.metaDescription) {
+    const seo = await generateSeoWithSettings({
+      title: existing.title,
+      summary: existing.excerpt,
+      imageUrl: existing.coverImage,
+    });
+    if (!existing.metaTitle) existing.metaTitle = seo.metaTitle;
+    if (!existing.metaDescription) existing.metaDescription = seo.metaDescription;
+    if (!existing.ogTitle) existing.ogTitle = seo.ogTitle;
+    if (!existing.ogDescription) existing.ogDescription = seo.ogDescription;
+    if (!existing.ogImage) existing.ogImage = seo.ogImage;
+    if (!existing.twitterTitle) existing.twitterTitle = seo.twitterTitle;
+    if (!existing.twitterDescription) existing.twitterDescription = seo.twitterDescription;
+    if (!existing.twitterImage) existing.twitterImage = seo.twitterImage;
+    if (!existing.coverAlt) existing.coverAlt = seo.imageAlt;
   }
 
   await existing.save();

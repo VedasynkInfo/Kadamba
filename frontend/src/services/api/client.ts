@@ -11,7 +11,10 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('kadamba_token');
+    const path = typeof window !== 'undefined' ? window.location.pathname : '';
+    const token = path.startsWith('/portal')
+      ? localStorage.getItem('kadamba_portal_token')
+      : localStorage.getItem('kadamba_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -24,16 +27,19 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('kadamba_token');
-      localStorage.removeItem('kadamba_user');
-      // If an admin session expired, return to the login screen cleanly
-      // instead of leaving a broken authenticated view on screen.
-      if (
-        typeof window !== 'undefined' &&
-        window.location.pathname.startsWith('/admin') &&
-        window.location.pathname !== '/admin/login'
-      ) {
-        window.location.assign('/admin/login');
+      const path = typeof window !== 'undefined' ? window.location.pathname : '';
+      if (path.startsWith('/portal')) {
+        localStorage.removeItem('kadamba_portal_token');
+        localStorage.removeItem('kadamba_portal_user');
+        if (path !== '/portal/login' && path !== '/portal/activate') {
+          window.location.assign('/portal/login');
+        }
+      } else {
+        localStorage.removeItem('kadamba_token');
+        localStorage.removeItem('kadamba_user');
+        if (path.startsWith('/admin') && path !== '/admin/login') {
+          window.location.assign('/admin/login');
+        }
       }
     }
     return Promise.reject(error);

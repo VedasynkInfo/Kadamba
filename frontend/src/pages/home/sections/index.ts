@@ -5,6 +5,7 @@ export { MarqueeSection } from './MarqueeSection';
 export { TestimonialsSection } from './TestimonialsSection';
 export { WhyChooseUsSection } from './WhyChooseUsSection';
 export { ProcessTimelineSection } from './ProcessTimelineSection';
+export { HowItWorksPortalSection } from './HowItWorksPortalSection';
 export { StatisticsSection } from './StatisticsSection';
 export { LatestBlogsSection } from './LatestBlogsSection';
 export { CtaBannerSection } from './CtaBannerSection';

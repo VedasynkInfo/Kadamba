@@ -1,11 +1,13 @@
 import type { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { env } from '../config/env';
+import type { UserRole } from '../models/User';
 import { ApiError } from '../utils/ApiError';
 
 export interface AuthPayload {
   id: string;
-  role: 'admin' | 'user';
+  role: UserRole;
+  customerId?: string;
 }
 
 declare global {
@@ -33,11 +35,19 @@ export function authenticate(req: Request, _res: Response, next: NextFunction) {
   }
 }
 
-export function authorize(...roles: Array<'admin' | 'user'>) {
+export function authorize(...roles: UserRole[]) {
   return (req: Request, _res: Response, next: NextFunction) => {
     if (!req.user || !roles.includes(req.user.role)) {
       return next(new ApiError(403, 'Insufficient permissions'));
     }
     next();
   };
+}
+
+/** Customer portal JWT gate — requires role customer + customerId claim. */
+export function requireCustomer(req: Request, _res: Response, next: NextFunction) {
+  if (!req.user || req.user.role !== 'customer' || !req.user.customerId) {
+    return next(new ApiError(403, 'Customer portal access required'));
+  }
+  next();
 }

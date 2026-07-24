@@ -1,4 +1,5 @@
 import { PageMeta, staticPageMeta } from '@/seo';
+import { HowItWorksPortalSection } from '@/pages/home/sections';
 import { RequestBannerSection, RequestFormSection } from './sections';
 
 /**
@@ -9,6 +10,7 @@ export default function RequestServicePage() {
     <>
       <PageMeta {...staticPageMeta.requestService} />
       <RequestBannerSection />
+      <HowItWorksPortalSection />
       <RequestFormSection />
     </>
   );

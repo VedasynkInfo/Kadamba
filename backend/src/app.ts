@@ -32,10 +32,19 @@ export function createApp(): Express {
     cors({
       origin(origin, callback) {
         // Allow same-origin / non-browser clients (no Origin header).
-        if (!origin || env.allowedOrigins.includes(origin)) {
+        if (!origin) {
           return callback(null, true);
         }
-        return callback(new Error('Not allowed by CORS'));
+        // Allow any origin whose host:port matches the backend itself
+        // (covers Vite dev proxy with changeOrigin:true).
+        const serverOrigin = `http://localhost:${env.port}`;
+        if (origin === serverOrigin || env.allowedOrigins.includes(origin)) {
+          return callback(null, true);
+        }
+        // Use callback(null, false) instead of callback(new Error) so the
+        // cors library handles denial gracefully and doesn't throw into
+        // Express error-handling middleware.
+        return callback(null, false);
       },
       credentials: true,
     }),

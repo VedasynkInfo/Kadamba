@@ -74,6 +74,20 @@ export interface ServiceDetail {
   includes: string[];
   durationNote: string;
   ctaLabel: string;
+  published?: boolean;
+  isFulfillable?: boolean;
+  linkedProductTypeIds?: string[];
+  defaultLeadTimeDays?: number;
+  basePriceFrom?: number;
+  tags?: string[];
+  metaTitle?: string;
+  metaDescription?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  twitterTitle?: string;
+  twitterDescription?: string;
+  twitterImage?: string;
 }
 
 export const serviceCategories = [

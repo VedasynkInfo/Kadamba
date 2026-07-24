@@ -18,9 +18,39 @@ export function absoluteUrl(path = '/'): string {
 }
 
 /** Page title: "Section | Brand" or brand alone for home. */
-export function pageTitle(title?: string): string {
-  if (!title) return `${SITE_NAME} | ${brand.location} — Traditional & Bridal Wear`;
-  return `${title} | ${SITE_NAME}`;
+export function pageTitle(title?: string, siteName = SITE_NAME): string {
+  if (!title) return `${siteName} | ${brand.location} — Traditional & Bridal Wear`;
+  return `${title} | ${siteName}`;
+}
+
+/**
+ * Apply Settings SEO defaults (Module 14) when generating meta.
+ * Used by CMS/SEO generators — brand prose stays in home/data.ts.
+ */
+export function resolveSeoFromSettings(seo?: {
+  siteName?: string;
+  titleTemplate?: string;
+  defaultDescription?: string;
+  defaultOgImage?: string;
+  localityPhrase?: string;
+  robotsIndex?: boolean;
+}) {
+  const siteName = seo?.siteName?.trim() || SITE_NAME;
+  const titleTemplate = seo?.titleTemplate || '{{title}} | {{siteName}}';
+  return {
+    siteName,
+    titleTemplate,
+    defaultDescription: seo?.defaultDescription?.trim() || brand.summary,
+    defaultOgImage: seo?.defaultOgImage?.trim() || DEFAULT_OG_IMAGE,
+    localityPhrase: seo?.localityPhrase?.trim() || brand.location,
+    robots: seo?.robotsIndex === false ? 'noindex, nofollow' : 'index, follow',
+    formatTitle: (title?: string) => {
+      if (!title) return pageTitle(undefined, siteName);
+      return titleTemplate
+        .replace(/\{\{\s*title\s*\}\}/g, title)
+        .replace(/\{\{\s*siteName\s*\}\}/g, siteName);
+    },
+  };
 }
 
 export const defaultDescription = brand.summary;

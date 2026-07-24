@@ -7,7 +7,10 @@ export interface LeadRequestPayload {
   phone: string;
   email: string;
   city: string;
+  locality?: string;
   service: string;
+  garmentType?: string;
+  fabricStatus?: string;
   occasion: string;
   budget: string;
   preferredDate: string;
@@ -18,6 +21,9 @@ export interface LeadRequestPayload {
 export interface LeadCreated {
   id: string;
   status: string;
+  orderId?: string;
+  orderNumber?: number;
+  referenceId?: string;
 }
 
 /**
@@ -29,7 +35,10 @@ export async function submitLeadRequest(payload: LeadRequestPayload): Promise<Le
   formData.append('phone', payload.phone);
   formData.append('email', payload.email);
   formData.append('city', payload.city);
+  if (payload.locality) formData.append('locality', payload.locality);
   formData.append('service', payload.service);
+  if (payload.garmentType) formData.append('garmentType', payload.garmentType);
+  if (payload.fabricStatus) formData.append('fabricStatus', payload.fabricStatus);
   formData.append('occasion', payload.occasion);
   formData.append('budget', payload.budget);
   formData.append('preferredDate', payload.preferredDate);

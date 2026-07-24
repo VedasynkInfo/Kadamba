@@ -308,26 +308,44 @@ This roadmap is organized into 15 distinct phases, each building upon the previo
 - API implementations in `/backend/src/`
 - Documentation in `/docs/`
 
+## Boutique ERP Extension (after Phase 15)
+
+Phases 1–15 delivered the public website + admin CMS. New program: **Boutique ERP + CRM + Customer Portal**.
+
+**Docs:** `documents/prd/*`, `documents/boutique_erp_prompts.md`, `documents/prompts_status.md`
+
+| Order | Module | Status |
+|-------|--------|--------|
+| 1 | 05 Measurement System | Active |
+| 2 | 06 Product Catalog / 09 Staff | Next |
+| 3 | 04 Customers → 03 Orders | Queued |
+| 4 | 08 Finance | Queued |
+| 5 | 15 Roles + 10 Customer Portal | Queued |
+| 6 | 16 Notifications → 02 Dashboard → CMS/SEO/Settings → 13 Reports | Queued |
+
 ## Current Status and Next Steps
 
-### Immediate Action Items (Phase 1 Complete, Moving to Phase 2)
+### Immediate Action Items
 
-**Current Phase:** Project Foundation - ✅ Complete
-**Next Phase:** Design System - 🚀 Ready to start
+**Website Phases 1–15:** ✅ Complete  
+**Active:** Module 05 — Measurement System (`active_chunk.md`)  
+**Next:** Staff Management + Product Catalog hardening
 
 ### Current Chunk Contents
 
 **Primary Documents:**
-- `current_chunk.md` - Current working phase details (Phase 1 - Project Foundation)
-- `active_chunk.md` - Detailed implementation specifications (Complete Phase 1)
-- `chunk_summary.md` - Complete roadmap overview and references
-- `README.md` - Project overview and status tracking
+- `current_chunk.md` — short status (Measurements active)
+- `active_chunk.md` — Measurement System implementation brief
+- `documents/current_chunk.md` — documents mirror
+- `documents/boutique_erp_prompts.md` — master feature prompts
+- `documents/prd/00_INDEX.md` — full PRD map
+- `chunk_summary.md` — roadmap overview
+- `README.md` — project overview
 
 **Development Focus:**
-- Complete Phase 2: Design System
-- Begin implementing reusable UI components
-- Setup theme and design system
-- Create component library
+- Admin Measurements page with product-type auto forms
+- Seed ladies garment measurement templates
+- Version history + printable sheets
 
 ## Token Usage Optimization Strategy
 

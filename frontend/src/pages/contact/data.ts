@@ -1,4 +1,5 @@
 import { brand } from '@/pages/home/data';
+import { whatsappDeepLink } from '@/utils/whatsapp';
 
 export { brand };
 
@@ -45,7 +46,7 @@ export const studioContact = {
 } as const;
 
 export function whatsappHref(prefill: string = studioContact.whatsappPrefill): string {
-  return `https://wa.me/${studioContact.whatsappNumber}?text=${encodeURIComponent(prefill)}`;
+  return whatsappDeepLink(studioContact.whatsappNumber, prefill);
 }
 
 export const contactFormCopy = {

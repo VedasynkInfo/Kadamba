@@ -37,10 +37,11 @@ export default function PortfolioDetailPage() {
   return (
     <>
       <PageMeta
-        title={project.title}
-        description={project.summary}
+        title={project.metaTitle || project.title}
+        titleAbsolute={Boolean(project.metaTitle)}
+        description={project.metaDescription || project.summary}
         path={path}
-        image={project.coverImage || project.bannerImage}
+        image={project.ogImage || project.coverImage || project.bannerImage}
       />
       <JsonLd
         data={creativeWorkJsonLd({

@@ -37,10 +37,11 @@ export default function ServiceDetailPage() {
   return (
     <>
       <PageMeta
-        title={service.title}
-        description={service.summary}
+        title={service.metaTitle || service.title}
+        titleAbsolute={Boolean(service.metaTitle)}
+        description={service.metaDescription || service.summary}
         path={path}
-        image={service.bannerImage || service.cardImage}
+        image={service.ogImage || service.bannerImage || service.cardImage}
       />
       <JsonLd
         data={serviceJsonLd({

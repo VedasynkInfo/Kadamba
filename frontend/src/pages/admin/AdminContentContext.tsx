@@ -18,6 +18,36 @@ import { blogsApi } from '@/services/blogs/blogsService';
 import { settingsApi } from '@/services/settings/settingsService';
 import { defaultWebsiteSettings, type WebsiteSettings } from './data';
 
+/** Deep-merge API settings onto defaults so nested sections always exist. */
+export function mergeWebsiteSettings(partial?: Partial<WebsiteSettings> | null): WebsiteSettings {
+  const base = structuredClone(defaultWebsiteSettings);
+  if (!partial) return base;
+  return {
+    ...base,
+    ...partial,
+    addressLines: partial.addressLines?.length ? partial.addressLines : base.addressLines,
+    hours: partial.hours?.length ? partial.hours : base.hours,
+    social: partial.social?.length ? partial.social : base.social,
+    socialNamed: { ...base.socialNamed, ...(partial.socialNamed || {}) },
+    seo: { ...base.seo, ...(partial.seo || {}) },
+    media: {
+      ...base.media,
+      ...(partial.media || {}),
+      bannerPresets: partial.media?.bannerPresets?.length
+        ? partial.media.bannerPresets
+        : base.media.bannerPresets,
+    },
+    emailConfig: {
+      ...base.emailConfig!,
+      ...(partial.emailConfig || {}),
+      templates: partial.emailConfig?.templates?.length
+        ? partial.emailConfig.templates
+        : base.emailConfig!.templates,
+    },
+    theme: { ...base.theme, ...(partial.theme || {}) },
+  };
+}
+
 interface AdminContentStore {
   loading: boolean;
   gallery: GalleryItem[];
@@ -50,9 +80,7 @@ export function AdminContentProvider({ children }: { children: ReactNode }) {
   const [services, setServices] = useState<ServiceDetail[]>([]);
   const [portfolio, setPortfolio] = useState<PortfolioProject[]>([]);
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
-  const [settings, setSettings] = useState<WebsiteSettings>(
-    () => structuredClone(defaultWebsiteSettings),
-  );
+  const [settings, setSettings] = useState<WebsiteSettings>(() => mergeWebsiteSettings());
 
   const refresh = useCallback(async () => {
     setLoading(true);
@@ -62,7 +90,7 @@ export function AdminContentProvider({ children }: { children: ReactNode }) {
         setServices(structuredClone(serviceDetails));
         setPortfolio(structuredClone(portfolioProjects));
         setBlogs(structuredClone(blogPosts));
-        setSettings(structuredClone(defaultWebsiteSettings));
+        setSettings(mergeWebsiteSettings());
         return;
       }
 
@@ -71,7 +99,7 @@ export function AdminContentProvider({ children }: { children: ReactNode }) {
         servicesApi.list(),
         portfolioApi.list(),
         blogsApi.list(),
-        settingsApi.get(),
+        settingsApi.getAdmin().catch(() => settingsApi.get()),
       ]);
 
       setGallery(g.items.length ? g.items : import.meta.env.DEV ? structuredClone(galleryItems) : []);
@@ -86,7 +114,7 @@ export function AdminContentProvider({ children }: { children: ReactNode }) {
             : [],
       );
       setBlogs(b.items.length ? b.items : import.meta.env.DEV ? structuredClone(blogPosts) : []);
-      setSettings({ ...defaultWebsiteSettings, ...site });
+      setSettings(mergeWebsiteSettings(site));
     } catch (err) {
       console.warn('Admin content API unavailable — using seed data', err);
       if (import.meta.env.DEV) {
@@ -235,15 +263,15 @@ export function AdminContentProvider({ children }: { children: ReactNode }) {
 
   const saveSettings = useCallback(async (next: WebsiteSettings) => {
     if (isDemoToken() && import.meta.env.DEV) {
-      setSettings(next);
+      setSettings(mergeWebsiteSettings(next));
       return;
     }
     const saved = await settingsApi.update(next);
-    setSettings({ ...defaultWebsiteSettings, ...saved });
+    setSettings(mergeWebsiteSettings(saved));
   }, []);
 
   const resetSettings = useCallback(async () => {
-    const next = structuredClone(defaultWebsiteSettings);
+    const next = mergeWebsiteSettings();
     await saveSettings(next);
   }, [saveSettings]);
 

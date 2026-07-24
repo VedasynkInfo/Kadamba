@@ -273,26 +273,26 @@ export const processSteps: ProcessStep[] = [
   {
     id: 'p1',
     step: '01',
-    title: 'Consult',
-    description: 'Share the occasion, preferred style, and fabric — we listen first.',
+    title: 'Enquire',
+    description: 'Request a consultation online or visit the Kurnool boutique with your occasion in mind.',
   },
   {
     id: 'p2',
     step: '02',
-    title: 'Measure',
-    description: 'Precise measurements and style notes for bridal or traditional wear.',
+    title: 'Confirm',
+    description: 'We confirm style, fabric, and timeline — then lock your workshop order.',
   },
   {
     id: 'p3',
     step: '03',
-    title: 'Stitch & trial',
-    description: 'Careful stitching with fittings so the silhouette sits just right.',
+    title: 'Reference ID',
+    description: 'Receive your Reference ID by email — keep it safe for portal activation.',
   },
   {
     id: 'p4',
     step: '04',
-    title: 'Finish & deliver',
-    description: 'Final finishing touches and a ready look for your celebration.',
+    title: 'Portal',
+    description: 'Track orders, share measurements, and chat with the boutique in one place.',
   },
 ];
 

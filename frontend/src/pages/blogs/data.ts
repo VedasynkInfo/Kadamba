@@ -43,6 +43,15 @@ export interface BlogPost {
   readMinutes: number;
   author: string;
   featured?: boolean;
+  published?: boolean;
+  metaTitle?: string;
+  metaDescription?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  twitterTitle?: string;
+  twitterDescription?: string;
+  twitterImage?: string;
 }
 
 export const blogCategories = [

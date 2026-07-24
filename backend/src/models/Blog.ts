@@ -17,6 +17,14 @@ export interface IBlog extends Document {
   author: string;
   featured: boolean;
   published: boolean;
+  metaTitle?: string;
+  metaDescription?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  twitterTitle?: string;
+  twitterDescription?: string;
+  twitterImage?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -36,6 +44,14 @@ const blogSchema = new Schema<IBlog>(
     author: { type: String, default: "Kadamba's Designer Studio" },
     featured: { type: Boolean, default: false },
     published: { type: Boolean, default: true },
+    metaTitle: { type: String, default: '' },
+    metaDescription: { type: String, default: '' },
+    ogTitle: { type: String, default: '' },
+    ogDescription: { type: String, default: '' },
+    ogImage: { type: String, default: '' },
+    twitterTitle: { type: String, default: '' },
+    twitterDescription: { type: String, default: '' },
+    twitterImage: { type: String, default: '' },
   },
   { timestamps: true },
 );

@@ -11,7 +11,8 @@ import { ApiError } from '../utils/ApiError';
 import { buildPaginationMeta, parsePagination } from '../utils/pagination';
 import { parseBooleanQuery, searchRegex } from '../utils/query';
 import { toDto } from '../utils/serialize';
-import { uniqueSlug } from '../utils/slugify';
+import { resolveClientSlug } from '../utils/slugify';
+import { generateSeoWithSettings } from '../utils/generateSeo';
 
 export type PortfolioDto = Record<string, unknown> & { id: string; slug: string; title: string };
 
@@ -79,14 +80,21 @@ export async function getPortfolio(idOrSlug: string, options: { admin: boolean }
 }
 
 export async function createPortfolio(input: Record<string, unknown> & { title: string }) {
-  const slug = await uniqueSlug(
+  const slug = await resolveClientSlug(
     input.title,
-    (s) => slugExists(s),
     typeof input.slug === 'string' ? input.slug : undefined,
+    (s) => slugExists(s),
   );
   const category = (PORTFOLIO_CATEGORIES as readonly string[]).includes(String(input.category))
     ? (input.category as PortfolioCategory)
     : 'Bridal';
+
+  const seo = await generateSeoWithSettings({
+    title: input.title,
+    summary: String(input.summary ?? ''),
+    imageUrl: String(input.coverImage || input.bannerImage || ''),
+  });
+
   const doc = await Portfolio.create({
     title: input.title,
     slug,
@@ -96,9 +104,9 @@ export async function createPortfolio(input: Record<string, unknown> & { title: 
     year: String(input.year ?? ''),
     location: String(input.location || 'Kurnool'),
     bannerImage: String(input.bannerImage ?? ''),
-    bannerAlt: String(input.bannerAlt ?? ''),
+    bannerAlt: String(input.bannerAlt || seo.imageAlt),
     coverImage: String(input.coverImage ?? ''),
-    coverAlt: String(input.coverAlt ?? ''),
+    coverAlt: String(input.coverAlt || seo.imageAlt),
     gallery: Array.isArray(input.gallery) ? input.gallery : [],
     beforeAfter: input.beforeAfter
       ? (input.beforeAfter as IPortfolioBeforeAfter)
@@ -110,6 +118,14 @@ export async function createPortfolio(input: Record<string, unknown> & { title: 
     ctaLabel: String(input.ctaLabel || 'Start your project'),
     published: Boolean(input.published ?? true),
     sortOrder: Number(input.sortOrder ?? 0),
+    metaTitle: String(input.metaTitle || seo.metaTitle),
+    metaDescription: String(input.metaDescription || seo.metaDescription),
+    ogTitle: String(input.ogTitle || seo.ogTitle),
+    ogDescription: String(input.ogDescription || seo.ogDescription),
+    ogImage: String(input.ogImage || seo.ogImage),
+    twitterTitle: String(input.twitterTitle || seo.twitterTitle),
+    twitterDescription: String(input.twitterDescription || seo.twitterDescription),
+    twitterImage: String(input.twitterImage || seo.twitterImage),
   });
   return serialize(doc);
 }
@@ -120,10 +136,10 @@ export async function updatePortfolio(id: string, input: Record<string, unknown>
   if (!existing) throw new ApiError(404, 'Portfolio project not found');
 
   if (input.slug || input.title) {
-    existing.slug = await uniqueSlug(
+    existing.slug = await resolveClientSlug(
       String(input.title || existing.title),
-      (s) => slugExists(s, id),
       typeof input.slug === 'string' ? input.slug : existing.slug,
+      (s) => slugExists(s, id),
     );
   }
 
@@ -131,6 +147,24 @@ export async function updatePortfolio(id: string, input: Record<string, unknown>
   for (const [key, value] of Object.entries(input)) {
     if (skip.has(key) || value === undefined) continue;
     (existing as unknown as Record<string, unknown>)[key] = value;
+  }
+
+  if (!existing.metaTitle || !existing.metaDescription) {
+    const seo = await generateSeoWithSettings({
+      title: existing.title,
+      summary: existing.summary,
+      imageUrl: existing.coverImage || existing.bannerImage,
+    });
+    if (!existing.metaTitle) existing.metaTitle = seo.metaTitle;
+    if (!existing.metaDescription) existing.metaDescription = seo.metaDescription;
+    if (!existing.ogTitle) existing.ogTitle = seo.ogTitle;
+    if (!existing.ogDescription) existing.ogDescription = seo.ogDescription;
+    if (!existing.ogImage) existing.ogImage = seo.ogImage;
+    if (!existing.twitterTitle) existing.twitterTitle = seo.twitterTitle;
+    if (!existing.twitterDescription) existing.twitterDescription = seo.twitterDescription;
+    if (!existing.twitterImage) existing.twitterImage = seo.twitterImage;
+    if (!existing.bannerAlt) existing.bannerAlt = seo.imageAlt;
+    if (!existing.coverAlt) existing.coverAlt = seo.imageAlt;
   }
 
   await existing.save();

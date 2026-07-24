@@ -3,6 +3,17 @@
 ## Purpose
 These comprehensive prompts ensure consistent code quality and functionality verification across all development phases. Use these in every chat to maintain standards and verify implementation.
 
+## Boutique ERP feature prompts (primary for new work)
+
+For **what to build** (ERP + CRM + Portal + CMS Phase 2), use:
+
+- **Master prompts:** `documents/boutique_erp_prompts.md`
+- **PRD index:** `documents/prd/00_INDEX.md`
+- **Active chunk:** `active_chunk.md` (currently Measurement System)
+- **Status:** `documents/prompts_status.md`
+
+This file (`complete_prompts.md`) remains the **QA / architecture / security review** pack.
+
 ## Development Review Checklist
 
 ### 1. Architecture Review Prompt

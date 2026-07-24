@@ -1,10 +1,7 @@
-# Current Chunk: Phase 3 — Home Page
+# Current chunk
 
-## Brand (all phases)
-Kadamba's Designer Studio, **Kurnool** — boutique & tailoring for **women's traditional and bridal wear**.
+**Last finished:** Chat 19 — CMS + SEO leftover (Modules 11 + 12)
 
-## Status
-✅ Home UI + typography + **brand content** updated
+**Next:** Chat 20 — Reports · optional Chat 17 Notifications depth
 
-## Next
-Phase 4 — About (same brand story)
+See `active_chunk.md` + `documents/START_HERE.md`.

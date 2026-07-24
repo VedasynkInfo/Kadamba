@@ -35,10 +35,11 @@ export default function BlogDetailPage() {
   return (
     <>
       <PageMeta
-        title={post.title}
-        description={post.excerpt}
+        title={post.metaTitle || post.title}
+        titleAbsolute={Boolean(post.metaTitle)}
+        description={post.metaDescription || post.excerpt}
         path={path}
-        image={post.coverImage}
+        image={post.ogImage || post.coverImage}
         type="article"
         publishedTime={post.date}
       />

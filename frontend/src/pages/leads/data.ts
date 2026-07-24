@@ -47,6 +47,9 @@ export interface Lead {
   status: LeadStatus;
   source: LeadSource;
   assignee: string;
+  orderId?: string;
+  orderNumber?: number;
+  referenceId?: string;
   notes: LeadNote[];
   timeline: LeadTimelineEvent[];
   createdAt: string;

@@ -2,13 +2,15 @@ import { motion } from 'framer-motion';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
 import { Button, Section, SectionIntro } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-import { whatsappBanner, whatsappHref } from '../data';
+import { usePublicContent } from '@/hooks/usePublicContent';
+import { whatsappBanner } from '../data';
 
 /**
  * Mid-page WhatsApp banner — full-bleed photo plane, different from the centered hero.
  */
 export function ContactWhatsAppSection() {
   const reduced = usePrefersReducedMotion();
+  const { whatsappHref } = usePublicContent();
 
   return (
     <Section tone="dark" contained={false} className="relative overflow-hidden py-0">

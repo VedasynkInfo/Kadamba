@@ -429,17 +429,48 @@ Tell the story of Kadamba's Designer Studio as a **Kurnool boutique and tailorin
    - Alt text for all images
    - Proper heading hierarchy
 
+## Boutique ERP Program (Phase 16+)
+
+Website Phases 1–15 remain complete. The product now extends into a **Boutique ERP + CRM + Customer Portal** for Kadamba's Designer Studio (Kurnool) — bridal, maggam, designer blouses, custom women's tailoring.
+
+### Canonical docs (keep in sync)
+
+| File | Role |
+|------|------|
+| `documents/boutique_erp_prompts.md` | Master feature list + Cursor starter prompts |
+| `documents/prd/00_INDEX.md` | PRD module map + implementation order |
+| `documents/prd/01_Project_Overview.md` … `17_Future_Roadmap.md` | Per-module PRDs |
+| `documents/prd/05_Measurement_System.md` | **Active** — measurements + ladies garment catalog |
+| `documents/prompts_status.md` | PRD/dev status tracker |
+| `active_chunk.md` | Current implementation brief (repo root) |
+| `current_chunk.md` / `documents/current_chunk.md` | Short status mirrors |
+
+### Module order
+
+1. Measurement System ← **active**  
+2. Product Catalog → Staff → Customers → Orders → Finance  
+3. User Roles + Customer Portal → Notifications  
+4. Admin Dashboard metrics → CMS/SEO/Settings polish → Reports  
+5. Future roadmap (inventory, GST, attendance, etc.)
+
+### Extend-not-rebuild rules
+
+- Keep JWT auth, Mongo/Mongoose, Cloudinary, `{ success, message, data }` envelope  
+- Extend `backend/src/{models,services,controllers,routes}` and `frontend/src/pages/admin/*`  
+- Brand: women's boutique & tailoring — never interior design  
+- Public site contact/address must sync from Settings (Module 14)
+
 ## Current Status Summary
 
-**Active Development:** All phases complete — ready for production launch
-**Current Chunk:** `documents/current_chunk.md`
-**Completed:** Phases 1–15
-**Next Phase:** Production launch (see `DEPLOYMENT.md`)
-**Project Health:** ✅ Hardened backend, tests + CI, deploy config, and docs delivered
+**Active Development:** Boutique ERP — Module 05 Measurement System  
+**Current Chunk:** `documents/current_chunk.md` + root `active_chunk.md`  
+**Completed:** Website/CMS Phases 1–15  
+**Next Module after Measurements:** Staff Management (09) / Product Catalog (06)  
+**Project Health:** ✅ Production site foundation intact; ERP PRDs documented; measurements implementation active
 
 **Immediate Action Items:**
-1. Provision MongoDB Atlas, Cloudinary, and SMTP credentials
-2. Set production env on Vercel (frontend) and Render (backend) per `DEPLOYMENT.md`
-3. Bootstrap the first admin via `npm run seed:admin`, then run the QA checklist
+1. Implement Measurement admin module per `documents/prd/05_Measurement_System.md`
+2. Keep `prompts_status.md` updated as modules complete
+3. Production deploy checklist still in `DEPLOYMENT.md` for the public site
 
 This reference document enables efficient token usage by providing phase-specific guidance while maintaining comprehensive documentation for team onboarding and project continuity.

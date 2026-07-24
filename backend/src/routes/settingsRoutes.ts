@@ -1,11 +1,16 @@
 import { Router } from 'express';
 import { body } from 'express-validator';
-import { getSettingsHandler, updateSettingsHandler } from '../controllers/settingsController';
+import {
+  getPublicSettingsHandler,
+  getSettingsHandler,
+  updateSettingsHandler,
+} from '../controllers/settingsController';
 import { authenticate, authorize } from '../middleware/auth';
 import { validateRequest } from '../middleware/validate';
 
 const router = Router();
 
+router.get('/public', getPublicSettingsHandler);
 router.get('/', getSettingsHandler);
 
 router.put(

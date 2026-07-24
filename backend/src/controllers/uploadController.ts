@@ -1,6 +1,20 @@
 import type { Request, Response } from 'express';
+import { env } from '../config/env';
 import { asyncHandler } from '../utils/asyncHandler';
 import { ApiError } from '../utils/ApiError';
+
+function absoluteLocalUploadUrl(req: Request, filename: string): string {
+  const base =
+    env.publicApiUrl ||
+    (() => {
+      const proto = String(req.get('x-forwarded-proto') || req.protocol || 'https')
+        .split(',')[0]
+        .trim();
+      const host = req.get('x-forwarded-host') || req.get('host') || 'localhost';
+      return `${proto}://${host}`;
+    })();
+  return `${base.replace(/\/$/, '')}/uploads/${filename}`;
+}
 
 export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
   if (!req.file) {
@@ -16,11 +30,12 @@ export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
     (req as Request & { uploadViaCloudinary?: boolean }).uploadViaCloudinary,
   );
 
+  const filename = file.filename || file.path?.split(/[/\\]/).pop() || '';
   // Cloudinary storage sets `path` to the secure delivery URL.
-  // Local disk fallback returns a same-origin path proxied via Vite `/uploads`.
+  // Local disk returns an absolute API URL so the SPA (separate origin) can load it.
   const url = viaCloudinary
     ? file.path
-    : `/uploads/${file.filename || file.path?.split(/[/\\]/).pop()}`;
+    : absoluteLocalUploadUrl(req, filename);
 
   if (!url) {
     throw new ApiError(500, 'Upload succeeded but no URL was returned');

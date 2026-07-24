@@ -42,11 +42,6 @@ if (isProduction) {
   if (frontendUrlRaw && !frontendUrlRaw.startsWith('https://')) {
     problems.push('FRONTEND_URL must be an https origin in production');
   }
-  if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
-    problems.push(
-      'Cloudinary (CLOUDINARY_CLOUD_NAME/API_KEY/API_SECRET) is required in production — local disk uploads are not durable',
-    );
-  }
 }
 
 if (problems.length && !isTest) {
@@ -79,6 +74,16 @@ export const env = {
     apiKey: optional('CLOUDINARY_API_KEY'),
     apiSecret: optional('CLOUDINARY_API_SECRET'),
   },
+  /**
+   * Upload backend: `local` (default) | `cloudinary` | `auto`.
+   * Prefer local when Cloudinary keys are missing/invalid — works on Render too.
+   */
+  uploadStorage: (optional('UPLOAD_STORAGE', 'local').toLowerCase() as
+    | 'local'
+    | 'cloudinary'
+    | 'auto'),
+  /** Optional public API origin for absolute local upload URLs (e.g. https://api.example.com). */
+  publicApiUrl: optional('PUBLIC_API_URL', optional('RENDER_EXTERNAL_URL')),
   email: {
     host: optional('EMAIL_HOST', 'smtp.gmail.com'),
     port: Number(process.env.EMAIL_PORT || 587),

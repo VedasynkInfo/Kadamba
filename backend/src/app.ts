@@ -71,10 +71,8 @@ export function createApp(): Express {
   app.use(express.json({ limit: '1mb' }));
   app.use(express.urlencoded({ extended: true }));
 
-  // Local disk uploads are only used in development (Cloudinary in production).
-  if (!env.isProduction) {
-    app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
-  }
+  // Serve locally stored uploads (dev + production when UPLOAD_STORAGE=local).
+  app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
   app.get('/', (_req, res) => {
     res.json({ success: true, message: "Kadamba's Designer Studio API", version: '1.0.0' });

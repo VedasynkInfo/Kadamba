@@ -29,6 +29,8 @@ services:
         generateValue: true  # Render generates a strong secret
       - key: JWT_EXPIRES_IN
         value: 1h
+      - key: UPLOAD_STORAGE
+        value: local
       - key: CLOUDINARY_CLOUD_NAME
         sync: false
       - key: CLOUDINARY_API_KEY

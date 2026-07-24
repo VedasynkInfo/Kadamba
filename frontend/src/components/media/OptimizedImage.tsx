@@ -1,5 +1,6 @@
 import type { ImgHTMLAttributes } from 'react';
 import { cn } from '@/utils/cn';
+import { mediaUrl } from '@/utils/mediaUrl';
 
 export interface OptimizedImageProps
   extends Omit<ImgHTMLAttributes<HTMLImageElement>, 'src' | 'alt' | 'loading'> {
@@ -51,7 +52,7 @@ export function OptimizedImage({
   sizes,
   ...rest
 }: OptimizedImageProps) {
-  const optimizedSrc = cloudinaryOptimizedUrl(src, width);
+  const optimizedSrc = cloudinaryOptimizedUrl(mediaUrl(src), width);
 
   return (
     <img

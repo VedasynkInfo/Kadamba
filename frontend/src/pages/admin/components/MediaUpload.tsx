@@ -1,6 +1,7 @@
 import { useId, useRef, useState, type ChangeEvent } from 'react';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/utils/cn';
+import { mediaUrl } from '@/utils/mediaUrl';
 import { uploadMedia } from '@/services/upload/uploadService';
 
 export interface MediaUploadProps {
@@ -80,6 +81,7 @@ export function MediaUpload({
   }
 
   const showVideo = value && isVideoUrl(value);
+  const previewSrc = mediaUrl(value);
 
   return (
     <div className="flex w-full flex-col gap-1.5">
@@ -96,7 +98,7 @@ export function MediaUpload({
         <div className="overflow-hidden rounded-md border border-black/15 bg-black/[0.03]">
           {showVideo ? (
             <video
-              src={value}
+              src={previewSrc}
               className="max-h-48 w-full object-cover"
               controls
               muted
@@ -104,7 +106,7 @@ export function MediaUpload({
             />
           ) : (
             <img
-              src={value}
+              src={previewSrc}
               alt=""
               className="max-h-48 w-full object-cover"
             />

@@ -66,10 +66,11 @@ export type LeadDto = {
 function cloudinaryConfigured(): boolean {
   const { cloudName, apiKey, apiSecret } = env.cloudinary;
   if (!cloudName || !apiKey || !apiSecret) return false;
-  // Guard against placeholder values in .env during local development
   if (cloudName.startsWith('your_') || apiKey.startsWith('your_') || apiSecret.startsWith('your_')) {
     return false;
   }
+  // Same guard as upload routes — reject mistyped keys (e.g. trailing "s").
+  if (!/^\d+$/.test(apiKey.trim())) return false;
   return true;
 }
 

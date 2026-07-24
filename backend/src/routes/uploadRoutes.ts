@@ -10,20 +10,32 @@ import { authenticate, authorize } from '../middleware/auth';
 
 const router = Router();
 
-const uploadsDir = path.join(process.cwd(), 'uploads');
+export const uploadsDir = path.join(process.cwd(), 'uploads');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
 /** True when real (non-placeholder) Cloudinary credentials are configured. */
-function cloudinaryReady(): boolean {
+function cloudinaryCredentialsPresent(): boolean {
   const { cloudName, apiKey, apiSecret } = env.cloudinary;
   if (!cloudName || !apiKey || !apiSecret) return false;
-  // Guard against placeholder values in .env during local development.
   if (cloudName.startsWith('your_') || apiKey.startsWith('your_') || apiSecret.startsWith('your_')) {
     return false;
   }
+  // Reject obviously truncated / mistyped keys (Cloudinary keys are numeric-ish, no trailing letters like "s").
+  if (!/^\d+$/.test(apiKey.trim())) return false;
   return true;
+}
+
+/**
+ * Prefer local disk by default (UPLOAD_STORAGE=local).
+ * Use Cloudinary only when explicitly requested and credentials look valid.
+ */
+export function useCloudinaryUpload(): boolean {
+  if (env.uploadStorage === 'local') return false;
+  if (env.uploadStorage === 'cloudinary') return cloudinaryCredentialsPresent();
+  // auto
+  return cloudinaryCredentialsPresent();
 }
 
 const cloudStorage = new CloudinaryStorage({
@@ -54,7 +66,7 @@ const diskStorage = multer.diskStorage({
 });
 
 const upload = multer({
-  storage: cloudinaryReady() ? cloudStorage : diskStorage,
+  storage: useCloudinaryUpload() ? cloudStorage : diskStorage,
   limits: {
     fileSize: 25 * 1024 * 1024,
   },
@@ -75,9 +87,8 @@ function uploadMedia(req: Request, res: Response, next: NextFunction) {
     if (files?.length) {
       req.file = files[0];
     }
-    // Flag for controller so local URLs are shaped correctly
     (req as Request & { uploadViaCloudinary?: boolean }).uploadViaCloudinary =
-      cloudinaryReady();
+      useCloudinaryUpload();
     next();
   });
 }

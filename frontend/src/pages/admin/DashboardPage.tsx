@@ -341,7 +341,7 @@ export default function AdminDashboardPage() {
                             color: '#fffdd0',
                             fontSize: '12px',
                           }}
-                          formatter={(value: number) => [`₹${Number(value).toLocaleString('en-IN')}`, 'Revenue']}
+                          formatter={(value) => [`₹${Number(value ?? 0).toLocaleString('en-IN')}`, 'Revenue']}
                         />
                         <Bar dataKey="amount" name="Revenue" fill="#000000" radius={[2, 2, 0, 0]} maxBarSize={45} />
                       </BarChart>

@@ -174,7 +174,7 @@ export type AnyReport =
   | StaffWorkloadReport
   | CustomerRepeatReport;
 
-async function getReport<T>(path: string, params?: Record<string, unknown>): Promise<T> {
+async function getReport<T>(path: string, params?: ReportDateParams | { asOf?: string }): Promise<T> {
   const { data } = await api.get<ApiResponse<T>>(`/admin/reports/${path}`, { params });
   return data.data!;
 }

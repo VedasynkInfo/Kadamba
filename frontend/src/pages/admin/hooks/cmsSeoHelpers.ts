@@ -72,7 +72,7 @@ export function applySeoPack<T>(
   slugAuto: boolean,
   altKeys: string | string[],
 ): T {
-  const next = { ...form } as T & Record<string, unknown>;
+  const next: Record<string, unknown> = { ...(form as Record<string, unknown>) };
   if (slugAuto && seoAuto.slug !== false) next.slug = pack.slug;
   if (seoAuto.metaTitle !== false) next.metaTitle = pack.metaTitle;
   if (seoAuto.metaDescription !== false) next.metaDescription = pack.metaDescription;
@@ -86,7 +86,7 @@ export function applySeoPack<T>(
     const keys = Array.isArray(altKeys) ? altKeys : [altKeys];
     for (const key of keys) next[key] = pack.imageAlt;
   }
-  return next as unknown as T;
+  return next as T;
 }
 
 export { defaultSeoAutoFlags };

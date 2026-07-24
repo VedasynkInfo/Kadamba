@@ -23,7 +23,6 @@ export interface ReportDateParams {
   to: string;
   groupBy?: GroupBy;
   asOf?: string;
-  [key: string]: unknown;
 }
 
 export interface OrdersByStatusReport {
@@ -175,7 +174,7 @@ export type AnyReport =
   | StaffWorkloadReport
   | CustomerRepeatReport;
 
-async function getReport<T>(path: string, params?: Record<string, string | undefined>): Promise<T> {
+async function getReport<T>(path: string, params?: Record<string, unknown>): Promise<T> {
   const { data } = await api.get<ApiResponse<T>>(`/admin/reports/${path}`, { params });
   return data.data!;
 }

@@ -65,7 +65,7 @@ export function inferSeoAutoFlags(
   };
 }
 
-export function applySeoPack<T extends Record<string, unknown>>(
+export function applySeoPack<T>(
   form: T,
   pack: SeoPack,
   seoAuto: SeoAutoFlags,

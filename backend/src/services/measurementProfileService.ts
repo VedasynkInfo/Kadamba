@@ -200,5 +200,50 @@ export async function seedProfiles() {
     return { message: 'Profiles already seeded', count };
   }
 
-  return { message: 'Profiles not seeded — requires customer data', count: 0 };
+  const customers = await Customer.find().limit(5).lean();
+  if (!customers.length) {
+    return { message: 'Profiles not seeded — requires customer data', count: 0 };
+  }
+
+  const templates = await MeasurementTemplate.find({ active: true }).limit(5).lean();
+  if (!templates.length) {
+    return { message: 'Profiles not seeded — requires measurement templates', count: 0 };
+  }
+
+  const docs = [];
+  for (let i = 0; i < Math.min(customers.length, templates.length); i++) {
+    const customer = customers[i];
+    const tmpl = templates[i];
+    const values: Record<string, unknown> = {};
+    for (const field of (tmpl.fieldDefs || []).slice(0, 12)) {
+      if (field.type === 'number') values[field.key] = 34;
+      else if (field.type === 'boolean') values[field.key] = false;
+      else if (field.type === 'enum' && field.options?.length) values[field.key] = field.options[0];
+      else values[field.key] = 'Sample';
+    }
+    docs.push({
+      customerId: String(customer._id),
+      productTypeCode: tmpl.code,
+      profileName: `${tmpl.name} — ${customer.name}`,
+      unit: 'inches',
+      status: i === 0 ? 'pending_approval' : 'active',
+      values,
+      notes: 'Seeded sample profile',
+      measuredBy: 'seed',
+      measuredAt: new Date(),
+      currentVersion: 1,
+      versions: [
+        {
+          values,
+          notes: 'Initial seed',
+          changedBy: 'seed',
+          changedAt: new Date(),
+          reason: 'Seed data',
+        },
+      ],
+    });
+  }
+
+  await MeasurementProfile.insertMany(docs);
+  return { message: 'Profiles seeded', count: docs.length };
 }

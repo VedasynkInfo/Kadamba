@@ -46,9 +46,9 @@ function useCollection<T>({ queryKey, fetcher }: CollectionArgs<T>): CollectionQ
   const query = useQuery({
     queryKey,
     queryFn: fetcher,
-    // Defensive: a malformed success envelope must degrade to "no items" rather
-    // than throwing inside a render. Strict response validation lands in 5.2.
-    select: (page) => (Array.isArray(page?.items) ? page.items : []),
+    // The service has already validated the envelope against the shared
+    // contract (`lib/parse.ts`), so this is a real `{ items, pagination }`.
+    select: (page) => page.items,
     staleTime: CONTENT_STALE_TIME,
   });
 

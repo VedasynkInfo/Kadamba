@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { body, param } from 'express-validator';
+import { param } from 'express-validator';
 import {
   createPortfolioHandler,
   getPortfolioHandler,
@@ -10,7 +10,8 @@ import {
 import { authenticate, authorize, requirePermission } from '../middleware/auth';
 import { optionalAuthenticate } from '../middleware/optionalAuth';
 import { validateRequest } from '../middleware/validate';
-import { PORTFOLIO_CATEGORIES } from '../models/Portfolio';
+import { validateBody } from '../middleware/validateBody';
+import { portfolioWriteSchema } from '../shared/schemas';
 
 const router = Router();
 
@@ -22,17 +23,7 @@ router.post(
   authenticate,
   authorize('admin', 'staff'),
   requirePermission('content:write'),
-  [
-    body('title').trim().isLength({ min: 2, max: 160 }).withMessage('Title is required'),
-    body('category').isIn([...PORTFOLIO_CATEGORIES]).withMessage('Invalid category'),
-    body('summary').trim().isLength({ min: 2, max: 500 }).withMessage('Summary is required'),
-    body('bannerImage').trim().notEmpty().withMessage('Banner image is required'),
-    body('bannerAlt').trim().notEmpty().withMessage('Banner alt is required'),
-    body('coverImage').trim().notEmpty().withMessage('Cover image is required'),
-    body('coverAlt').trim().notEmpty().withMessage('Cover alt is required'),
-    body('published').optional().isBoolean(),
-  ],
-  validateRequest,
+  validateBody(portfolioWriteSchema),
   createPortfolioHandler,
 );
 
@@ -43,6 +34,7 @@ router.put(
   requirePermission('content:write'),
   [param('id').isMongoId().withMessage('Invalid id')],
   validateRequest,
+  validateBody(portfolioWriteSchema.partial()),
   updatePortfolioHandler,
 );
 

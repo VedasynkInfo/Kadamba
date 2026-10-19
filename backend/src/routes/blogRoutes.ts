@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { body, param } from 'express-validator';
+import { param } from 'express-validator';
 import {
   createBlogHandler,
   getBlogHandler,
@@ -10,7 +10,8 @@ import {
 import { authenticate, authorize, requirePermission } from '../middleware/auth';
 import { optionalAuthenticate } from '../middleware/optionalAuth';
 import { validateRequest } from '../middleware/validate';
-import { BLOG_CATEGORIES } from '../models/Blog';
+import { validateBody } from '../middleware/validateBody';
+import { blogWriteSchema } from '../shared/schemas';
 
 const router = Router();
 
@@ -22,17 +23,7 @@ router.post(
   authenticate,
   authorize('admin', 'staff'),
   requirePermission('content:write'),
-  [
-    body('title').trim().isLength({ min: 2, max: 200 }).withMessage('Title is required'),
-    body('excerpt').trim().isLength({ min: 2, max: 500 }).withMessage('Excerpt is required'),
-    body('category').isIn([...BLOG_CATEGORIES]).withMessage('Invalid category'),
-    body('coverImage').trim().notEmpty().withMessage('Cover image is required'),
-    body('coverAlt').trim().notEmpty().withMessage('Cover alt is required'),
-    body('published').optional().isBoolean(),
-    body('featured').optional().isBoolean(),
-    body('readMinutes').optional().isInt({ min: 1 }),
-  ],
-  validateRequest,
+  validateBody(blogWriteSchema),
   createBlogHandler,
 );
 
@@ -43,6 +34,7 @@ router.put(
   requirePermission('content:write'),
   [param('id').isMongoId().withMessage('Invalid id')],
   validateRequest,
+  validateBody(blogWriteSchema.partial()),
   updateBlogHandler,
 );
 

@@ -323,6 +323,12 @@ export const ERROR_CODES = [
   'MFA_REQUIRED',
   'MFA_INVALID',
   'ACCOUNT_LOCKED',
+  /**
+   * Client-originated: the response arrived but did not match
+   * `shared/schemas.ts`. The server never sends this; the SPA raises it when a
+   * contract violation would otherwise be rendered as a blank field.
+   */
+  'UNEXPECTED_RESPONSE',
 ] as const;
 export type ErrorCode = (typeof ERROR_CODES)[number];
 

@@ -1,25 +1,27 @@
 import api from '../api/client';
-import type { ApiResponse, PaginatedData } from '@/types';
+import type { PaginatedData } from '@/types';
+import { parseApiData } from '@/lib/parse';
+import { serviceDetailSchema, servicesPageSchema } from '@/shared/schemas';
 import type { ServiceDetail } from '@/pages/services/data';
 
 const MONGO_ID = /^[a-f\d]{24}$/i;
 
 export const servicesApi = {
-  list: async (params?: Record<string, string | number | boolean>) => {
-    const { data } = await api.get<ApiResponse<PaginatedData<ServiceDetail>>>('/services', {
-      params: { limit: 100, ...params },
-    });
-    return data.data!;
+  list: async (
+    params?: Record<string, string | number | boolean>,
+  ): Promise<PaginatedData<ServiceDetail>> => {
+    const { data } = await api.get('/services', { params: { limit: 100, ...params } });
+    return parseApiData(servicesPageSchema, data, 'the services list');
   },
 
-  upsert: async (item: ServiceDetail) => {
+  upsert: async (item: ServiceDetail): Promise<ServiceDetail> => {
     const { id, ...body } = item;
     if (MONGO_ID.test(id)) {
-      const { data } = await api.put<ApiResponse<ServiceDetail>>(`/services/${id}`, body);
-      return data.data!;
+      const { data } = await api.put(`/services/${id}`, body);
+      return parseApiData(serviceDetailSchema, data, 'the saved service');
     }
-    const { data } = await api.post<ApiResponse<ServiceDetail>>('/services', body);
-    return data.data!;
+    const { data } = await api.post('/services', body);
+    return parseApiData(serviceDetailSchema, data, 'the saved service');
   },
 
   remove: async (id: string) => {

@@ -162,7 +162,7 @@
 | 5.1 | TanStack Query v5 — replace data responsibilities of 9 contexts | 🚧 (CMS + leads + theme done; admin desks remain) |
 | 5.1 | Delete seed-data swallowing → real error states | ✅ |
 | 5.1 | Error-code adoption on the backend (`code` on every error) | ✅ |
-| 5.2 | Zod schemas shared via contract (server + client) | ⬜ |
+| 5.2 | Zod schemas shared via contract (server + client) | ✅ |
 | 5.3 | React Router v7 data router (loaders/actions/errorElement) | ⬜ |
 | 5.4 | Typed order state machine (shared transitions) | ⬜ (transitions defined ✅) |
 | 5.5 | Socket events → query cache invalidation | ⬜ |
@@ -179,6 +179,16 @@
 - **Tests:** the frontend had no unit runner. Added Vitest + jsdom + Testing Library (`npm test`, currently 36 tests) covering `apiError`, the query-key hierarchy (including the published-vs-draft separation), `mergeWebsiteSettings`, and the loading → data → error behaviour of the CMS query hook. The token ratchet now skips `*.test.ts(x)`: a test asserting `{ accent: '#123456' }` round-trips is checking plumbing, not shipping a colour.
 - **Remaining for 5.1:** ~30 admin desks still own hand-rolled `useEffect` fetches; they need the same query treatment (Phase 7 rewrites most of those components anyway, so the two phases meet there).
 - **Routing smell found while testing:** `router.use('/admin', createSlugAvailableRouter())` applies its `content:write` gate to *any* unmatched `/api/admin/*` path, so a staff user without `content:write` gets `403` instead of `404` for an unknown admin URL. Existing routes all mount before it, so nothing is shadowed today — but the gate should be attached per-route. Folding this into 5.3.
+
+**5.2 — one schema for both ends**
+- `shared/schemas.ts` is the payload half of the contract (`shared/enums.ts` is the vocabulary half): the success/error envelopes, pagination, the four CMS records, the settings document, the lead record, the four CMS write payloads and the public enquiry payload. `scripts/sync-shared.mjs` now copies a *file list* (`enums.ts`, `schemas.ts`) and `--check` fails if either drifts. Only `zod` and `./enums` are imported, because the copy must compile under both the backend's CommonJS `rootDir: ./src` build and Vite.
+- **Server side:** `middleware/validateBody(schema)` replaces the hand-written `express-validator` body chains on the gallery/service/portfolio/blog create-and-update routes and on the enquiry form. The payload the SPA sends is now checked against the same definition the SPA validates with, and the parsed result replaces `req.body`, so `"false"` arrives as a boolean and `"1200"` as a number instead of each service re-casting them. The write schemas are `looseObject`s, which is what makes that safe: fields the contract does not police (a service's `gallery`, `pricing`, …) still reach the service untouched rather than being stripped by a strict parse. `express-validator` keeps params and query strings.
+- **`__tests__/contract.test.ts` is the proof.** A schema is only worth having if it describes real responses, so these tests create a record through the API and parse what comes back — gallery, service, portfolio, post, the settings document, the enquiry receipt and the leads list — and assert the transcribed category vocabularies still match the models value for value. That test is what makes it safe to transcribe the enums rather than import them.
+- **Client side:** services no longer assert their own response shape with `data.data!`. `lib/parse.ts` validates the envelope and the payload against the shared schema and throws an `ApiContractError` attributed to the surface that asked ("the gallery list"), which `toAppError` reports as the new client-originated code `UNEXPECTED_RESPONSE` — distinguishable in logs from a network fault and never retried (retrying reproduces it). Responses are parsed with `looseObject`, so a field the server adds later passes through instead of invalidating a collection.
+- **Settings read through one adapter.** `settingsApi` parses the (partial, sometimes `null`) settings document and returns the result of `mergeWebsiteSettings`, so every caller keeps receiving a complete `WebsiteSettings` while the wire shape stays honest.
+- **Bug found and fixed:** `extractFieldErrors` only looked for `message`, but express-validator names its field detail `msg` — so *every* validation failure had been arriving in the UI with no field detail at all. Both are now read, and `validateBody` emits `message`.
+- `leadRequestSchema` carries the two business rules the enquiry route used to hold inline (a dialable phone number, no preferred date in the past), so the form and the server can enforce the same rule from one definition.
+- **Not yet migrated:** orders, customers, measurements, product catalog and the portal still validate with `express-validator` alone and still use `data.data!` in their services; their entity schemas are the next slice of the same pattern.
 
 ---
 

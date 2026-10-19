@@ -1,6 +1,7 @@
 import api from '../api/client';
-import type { ApiResponse, PaginatedData } from '@/types';
-import type { Lead, LeadStatus } from '@/pages/leads/data';
+import { parseApiData } from '@/lib/parse';
+import { leadCreatedSchema, leadSchema, leadsPageSchema } from '@/shared/schemas';
+import type { LeadStatus } from '@/pages/leads/data';
 
 export interface LeadRequestPayload {
   name: string;
@@ -48,7 +49,7 @@ export async function submitLeadRequest(payload: LeadRequestPayload): Promise<Le
     formData.append('inspiration', file);
   }
 
-  const { data } = await api.post<ApiResponse<LeadCreated>>('/leads', formData, {
+  const { data } = await api.post('/leads', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
     transformRequest: [
       (body, headers) => {
@@ -61,30 +62,28 @@ export async function submitLeadRequest(payload: LeadRequestPayload): Promise<Le
     timeout: 60000,
   });
 
-  return data.data ?? { id: '', status: 'New' };
+  return parseApiData(leadCreatedSchema, data, 'your enquiry');
 }
 
 export const leadsAdminApi = {
   list: async (params?: Record<string, string | number>) => {
-    const { data } = await api.get<ApiResponse<PaginatedData<Lead>>>('/leads', {
-      params: { limit: 100, ...params },
-    });
-    return data.data!;
+    const { data } = await api.get('/leads', { params: { limit: 100, ...params } });
+    return parseApiData(leadsPageSchema, data, 'the leads desk');
   },
 
   get: async (id: string) => {
-    const { data } = await api.get<ApiResponse<Lead>>(`/leads/${id}`);
-    return data.data!;
+    const { data } = await api.get(`/leads/${id}`);
+    return parseApiData(leadSchema, data, 'the lead');
   },
 
   update: async (id: string, payload: { status?: LeadStatus; assignee?: string }) => {
-    const { data } = await api.patch<ApiResponse<Lead>>(`/leads/${id}`, payload);
-    return data.data!;
+    const { data } = await api.patch(`/leads/${id}`, payload);
+    return parseApiData(leadSchema, data, 'the updated lead');
   },
 
   addNote: async (id: string, body: string, author?: string) => {
-    const { data } = await api.post<ApiResponse<Lead>>(`/leads/${id}/notes`, { body, author });
-    return data.data!;
+    const { data } = await api.post(`/leads/${id}/notes`, { body, author });
+    return parseApiData(leadSchema, data, 'the updated lead');
   },
 
   scheduleFollowUp: async (
@@ -95,8 +94,8 @@ export const leadsAdminApi = {
       notes?: string;
     },
   ) => {
-    const { data } = await api.post<ApiResponse<Lead>>(`/leads/${id}/follow-ups`, payload);
-    return data.data!;
+    const { data } = await api.post(`/leads/${id}/follow-ups`, payload);
+    return parseApiData(leadSchema, data, 'the updated lead');
   },
 
   completeFollowUp: async (
@@ -104,11 +103,8 @@ export const leadsAdminApi = {
     followUpId: string,
     payload: { outcome?: string; notes?: string },
   ) => {
-    const { data } = await api.patch<ApiResponse<Lead>>(
-      `/leads/${id}/follow-ups/${followUpId}/complete`,
-      payload,
-    );
-    return data.data!;
+    const { data } = await api.patch(`/leads/${id}/follow-ups/${followUpId}/complete`, payload);
+    return parseApiData(leadSchema, data, 'the updated lead');
   },
 
   exportCsv: async (params?: Record<string, string>) => {

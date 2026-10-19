@@ -14,6 +14,8 @@ import {
 import { authenticate, authorize, requirePermission } from '../middleware/auth';
 import { publicWriteRateLimiter } from '../middleware/rateLimit';
 import { validateRequest } from '../middleware/validate';
+import { validateBody } from '../middleware/validateBody';
+import { leadRequestSchema } from '../shared/schemas';
 import { LEAD_STATUSES } from '../models/Lead';
 
 const router = Router();
@@ -37,36 +39,9 @@ router.post(
   '/',
   publicWriteRateLimiter,
   inspirationUpload.array('inspiration', 4),
-  [
-    body('name').trim().isLength({ min: 2, max: 80 }).withMessage('Name must be 2-80 characters'),
-    body('email').isEmail().normalizeEmail().withMessage('Valid email is required'),
-    body('phone')
-      .trim()
-      .custom((value: string) => value.replace(/\D/g, '').length >= 10)
-      .withMessage('Valid phone number is required'),
-    body('city').trim().isLength({ min: 2, max: 80 }).withMessage('City is required'),
-    body('service').trim().isLength({ min: 2, max: 120 }).withMessage('Service is required'),
-    body('occasion').trim().isLength({ min: 2, max: 120 }).withMessage('Occasion is required'),
-    body('budget').trim().isLength({ min: 2, max: 80 }).withMessage('Budget is required'),
-    body('preferredDate')
-      .trim()
-      .isISO8601()
-      .withMessage('Valid preferred date is required')
-      .custom((value: string) => {
-        const day = value.slice(0, 10);
-        const today = new Date();
-        const y = today.getFullYear();
-        const m = String(today.getMonth() + 1).padStart(2, '0');
-        const d = String(today.getDate()).padStart(2, '0');
-        return day >= `${y}-${m}-${d}`;
-      })
-      .withMessage('Preferred date cannot be in the past'),
-    body('message')
-      .trim()
-      .isLength({ min: 10, max: 2000 })
-      .withMessage('Message must be 10-2000 characters'),
-  ],
-  validateRequest,
+  // The enquiry payload is checked with the same schema the form validates
+  // against, so a rule can never diverge between the two.
+  validateBody(leadRequestSchema),
   createLead,
 );
 

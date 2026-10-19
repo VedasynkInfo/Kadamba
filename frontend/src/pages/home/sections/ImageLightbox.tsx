@@ -93,6 +93,7 @@ export function ImageLightbox({ open, onClose, title, image, alt }: ImageLightbo
           </button>
         </div>
         <OptimizedImage
+          sizes="(min-width: 1200px) 1104px, 80vw"
           src={image}
           alt={alt}
           className="max-h-[80vh] w-full object-contain"

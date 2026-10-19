@@ -108,6 +108,7 @@ function ProjectTile({
     >
       <div className="relative aspect-[3/4] overflow-hidden bg-black/5">
         <OptimizedImage
+          sizes="(min-width: 1200px) 368px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
           src={project.coverImage}
           alt={project.coverAlt}
           className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.04]"

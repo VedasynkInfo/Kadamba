@@ -97,6 +97,7 @@ export function ServicesSection() {
                 aria-expanded={isActive}
               >
                 <OptimizedImage
+                  sizes="(min-width: 1200px) 1104px, 100vw"
                   src={service.image}
                   alt=""
                   className={cn(
@@ -165,6 +166,7 @@ export function ServicesSection() {
               onClick={() => navigate(service.href)}
             >
               <OptimizedImage
+                sizes="100vw"
                 src={service.image}
                 alt=""
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 group-active:scale-105"

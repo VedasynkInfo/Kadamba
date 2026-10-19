@@ -110,11 +110,15 @@ export function GalleryLightbox({
                   controls
                   autoPlay
                   playsInline
+                  // Metadata first: the poster frame and duration are enough to
+                  // start the interaction; the media streams in behind it.
+                  preload="metadata"
                 >
                   <track kind="captions" />
                 </video>
               ) : (
                 <OptimizedImage
+                  sizes="(min-width: 1200px) 1104px, 80vw"
                   key={item.id}
                   src={item.src}
                   alt={item.alt}

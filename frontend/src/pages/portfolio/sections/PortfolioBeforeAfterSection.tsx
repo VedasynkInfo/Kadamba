@@ -34,6 +34,7 @@ export function PortfolioBeforeAfterSection({ project }: PortfolioBeforeAfterSec
           <figure>
             <div className="relative aspect-[3/4] overflow-hidden">
               <OptimizedImage
+                sizes="(min-width: 1200px) 552px, 50vw"
                 src={pair.beforeImage}
                 alt={pair.beforeAlt}
                 className="h-full w-full object-cover"
@@ -48,6 +49,7 @@ export function PortfolioBeforeAfterSection({ project }: PortfolioBeforeAfterSec
           <figure>
             <div className="relative aspect-[3/4] overflow-hidden">
               <OptimizedImage
+                sizes="(min-width: 1200px) 552px, 50vw"
                 src={pair.afterImage}
                 alt={pair.afterAlt}
                 className="h-full w-full object-cover"

@@ -45,6 +45,7 @@ export function ServiceDescriptionSection({ service }: ServiceDescriptionSection
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
           <OptimizedImage
+            sizes="(min-width: 1200px) 552px, 50vw"
             src={service.cardImage}
             alt={service.bannerAlt}
             className="h-full w-full object-cover"

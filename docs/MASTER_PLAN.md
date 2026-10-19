@@ -127,19 +127,31 @@
 
 | # | Task | Status |
 |---|------|--------|
-| 4.1 | `UPLOAD_DIR` → Render Persistent Disk; `migrateUploads.ts` (checksum-verified, never deletes) | ⬜ |
-| 4.2 | `sharp` pipeline: WebP/AVIF variants @ 400/800/1200/1600/2400 + blurhash + EXIF strip | ⬜ |
-| 4.2 | `ImageAsset` model (hash, widths, blurhash, dims, bytes) | ⬜ |
-| 4.3 | `optimizeExisting.ts` idempotent backfill (dry-run + progress) | ⬜ |
-| 4.4 | `OptimizedImage` emits real `srcset` + `sizes` + `<picture>` AVIF/WebP/JPEG | ⬜ |
-| 4.4 | Replace all raw `<img>` (admin tables, logos, modals) | ⬜ |
-| 4.4 | Replace 62 Unsplash hotlinks with local assets | ⬜ |
-| 4.5 | Immutable caching on `/uploads/optimized/*` | ⬜ |
-| 4.6 | Wire `react-easy-crop` (aspect presets) into `MediaUpload` | ⬜ |
-| 4.7 | Admin media library (usage count, orphan-safe delete, alt text) | ⬜ |
-| 4.8 | Video: poster frame + `preload="metadata"` | ⬜ |
+| 4.1 | `UPLOAD_DIR` → Render Persistent Disk; `migrateUploads.ts` (checksum-verified, never deletes) | ✅ |
+| 4.2 | `sharp` pipeline: WebP/AVIF variants @ 400/800/1200/1600/2400 + blurhash + EXIF strip | ✅ |
+| 4.2 | `ImageAsset` model (hash, widths, blurhash, dims, bytes) | ✅ |
+| 4.3 | `optimizeExisting.ts` idempotent backfill (dry-run + progress) | ✅ |
+| 4.4 | `OptimizedImage` emits real `srcset` + `sizes` + `<picture>` AVIF/WebP/JPEG | ✅ |
+| 4.4 | Replace all raw `<img>` (admin tables, logos, modals) | ✅ |
+| 4.4 | Replace 62 Unsplash hotlinks with local assets | ✅ |
+| 4.5 | Immutable caching on `/uploads/optimized/*` | ✅ |
+| 4.6 | Wire `react-easy-crop` (aspect presets) into `MediaUpload` | ✅ |
+| 4.7 | Admin media library (usage count, orphan-safe delete, alt text) | ✅ |
+| 4.8 | Video: poster frame + `preload="metadata"` | ✅ |
 
 **Gate:** Lighthouse ≥95; LCP <1.8s; 0 CLS; originals byte-identical after migration; variants ready <2s.
+
+**Notes / follow-ups**
+- Cloudinary was removed entirely (`cloudinary`, `multer-storage-cloudinary`, `config/cloudinary.ts`, the `env.cloudinary` block and `cloudinaryOptimizedUrl`). Originals stay in `UPLOAD_DIR`; variants live in `UPLOAD_DIR/optimized/<hash>/<width>.<ext>`, which is disposable and regenerable.
+- `targetWidths()` never upscales: configured widths ≤ the source width, plus the source width itself when the last configured width is strictly smaller, so every image gets one full-size modern-format variant. AVIF is capped at `IMAGE_AVIF_MAX_WIDTH` (1600); WebP and JPEG are produced for every width.
+- EXIF auto-orient runs *before* metadata is dropped. `sharp`'s `metadata()` reports pre-rotation dimensions, so `processImageFile` swaps width/height when `orientation >= 5` — stored dimensions, aspect ratio and variant widths all describe the displayed image. Originals are never rewritten.
+- Deleting an asset is orphan-safe: `409` while any content still references it, unless `?force=true`; the original is unlinked only when forced **and** the resolved path is verified to sit inside `UPLOAD_DIR`.
+- The renderer avoids N+1 metadata lookups via a public `GET|POST /api/media/resolve?urls=…` (unauthenticated, `/uploads/`-only, `Cache-Control: public, max-age=300, stale-while-revalidate=86400`) batched and memoised client-side by `services/media/assetResolver.ts`.
+- Media curation is gated by new `media:read` / `media:write` permissions (`media:read` is in `DEFAULT_STAFF_PERMISSIONS`); `POST /api/upload` stays role-gated to `admin`/`staff`.
+- All 62 third-party image hotlinks (plus one hotlinked video) were replaced with locally generated, committed artwork (`frontend/public/media/placeholders/*.jpg`, produced by `backend npm run assets:placeholders`) plus a raster `og-default.jpg` — social crawlers do not render SVG. The frontend now has **zero external media dependencies**.
+- `sizes` was set on 32 public call sites (heroes `100vw`, catalogue grids 2/3/4-up, masonry, lightbox `80vw`, fixed-size marquee) so `srcset` only fetches what a viewport needs. Logos use `responsive={false}`.
+- **Blocking infra:** durability requires **Render Paid + a Persistent Disk** mounted at `UPLOAD_DIR` (`render.yaml` already declares `kadamba-uploads` @ `/var/data`). Without it, uploads are lost on redeploy.
+- Deferred: transcoding uploaded video to a poster frame + streaming variants (video items render a poster and stream with `preload="metadata"`).
 
 ---
 

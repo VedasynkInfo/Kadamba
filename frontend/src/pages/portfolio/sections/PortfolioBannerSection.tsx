@@ -46,6 +46,7 @@ export function PortfolioBannerSection({ project }: PortfolioBannerSectionProps)
       <div className="relative min-h-[min(90svh,900px)] w-full md:min-h-[calc(100svh-4.25rem)]">
         <div data-banner-media className="absolute inset-0">
           <OptimizedImage
+            sizes="100vw"
             src={project.bannerImage}
             alt={project.bannerAlt}
             className="h-full w-full object-cover"

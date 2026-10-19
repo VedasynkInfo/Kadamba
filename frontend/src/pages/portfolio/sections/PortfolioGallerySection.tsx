@@ -38,6 +38,7 @@ export function PortfolioGallerySection({ project }: PortfolioGallerySectionProp
           >
             <figure className="group relative overflow-hidden bg-black/5">
               <OptimizedImage
+                sizes="(min-width: 1200px) 368px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                 src={item.image}
                 alt={item.alt}
                 className={`w-full object-cover transition duration-700 group-hover:scale-[1.03] ${

@@ -3,6 +3,7 @@ import type { BlogPost } from '@/pages/blogs/data';
 import { EmptyState } from '../components/EmptyState';
 import { Skeleton } from '../components/Skeleton';
 import { cn } from '@/utils/cn';
+import { OptimizedImage } from '@/components/media/OptimizedImage';
 
 const SKELETON_ROWS = 6;
 
@@ -144,11 +145,11 @@ export function BlogsTable({
                         title="Click to preview article"
                       >
                         {item.coverImage ? (
-                          <img
+                          <OptimizedImage
                             src={item.coverImage}
                             alt={item.title}
+                            sizes="48px"
                             className="h-full w-full object-cover transition-transform duration-300 group-hover/thumb:scale-110"
-                            loading="lazy"
                           />
                         ) : (
                           <div className="h-full w-full flex items-center justify-center bg-current/5 text-lg">

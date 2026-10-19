@@ -6,9 +6,9 @@ export { brand };
 /** Atelier / visit imagery — placeholders until studio photography is wired. */
 const img = {
   banner:
-    'https://images.unsplash.com/photo-1558171813-4c088753af8f?auto=format&fit=crop&w=2400&q=80',
+    '/media/placeholders/fabric.jpg',
   visit:
-    'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1600&q=80',
+    '/media/placeholders/boutique.jpg',
 };
 
 /**

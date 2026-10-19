@@ -15,6 +15,7 @@ import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { usePublicContent } from '@/hooks/usePublicContent';
 import { fadeUp } from '@/motion/variants';
 import { submitLeadRequest } from '@/services/leads/leadService';
+import { OptimizedImage } from '@/components/media/OptimizedImage';
 import {
   budgetLabelFromValue,
   budgetOptions,
@@ -533,9 +534,10 @@ export function RequestFormSection() {
                       <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
                         {images.map((img) => (
                           <li key={img.id} className="relative overflow-hidden rounded-md">
-                            <img
+                            <OptimizedImage
                               src={img.url}
                               alt=""
+                              sizes="(max-width: 640px) 50vw, 25vw"
                               className="aspect-square w-full object-cover"
                             />
                             <button

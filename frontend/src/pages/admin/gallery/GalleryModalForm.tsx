@@ -184,6 +184,8 @@ export function GalleryModalForm({
                 <MediaUpload
                   label="Poster Thumbnail"
                   folder="gallery"
+                  enableCrop
+                  cropAspect={4 / 5}
                   value={form.poster || ''}
                   onChange={(url) => setForm((f) => ({ ...f, poster: url }))}
                   hint="Cover frame displayed before video starts"

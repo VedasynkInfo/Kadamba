@@ -141,6 +141,8 @@ export function SeoTab({ form, patchForm }: SeoTabProps) {
             label="Default OpenGraph / Social Share Image"
             value={form.seo.defaultOgImage}
             folder="seo"
+            enableCrop
+            cropAspect={1.91}
             onChange={(url) =>
               patchForm((f) => ({
                 ...f,

@@ -198,6 +198,8 @@ export function PortfolioModalForm({
                   label="Cover Image *"
                   required
                   folder="portfolio"
+                  enableCrop
+                  cropAspect={4 / 5}
                   value={form.coverImage || ''}
                   onChange={(url) => setForm((f) => ({ ...f, coverImage: url }))}
                   hint="Primary preview image (800×1000 portrait)"
@@ -208,6 +210,8 @@ export function PortfolioModalForm({
               <MediaUpload
                 label="Banner Image"
                 folder="portfolio"
+                enableCrop
+                cropAspect={16 / 9}
                 value={form.bannerImage || ''}
                 onChange={(url) => setForm((f) => ({ ...f, bannerImage: url }))}
                 hint="Landscape hero image for detailed exhibit page"

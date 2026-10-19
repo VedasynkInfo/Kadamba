@@ -1,5 +1,6 @@
 ﻿import type { GalleryItem } from '@/pages/gallery/data';
 import { cn } from '@/utils/cn';
+import { OptimizedImage } from '@/components/media/OptimizedImage';
 
 interface GalleryPreviewModalProps {
   item: GalleryItem | null;
@@ -83,12 +84,14 @@ export function GalleryPreviewModal({
                 src={item.src}
                 poster={item.poster}
                 controls
+                preload="metadata"
                 className="max-h-[380px] w-full object-contain"
               />
             ) : (
-              <img
+              <OptimizedImage
                 src={item.src}
                 alt={item.alt || item.title}
+                sizes="(max-width: 768px) 90vw, 720px"
                 className="max-h-[380px] w-full object-contain"
               />
             )}

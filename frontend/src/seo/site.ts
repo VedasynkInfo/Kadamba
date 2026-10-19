@@ -9,7 +9,7 @@ export const SITE_NAME = brand.name;
 
 /** Default share image (hero bridal placeholder until studio OG asset is set). */
 export const DEFAULT_OG_IMAGE =
-  'https://images.unsplash.com/photo-1594552072238-8dcd8a33f848?auto=format&fit=crop&w=1200&q=80';
+  '/media/placeholders/bridal.jpg';
 
 export function absoluteUrl(path = '/'): string {
   if (/^https?:\/\//i.test(path)) return path;

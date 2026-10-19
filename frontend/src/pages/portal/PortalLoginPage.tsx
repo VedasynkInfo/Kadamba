@@ -50,7 +50,7 @@ export default function PortalLoginPage() {
           className="relative hidden overflow-hidden lg:block"
           style={{
             backgroundImage:
-              'linear-gradient(120deg, rgba(12,10,8,0.55), rgba(12,10,8,0.85)), url(https://images.unsplash.com/photo-1594552072238-8dcd8a33f848?auto=format&fit=crop&w=1600&q=80)',
+              'linear-gradient(120deg, rgba(12,10,8,0.55), rgba(12,10,8,0.85)), url(/media/placeholders/bridal.jpg)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}

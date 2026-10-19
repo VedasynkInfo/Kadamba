@@ -56,6 +56,7 @@ export function PortfolioHeroSection() {
       <div className="relative min-h-[min(94svh,960px)] w-full md:min-h-[calc(100svh-4.25rem)]">
         <div ref={mediaRef} className="absolute inset-0">
           <OptimizedImage
+            sizes="100vw"
             src={portfolioHero.image}
             alt={portfolioHero.alt}
             className="h-full w-full object-cover object-center"

@@ -1,6 +1,4 @@
 import mongoose from 'mongoose';
-import { cloudinary } from '../config/cloudinary';
-import { env } from '../config/env';
 import {
   Lead,
   LEAD_STATUSES,
@@ -9,6 +7,7 @@ import {
   type LeadStatus,
 } from '../models/Lead';
 import { calculateLeadScore } from './leadScoringService';
+import { storeUploadedBuffer } from './mediaService';
 import { ApiError } from '../utils/ApiError';
 import { buildPaginationMeta, parsePagination } from '../utils/pagination';
 import { searchRegex } from '../utils/query';
@@ -84,46 +83,32 @@ export type LeadDto = {
   updatedAt: string;
 };
 
-function cloudinaryConfigured(): boolean {
-  const { cloudName, apiKey, apiSecret } = env.cloudinary;
-  if (!cloudName || !apiKey || !apiSecret) return false;
-  if (cloudName.startsWith('your_') || apiKey.startsWith('your_') || apiSecret.startsWith('your_')) {
-    return false;
-  }
-  // Same guard as upload routes — reject mistyped keys (e.g. trailing "s").
-  if (!/^\d+$/.test(apiKey.trim())) return false;
-  return true;
-}
-
+/**
+ * Persist inspiration images attached to a lead enquiry.
+ *
+ * Written to the local uploads directory (the Render Persistent Disk in
+ * production) rather than a third-party CDN, matching the rest of the media
+ * pipeline. The magic-byte check inside `storeUploadedBuffer` means a
+ * mislabelled payload is rejected before it reaches disk.
+ */
 async function uploadInspirationBuffers(
   files: Express.Multer.File[],
 ): Promise<string[]> {
   if (!files.length) return [];
-  if (!cloudinaryConfigured()) {
-    console.warn('Cloudinary not configured — skipping inspiration image upload');
-    return [];
-  }
 
   const urls: string[] = [];
   for (const file of files) {
-    const result = await new Promise<{ secure_url: string }>((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream(
-        {
-          folder: 'kadamba-leads',
-          resource_type: 'image',
-          transformation: [{ width: 1600, height: 1600, crop: 'limit' }],
-        },
-        (error, uploaded) => {
-          if (error || !uploaded?.secure_url) {
-            reject(error ?? new Error('Cloudinary upload failed'));
-            return;
-          }
-          resolve({ secure_url: uploaded.secure_url });
-        },
-      );
-      stream.end(file.buffer);
-    });
-    urls.push(result.secure_url);
+    try {
+      const asset = await storeUploadedBuffer({
+        buffer: file.buffer,
+        originalName: file.originalname,
+        folder: 'leads',
+      });
+      urls.push(asset.originalUrl);
+    } catch (error) {
+      // One bad attachment must not lose the whole enquiry.
+      console.warn('Skipping lead inspiration image:', error);
+    }
   }
   return urls;
 }

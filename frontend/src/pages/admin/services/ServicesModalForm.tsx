@@ -191,6 +191,8 @@ export function ServicesModalForm({
                 <MediaUpload
                   label="Banner Image"
                   folder="services"
+                  enableCrop
+                  cropAspect={12 / 5}
                   value={form.bannerImage || ''}
                   onChange={(url) => setForm((f) => ({ ...f, bannerImage: url }))}
                   hint="Hero landscape display (1920×800)"
@@ -201,6 +203,8 @@ export function ServicesModalForm({
               <MediaUpload
                 label="Card Image"
                 folder="services"
+                enableCrop
+                cropAspect={4 / 5}
                 value={form.cardImage || ''}
                 onChange={(url) => setForm((f) => ({ ...f, cardImage: url }))}
                 hint="Square/portrait display for grid cards (800×1000)"

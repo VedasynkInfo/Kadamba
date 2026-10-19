@@ -1,5 +1,6 @@
 ﻿import type { BlogPost } from '@/pages/blogs/data';
 import { cn } from '@/utils/cn';
+import { OptimizedImage } from '@/components/media/OptimizedImage';
 
 interface BlogsPreviewModalProps {
   item: BlogPost | null;
@@ -83,9 +84,10 @@ export function BlogsPreviewModal({
               className="rounded-xl border overflow-hidden flex items-center justify-center bg-black/40 relative min-h-[200px] max-h-[300px]"
               style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))' }}
             >
-              <img
+              <OptimizedImage
                 src={item.coverImage}
                 alt={item.coverAlt || item.title}
+                sizes="(max-width: 768px) 90vw, 640px"
                 className="max-h-[280px] w-full object-contain"
               />
             </div>

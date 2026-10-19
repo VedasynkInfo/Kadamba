@@ -3,7 +3,8 @@ import { brand } from '@/pages/home/data';
 /**
  * Phase 6 Gallery — CRUD-ready shapes.
  * Admin UI deferred to Phase 12; API layer to Phase 13.
- * Media URLs are Cloudinary-ready (swap host when upload pipeline is live).
+ * Media URLs are relative API paths (`/uploads/...`) or absolute same-origin
+ * URLs once the upload pipeline stores them.
  */
 
 export type GalleryCategory =
@@ -22,7 +23,7 @@ export interface GalleryItem {
   category: GalleryCategory;
   alt: string;
   mediaType: GalleryMediaType;
-  /** Delivery URL (Cloudinary or CDN). */
+  /** Delivery URL (uploaded file or bundled placeholder). */
   src: string;
   /** Poster / thumbnail for video items. */
   poster?: string;
@@ -51,35 +52,32 @@ export const galleryCategories = [
 
 export type GalleryFilter = (typeof galleryCategories)[number];
 
-/** Fashion / bridal placeholders until Cloudinary gallery assets are wired. */
+/** Fashion / bridal placeholders until real gallery assets are uploaded. */
 const media = {
   bridal:
-    'https://images.unsplash.com/photo-1594552072238-8dcd8a33f848?auto=format&fit=crop&w=1600&q=80',
+    '/media/placeholders/bridal.jpg',
   bridal2:
-    'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80',
+    '/media/placeholders/bridal-alt.jpg',
   lehenga:
-    'https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=1400&q=80',
+    '/media/placeholders/lehenga.jpg',
   saree:
-    'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1400&q=80',
+    '/media/placeholders/saree.jpg',
   saree2:
-    'https://images.unsplash.com/photo-1583391733981-8b530b760759?auto=format&fit=crop&w=1200&q=80',
+    '/media/placeholders/saree-alt.jpg',
   fabric:
-    'https://images.unsplash.com/photo-1558171813-4c088753af8f?auto=format&fit=crop&w=1400&q=80',
+    '/media/placeholders/fabric.jpg',
   stitching:
-    'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=1200&q=80',
+    '/media/placeholders/stitching.jpg',
   jewelry:
-    'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1200&q=80',
+    '/media/placeholders/jewelry.jpg',
   embroidery:
-    'https://images.unsplash.com/photo-1572804013309-59aec7c2c2c4?auto=format&fit=crop&w=1400&q=80',
+    '/media/placeholders/embroidery.jpg',
   festive:
-    'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=1200&q=80',
+    '/media/placeholders/festive.jpg',
   detail:
-    'https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=1200&q=80',
+    '/media/placeholders/atelier.jpg',
   atelier:
-    'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=2400&q=80',
-  /** Soft ambient motion — swap for studio Cloudinary video when uploads go live. */
-  atelierMotion:
-    'https://videos.pexels.com/video-files/3129957/3129957-uhd_2560_1440_25fps.mp4',
+    '/media/placeholders/fitting.jpg',
 };
 
 export const galleryHero = {
@@ -100,7 +98,7 @@ export const galleryCta = {
 } as const;
 
 /**
- * Static gallery inventory — shapes match future admin CRUD + Cloudinary uploads.
+ * Static gallery inventory - shapes match the admin CRUD payloads.
  */
 export const galleryItems: GalleryItem[] = [
   {
@@ -144,15 +142,18 @@ export const galleryItems: GalleryItem[] = [
   },
   {
     id: 'g4',
-    slug: 'atelier-motion',
-    title: 'Atelier motion',
+    slug: 'atelier-detail',
+    title: 'Atelier detail',
     category: 'Details',
-    alt: 'Soft motion study of fabric and presence in the atelier',
-    mediaType: 'video',
-    src: media.atelierMotion,
-    poster: media.detail,
-    width: 1920,
-    height: 1080,
+    alt: 'Hand-finished detail from the atelier worktable',
+    // Video items are supported end-to-end (admin upload, poster frame, and a
+    // metadata-only player in the lightbox) but the bundled fallback inventory
+    // only ships stills: there is no local video to point at, and a hotlinked
+    // one would reintroduce a third-party dependency.
+    mediaType: 'image',
+    src: media.detail,
+    width: 1200,
+    height: 750,
     published: true,
     sortOrder: 4,
   },

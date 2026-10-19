@@ -69,6 +69,7 @@ export function GalleryHeroSection() {
       <div className="relative min-h-[min(90svh,900px)] w-full md:min-h-[calc(100svh-4.25rem)]">
         <div ref={mediaRef} className="absolute inset-0 will-change-transform">
           <OptimizedImage
+            sizes="100vw"
             src={galleryHero.image}
             alt={galleryHero.alt}
             className="h-full w-full origin-center object-cover object-[center_35%]"

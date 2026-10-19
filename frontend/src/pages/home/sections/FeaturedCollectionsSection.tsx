@@ -97,6 +97,7 @@ export function FeaturedCollectionsSection() {
                 transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
               >
                 <OptimizedImage
+                  sizes="(min-width: 1200px) 1104px, 100vw"
                   src={featured.image}
                   alt={featured.alt}
                   className="h-full w-full object-cover"
@@ -190,6 +191,7 @@ export function FeaturedCollectionsSection() {
                 onClick={() => setActive(item)}
               >
                 <OptimizedImage
+                  sizes="(min-width: 1200px) 368px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                   src={item.image}
                   alt={item.alt}
                   className="h-full w-full object-cover transition-transform duration-700 ease-[var(--ease-luxury)] group-hover:scale-110 group-focus-visible:scale-105"

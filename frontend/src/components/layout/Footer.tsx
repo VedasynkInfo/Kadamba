@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { usePublicContent } from '@/hooks/usePublicContent';
 import { brand } from '@/pages/home/data';
 import { Container } from './Container';
+import { OptimizedImage } from '@/components/media/OptimizedImage';
 
 const footerLinks = [
   { to: '/about', label: 'About' },
@@ -33,9 +34,10 @@ export function Footer() {
         <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
           <div>
             {logo ? (
-              <img
+              <OptimizedImage
                 src={logo}
                 alt={settings.studioName || brand.name}
+                responsive={false}
                 className="mb-3 h-10 w-auto object-contain"
               />
             ) : null}

@@ -33,19 +33,24 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: /^https:\/\/res\.cloudinary\.com\/.*/i,
+            // Studio media served by our own API. The backend already sends
+            // long-lived immutable cache headers for generated variants, so
+            // caching here matches what the browser does anyway — and keeps a
+            // repeat visit (or an offline one) instant.
+            urlPattern: ({ url }) => url.pathname.startsWith('/uploads/'),
             handler: 'CacheFirst',
             options: {
-              cacheName: 'cloudinary-images',
-              expiration: { maxEntries: 80, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              cacheName: 'kadamba-uploads',
+              expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 30 },
             },
           },
           {
-            urlPattern: /^https:\/\/images\.unsplash\.com\/.*/i,
+            // Placeholder artwork shipped with the app.
+            urlPattern: /^\/media\/.*/i,
             handler: 'CacheFirst',
             options: {
-              cacheName: 'unsplash-images',
-              expiration: { maxEntries: 60, maxAgeSeconds: 60 * 60 * 24 * 14 },
+              cacheName: 'kadamba-media',
+              expiration: { maxEntries: 40, maxAgeSeconds: 60 * 60 * 24 * 30 },
             },
           },
         ],

@@ -23,6 +23,7 @@ export function ContactWhatsAppSection() {
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
         >
           <OptimizedImage
+            sizes="100vw"
             src={whatsappBanner.image}
             alt={whatsappBanner.imageAlt}
             className="h-full w-full object-cover"

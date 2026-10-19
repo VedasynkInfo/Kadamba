@@ -6,6 +6,7 @@ import { PortalNotifyProvider, usePortalNotify } from '@/hooks/usePortalNotifySo
 import { portalApi } from '@/services/portal/portalService';
 import { cn } from '@/utils/cn';
 import { PageMeta } from '@/seo';
+import { OptimizedImage } from '@/components/media/OptimizedImage';
 import { useTheme } from '@/context/ThemeContext';
 
 const nav = [
@@ -69,7 +70,13 @@ function PortalShell() {
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
           <Link to="/portal/dashboard" className="flex items-center gap-3 min-w-0">
             {activeLogo ? (
-              <img src={activeLogo} alt={brand.shortName} className="h-8 w-auto object-contain" />
+              <OptimizedImage
+                src={activeLogo}
+                alt={brand.shortName}
+                responsive={false}
+                priority
+                className="h-8 w-auto object-contain"
+              />
             ) : (
               <p className="font-heading text-xl tracking-wide text-gold sm:text-2xl">
                 {brand.shortName}

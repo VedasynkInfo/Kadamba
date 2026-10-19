@@ -4,6 +4,7 @@ import { Drawer } from '@/components/ui/Drawer';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/utils/cn';
 import { useTheme } from '@/context/ThemeContext';
+import { OptimizedImage } from '@/components/media/OptimizedImage';
 
 const links = [
   { to: '/', label: 'Home' },
@@ -49,7 +50,13 @@ export function Navbar() {
             className="flex items-center gap-2 font-heading text-xl tracking-wide text-gold transition-opacity hover:opacity-90"
           >
             {activeLogo ? (
-              <img src={activeLogo} alt="Kadamba" className="h-8 w-auto object-contain" />
+              <OptimizedImage
+                src={activeLogo}
+                alt="Kadamba"
+                responsive={false}
+                priority
+                className="h-8 w-auto object-contain"
+              />
             ) : (
               <span>Kadamba</span>
             )}

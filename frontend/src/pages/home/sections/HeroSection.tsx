@@ -90,6 +90,7 @@ export function HeroSection() {
             transition={{ duration: reduced ? 0 : 1.1, ease: [0.22, 1, 0.36, 1] }}
           >
             <OptimizedImage
+              sizes="100vw"
               src={slide.image}
               alt={slide.alt}
               className="h-full w-full object-cover"

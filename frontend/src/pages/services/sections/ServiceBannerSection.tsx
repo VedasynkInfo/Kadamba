@@ -29,6 +29,7 @@ export function ServiceBannerSection({ service }: ServiceBannerSectionProps) {
           transition={{ duration: reduced ? 0 : 1.15, ease: [0.22, 1, 0.36, 1] }}
         >
           <OptimizedImage
+            sizes="100vw"
             src={service.bannerImage}
             alt={service.bannerAlt}
             className="h-full w-full object-cover"

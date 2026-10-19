@@ -50,6 +50,7 @@ const ReportsAdminPage = lazy(() => import('@/pages/admin/reports/ReportsAdminPa
 const ReportDetailPage = lazy(() => import('@/pages/admin/reports/ReportDetailPage'));
 const UsersAdminPage = lazy(() => import('@/pages/admin/users/UsersAdminPage'));
 const AuditAdminPage = lazy(() => import('@/pages/admin/users/AuditAdminPage'));
+const MediaLibraryPage = lazy(() => import('@/pages/admin/media/MediaLibraryPage'));
 const PortalLoginPage = lazy(() => import('@/pages/portal/PortalLoginPage'));
 const PortalActivatePage = lazy(() => import('@/pages/portal/PortalActivatePage'));
 const PortalDashboardPage = lazy(() => import('@/pages/portal/PortalDashboardPage'));
@@ -111,6 +112,7 @@ export default function App() {
                       <Route path="measurements" element={<MeasurementsPage />} />
                       <Route path="users" element={<UsersAdminPage />} />
                       <Route path="audit" element={<AuditAdminPage />} />
+                      <Route path="media" element={<MediaLibraryPage />} />
                       <Route path="profile" element={<ProfileAdminPage />} />
                     </Route>
 

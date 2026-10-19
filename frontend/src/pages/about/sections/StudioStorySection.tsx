@@ -38,6 +38,7 @@ export function StudioStorySection() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
           <OptimizedImage
+            sizes="(min-width: 1200px) 552px, 50vw"
             src={studioStory.image}
             alt={studioStory.imageAlt}
             className="h-full w-full object-cover"

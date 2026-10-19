@@ -6,6 +6,7 @@ import type {
 import { getSilhouetteMeta } from './types';
 import { whatsappDeepLink } from '@/utils/whatsapp';
 import { cn } from '@/utils/cn';
+import { OptimizedImage } from '@/components/media/OptimizedImage';
 
 interface MeasurementPreviewModalProps {
   profile: MeasurementProfile | null;
@@ -280,7 +281,7 @@ export function MeasurementPreviewModal({
                     className="relative h-20 w-20 rounded-xl overflow-hidden border shadow-xs hover:opacity-90 transition block"
                     style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
                   >
-                    <img src={imgUrl} alt="Reference" className="h-full w-full object-cover" />
+                    <OptimizedImage src={imgUrl} alt="Reference" sizes="80px" className="h-full w-full object-cover" />
                   </a>
                 ))}
               </div>

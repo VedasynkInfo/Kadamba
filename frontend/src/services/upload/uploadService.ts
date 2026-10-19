@@ -7,7 +7,7 @@ export interface UploadResult {
   originalName?: string;
   mimeType?: string;
   size?: number;
-  storage?: 'cloudinary' | 'local';
+  storage?: 'local';
 }
 
 /**
@@ -39,7 +39,7 @@ function extractError(err: unknown): string {
 }
 
 /**
- * Upload an image or video to the backend (Cloudinary or local fallback).
+ * Upload an image or video to the backend (stored on local disk).
  */
 export async function uploadMedia(
   file: File,

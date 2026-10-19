@@ -41,6 +41,8 @@ export const PERMISSIONS = [
   'staff:write',
   'catalog:read',
   'catalog:write',
+  'media:read',
+  'media:write',
   'content:write',
   'reports:read',
   'users:manage',
@@ -103,6 +105,13 @@ export const PERMISSION_GROUPS: ReadonlyArray<{
     ],
   },
   {
+    group: 'Media',
+    permissions: [
+      { key: 'media:read', label: 'Browse the media library' },
+      { key: 'media:write', label: 'Upload, edit & delete media' },
+    ],
+  },
+  {
     group: 'Content & reports',
     permissions: [
       { key: 'content:write', label: 'Edit website content' },
@@ -127,6 +136,7 @@ export const DEFAULT_STAFF_PERMISSIONS: readonly Permission[] = [
   'measurements:read',
   'measurements:write',
   'catalog:read',
+  'media:read',
 ];
 
 /* -------------------------------------------------------------------------- */
@@ -362,6 +372,10 @@ export const AUDIT_ACTIONS = [
   'staff.updated',
   'catalog.created',
   'catalog.updated',
+  'media.uploaded',
+  'media.updated',
+  'media.deleted',
+  'media.variants_regenerated',
   'content.updated',
   'settings.updated',
   /**

@@ -28,6 +28,7 @@ export function BlogMastheadBanner({ post }: BlogMastheadBannerProps) {
           transition={{ duration: reduced ? 0 : 1.15, ease: [0.22, 1, 0.36, 1] }}
         >
           <OptimizedImage
+            sizes="100vw"
             src={post.coverImage}
             alt={post.coverAlt}
             className="h-full w-full object-cover"

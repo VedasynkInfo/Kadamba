@@ -6,7 +6,7 @@ export { brand };
 /** Horizon console filmstrip — atelier still, not a marketing hero. */
 export const adminHorizonMedia = {
   image:
-    'https://images.unsplash.com/photo-1558171813-4c088753af8f?auto=format&fit=crop&w=2400&q=80',
+    '/media/placeholders/fabric.jpg',
   alt: 'Fabric folds and atelier tools on a studio worktable',
 } as const;
 
@@ -28,6 +28,7 @@ export const adminNav = [
   { to: '/admin/reports', end: false, label: 'Reports', permission: 'reports:read' },
   { to: '/admin/users', end: false, label: 'Users & Roles', permission: 'users:manage' },
   { to: '/admin/audit', end: false, label: 'Audit Log', permission: 'audit:read' },
+  { to: '/admin/media', end: false, label: 'Media', permission: 'media:read' },
   { to: '/admin/settings', end: false, label: 'Settings', permission: 'content:write' },
   { to: '/admin/profile', end: false, label: 'Profile', permission: null },
 ] as const;

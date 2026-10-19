@@ -42,6 +42,7 @@ export function LatestBlogsSection() {
               >
                 <div className="overflow-hidden">
                   <OptimizedImage
+                    sizes="(min-width: 1200px) 368px, (min-width: 768px) 33vw, 100vw"
                     src={post.image}
                     alt={post.title}
                     className="aspect-[16/10] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"

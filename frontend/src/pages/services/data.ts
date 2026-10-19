@@ -5,23 +5,23 @@ export { brand };
 /** Fashion / atelier placeholders until gallery assets are wired. */
 const img = {
   bridal:
-    'https://images.unsplash.com/photo-1594552072238-8dcd8a33f848?auto=format&fit=crop&w=2400&q=80',
+    '/media/placeholders/bridal.jpg',
   lehenga:
-    'https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=1600&q=80',
+    '/media/placeholders/lehenga.jpg',
   saree:
-    'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1600&q=80',
+    '/media/placeholders/saree.jpg',
   fabric:
-    'https://images.unsplash.com/photo-1558171813-4c088753af8f?auto=format&fit=crop&w=1600&q=80',
+    '/media/placeholders/fabric.jpg',
   stitching:
-    'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=1600&q=80',
+    '/media/placeholders/stitching.jpg',
   boutique:
-    'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1600&q=80',
+    '/media/placeholders/boutique.jpg',
   embroidery:
-    'https://images.unsplash.com/photo-1572804013309-59aec7c2c2c4?auto=format&fit=crop&w=1600&q=80',
+    '/media/placeholders/embroidery.jpg',
   jewelry:
-    'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1600&q=80',
+    '/media/placeholders/jewelry.jpg',
   detail:
-    'https://images.unsplash.com/photo-1558171813-4c088753af8f?auto=format&fit=crop&w=1200&q=80',
+    '/media/placeholders/fabric.jpg',
 };
 
 export type ServiceCategory = 'Bridal' | 'Traditional' | 'Tailoring' | 'Boutique';

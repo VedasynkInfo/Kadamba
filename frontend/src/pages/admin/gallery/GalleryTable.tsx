@@ -3,6 +3,7 @@ import type { GalleryItem } from '@/pages/gallery/data';
 import { EmptyState } from '../components/EmptyState';
 import { Skeleton } from '../components/Skeleton';
 import { cn } from '@/utils/cn';
+import { OptimizedImage } from '@/components/media/OptimizedImage';
 
 const SKELETON_ROWS = 6;
 
@@ -146,11 +147,11 @@ export function GalleryTable({
                         style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
                         title="Click to preview media"
                       >
-                        <img
+                        <OptimizedImage
                           src={displaySrc}
                           alt={item.alt || item.title}
+                          sizes="48px"
                           className="h-full w-full object-cover transition-transform duration-300 group-hover/thumb:scale-110"
-                          loading="lazy"
                         />
                         {isVideo ? (
                           <span className="absolute inset-0 flex items-center justify-center bg-black/45 text-white text-xs">

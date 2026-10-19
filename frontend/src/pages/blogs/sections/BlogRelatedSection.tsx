@@ -46,6 +46,7 @@ export function BlogRelatedSection({ post }: BlogRelatedSectionProps) {
               >
                 <div className="overflow-hidden">
                   <OptimizedImage
+                    sizes="(min-width: 1200px) 368px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                     src={item.coverImage}
                     alt={item.coverAlt || item.title}
                     className="aspect-[16/10] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"

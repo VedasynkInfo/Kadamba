@@ -199,6 +199,8 @@ export function BlogsModalForm({
                   label="Cover Image *"
                   required
                   folder="blogs"
+                  enableCrop
+                  cropAspect={16 / 9}
                   value={form.coverImage || ''}
                   onChange={(url) => setForm((f) => ({ ...f, coverImage: url }))}
                   hint="Hero landscape editorial image (1200×675)"

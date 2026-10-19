@@ -4,14 +4,14 @@ export { brand };
 
 /** Fashion / atelier placeholders until gallery assets are wired. */
 const img = {
-  hero: 'https://images.unsplash.com/photo-1594552072238-8dcd8a33f848?auto=format&fit=crop&w=2400&q=80',
-  story: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1600&q=80',
+  hero: '/media/placeholders/bridal.jpg',
+  story: '/media/placeholders/boutique.jpg',
   portrait1:
-    'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=800&q=80',
+    '/media/placeholders/portrait-1.jpg',
   portrait2:
-    'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80',
+    '/media/placeholders/portrait-2.jpg',
   portrait3:
-    'https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?auto=format&fit=crop&w=800&q=80',
+    '/media/placeholders/portrait-3.jpg',
 };
 
 export const aboutHero = {

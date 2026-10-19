@@ -69,6 +69,7 @@ export function MarqueeSection() {
               aria-label={`Preview ${item.title}`}
             >
               <OptimizedImage
+                sizes="(min-width: 640px) 320px, 256px"
                 src={item.image}
                 alt={item.alt}
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"

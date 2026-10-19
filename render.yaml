@@ -4,7 +4,9 @@ services:
   - type: web
     name: kadamba-api
     runtime: node
-    plan: free
+    # A Persistent Disk requires a paid instance type — uploads must survive
+    # deploys, so `free` is not an option here.
+    plan: starter
     region: singapore
     rootDir: backend
     # Force full install (NODE_ENV=production would skip TypeScript). Prefer
@@ -13,6 +15,14 @@ services:
     startCommand: npm run start
     healthCheckPath: /api/health/ready
     autoDeploy: true
+    # Uploaded originals and their generated variants live here. The disk is
+    # mounted OUTSIDE the repo so a deploy can never wipe user media. Existing
+    # files are carried over once with `npm run uploads:migrate` (checksum
+    # verified; the source directory is left untouched).
+    disk:
+      name: kadamba-uploads
+      mountPath: /var/data
+      sizeGB: 5
     envVars:
       - key: NODE_ENV
         value: production
@@ -46,13 +56,15 @@ services:
       - key: REQUIRE_ADMIN_MFA
         value: "false"       # flip to true only after the admin has enrolled
       - key: UPLOAD_STORAGE
-        value: cloudinary
-      - key: CLOUDINARY_CLOUD_NAME
-        sync: false
-      - key: CLOUDINARY_API_KEY
-        sync: false
-      - key: CLOUDINARY_API_SECRET
-        sync: false
+        value: local
+      # Persistent Disk mount (see `disk:` above). Uploads — originals and the
+      # generated AVIF/WebP/JPEG variants — are stored under this path.
+      - key: UPLOAD_DIR
+        value: /var/data/uploads
+      - key: IMAGE_OPTIMIZE
+        value: "true"
+      - key: IMAGE_WIDTHS
+        value: "400,800,1200,1600,2400"
       - key: EMAIL_HOST
         value: smtp.gmail.com
       - key: EMAIL_PORT

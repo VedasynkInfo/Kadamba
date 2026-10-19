@@ -31,7 +31,7 @@ export function localBusinessJsonLd(): JsonLdObject {
     name: SITE_NAME,
     description: brand.summary,
     url: SITE_URL,
-    image: DEFAULT_OG_IMAGE,
+    image: absoluteUrl(DEFAULT_OG_IMAGE),
     telephone: studioContact.phoneTel,
     email: studioContact.email,
     address: {

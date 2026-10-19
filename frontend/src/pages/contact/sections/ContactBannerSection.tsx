@@ -32,6 +32,7 @@ export function ContactBannerSection() {
           transition={{ duration: reduced ? 0 : 1.35, ease: [0.22, 1, 0.36, 1] }}
         >
           <OptimizedImage
+            sizes="100vw"
             src={contactBanner.image}
             alt={contactBanner.alt}
             className="h-full w-full object-cover object-center"

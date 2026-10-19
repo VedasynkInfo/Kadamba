@@ -139,6 +139,7 @@ function MasonryTile({
         {item.mediaType === 'video' ? (
           <>
             <OptimizedImage
+              sizes="(min-width: 1200px) 368px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
               src={item.poster ?? item.src}
               alt={item.alt}
               className="h-full w-full object-cover transition-transform duration-700 ease-[var(--ease-luxury)] group-hover:scale-105"
@@ -158,6 +159,7 @@ function MasonryTile({
           </>
         ) : (
           <OptimizedImage
+            sizes="(min-width: 1200px) 368px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             src={item.src}
             alt={item.alt}
             className="h-full w-full object-cover transition-transform duration-700 ease-[var(--ease-luxury)] group-hover:scale-105"

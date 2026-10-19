@@ -9,6 +9,7 @@ import { useTheme } from '@/context/ThemeContext';
 import { PageMeta, staticPageMeta } from '@/seo';
 import { cn } from '@/utils/cn';
 import { AdminContentProvider } from './AdminContentContext';
+import { OptimizedImage } from '@/components/media/OptimizedImage';
 import { adminNav } from './data';
 import { RequireAdmin } from './RequireAdmin';
 
@@ -31,6 +32,7 @@ const navIcons: Record<string, string> = {
   '/admin/settings': '⚙️',
   '/admin/users': '🔐',
   '/admin/audit': '📜',
+  '/admin/media': '🖼️',
   '/admin/profile': '👤',
 };
 
@@ -152,7 +154,13 @@ export function AdminLayout() {
                   {!collapsed ? (
                     <div className="flex items-center gap-2">
                       {activeLogo ? (
-                        <img src={activeLogo} alt={brand.shortName} className="h-7 w-auto object-contain" />
+                        <OptimizedImage
+                          src={activeLogo}
+                          alt={brand.shortName}
+                          responsive={false}
+                          priority
+                          className="h-7 w-auto object-contain"
+                        />
                       ) : (
                         <p className="font-heading text-xl font-bold tracking-wide text-gold">
                           {brand.shortName}

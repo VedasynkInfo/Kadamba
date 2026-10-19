@@ -1,12 +1,12 @@
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import express, { type Express } from 'express';
+import express, { type Express, type Response } from 'express';
 import helmet from 'helmet';
 import { pinoHttp } from 'pino-http';
-import path from 'path';
 import { randomUUID } from 'crypto';
 import { env } from './config/env';
 import { logger } from './config/logger';
+import { ensureUploadDirs, optimizedDir, uploadsDir } from './config/storage';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 import { globalApiRateLimiter } from './middleware/rateLimit';
 import { autoAudit } from './middleware/autoAudit';
@@ -18,6 +18,10 @@ import apiRoutes from './routes';
  */
 export function createApp(): Express {
   const app = express();
+
+  // Uploads live on the Persistent Disk in production; make sure the tree
+  // (including the `optimized/` subtree) exists before anything serves it.
+  ensureUploadDirs();
 
   // Behind Render/Vercel proxies — required for correct client IPs + rate limits.
   if (env.trustProxy > 0) {
@@ -76,23 +80,48 @@ export function createApp(): Express {
   // an unguessable 384-bit random token whose hash is stored server-side.
   app.use(cookieParser());
 
-  // Serve locally stored uploads (dev + production when UPLOAD_STORAGE=local).
-  // Hardened: no dotfiles, nosniff, long-lived immutable caching (filenames are
-  // timestamped/unique), and an explicit X-Content-Type-Options header so a
+  // Serve locally stored uploads (dev + production).
+  //
+  // Hardened: no dotfiles, nosniff, and an explicit sandbox CSP so a
   // mislabelled file can never be sniffed into an active content type.
-  app.use(
-    '/uploads',
-    express.static(path.join(process.cwd(), 'uploads'), {
-      dotfiles: 'deny',
-      index: false,
-      fallthrough: false,
-      setHeaders(res) {
-        res.setHeader('X-Content-Type-Options', 'nosniff');
-        res.setHeader('Content-Security-Policy', "default-src 'none'; sandbox");
-        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-      },
-    }),
-  );
+  //
+  // Caching differs by subtree because the two trees have different
+  // immutability guarantees:
+  //   /uploads/optimized/**  content-hash keyed → immutable, cache forever
+  //   /uploads/*.png         timestamped unique names → immutable too, but we
+  //                          keep a slightly shorter window so a re-upload
+  //                          that reuses a name can still be picked up.
+  const uploadCacheHeaders = (immutable: boolean) => (res: Response) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('Content-Security-Policy', "default-src 'none'; sandbox");
+    res.setHeader(
+      'Cache-Control',
+      immutable
+        ? 'public, max-age=31536000, immutable'
+        : 'public, max-age=2592000, immutable',
+    );
+  };
+
+  const uploadsStatic = express.static(uploadsDir, {
+    dotfiles: 'deny',
+    index: false,
+    // `false` so a missing file 404s from this handler rather than falling
+    // through to the SPA's catch-all index.html (which would return HTML for
+    // an <img>, producing a confusing "broken image" instead of a clean 404).
+    fallthrough: false,
+    setHeaders: uploadCacheHeaders(false),
+  });
+
+  const optimizedStatic = express.static(optimizedDir, {
+    dotfiles: 'deny',
+    index: false,
+    fallthrough: false,
+    setHeaders: uploadCacheHeaders(true),
+  });
+
+  // Most specific path first.
+  app.use('/uploads/optimized', optimizedStatic);
+  app.use('/uploads', uploadsStatic);
 
   app.get('/', (_req, res) => {
     res.json({ success: true, message: "Kadamba's Designer Studio API", version: '1.0.0' });

@@ -105,19 +105,45 @@ export const env = {
   /** Trust N proxy hops (Render/Vercel sit behind a load balancer). */
   trustProxy: Number(process.env.TRUST_PROXY || (isProduction ? 1 : 0)),
   logLevel: optional('LOG_LEVEL', isTest ? 'silent' : isProduction ? 'info' : 'debug'),
-  cloudinary: {
-    cloudName: optional('CLOUDINARY_CLOUD_NAME'),
-    apiKey: optional('CLOUDINARY_API_KEY'),
-    apiSecret: optional('CLOUDINARY_API_SECRET'),
-  },
   /**
-   * Upload backend: `local` (default) | `cloudinary` | `auto`.
-   * Prefer local when Cloudinary keys are missing/invalid — works on Render too.
+   * Upload backend. Only `local` (disk / Render Persistent Disk) is
+   * implemented — the third-party CDN path was removed in Phase 4 so that all
+   * media lives on infrastructure we control, per the project constraints.
+   * The value is still read so an old deployment with `cloudinary` set gets a
+   * loud warning instead of silently changing behaviour.
    */
-  uploadStorage: (optional('UPLOAD_STORAGE', 'local').toLowerCase() as
-    | 'local'
-    | 'cloudinary'
-    | 'auto'),
+  uploadStorage: optional('UPLOAD_STORAGE', 'local').toLowerCase(),
+  /**
+   * Absolute path to the canonical uploads directory.
+   *
+   * Defaults to `<cwd>/uploads`, which is where every existing file and every
+   * stored URL already points — so the default is fully backward compatible.
+   * On Render, point this at the Persistent Disk mount (e.g.
+   * `/var/data/uploads`) so uploads survive deploys. Originals are never
+   * relocated automatically; use `npm run uploads:migrate` for that.
+   */
+  uploadDir: optional('UPLOAD_DIR'),
+  /** Image variant generation (sharp). */
+  image: {
+    /** Master switch — disable to store originals only. */
+    optimize: optional('IMAGE_OPTIMIZE', 'true') === 'true',
+    /** Widths generated for every raster upload. */
+    widths: (optional('IMAGE_WIDTHS', '400,800,1200,1600,2400'))
+      .split(',')
+      .map((w) => Number(w.trim()))
+      .filter((w) => Number.isFinite(w) && w > 0)
+      .sort((a, b) => a - b),
+    /**
+     * AVIF encode ceiling. AVIF is markedly slower than WebP/JPEG, so it is
+     * generated only for widths at or below this value.
+     */
+    avifMaxWidth: Number(process.env.IMAGE_AVIF_MAX_WIDTH || 1600),
+    /** Reject absurd source dimensions (decompression-bomb guard). */
+    maxPixels: Number(process.env.IMAGE_MAX_PIXELS || 80_000_000),
+    webpQuality: Number(process.env.IMAGE_WEBP_QUALITY || 82),
+    avifQuality: Number(process.env.IMAGE_AVIF_QUALITY || 62),
+    jpegQuality: Number(process.env.IMAGE_JPEG_QUALITY || 84),
+  },
   /** Optional public API origin for absolute local upload URLs (e.g. https://api.example.com). */
   publicApiUrl: optional('PUBLIC_API_URL', optional('RENDER_EXTERNAL_URL')),
   email: {

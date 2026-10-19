@@ -29,6 +29,7 @@ export function TeamSection() {
           <motion.li key={member.id} variants={reduced ? undefined : fadeUp}>
             <div className="aspect-[4/5] w-full overflow-hidden">
               <OptimizedImage
+                sizes="(min-width: 1200px) 368px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                 src={member.image}
                 alt={member.alt}
                 className="h-full w-full object-cover"

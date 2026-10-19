@@ -1,4 +1,5 @@
 import { MediaUpload } from '../components/MediaUpload';
+import { OptimizedImage } from '@/components/media/OptimizedImage';
 import type { ProfileFormData } from './types';
 
 interface MeasurementFormDirectivesTabProps {
@@ -24,7 +25,7 @@ export function MeasurementFormDirectivesTab({
               className="relative h-20 w-20 rounded-xl overflow-hidden border shadow-xs group"
               style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
             >
-              <img src={url} alt="Fitting Reference" className="h-full w-full object-cover" />
+              <OptimizedImage src={url} alt="Fitting Reference" sizes="80px" className="h-full w-full object-cover" />
               <button
                 type="button"
                 onClick={() =>

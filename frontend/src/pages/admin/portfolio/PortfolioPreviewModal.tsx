@@ -1,5 +1,6 @@
 ﻿import type { PortfolioProject } from '@/pages/portfolio/data';
 import { cn } from '@/utils/cn';
+import { OptimizedImage } from '@/components/media/OptimizedImage';
 
 interface PortfolioPreviewModalProps {
   item: PortfolioProject | null;
@@ -80,9 +81,10 @@ export function PortfolioPreviewModal({
               className="rounded-xl border overflow-hidden flex items-center justify-center bg-black/40 relative min-h-[220px] max-h-[340px]"
               style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))' }}
             >
-              <img
+              <OptimizedImage
                 src={displayImage}
                 alt={item.coverAlt || item.title}
+                sizes="(max-width: 768px) 90vw, 640px"
                 className="max-h-[320px] w-full object-contain"
               />
             </div>

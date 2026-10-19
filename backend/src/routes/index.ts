@@ -21,6 +21,8 @@ import staffRoutes from './staffRoutes';
 import financeRoutes from './financeRoutes';
 import reportRoutes from './reportRoutes';
 import userAdminRoutes from './userAdminRoutes';
+import mediaRoutes from './mediaRoutes';
+import mediaResolveRoutes from './mediaResolveRoutes';
 
 const router = Router();
 
@@ -34,6 +36,7 @@ router.use('/admin/customers', customerRoutes);
 router.use('/admin/orders', orderRoutes);
 router.use('/admin/products', productCatalogRoutes);
 router.use('/admin/staff', staffRoutes);
+router.use('/admin/media', mediaRoutes);
 router.use('/admin/users', userAdminRoutes);
 router.use('/admin/finance', financeRoutes);
 router.use('/admin/reports', reportRoutes);
@@ -48,5 +51,6 @@ router.use('/measurement-templates', templatesRouter);
 router.use('/measurements', profilesRouter);
 router.use('/upload', uploadRoutes);
 router.use('/settings', settingsRoutes);
+router.use('/media', mediaResolveRoutes);
 
 export default router;

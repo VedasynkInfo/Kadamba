@@ -25,6 +25,7 @@ export function AboutHeroSection() {
           transition={{ duration: reduced ? 0 : 1.1, ease: [0.22, 1, 0.36, 1] }}
         >
           <OptimizedImage
+            sizes="100vw"
             src={aboutHero.image}
             alt={aboutHero.alt}
             className="h-full w-full object-cover"

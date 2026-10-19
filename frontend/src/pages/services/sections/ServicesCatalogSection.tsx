@@ -167,6 +167,7 @@ function ServiceCard({
       >
         <div className="relative aspect-[16/11] w-full overflow-hidden">
           <OptimizedImage
+            sizes="(min-width: 1200px) 552px, 50vw"
             src={service.cardImage}
             alt={service.bannerAlt}
             className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"

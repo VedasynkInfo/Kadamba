@@ -165,8 +165,8 @@
 | 5.2 | Zod schemas shared via contract (server + client) | ✅ |
 | 5.3 | React Router v7 data router (loaders/actions/errorElement) | ✅ (loaders + errorElement + scroll restoration; actions intentionally not adopted — see notes) |
 | 5.4 | Typed order state machine (shared transitions) | ✅ (enforced + mirrored in the console; `INVALID_TRANSITION`) |
-| 5.5 | Socket events → query cache invalidation | ⬜ |
-| 5.6 | Offline mutation retry queue + offline banner | ⬜ |
+| 5.5 | Socket events → query cache invalidation | ✅ (coalesced; the legacy soft-refresh channel remains only for the hand-rolled desks) |
+| 5.6 | Offline mutation retry queue + offline banner | ✅ (pause/resume queue + counted banner; durable across reloads is the outbox slice, see notes) |
 
 **Gate:** every surface has loading/error/empty; optimistic UI rolls back on 4xx; zero raw `useEffect` fetches.
 
@@ -206,6 +206,18 @@
 - **The console stopped keeping its own copy of the flow.** `OrderDetailAdminPage` had a hand-written nine-entry `ORDER_STATUS_FLOW` for its "is this move backwards?" heuristic — a second, silent definition of the lifecycle. It now reads `ORDER_PRODUCTION_FLOW` and asks `transitionNeedsNote()`, which still demands a reason for a cancel, a hold, or rework (a finished garment sent back to trial). The status `<select>` offers only legal moves and renders a plain "lifecycle complete" line instead of a selector when there is nowhere left to go.
 - **`Order.status` is `OrderStatus`**, not `string`, in the SPA's own type — so a typo in a stage name is a compile error rather than a 409 at runtime.
 - Not in this workstream: order/customer/portal payloads still use `express-validator` alone rather than the shared zod contract (that is the remaining "not yet migrated" slice above); 5.4 is the lifecycle itself.
+
+**5.5 — the socket stops being a fetch instruction**
+- The realtime channel used to command: every list page subscribed to a `soft-refresh` hint and re-ran its own fetch. One order edit could fire a dozen uncoordinated requests, and a page that forgot to subscribe simply stopped updating — with nothing to tell you which kind of page you were looking at.
+- Now an event is only a *hint*: `invalidateForRealtime(event)` maps it to the cache families it makes stale (`lib/realtimeInvalidation.ts`), and whichever of those queries is mounted refetches once, through the same query layer as everything else. Correctness no longer depends on a surface remembering to listen.
+- Coarse on purpose. A write touches more than the row it names — confirming an order moves its lead, the customer's history, the badge counts and the dashboard — so events invalidate whole families rather than trying to enumerate the joins, which would be a second and quietly-wrong copy of the server's rules. Bursts are coalesced (200 ms) so one write that pokes three families is one refetch pass.
+- `onSoftRefresh` survives as a legacy hint for the desks that still own their fetches (the two dashboards today). It is explicitly a transportation detail: it dies with the last hand-rolled desk in Phase 7, and nothing new should subscribe to it.
+- **Not extended to the public site**, deliberately. Anonymous visitors hold no socket (the connection is token-authenticated), and opening one per visitor to watch for CMS edits is a cost this plan has not justified. Public content stays stale-while-revalidate: a 5-minute `staleTime`, the studio's own writes invalidating both cache families in the same browser, and `refetchOnReconnect`.
+
+**5.6 — offline, told honestly**
+- The fetch layer already paused work offline (`networkMode: 'online'`, set in 5.1) — which is exactly the problem: forms kept accepting input and nothing on screen changed. `useOfflineState()` reads the state from the layers that *are* the truth (`onlineManager` and the mutation cache) via `useSyncExternalStore`, so the banner cannot claim "online" over a queue that is stuck.
+- `OfflineBanner` renders in `RouterShell`, so the public site, the console and the portal all get it and none can forget. It distinguishes "offline, showing the last content that loaded" from "offline, *n* changes will be sent when the connection returns", and reports "back online — sending…" while the queue drains. Writes made offline are paused, not failed, and resume by themselves.
+- **Not durable across a reload, on purpose.** A queue that survives a refresh has to replay *service calls*, not closures — it needs a declarative mutation registry and idempotency keys so a write that did reach the server is not applied twice. That is the same mechanism the planned `EmailOutbox` needs; faking it with a localStorage dump of ad-hoc mutation closures would silently double-apply writes, which is worse than losing them. Recorded here rather than quietly implied by "offline support".
 
 ---
 

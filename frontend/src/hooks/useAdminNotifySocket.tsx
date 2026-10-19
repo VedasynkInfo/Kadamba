@@ -12,6 +12,7 @@ import { io, type Socket } from 'socket.io-client';
 import { useToast } from '@/components/ui/Toast';
 import { getAdminToken } from '@/services/api/client';
 import { dashboardApi, type AdminBadges } from '@/services/dashboard/dashboardService';
+import { invalidateForRealtime } from '@/lib/realtimeInvalidation';
 import { socketOrigin } from './socketOrigin';
 import { useAuth } from './useAuth';
 
@@ -21,7 +22,14 @@ interface AdminNotifyStore {
   connected: boolean;
   badges: AdminBadges;
   refreshBadges: () => Promise<void>;
-  /** Subscribe to soft-refresh hints for open list pages */
+  /**
+   * Legacy hint channel for pages that still own their own fetches.
+   *
+   * Query-driven surfaces do not need this: `invalidateForRealtime` refreshes
+   * them by cache key, and a page cannot forget to listen. This stays only for
+   * the hand-rolled desks (the dashboards today) until Phase 7 moves them onto
+   * the query layer, at which point it can be deleted outright.
+   */
   onSoftRefresh: (fn: (kinds: SoftRefreshKind[]) => void) => () => void;
 }
 
@@ -30,7 +38,14 @@ const AdminNotifyContext = createContext<AdminNotifyStore | null>(null);
 const emptyBadges: AdminBadges = { leads: 0, measurements: 0, chat: 0 };
 
 /**
- * Admin Socket.IO live notifications — toast + badge + soft-refresh.
+ * Admin Socket.IO live notifications — toast + badge + cache invalidation.
+ *
+ * Every event does three things: tells the operator (toast), makes the affected
+ * query families stale (`invalidateForRealtime`, which is how a page that is
+ * already mounted updates), and — until Phase 7 — nudges the desks that still
+ * run their own fetches (`bumpSoft`). The socket never carries data the app
+ * renders; it only says that something changed.
+ *
  * Graceful when socket is down (HTTP badges still work).
  */
 export function AdminNotifyProvider({ children }: { children: ReactNode }) {
@@ -85,6 +100,7 @@ export function AdminNotifyProvider({ children }: { children: ReactNode }) {
           : 'A new consultation request arrived',
       });
       void refreshBadges();
+      invalidateForRealtime('notify:lead');
       bumpSoft(['leads', 'dashboard']);
     });
 
@@ -96,6 +112,7 @@ export function AdminNotifyProvider({ children }: { children: ReactNode }) {
           ? `#${payload.orderNumber}${payload.status ? ` → ${payload.status}` : ''}`
           : 'An order changed status',
       });
+      invalidateForRealtime('notify:order');
       bumpSoft(['orders', 'dashboard']);
     });
 
@@ -109,6 +126,7 @@ export function AdminNotifyProvider({ children }: { children: ReactNode }) {
           description: payload.profileName || payload.productTypeCode || 'Profile updated',
         });
         void refreshBadges();
+        invalidateForRealtime('notify:measurement');
         bumpSoft(['measurements', 'dashboard']);
       },
     );
@@ -122,6 +140,7 @@ export function AdminNotifyProvider({ children }: { children: ReactNode }) {
             ? `₹${payload.amount}${payload.orderNumber ? ` · #${payload.orderNumber}` : ''}`
             : 'A payment was recorded',
       });
+      invalidateForRealtime('notify:payment');
       bumpSoft(['payments', 'orders', 'dashboard']);
     });
 
@@ -135,10 +154,12 @@ export function AdminNotifyProvider({ children }: { children: ReactNode }) {
       } else {
         void refreshBadges();
       }
+      invalidateForRealtime('notify:badge');
     });
 
     socket.on('portal:chat', () => {
       void refreshBadges();
+      invalidateForRealtime('portal:chat');
     });
 
     return () => {

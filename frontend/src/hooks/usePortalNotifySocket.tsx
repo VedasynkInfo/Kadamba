@@ -11,6 +11,7 @@ import {
 import { io, type Socket } from 'socket.io-client';
 import { useToast } from '@/components/ui/Toast';
 import { getPortalToken } from '@/services/api/client';
+import { invalidateForRealtime } from '@/lib/realtimeInvalidation';
 import { socketOrigin } from './socketOrigin';
 
 type SoftRefreshKind = 'orders' | 'measurements' | 'payments' | 'dashboard' | 'chat';
@@ -24,7 +25,11 @@ interface PortalNotifyStore {
 const PortalNotifyContext = createContext<PortalNotifyStore | null>(null);
 
 /**
- * Portal Socket.IO live notifications — toast + soft-refresh dashboard/lists.
+ * Portal Socket.IO live notifications — toast + cache invalidation.
+ *
+ * Same shape as the admin socket: the event is a hint, and the query layer is
+ * what actually refreshes. `bumpSoft` and `refreshTick` remain for the portal
+ * pages that still own their fetches.
  */
 export function PortalNotifyProvider({ children }: { children: ReactNode }) {
   const { toast } = useToast();
@@ -62,6 +67,7 @@ export function PortalNotifyProvider({ children }: { children: ReactNode }) {
           ? `${payload.title}${payload.status ? ` · ${payload.status}` : ''}`
           : 'Your order status changed',
       });
+      invalidateForRealtime('notify:order');
       bumpSoft(['orders', 'dashboard']);
     });
 
@@ -77,6 +83,7 @@ export function PortalNotifyProvider({ children }: { children: ReactNode }) {
             ? 'Your fitting measurements were approved by the boutique.'
             : 'Your measurement profile was updated.',
       });
+      invalidateForRealtime('notify:measurement');
       bumpSoft(['measurements', 'dashboard']);
     });
 
@@ -89,14 +96,17 @@ export function PortalNotifyProvider({ children }: { children: ReactNode }) {
             ? `₹${payload.amount} recorded on your order`
             : 'A payment was recorded',
       });
+      invalidateForRealtime('notify:payment');
       bumpSoft(['payments', 'orders', 'dashboard']);
     });
 
     socket.on('notify:badge', () => {
+      invalidateForRealtime('notify:badge');
       bumpSoft(['dashboard', 'chat']);
     });
 
     socket.on('portal:chat', () => {
+      invalidateForRealtime('portal:chat');
       bumpSoft(['chat', 'dashboard']);
     });
 

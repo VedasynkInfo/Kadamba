@@ -10,6 +10,12 @@ export interface Column<T> {
   className?: string;
   cellClassName?: string;
   hide?: 'sm' | 'md' | 'lg';
+  /**
+   * Value used when `DataTable` sorts this column client-side. `Table` ignores
+   * it. Falls back to the row's `key` property, so it is only needed when the
+   * displayed value is computed rather than read straight off the row.
+   */
+  sortValue?: (row: T) => string | number | null | undefined;
 }
 
 export interface TableProps<T> {
@@ -25,6 +31,10 @@ export interface TableProps<T> {
   sortDir?: 'asc' | 'desc';
   onRowClick?: (row: T) => void;
   className?: string;
+  /**
+   * Accepted for compatibility; the shell decides the surface now
+   * (`bg-surface-raised` resolves to the console's card under `.admin-shell`).
+   */
   variant?: 'default' | 'admin';
 }
 
@@ -41,7 +51,6 @@ export function Table<T>({
   sortDir,
   onRowClick,
   className,
-  variant = 'default',
 }: TableProps<T>) {
   const getKey = (row: T, i: number) => {
     if (keyExtractor) return keyExtractor(row);
@@ -55,19 +64,12 @@ export function Table<T>({
     onSort(key, dir);
   };
 
-  const isAdmin = variant === 'admin';
-
   return (
     <div
       className={cn(
-        'overflow-x-auto rounded-xl border transition-all duration-200 shadow-xs',
-        className
+        'overflow-x-auto rounded-xl border border-line bg-surface-raised text-ink transition-all duration-200 shadow-xs',
+        className,
       )}
-      style={{
-        backgroundColor: isAdmin ? 'var(--admin-card, #1f2937)' : 'var(--public-card, #ffffff)',
-        borderColor: isAdmin ? 'var(--admin-border, rgba(128, 128, 128, 0.18))' : 'rgba(0, 0, 0, 0.08)',
-        color: isAdmin ? 'var(--admin-card-text, var(--admin-text, #f3f4f6))' : 'var(--public-card-text, var(--public-text, #171717))',
-      }}
     >
       <table className="w-full text-left border-collapse text-sm">
         <thead>
@@ -77,7 +79,7 @@ export function Table<T>({
                 key={col.key}
                 className={cn(
                   'px-4 py-3.5 font-semibold',
-                  col.sortable && 'cursor-pointer select-none hover:text-black',
+                  col.sortable && 'cursor-pointer select-none hover:text-ink',
                   col.className,
                   col.hide === 'sm' && 'hidden sm:table-cell',
                   col.hide === 'md' && 'hidden md:table-cell',

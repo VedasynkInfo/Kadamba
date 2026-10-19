@@ -1,12 +1,8 @@
-import {
-  useEffect,
-  useId,
-  useRef,
-  type ReactNode,
-  type KeyboardEvent,
-} from 'react';
+import * as Dialog from '@radix-ui/react-dialog';
+import { useRef, type ReactNode } from 'react';
 import { cn } from '@/utils/cn';
 import { Button } from './Button';
+import { PortalShell } from './PortalShell';
 
 export interface DrawerProps {
   open: boolean;
@@ -18,7 +14,13 @@ export interface DrawerProps {
 }
 
 /**
- * Side drawer panel for mobile nav and secondary content.
+ * Side drawer for mobile nav and secondary content.
+ *
+ * A sliding panel is still a modal dialog, so this is built on the same Radix
+ * Dialog primitive as `Modal` — the focus trap, Escape, scroll lock and
+ * `aria-hidden` of the background all come from there instead of being
+ * hand-rolled. As with `Modal`, focus restore is ours because the controlled
+ * `open` prop has no `Dialog.Trigger` to return to.
  */
 export function Drawer({
   open,
@@ -28,91 +30,53 @@ export function Drawer({
   side = 'right',
   className,
 }: DrawerProps) {
-  const titleId = useId();
-  const panelRef = useRef<HTMLDivElement>(null);
-  const onCloseRef = useRef(onClose);
-  const wasOpenRef = useRef(false);
-
-  onCloseRef.current = onClose;
-
-  useEffect(() => {
-    if (!open) {
-      wasOpenRef.current = false;
-      document.body.style.overflow = '';
-      return;
-    }
-
-    // Focus the panel only when the drawer first opens — not on every parent re-render
-    // (inline onClose identities used to re-run this effect and steal input focus).
-    if (!wasOpenRef.current) {
-      panelRef.current?.focus();
-      wasOpenRef.current = true;
-    }
-
-    const onKeyDown = (e: globalThis.KeyboardEvent) => {
-      if (e.key === 'Escape') onCloseRef.current();
-    };
-    document.addEventListener('keydown', onKeyDown);
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      document.removeEventListener('keydown', onKeyDown);
-      document.body.style.overflow = '';
-    };
-  }, [open]);
-
-  if (!open) return null;
-
-  const onPanelKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === 'Escape') onCloseRef.current();
-  };
+  const previouslyFocused = useRef<HTMLElement | null>(null);
 
   return (
-    <div className="fixed inset-0 z-50" role="presentation">
-      <button
-        type="button"
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-        aria-label="Close drawer"
-        onClick={() => onCloseRef.current()}
-      />
-      <div
-        ref={panelRef}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={titleId}
-        tabIndex={-1}
-        onKeyDown={onPanelKeyDown}
-        className={cn(
-          'absolute top-0 flex h-full w-full max-w-[24rem] flex-col shadow-[var(--shadow-soft)] outline-none border-l',
-          'transition-transform duration-300 ease-[var(--ease-luxury)]',
-          side === 'right' ? 'right-0 animate-fade-in-up' : 'left-0 animate-fade-in-up',
-          className,
-        )}
-        style={{
-          backgroundColor: 'var(--admin-card, var(--public-card, #0a0a0a))',
-          color: 'var(--admin-card-text, var(--public-card-text, #f3f4f6))',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))',
-        }}
-      >
-        <div
-          className="flex items-center justify-between border-b px-5 py-4"
-          style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))' }}
-        >
-          <h2 id={titleId} className="font-heading text-xl text-[var(--admin-primary,var(--color-accent,#b59410))]">
-            {title}
-          </h2>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => onCloseRef.current()}
-            aria-label="Close drawer"
-            className="!text-inherit opacity-70 hover:opacity-100 hover:!bg-current/[0.08]"
+    <Dialog.Root
+      open={open}
+      onOpenChange={(next) => {
+        if (!next) onClose();
+      }}
+    >
+      <Dialog.Portal>
+        <PortalShell>
+          <Dialog.Overlay className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm" />
+          <Dialog.Content
+            aria-modal="true"
+            // Radix fires this just before it moves focus into the drawer, so
+            // the active element here is still the opener we must return to.
+            onOpenAutoFocus={() => {
+              previouslyFocused.current = document.activeElement as HTMLElement | null;
+            }}
+            onCloseAutoFocus={(event) => {
+              event.preventDefault();
+              previouslyFocused.current?.focus();
+            }}
+            className={cn(
+              'fixed top-0 z-50 flex h-full w-full max-w-[24rem] flex-col border-l border-line bg-surface-raised text-ink-raised shadow-soft outline-none',
+              'transition-transform duration-300 ease-luxury animate-fade-in-up',
+              side === 'right' ? 'right-0' : 'left-0',
+              className,
+            )}
           >
-            ✕
-          </Button>
-        </div>
-        <div className="flex-1 overflow-y-auto px-5 py-4">{children}</div>
-      </div>
-    </div>
+            <div className="flex items-center justify-between border-b border-line px-5 py-4">
+              <Dialog.Title className="font-heading text-xl text-brand">{title}</Dialog.Title>
+              <Dialog.Close asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  aria-label="Close drawer"
+                  className="text-inherit opacity-70 hover:bg-current/[0.08] hover:opacity-100"
+                >
+                  ✕
+                </Button>
+              </Dialog.Close>
+            </div>
+            <div className="flex-1 overflow-y-auto px-5 py-4">{children}</div>
+          </Dialog.Content>
+        </PortalShell>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }

@@ -1,13 +1,8 @@
-import {
-  useEffect,
-  useId,
-  useRef,
-  type ReactNode,
-  type MouseEvent,
-  type KeyboardEvent,
-} from 'react';
+import * as Dialog from '@radix-ui/react-dialog';
+import { useRef, type ReactNode } from 'react';
 import { cn } from '@/utils/cn';
 import { Button } from './Button';
+import { PortalShell } from './PortalShell';
 
 export interface ModalProps {
   open: boolean;
@@ -27,7 +22,15 @@ const sizeClasses = {
 };
 
 /**
- * Modal dialog with backdrop blur, Escape to close, and focus restore.
+ * Modal dialog.
+ *
+ * Radix owns the parts that are easy to get subtly wrong — the focus trap,
+ * Escape, the page scroll lock, `aria-hidden` on the rest of the page and the
+ * role/labelling wiring — so none of that is hand-rolled here.
+ *
+ * The one thing Radix cannot do for this API is focus restore: it returns focus
+ * to a `Dialog.Trigger`, and this controlled `open` prop has none. We therefore
+ * remember the previously focused element and restore it on close ourselves.
  */
 export function Modal({
   open,
@@ -38,108 +41,60 @@ export function Modal({
   size = 'md',
   className,
 }: ModalProps) {
-  const titleId = useId();
-  const panelRef = useRef<HTMLDivElement>(null);
-  const previousFocus = useRef<HTMLElement | null>(null);
-  const onCloseRef = useRef(onClose);
-  const wasOpenRef = useRef(false);
-
-  onCloseRef.current = onClose;
-
-  useEffect(() => {
-    if (!open) {
-      if (wasOpenRef.current) {
-        document.body.style.overflow = '';
-        previousFocus.current?.focus();
-      }
-      wasOpenRef.current = false;
-      return;
-    }
-
-    if (!wasOpenRef.current) {
-      previousFocus.current = document.activeElement as HTMLElement | null;
-      panelRef.current?.focus();
-      wasOpenRef.current = true;
-    }
-
-    const onKeyDown = (e: globalThis.KeyboardEvent) => {
-      if (e.key === 'Escape') onCloseRef.current();
-    };
-
-    document.addEventListener('keydown', onKeyDown);
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      document.removeEventListener('keydown', onKeyDown);
-    };
-  }, [open]);
-
-  if (!open) return null;
-
-  const onBackdropClick = (e: MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) onCloseRef.current();
-  };
-
-  const onPanelKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-    if (e.key !== 'Tab' || !panelRef.current) return;
-    const focusable = panelRef.current.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-    );
-    if (focusable.length === 0) return;
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-    if (e.shiftKey && document.activeElement === first) {
-      e.preventDefault();
-      last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
-      e.preventDefault();
-      first.focus();
-    }
-  };
+  const previouslyFocused = useRef<HTMLElement | null>(null);
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      role="presentation"
-      onClick={onBackdropClick}
+    <Dialog.Root
+      open={open}
+      onOpenChange={(next) => {
+        if (!next) onClose();
+      }}
     >
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" aria-hidden />
-      <div
-        ref={panelRef}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={titleId}
-        tabIndex={-1}
-        onKeyDown={onPanelKeyDown}
-        className={cn(
-          'relative z-10 w-full rounded-xl border p-6 shadow-[var(--shadow-soft)]',
-          'animate-fade-in-up outline-none',
-          sizeClasses[size],
-          className,
-        )}
-        style={{
-          backgroundColor: 'var(--admin-card, var(--public-card, #ffffff))',
-          color: 'var(--admin-card-text, var(--public-card-text, #171717))',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))',
-        }}
-      >
-        <div className="mb-4 flex items-start justify-between gap-4">
-          <h2 id={titleId} className="font-heading text-xl font-bold text-inherit">
-            {title}
-          </h2>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => onCloseRef.current()}
-            aria-label="Close dialog"
-            className="!px-2 text-inherit opacity-70 hover:opacity-100 hover:bg-current/[0.06]"
-          >
-            ✕
-          </Button>
-        </div>
-        <div className="text-sm text-inherit">{children}</div>
-        {footer ? <div className="mt-6 flex justify-end gap-3">{footer}</div> : null}
-      </div>
-    </div>
+      <Dialog.Portal>
+        <PortalShell>
+          <Dialog.Overlay className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm" />
+          {/* The panel is centred by a flex parent rather than by translate, so
+              that the entrance animation's transform cannot fight the centring. */}
+          <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4">
+            <Dialog.Content
+              aria-modal="true"
+              // Radix fires this just before it moves focus into the dialog, so
+              // the active element here is still the opener we must return to.
+              onOpenAutoFocus={() => {
+                previouslyFocused.current = document.activeElement as HTMLElement | null;
+              }}
+              onCloseAutoFocus={(event) => {
+                event.preventDefault();
+                previouslyFocused.current?.focus();
+              }}
+              className={cn(
+                'pointer-events-auto relative w-full rounded-xl border border-line bg-surface-raised p-6 text-ink-raised shadow-soft',
+                'animate-fade-in-up outline-none',
+                sizeClasses[size],
+                className,
+              )}
+            >
+              <div className="mb-4 flex items-start justify-between gap-4">
+                <Dialog.Title className="font-heading text-xl font-bold text-inherit">
+                  {title}
+                </Dialog.Title>
+                <Dialog.Close asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    aria-label="Close dialog"
+                    className="px-2 text-inherit opacity-70 hover:bg-current/[0.06] hover:opacity-100"
+                  >
+                    ✕
+                  </Button>
+                </Dialog.Close>
+              </div>
+              <div className="text-sm text-inherit">{children}</div>
+              {footer ? <div className="mt-6 flex justify-end gap-3">{footer}</div> : null}
+            </Dialog.Content>
+          </div>
+        </PortalShell>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }

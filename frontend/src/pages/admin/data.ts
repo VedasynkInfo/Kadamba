@@ -1,3 +1,5 @@
+import type { GlyphName } from '@/components/icons';
+import type { Permission } from '@/shared/enums';
 import { brand } from '@/pages/home/data';
 import { studioContact, socialLinks } from '@/pages/contact/data';
 import { DEFAULT_THEME_TOKENS } from '@/theme/palettes';
@@ -11,28 +13,120 @@ export const adminHorizonMedia = {
   alt: 'Fabric folds and atelier tools on a studio worktable',
 } as const;
 
-export const adminNav = [
-  { to: '/admin', end: true, label: 'Dashboard', permission: 'orders:read' },
-  { to: '/admin/gallery', end: false, label: 'Gallery', permission: 'content:write' },
-  { to: '/admin/services', end: false, label: 'Services', permission: 'content:write' },
-  { to: '/admin/portfolio', end: false, label: 'Portfolio', permission: 'content:write' },
-  { to: '/admin/blogs', end: false, label: 'Blogs', permission: 'content:write' },
-  { to: '/admin/leads', end: false, label: 'Leads', permission: 'leads:read' },
-  { to: '/admin/customers', end: false, label: 'Customers', permission: 'customers:read' },
-  { to: '/admin/products', end: false, label: 'Products', permission: 'catalog:read' },
-  { to: '/admin/orders', end: false, label: 'Orders', permission: 'orders:read' },
-  { to: '/admin/measurements', end: false, label: 'Measurements', permission: 'measurements:read' },
-  { to: '/admin/invoices', end: false, label: 'Invoices', permission: 'finance:read' },
-  { to: '/admin/payments', end: false, label: 'Payments', permission: 'finance:read' },
-  { to: '/admin/staff', end: false, label: 'Staff', permission: 'staff:read' },
-  { to: '/admin/finance', end: false, label: 'Finance', permission: 'finance:read' },
-  { to: '/admin/reports', end: false, label: 'Reports', permission: 'reports:read' },
-  { to: '/admin/users', end: false, label: 'Users & Roles', permission: 'users:manage' },
-  { to: '/admin/audit', end: false, label: 'Audit Log', permission: 'audit:read' },
-  { to: '/admin/media', end: false, label: 'Media', permission: 'media:read' },
-  { to: '/admin/settings', end: false, label: 'Settings', permission: 'content:write' },
-  { to: '/admin/profile', end: false, label: 'Profile', permission: null },
-] as const;
+export interface AdminNavItem {
+  to: string;
+  end: boolean;
+  label: string;
+  /** A name from `@/components/icons`. Never a glyph. */
+  icon: GlyphName;
+  permission: Permission | null;
+}
+
+export interface AdminNavGroup {
+  id: string;
+  /** Shown above the group. In the collapsed rail the groups become rules. */
+  label: string;
+  items: AdminNavItem[];
+}
+
+/**
+ * The console's map, grouped by the desk a task belongs to rather than by the
+ * order modules were built in. Twenty flat links is a list; five named groups is
+ * a place you can learn.
+ */
+export const adminNavGroups: AdminNavGroup[] = [
+  {
+    id: 'overview',
+    label: 'Overview',
+    items: [
+      { to: '/admin', end: true, label: 'Dashboard', icon: 'dashboard', permission: 'orders:read' },
+      { to: '/admin/reports', end: false, label: 'Reports', icon: 'reports', permission: 'reports:read' },
+    ],
+  },
+  {
+    id: 'front-desk',
+    label: 'Front desk',
+    items: [
+      { to: '/admin/leads', end: false, label: 'Leads', icon: 'leads', permission: 'leads:read' },
+      { to: '/admin/customers', end: false, label: 'Customers', icon: 'customers', permission: 'customers:read' },
+    ],
+  },
+  {
+    id: 'atelier',
+    label: 'Atelier',
+    items: [
+      { to: '/admin/orders', end: false, label: 'Orders', icon: 'orders', permission: 'orders:read' },
+      { to: '/admin/measurements', end: false, label: 'Measurements', icon: 'measurements', permission: 'measurements:read' },
+      { to: '/admin/staff', end: false, label: 'Staff', icon: 'staff', permission: 'staff:read' },
+    ],
+  },
+  {
+    id: 'catalogue',
+    label: 'Catalogue',
+    items: [
+      { to: '/admin/products', end: false, label: 'Products', icon: 'products', permission: 'catalog:read' },
+      { to: '/admin/services', end: false, label: 'Services', icon: 'services', permission: 'content:write' },
+      { to: '/admin/portfolio', end: false, label: 'Portfolio', icon: 'portfolio', permission: 'content:write' },
+      { to: '/admin/gallery', end: false, label: 'Gallery', icon: 'gallery', permission: 'content:write' },
+      { to: '/admin/blogs', end: false, label: 'Blogs', icon: 'blogs', permission: 'content:write' },
+    ],
+  },
+  {
+    id: 'ledger',
+    label: 'Ledger',
+    items: [
+      { to: '/admin/invoices', end: false, label: 'Invoices', icon: 'invoices', permission: 'finance:read' },
+      { to: '/admin/payments', end: false, label: 'Payments', icon: 'payments', permission: 'finance:read' },
+      { to: '/admin/finance', end: false, label: 'Finance', icon: 'finance', permission: 'finance:read' },
+    ],
+  },
+  {
+    id: 'console',
+    label: 'Console',
+    items: [
+      { to: '/admin/media', end: false, label: 'Media', icon: 'media', permission: 'media:read' },
+      { to: '/admin/users', end: false, label: 'Users & Roles', icon: 'users', permission: 'users:manage' },
+      { to: '/admin/audit', end: false, label: 'Audit Log', icon: 'audit', permission: 'audit:read' },
+      { to: '/admin/settings', end: false, label: 'Settings', icon: 'settings', permission: 'content:write' },
+      { to: '/admin/profile', end: false, label: 'Profile', icon: 'profile', permission: null },
+    ],
+  },
+];
+
+/** Flat view of the same map, for search, the palette and permission checks. */
+export const adminNav: AdminNavItem[] = adminNavGroups.flatMap((group) => group.items);
+
+/** Just enough of the signed-in user to decide what a nav may show. */
+export interface AdminNavViewer {
+  role: string;
+  permissions?: readonly Permission[];
+}
+
+/**
+ * The map a given user may see: items they hold the permission for, and groups
+ * that still have at least one item left.
+ *
+ * This is presentation, not access control — every desk's route and API enforce
+ * the same permission server-side. It exists so a staff tailor is not shown
+ * twenty doors they cannot open.
+ */
+export function visibleAdminNavGroups(viewer: AdminNavViewer | null): AdminNavGroup[] {
+  const canSee = (item: AdminNavItem) => {
+    if (!item.permission) return true;
+    if (!viewer) return false;
+    if (viewer.role === 'admin') return true;
+    return (viewer.permissions ?? []).includes(item.permission);
+  };
+
+  return adminNavGroups
+    .map((group) => ({ ...group, items: group.items.filter(canSee) }))
+    .filter((group) => group.items.length > 0);
+}
+
+/** Does a pathname belong to a nav item, mirroring `NavLink`'s own rule? */
+export function isAdminNavItemActive(item: Pick<AdminNavItem, 'to' | 'end'>, pathname: string) {
+  return item.end ? pathname === item.to : pathname === item.to || pathname.startsWith(`${item.to}/`);
+}
 
 export const adminBanners = {
   dashboard: {

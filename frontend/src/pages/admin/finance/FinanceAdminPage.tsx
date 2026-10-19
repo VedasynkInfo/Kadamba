@@ -6,6 +6,7 @@ import {
   type ExpenseRecord,
   type SalaryRecord,
 } from '@/services/finance/financeService';
+import { Icon, type GlyphName } from '@/components/icons';
 import { staffApi, type Staff } from '@/services/staff/staffService';
 import { useToast } from '@/components/ui';
 import { PageMeta, staticPageMeta } from '@/seo';
@@ -20,11 +21,11 @@ import { cn } from '@/utils/cn';
 
 type FinanceTab = 'overview' | 'expenses' | 'salaries' | 'profit-loss';
 
-const TABS: { key: FinanceTab; label: string; icon: string }[] = [
-  { key: 'overview', label: 'Financial Overview', icon: '📊' },
-  { key: 'expenses', label: 'Expenses Ledger', icon: '💸' },
-  { key: 'salaries', label: 'Artisan Payroll', icon: '👥' },
-  { key: 'profit-loss', label: 'P&L Statement', icon: '💎' },
+const TABS: { key: FinanceTab; label: string; icon: GlyphName }[] = [
+  { key: 'overview', label: 'Financial Overview', icon: 'chart' },
+  { key: 'expenses', label: 'Expenses Ledger', icon: 'expense' },
+  { key: 'salaries', label: 'Artisan Payroll', icon: 'salary' },
+  { key: 'profit-loss', label: 'P&L Statement', icon: 'profit' },
 ];
 
 export default function FinanceAdminPage() {
@@ -131,7 +132,7 @@ export default function FinanceAdminPage() {
               disabled={loading}
               className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold transition hover:bg-current/[0.05] active:scale-98 cursor-pointer border-line"
             >
-              <span className={loading ? 'animate-spin' : ''}>🔄</span>
+              <span className={loading ? 'animate-spin' : ''}><Icon name="refresh" size={14} className="mr-1 inline align-middle" /> </span>
               <span>Sync Ledgers</span>
             </button>
           </div>
@@ -158,7 +159,7 @@ export default function FinanceAdminPage() {
                     : 'border-transparent opacity-65 hover:opacity-100',
                 )}
               >
-                <span>{tab.icon}</span>
+                <Icon name={tab.icon} size={16} />
                 <span>{tab.label}</span>
               </button>
             );

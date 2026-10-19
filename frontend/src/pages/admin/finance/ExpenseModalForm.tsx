@@ -1,4 +1,5 @@
 ﻿import { useState, useEffect } from 'react';
+import { Icon } from '@/components/icons';
 import { financeApi, type ExpenseRecord } from '@/services/finance/financeService';
 
 interface ExpenseModalFormProps {
@@ -118,7 +119,7 @@ export function ExpenseModalForm({ open, expense, onClose, onSuccess }: ExpenseM
           className="flex items-center justify-between border-b px-5 py-4 border-line"
         >
           <div className="flex items-center gap-2.5">
-            <span className="text-xl">💸</span>
+            <span className="text-xl"><Icon name="expense" size={14} className="mr-1 inline align-middle" /> </span>
             <div>
               <h3 className="font-heading text-base font-bold tracking-wide">
                 {expense ? 'Edit Expense Record' : 'Record New Studio Expense'}
@@ -134,7 +135,7 @@ export function ExpenseModalForm({ open, expense, onClose, onSuccess }: ExpenseM
             className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer border-line"
             aria-label="Close modal"
           >
-            ✕
+            <Icon name="close" size={16} />
           </button>
         </div>
 

@@ -6,6 +6,7 @@ import type {
 import { getSilhouetteMeta } from './types';
 import { EmptyState } from '../components/EmptyState';
 import { Skeleton } from '../components/Skeleton';
+import { Icon } from '@/components/icons';
 import { cn } from '@/utils/cn';
 
 const SKELETON_ROWS = 6;
@@ -179,7 +180,8 @@ export function MeasurementsTable({
                           <span
                             className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold border bg-brand/12 border-brand/30 text-brand"
                           >
-                            {silhouette.icon} {silhouette.name}
+                            <Icon name={silhouette.icon} size={13} />
+                        {silhouette.name}
                           </span>
                         </div>
                       </div>
@@ -240,7 +242,7 @@ export function MeasurementsTable({
                             className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/40 hover:bg-amber-500/30 transition cursor-pointer disabled:opacity-50"
                             title="Approve measurement specification"
                           >
-                            <span>✓</span>
+                            <span><Icon name="check" size={14} className="mr-1 inline align-middle" /> </span>
                             <span>{isApproving ? 'Approving...' : 'Approve'}</span>
                           </button>
                         ) : null}
@@ -296,7 +298,7 @@ export function MeasurementsTable({
                 }}
                 className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-bold text-amber-400 hover:bg-amber-500/10 transition cursor-pointer"
               >
-                <span className="text-sm">✓</span>
+                <Icon name="check" size={14} />
                 <span>Approve Fit Profile</span>
               </button>
             ) : null}
@@ -310,7 +312,7 @@ export function MeasurementsTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">👁️</span>
+              <Icon name="view" size={14} />
               <span>View Fit Specification</span>
             </button>
 
@@ -323,7 +325,7 @@ export function MeasurementsTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">✏️</span>
+              <Icon name="edit" size={14} />
               <span>Edit Dimensions</span>
             </button>
 
@@ -336,7 +338,7 @@ export function MeasurementsTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">📋</span>
+              <Icon name="copy" size={14} />
               <span>Duplicate Profile</span>
             </button>
 
@@ -353,7 +355,9 @@ export function MeasurementsTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-rose-400 hover:bg-rose-500/10 transition cursor-pointer"
             >
-              <span className="text-sm">{menuAnchor.profile.status === 'archived' ? '📂' : '📦'}</span>
+              {menuAnchor.profile.status === 'archived' ? (
+                <Icon name="archived" size={14} />
+              ) : null}
               <span>{menuAnchor.profile.status === 'archived' ? 'Unarchive Fit' : 'Archive Fit'}</span>
             </button>
           </div>

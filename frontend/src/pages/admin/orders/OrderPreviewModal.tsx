@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Icon } from '@/components/icons';
 import type { Order } from '@/services/orders/orderService';
 import type { OrderStatus } from '@/shared/enums';
 import { ORDER_STATUS_CONFIG, orderStatusChoices } from './types';
@@ -83,7 +84,7 @@ export function OrderPreviewModal({ order, onClose, onStatusChange }: OrderPrevi
             </span>
             {order.priority === 'rush' || order.priority === 'high' ? (
               <span className="text-[10px] font-bold uppercase tracking-wider text-rose-500 bg-rose-500/10 px-2 py-0.5 rounded border border-rose-500/20">
-                {order.priority} ⚡
+                {order.priority} <Icon name="speed" size={14} className="mr-1 inline align-middle" /> 
               </span>
             ) : null}
           </div>
@@ -94,7 +95,7 @@ export function OrderPreviewModal({ order, onClose, onStatusChange }: OrderPrevi
             className="h-8 w-8 rounded-lg border flex items-center justify-center text-xs opacity-70 hover:opacity-100 hover:bg-current/[0.06] transition cursor-pointer border-line"
             aria-label="Close dialog"
           >
-            ✕
+            <Icon name="close" size={16} />
           </button>
         </div>
 
@@ -106,11 +107,11 @@ export function OrderPreviewModal({ order, onClose, onStatusChange }: OrderPrevi
             <div className="mt-1 flex flex-wrap items-center gap-2 text-xs opacity-70">
               <span className="font-semibold text-inherit">{order.customerId?.name}</span>
               <span>·</span>
-              <span>📞 {order.customerId?.phone || 'No phone'}</span>
+              <span><Icon name="phoneCall" size={14} className="mr-1 inline align-middle" /> {order.customerId?.phone || 'No phone'}</span>
               {order.customerId?.city ? (
                 <>
                   <span>·</span>
-                  <span>📍 {order.customerId.city}</span>
+                  <span><Icon name="location" size={14} className="mr-1 inline align-middle" /> {order.customerId.city}</span>
                 </>
               ) : null}
             </div>
@@ -232,7 +233,7 @@ export function OrderPreviewModal({ order, onClose, onStatusChange }: OrderPrevi
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 rounded-lg border px-3.5 py-1.5 font-bold text-emerald-500 hover:bg-emerald-500/10 transition cursor-pointer border-emerald-500/30"
             >
-              <span>💬 WhatsApp Client</span>
+              <span><Icon name="message" size={14} className="mr-1 inline align-middle" /> WhatsApp Client</span>
             </a>
           ) : (
             <div />
@@ -251,7 +252,7 @@ export function OrderPreviewModal({ order, onClose, onStatusChange }: OrderPrevi
               className="inline-flex items-center gap-1 rounded-lg px-4 py-1.5 font-bold shadow-xs transition hover:opacity-95 bg-brand text-ink-on-brand"
             >
               <span>Open Atelier Workspace</span>
-              <span>→</span>
+              <span><Icon name="arrowRight" size={14} className="mr-1 inline align-middle" /> </span>
             </Link>
           </div>
         </div>

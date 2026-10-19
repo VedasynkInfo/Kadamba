@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Icon } from '@/components/icons';
 import { Spinner } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { portalApi, type PortalOrder } from '@/services/portal/portalService';
@@ -210,9 +211,10 @@ export function PortalOrderDetailPage() {
       <div>
         <Link
           to="/portal/orders"
-          className="text-xs uppercase tracking-[0.18em] text-ink-inverse/50 hover:text-gold"
+          className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.18em] text-ink-inverse/50 hover:text-gold"
         >
-          ← Orders
+          <Icon name="arrowLeft" size={14} />
+          Orders
         </Link>
 
         <div className="mt-4 overflow-hidden border border-gold/20 bg-[radial-gradient(ellipse_at_top_right,_rgba(255,215,0,0.1),_transparent_50%),_var(--color-espresso)] p-5 sm:p-7">
@@ -359,15 +361,17 @@ export function PortalOrderDetailPage() {
           <div className="flex flex-wrap gap-3">
             <Link
               to={`/portal/invoices/${order.id}`}
-              className="text-xs uppercase tracking-[0.16em] text-gold hover:underline"
+              className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.16em] text-gold hover:underline"
             >
-              View invoice →
+              View invoice
+              <Icon name="arrowRight" size={14} />
             </Link>
             <Link
               to="/portal/payments"
-              className="text-xs uppercase tracking-[0.16em] text-ink-inverse/45 hover:text-gold"
+              className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.16em] text-ink-inverse/45 hover:text-gold"
             >
-              All invoices →
+              All invoices
+              <Icon name="arrowRight" size={14} />
             </Link>
           </div>
         </div>

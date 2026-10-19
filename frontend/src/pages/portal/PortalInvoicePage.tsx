@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { portalApi } from '@/services/portal/portalService';
+import { Icon } from '@/components/icons';
 import { Button, Spinner } from '@/components/ui';
 import {
   InvoiceDocument,
@@ -41,9 +42,10 @@ export default function PortalInvoicePage() {
         <button
           type="button"
           onClick={() => navigate('/portal/payments')}
-          className="text-xs uppercase tracking-[0.18em] text-ink-inverse/50 hover:text-gold"
+          className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.18em] text-ink-inverse/50 hover:text-gold"
         >
-          ← Payments & invoices
+          <Icon name="arrowLeft" size={14} />
+          Payments &amp; invoices
         </button>
         <div className="flex flex-wrap gap-2">
           {invoice ? (

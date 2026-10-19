@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Icon } from '@/components/icons';
 import type { Customer } from '@/services/customers/customerService';
 import { whatsappDeepLink } from '@/utils/whatsapp';
 import { EmptyState } from '../components/EmptyState';
@@ -232,7 +233,7 @@ export function CustomersTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">👁️</span>
+              <Icon name="view" size={14} />
               <span>Quick Preview</span>
             </button>
 
@@ -241,7 +242,7 @@ export function CustomersTable({
               onClick={() => setMenuAnchor(null)}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">👤</span>
+              <Icon name="user" size={14} />
               <span>Client Profile & Measurements</span>
             </Link>
 
@@ -255,7 +256,7 @@ export function CustomersTable({
               onClick={() => setMenuAnchor(null)}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-500 hover:bg-emerald-500/10 transition cursor-pointer"
             >
-              <span className="text-sm">💬</span>
+              <Icon name="message" size={14} />
               <span>WhatsApp Concierge</span>
             </a>
           </div>

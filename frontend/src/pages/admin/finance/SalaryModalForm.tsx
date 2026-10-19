@@ -1,4 +1,5 @@
 ﻿import { useState, useEffect } from 'react';
+import { Icon } from '@/components/icons';
 import { financeApi } from '@/services/finance/financeService';
 import type { Staff } from '@/services/staff/staffService';
 
@@ -126,7 +127,7 @@ export function SalaryModalForm({ open, staffList, onClose, onSuccess }: SalaryM
           className="flex items-center justify-between border-b px-5 py-4 border-line"
         >
           <div className="flex items-center gap-2.5">
-            <span className="text-xl">💰</span>
+            <span className="text-xl"><Icon name="salary" size={14} className="mr-1 inline align-middle" /> </span>
             <div>
               <h3 className="font-heading text-base font-bold tracking-wide">
                 Disburse Artisan Salary
@@ -142,7 +143,7 @@ export function SalaryModalForm({ open, staffList, onClose, onSuccess }: SalaryM
             className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer border-line"
             aria-label="Close modal"
           >
-            ✕
+            <Icon name="close" size={16} />
           </button>
         </div>
 

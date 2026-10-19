@@ -1,4 +1,5 @@
 ﻿import { useState } from 'react';
+import { Icon, type GlyphName } from '@/components/icons';
 import { Button, Input, Select, Textarea } from '@/components/ui';
 import type { CustomerProfile } from '@/services/orders/orderService';
 import { ORDER_PRIORITIES, type OrderFormData } from './types';
@@ -83,7 +84,7 @@ export function OrderCreateModal({
             className="h-8 w-8 rounded-lg border flex items-center justify-center text-xs opacity-70 hover:opacity-100 hover:bg-current/[0.06] transition cursor-pointer border-line"
             aria-label="Close dialog"
           >
-            ✕
+            <Icon name="close" size={16} />
           </button>
         </div>
 
@@ -91,11 +92,13 @@ export function OrderCreateModal({
         <div
           className="flex border-b px-6 gap-2 bg-current/[0.02] border-line"
         >
-          {[
-            { id: 'client', label: '1. Client & Dates', icon: '👤' },
-            { id: 'items', label: `2. Garments (${form.lineItems.length})`, icon: '✂️' },
-            { id: 'pricing', label: '3. Pricing & Priority', icon: '💎' },
-          ].map((tab) => (
+          {(
+            [
+              { id: 'client', label: '1. Client & Dates', icon: 'user' },
+              { id: 'items', label: `2. Garments (${form.lineItems.length})`, icon: 'stitching' },
+              { id: 'pricing', label: '3. Pricing & Priority', icon: 'premium' },
+            ] satisfies { id: string; label: string; icon: GlyphName }[]
+          ).map((tab) => (
             <button
               key={tab.id}
               type="button"
@@ -107,7 +110,7 @@ export function OrderCreateModal({
                   : 'border-transparent opacity-60 hover:opacity-100',
               )}
             >
-              <span>{tab.icon}</span>
+              <Icon name={tab.icon} size={15} />
               <span>{tab.label}</span>
             </button>
           ))}
@@ -166,7 +169,7 @@ export function OrderCreateModal({
                         <div>
                           <span className="font-bold text-emerald-400 block">{form.selectedCustomer.name}</span>
                           <span className="text-[11px] opacity-75">
-                            📞 {form.selectedCustomer.phone} · 📍 {form.selectedCustomer.city || 'Kurnool'}
+                            <Icon name="phoneCall" size={14} className="mr-1 inline align-middle" /> {form.selectedCustomer.phone} · <Icon name="location" size={14} className="mr-1 inline align-middle" /> {form.selectedCustomer.city || 'Kurnool'}
                           </span>
                         </div>
                         <button
@@ -290,7 +293,7 @@ export function OrderCreateModal({
                           onClick={() => removeLineItem(idx)}
                           className="text-rose-400 hover:text-rose-300 text-xs font-semibold cursor-pointer"
                         >
-                          ✕ Remove
+                          <Icon name="close" size={14} className="mr-1 inline align-middle" /> Remove
                         </button>
                       ) : null}
                     </div>

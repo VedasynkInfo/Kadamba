@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { Icon } from '@/components/icons';
 import { Button, Input, useToast } from '@/components/ui';
 import { authApi } from '@/services/auth/authService';
 import { PageMeta, staticPageMeta } from '@/seo';
@@ -83,7 +84,8 @@ export default function ForgotPasswordPage() {
                 to="/admin/login"
                 className="inline-block text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/45 transition hover:text-gold"
               >
-                ← Back to sign in
+                <Icon name="arrowLeft" size={14} className="mr-1 inline align-middle" />
+                Back to sign in
               </Link>
             </div>
           ) : (
@@ -104,9 +106,10 @@ export default function ForgotPasswordPage() {
               </Button>
               <Link
                 to="/admin/login"
-                className="block text-center text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/45 transition hover:text-gold"
+                className="inline-block text-center text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/45 transition hover:text-gold"
               >
-                ← Back to sign in
+                <Icon name="arrowLeft" size={14} className="mr-1 inline align-middle" />
+                Back to sign in
               </Link>
             </form>
           )}

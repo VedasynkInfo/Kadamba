@@ -1,4 +1,5 @@
 ﻿import { useState, useEffect } from 'react';
+import { Icon } from '@/components/icons';
 import type { PortfolioProject } from '@/pages/portfolio/data';
 import { EmptyState } from '../components/EmptyState';
 import { Skeleton } from '../components/Skeleton';
@@ -142,7 +143,7 @@ export function PortfolioTable({
                           />
                         ) : (
                           <div className="h-full w-full flex items-center justify-center bg-current/5 text-lg">
-                            👗
+                            <Icon name="garment" size={16} />
                           </div>
                         )}
                       </button>
@@ -263,7 +264,7 @@ export function PortfolioTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">👁️</span>
+              <Icon name="view" size={14} />
               <span>Quick Preview</span>
             </button>
 
@@ -276,7 +277,7 @@ export function PortfolioTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">✏️</span>
+              <Icon name="edit" size={14} />
               <span>Edit Project</span>
             </button>
 
@@ -289,7 +290,7 @@ export function PortfolioTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">{menuAnchor.item.published ? '📦' : '🚀'}</span>
+              <Icon name={menuAnchor.item.published ? 'archived' : 'publish'} size={14} />
               <span>{menuAnchor.item.published ? 'Unpublish to Draft' : 'Publish Live'}</span>
             </button>
 
@@ -302,7 +303,7 @@ export function PortfolioTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">📋</span>
+              <Icon name="copy" size={14} />
               <span>Copy Public Link</span>
             </button>
 
@@ -319,7 +320,7 @@ export function PortfolioTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-semibold text-rose-500 transition hover:bg-rose-500/10 cursor-pointer"
             >
-              <span className="text-sm">🗑️</span>
+              <Icon name="delete" size={14} />
               <span>Delete Project</span>
             </button>
           </div>

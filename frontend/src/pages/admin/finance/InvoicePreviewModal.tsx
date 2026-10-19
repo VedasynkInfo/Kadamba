@@ -1,4 +1,5 @@
 ﻿import { Link } from 'react-router-dom';
+import { Icon } from '@/components/icons';
 import type { InvoiceRecord } from '@/services/finance/financeService';
 import { whatsappDeepLink } from '@/utils/whatsapp';
 import { cn } from '@/utils/cn';
@@ -69,7 +70,7 @@ export function InvoicePreviewModal({ invoice, onClose }: InvoicePreviewModalPro
             className="h-8 w-8 rounded-lg border flex items-center justify-center text-xs opacity-70 hover:opacity-100 hover:bg-current/[0.06] transition cursor-pointer border-line"
             aria-label="Close dialog"
           >
-            ✕
+            <Icon name="close" size={16} />
           </button>
         </div>
 
@@ -81,7 +82,7 @@ export function InvoicePreviewModal({ invoice, onClose }: InvoicePreviewModalPro
             </span>
             <h3 className="text-xl font-bold font-heading text-inherit mt-0.5">{invoice.customer?.name}</h3>
             <p className="opacity-70 text-xs mt-0.5">
-              📞 {invoice.customer?.phone} {invoice.customer?.email ? `· ✉️ ${invoice.customer.email}` : ''}
+              <Icon name="phoneCall" size={14} className="mr-1 inline align-middle" /> {invoice.customer?.phone} {invoice.customer?.email ? `· <Icon name="email" size={14} className="mr-1 inline align-middle" /> ${invoice.customer.email}` : ''}
             </p>
             <p className="font-medium text-xs mt-1 text-inherit">{invoice.title}</p>
           </div>
@@ -138,7 +139,7 @@ export function InvoicePreviewModal({ invoice, onClose }: InvoicePreviewModalPro
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 rounded-lg border px-3.5 py-1.5 font-bold text-emerald-500 hover:bg-emerald-500/10 transition cursor-pointer border-emerald-500/30"
             >
-              <span>💬 WhatsApp Reminder</span>
+              <span><Icon name="message" size={14} className="mr-1 inline align-middle" /> WhatsApp Reminder</span>
             </a>
           ) : (
             <div />
@@ -157,7 +158,7 @@ export function InvoicePreviewModal({ invoice, onClose }: InvoicePreviewModalPro
               className="inline-flex items-center gap-1 rounded-lg px-4 py-1.5 font-bold shadow-xs transition hover:opacity-95 bg-brand text-ink-on-brand"
             >
               <span>Printable Document</span>
-              <span>→</span>
+              <span><Icon name="arrowRight" size={14} className="mr-1 inline align-middle" /> </span>
             </Link>
           </div>
         </div>

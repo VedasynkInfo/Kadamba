@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Icon } from '@/components/icons';
 import { useToast } from '@/components/ui';
 import { settingsApi } from '@/services/settings/settingsService';
 import type { WebsiteSettings } from '../data';
@@ -210,7 +211,14 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
             disabled={testingEmail}
             className="rounded-xl px-4 py-2 text-xs font-bold border hover:bg-current/[0.05] transition disabled:opacity-50 cursor-pointer border-line"
           >
-            {testingEmail ? 'Sending Test...' : 'Send Test Email ↗'}
+            {testingEmail ? (
+              'Sending Test...'
+            ) : (
+              <span className="inline-flex items-center gap-1">
+                Send Test Email
+                <Icon name="arrowUpRight" size={12} />
+              </span>
+            )}
           </button>
         </div>
       </div>

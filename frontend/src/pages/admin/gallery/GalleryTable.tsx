@@ -1,4 +1,5 @@
 ﻿import { useState, useEffect } from 'react';
+import { Icon } from '@/components/icons';
 import type { GalleryItem } from '@/pages/gallery/data';
 import { EmptyState } from '../components/EmptyState';
 import { Skeleton } from '../components/Skeleton';
@@ -143,7 +144,7 @@ export function GalleryTable({
                         />
                         {isVideo ? (
                           <span className="absolute inset-0 flex items-center justify-center bg-black/45 text-white text-xs">
-                            ▶
+                            <Icon name="play" size={16} />
                           </span>
                         ) : null}
                       </button>
@@ -184,7 +185,7 @@ export function GalleryTable({
                     {/* Type */}
                     <td className="py-2.5 px-4 whitespace-nowrap">
                       <span className="inline-flex items-center gap-1 text-[11px] opacity-75 font-medium">
-                        {isVideo ? '🎥 Video' : '🖼️ Image'}
+                        {isVideo ? 'Video' : 'Image'}
                       </span>
                     </td>
 
@@ -269,7 +270,7 @@ export function GalleryTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">👁️</span>
+              <Icon name="view" size={14} />
               <span>Quick Preview</span>
             </button>
 
@@ -282,7 +283,7 @@ export function GalleryTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">✏️</span>
+              <Icon name="edit" size={14} />
               <span>Edit Details</span>
             </button>
 
@@ -295,7 +296,7 @@ export function GalleryTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">{menuAnchor.item.published ? '📦' : '🚀'}</span>
+              <Icon name={menuAnchor.item.published ? 'archived' : 'publish'} size={14} />
               <span>{menuAnchor.item.published ? 'Unpublish to Draft' : 'Publish Live'}</span>
             </button>
 
@@ -308,7 +309,7 @@ export function GalleryTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">📋</span>
+              <Icon name="copy" size={14} />
               <span>Copy Image URL</span>
             </button>
 
@@ -325,7 +326,7 @@ export function GalleryTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-semibold text-rose-500 transition hover:bg-rose-500/10 cursor-pointer"
             >
-              <span className="text-sm">🗑️</span>
+              <Icon name="delete" size={14} />
               <span>Delete Item</span>
             </button>
           </div>

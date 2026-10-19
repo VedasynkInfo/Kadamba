@@ -1,3 +1,4 @@
+import { Icon } from '@/components/icons';
 import { Button, Input, Select, Textarea } from '@/components/ui';
 import { LEAD_DESK_OPTIONS, LEAD_QUALITY_OPTIONS, type LeadFormData, type LeadQuality } from './types';
 
@@ -48,7 +49,7 @@ export function LeadCreateModal({
             className="h-8 w-8 rounded-lg border flex items-center justify-center text-xs opacity-70 hover:opacity-100 hover:bg-current/[0.06] transition cursor-pointer border-line"
             aria-label="Close dialog"
           >
-            ✕
+            <Icon name="close" size={16} />
           </button>
         </div>
 
@@ -101,11 +102,11 @@ export function LeadCreateModal({
               value={form.source}
               onChange={(e) => setForm((f) => ({ ...f, source: e.target.value }))}
               options={[
-                { value: 'walk-in', label: '🚶 Walk-In Atelier' },
-                { value: 'instagram', label: '📸 Instagram / Social' },
-                { value: 'website', label: '🌐 Website Enquiry' },
-                { value: 'referral', label: '🤝 Client Referral' },
-                { value: 'phone', label: '📞 Direct Call' },
+                { value: 'walk-in', label: 'Walk-In Atelier' },
+                { value: 'instagram', label: 'Instagram / Social' },
+                { value: 'website', label: 'Website Enquiry' },
+                { value: 'referral', label: 'Client Referral' },
+                { value: 'phone', label: 'Direct Call' },
               ]}
             />
           </div>
@@ -124,7 +125,7 @@ export function LeadCreateModal({
               onChange={(e) => setForm((f) => ({ ...f, quality: e.target.value as LeadQuality }))}
               options={LEAD_QUALITY_OPTIONS.map((q) => ({
                 value: q,
-                label: q === 'hot' ? '🔥 Hot Lead' : q === 'warm' ? '⚡ Warm Lead' : '❄️ Cold Enquiry',
+                label: q === 'hot' ? 'Hot Lead' : q === 'warm' ? 'Warm Lead' : 'Cold Enquiry',
               }))}
             />
           </div>

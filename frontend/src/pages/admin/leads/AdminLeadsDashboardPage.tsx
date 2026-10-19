@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useLeads } from '@/pages/leads/LeadsContext';
+import { Icon } from '@/components/icons';
 import { useToast } from '@/components/ui';
 import type { Lead, LeadStatus } from '@/pages/leads/data';
 import { AdminHorizonBanner } from '../components/AdminHorizonBanner';
@@ -89,8 +90,12 @@ export default function AdminLeadsDashboardPage() {
         <div className="space-y-2">
           <div className="flex items-center justify-between px-1">
             <h3 className="text-sm font-bold tracking-tight text-inherit">Recently Active Enquiries</h3>
-            <a href="/admin/leads/list" className="text-xs font-semibold text-brand hover:underline">
-              View All Pipeline ({leads.length}) →
+            <a
+              href="/admin/leads/list"
+              className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:underline"
+            >
+              View All Pipeline ({leads.length})
+              <Icon name="arrowRight" size={14} />
             </a>
           </div>
 

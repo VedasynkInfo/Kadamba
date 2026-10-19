@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { Icon } from '@/components/icons';
 import { ordersApi, type Order, type OrderStaff } from '@/services/orders/orderService';
 import { measurementApi, type MeasurementProfile } from '@/services/measurements/measurementsService';
 import { financeApi } from '@/services/finance/financeService';
@@ -246,7 +247,7 @@ export default function OrderDetailAdminPage() {
         <h3 className="font-heading text-xl text-ink">Order not found</h3>
         <p className="text-ink/55 text-xs mt-2">The requested order workspace could not be resolved.</p>
         <Link to="/admin/orders" className="text-xs font-semibold hover:underline block mt-4 text-ink">
-          ← Back to orders desk
+          <Icon name="arrowLeft" size={14} className="mr-1 inline align-middle" /> Back to orders desk
         </Link>
       </div>
     );
@@ -527,7 +528,7 @@ export default function OrderDetailAdminPage() {
                   <div>
                     <span className="text-ink/45 block">Lead Link</span>
                     <Link to={`/admin/leads/${order.leadId}`} className="font-semibold text-ink hover:underline block mt-0.5">
-                      Open original crm lead →
+                      Open original crm lead <Icon name="arrowRight" size={14} className="mr-1 inline align-middle" /> 
                     </Link>
                   </div>
                 )}

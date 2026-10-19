@@ -1,4 +1,5 @@
 import { useId, type InputHTMLAttributes } from 'react';
+import { Icon } from '@/components/icons';
 import { cn } from '@/utils/cn';
 
 export interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -15,8 +16,8 @@ export function SearchInput({
 
   return (
     <div className={cn('relative min-w-[200px] flex-1 max-w-xs', containerClassName)}>
-      <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink/30 text-sm">
-        ⌕
+      <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink/30">
+        <Icon name="search" size={16} />
       </span>
       <input
         id={id}

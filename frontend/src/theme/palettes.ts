@@ -1,7 +1,7 @@
 /**
  * Palette data: the colours a studio picks, kept in one module.
  *
- * Colour here is data rather than styling. The Settings → Theme editor writes
+ * Colour here is data rather than styling. The Theme editor under Settings writes
  * these values into CSS custom properties at runtime, the API stores them on the
  * settings record, and the editor offers presets drawn from them. They therefore
  * have to exist as literals somewhere in JS — this is that somewhere. It is a
@@ -15,7 +15,7 @@
  * Import-direction wart: we take the `WebsiteSettings` *type* from
  * `pages/admin/data.ts`, while `data.ts` takes `DEFAULT_THEME_TOKENS` back from
  * here. That reads as a cycle, but the type import is erased at build time, so
- * the only runtime edge is `data.ts → palettes.ts`. Kept rather than lifting the
+ * the only runtime edge is `data.ts` importing `palettes.ts`. Kept rather than lifting the
  * settings type into its own module because `ThemeContext` already imports it
  * this same way.
  */

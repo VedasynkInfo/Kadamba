@@ -1,5 +1,6 @@
 ﻿import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Icon } from '@/components/icons';
 import type { Order } from '@/services/orders/orderService';
 import { canTransitionOrder, type OrderStatus } from '@/shared/enums';
 import { ORDER_STATUS_CONFIG } from './types';
@@ -311,7 +312,7 @@ export function OrdersTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">👁️</span>
+              <Icon name="view" size={14} />
               <span>Quick Preview</span>
             </button>
 
@@ -320,7 +321,7 @@ export function OrdersTable({
               onClick={() => setMenuAnchor(null)}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">🧵</span>
+              <Icon name="thread" size={14} />
               <span>Full Order Workspace</span>
             </Link>
 
@@ -335,7 +336,7 @@ export function OrdersTable({
                 onClick={() => setMenuAnchor(null)}
                 className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-500 hover:bg-emerald-500/10 transition cursor-pointer"
               >
-                <span className="text-sm">💬</span>
+                <Icon name="message" size={14} />
                 <span>WhatsApp Client</span>
               </a>
             ) : null}
@@ -357,7 +358,7 @@ export function OrdersTable({
                 }}
                 className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-500 hover:bg-emerald-500/10 cursor-pointer"
               >
-                <span className="text-sm">📦</span>
+                <Icon name="archived" size={14} />
                 <span>Mark Delivered</span>
               </button>
             ) : null}
@@ -372,7 +373,7 @@ export function OrdersTable({
                 }}
                 className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium opacity-70 hover:opacity-100 hover:bg-current/[0.06] cursor-pointer"
               >
-                <span className="text-sm">↩️</span>
+                <Icon name="undo" size={14} />
                 <span>Move to Finishing</span>
               </button>
             ) : null}

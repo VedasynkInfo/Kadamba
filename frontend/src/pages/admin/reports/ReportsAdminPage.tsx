@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Icon } from '@/components/icons';
 import { AdminHorizonBanner } from '../components/AdminHorizonBanner';
 import { adminBanners } from '../data';
 import { REPORT_CATALOG, REPORT_CATEGORIES } from './reportCatalog';
@@ -44,8 +45,9 @@ export default function ReportsAdminPage() {
                       <p className="mt-1.5 text-sm text-ink/55 leading-relaxed">
                         {item.description}
                       </p>
-                      <span className="mt-3 inline-block text-xs font-medium text-gold tracking-wide">
-                        Open report →
+                      <span className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-gold tracking-wide">
+                        Open report
+                        <Icon name="arrowRight" size={14} />
                       </span>
                     </Link>
                   ))}

@@ -1,4 +1,5 @@
 ﻿import { useState } from 'react';
+import { Icon } from '@/components/icons';
 import { useToast } from '@/components/ui';
 
 interface ProfileSecurityCardProps {
@@ -115,14 +116,16 @@ export function ProfileSecurityCard({ onUpdatePassword }: ProfileSecurityCardPro
           </span>
           <div className="flex flex-wrap gap-4 text-[11px] opacity-70">
             <span className={nextPassword.length >= 8 ? 'text-emerald-400 font-semibold' : ''}>
-              ✓ Minimum 8 characters
+              <Icon name="check" size={12} className="mr-1 inline align-middle" />
+              Minimum 8 characters
             </span>
             <span
               className={
                 nextPassword && nextPassword === confirm ? 'text-emerald-400 font-semibold' : ''
               }
             >
-              ✓ Passwords must match
+              <Icon name="check" size={12} className="mr-1 inline align-middle" />
+              Passwords must match
             </span>
           </div>
         </div>

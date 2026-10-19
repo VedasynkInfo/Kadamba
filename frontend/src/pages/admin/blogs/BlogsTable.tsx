@@ -1,4 +1,5 @@
 ﻿import { useState, useEffect } from 'react';
+import { Icon } from '@/components/icons';
 import type { BlogPost } from '@/pages/blogs/data';
 import { EmptyState } from '../components/EmptyState';
 import { Skeleton } from '../components/Skeleton';
@@ -141,7 +142,7 @@ export function BlogsTable({
                           />
                         ) : (
                           <div className="h-full w-full flex items-center justify-center bg-current/5 text-lg">
-                            📰
+                            <Icon name="newspaper" size={16} />
                           </div>
                         )}
                       </button>
@@ -177,7 +178,7 @@ export function BlogsTable({
                     {/* Read Time */}
                     <td className="py-2.5 px-4 whitespace-nowrap">
                       <span className="text-xs opacity-75">
-                        ⏱️ {item.readMinutes || 3} mins
+                        <Icon name="timer" size={14} className="mr-1 inline align-middle" /> {item.readMinutes || 3} mins
                       </span>
                     </td>
 
@@ -185,7 +186,7 @@ export function BlogsTable({
                     <td className="py-2.5 px-4 whitespace-nowrap">
                       {item.featured ? (
                         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-500/15 text-amber-500 border border-amber-500/30">
-                          ⭐ Featured
+                          <Icon name="featured" size={14} className="mr-1 inline align-middle" /> Featured
                         </span>
                       ) : (
                         <span className="text-xs opacity-40">—</span>
@@ -266,7 +267,7 @@ export function BlogsTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">👁️</span>
+              <Icon name="view" size={14} />
               <span>Quick Preview</span>
             </button>
 
@@ -279,7 +280,7 @@ export function BlogsTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">✏️</span>
+              <Icon name="edit" size={14} />
               <span>Edit Article</span>
             </button>
 
@@ -292,7 +293,7 @@ export function BlogsTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">{menuAnchor.item.published ? '📦' : '🚀'}</span>
+              <Icon name={menuAnchor.item.published ? 'archived' : 'publish'} size={14} />
               <span>{menuAnchor.item.published ? 'Unpublish to Draft' : 'Publish Live'}</span>
             </button>
 
@@ -305,7 +306,7 @@ export function BlogsTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">📋</span>
+              <Icon name="copy" size={14} />
               <span>Copy Article Link</span>
             </button>
 
@@ -322,7 +323,7 @@ export function BlogsTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-semibold text-rose-500 transition hover:bg-rose-500/10 cursor-pointer"
             >
-              <span className="text-sm">🗑️</span>
+              <Icon name="delete" size={14} />
               <span>Delete Article</span>
             </button>
           </div>

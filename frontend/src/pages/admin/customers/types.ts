@@ -1,9 +1,9 @@
 ﻿export const CUSTOMER_SOURCES = [
-  { value: 'walk-in', label: '🚶 Walk-In Atelier' },
-  { value: 'referral', label: '🤝 Client Referral' },
-  { value: 'instagram', label: '📸 Instagram' },
-  { value: 'portal', label: '🌐 Customer Portal' },
-  { value: 'phone', label: '📞 Phone Consultation' },
+  { value: 'walk-in', label: 'Walk-In Atelier' },
+  { value: 'referral', label: 'Client Referral' },
+  { value: 'instagram', label: 'Instagram' },
+  { value: 'portal', label: 'Customer Portal' },
+  { value: 'phone', label: 'Phone Consultation' },
 ];
 
 export interface CustomerFormData {

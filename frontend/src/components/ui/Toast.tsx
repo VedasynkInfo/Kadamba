@@ -6,6 +6,7 @@ import {
   useState,
   type ReactNode,
 } from 'react';
+import { Icon } from '@/components/icons';
 import { cn } from '@/utils/cn';
 
 export type ToastTone = 'default' | 'success' | 'error' | 'info';
@@ -84,7 +85,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                 className="text-ink-inverse/60 hover:text-gold"
                 aria-label="Dismiss notification"
               >
-                ✕
+                <Icon name="close" size={16} />
               </button>
             </div>
           </div>

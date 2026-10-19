@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Icon } from '@/components/icons';
 import { financeApi, type InvoiceDetail } from '@/services/finance/financeService';
 import { Button, Spinner } from '@/components/ui';
 import { InvoiceDocument } from '@/components/invoices/InvoiceDocument';
@@ -47,7 +48,7 @@ export default function InvoiceDetailAdminPage() {
           onClick={() => navigate('/admin/invoices')}
           className="text-xs uppercase tracking-[0.2em] text-ink/45 transition hover:text-ink"
         >
-          ← All invoices
+          <Icon name="arrowLeft" size={14} className="mr-1 inline align-middle" /> All invoices
         </button>
         <div className="flex flex-wrap gap-2">
           {invoice ? (

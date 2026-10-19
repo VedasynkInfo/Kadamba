@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { Icon } from '@/components/icons';
 import { cn } from '@/utils/cn';
 import { type Column } from './Table';
 
@@ -221,8 +222,13 @@ export function DataTable<T>({
                       className="inline-flex items-center gap-1 rounded-sm font-semibold uppercase tracking-wider transition-colors duration-150 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40"
                     >
                       {column.header ?? column.label}
-                      <span aria-hidden className={cn('text-gold', !isActive && 'opacity-30')}>
-                        {isActive && activeSortDir === 'asc' ? '↑' : isActive ? '↓' : '↕'}
+                      <span className={cn('text-gold', !isActive && 'opacity-30')}>
+                        <Icon
+                          name={
+                            isActive ? (activeSortDir === 'asc' ? 'sortAsc' : 'sortDesc') : 'sort'
+                          }
+                          size={14}
+                        />
                       </span>
                     </button>
                   ) : (

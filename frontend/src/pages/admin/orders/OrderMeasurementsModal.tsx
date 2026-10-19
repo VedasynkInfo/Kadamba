@@ -1,4 +1,5 @@
 ﻿import { Link } from 'react-router-dom';
+import { Icon } from '@/components/icons';
 import { Button, Modal, Spinner } from '@/components/ui';
 import type { MeasurementProfile } from '@/services/measurements/measurementsService';
 
@@ -40,7 +41,7 @@ export function OrderMeasurementsModal({
                 to="/admin/measurements"
                 className="block font-semibold text-ink hover:underline mt-2 text-[10px] uppercase"
               >
-                Create fitting profile →
+                Create fitting profile <Icon name="arrowRight" size={14} className="mr-1 inline align-middle" /> 
               </Link>
             </div>
           ) : (

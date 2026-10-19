@@ -1,5 +1,6 @@
 ﻿import { useEffect } from 'react';
 import type { Staff } from '@/services/staff/staffService';
+import { Icon } from '@/components/icons';
 import { SPECIALIZATIONS } from './types';
 import { whatsappDeepLink } from '@/utils/whatsapp';
 import { cn } from '@/utils/cn';
@@ -99,7 +100,7 @@ export function StaffPreviewModal({ staff, onClose, onEdit }: StaffPreviewModalP
             className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer border-line"
             aria-label="Close modal"
           >
-            ✕
+            <Icon name="close" size={16} />
           </button>
         </div>
 
@@ -116,9 +117,10 @@ export function StaffPreviewModal({ staff, onClose, onEdit }: StaffPreviewModalP
                 return (
                   <span
                     key={spec}
-                    className="rounded-lg px-2.5 py-1 text-xs font-semibold border bg-brand/12 border-brand/30 text-brand"
+                    className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold border bg-brand/12 border-brand/30 text-brand"
                   >
-                    ✨ {label}
+                    <Icon name="couture" size={12} />
+                    {label}
                   </span>
                 );
               })}
@@ -214,7 +216,7 @@ export function StaffPreviewModal({ staff, onClose, onEdit }: StaffPreviewModalP
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 transition cursor-pointer shadow-xs"
             >
-              <span>💬</span>
+              <Icon name="whatsapp" size={14} />
               <span>WhatsApp Staff</span>
             </a>
           ) : (
@@ -230,7 +232,8 @@ export function StaffPreviewModal({ staff, onClose, onEdit }: StaffPreviewModalP
               }}
               className="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 border text-xs font-semibold hover:bg-current/[0.05] transition cursor-pointer border-line"
             >
-              <span>✏️ Edit Profile</span>
+              <Icon name="edit" size={14} />
+              Edit Profile
             </button>
             <button
               type="button"

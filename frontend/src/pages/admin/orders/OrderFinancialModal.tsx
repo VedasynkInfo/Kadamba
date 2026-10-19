@@ -1,3 +1,4 @@
+import { Icon } from '@/components/icons';
 import { Button, Input, Modal } from '@/components/ui';
 
 interface OrderFinancialModalProps {
@@ -109,7 +110,7 @@ export function OrderFinancialModal({
             Current balance: <strong>₹{currentBalance}</strong>
             {paymentAmount && Number(paymentAmount) > 0 && (
               <span className="ml-2">
-                → After payment:{' '}
+                <Icon name="arrowRight" size={14} className="mr-1 inline align-middle" /> After payment:{' '}
                 <strong>₹{Math.max(0, currentBalance - Number(paymentAmount))}</strong>
               </span>
             )}

@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Icon } from '@/components/icons';
 import { Button, Input, Select, Spinner, Textarea, useToast } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { brand } from '@/pages/home/data';
@@ -156,9 +157,10 @@ export default function PortalRequestsPage() {
               <button
                 type="button"
                 onClick={backToList}
-                className="text-xs uppercase tracking-[0.18em] text-ink-inverse/50 hover:text-gold"
+                className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.18em] text-ink-inverse/50 hover:text-gold"
               >
-                ← All garments
+                <Icon name="arrowLeft" size={14} />
+                All garments
               </button>
 
               {doneId ? (
@@ -323,8 +325,9 @@ export default function PortalRequestsPage() {
                         {item.publicDescription}
                       </p>
                     ) : null}
-                    <p className="mt-4 text-[0.65rem] uppercase tracking-[0.18em] text-ink-inverse/40 group-hover:text-gold/80">
-                      Request this →
+                    <p className="mt-4 inline-flex items-center gap-1 text-[0.65rem] uppercase tracking-[0.18em] text-ink-inverse/40 group-hover:text-gold/80">
+                      Request this
+                      <Icon name="arrowRight" size={14} />
                     </p>
                   </button>
                 </motion.li>

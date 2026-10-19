@@ -4,6 +4,7 @@ import type {
   MeasurementTemplate,
 } from '@/services/measurements/measurementsService';
 import { getSilhouetteMeta } from './types';
+import { Icon } from '@/components/icons';
 import { whatsappDeepLink } from '@/utils/whatsapp';
 import { cn } from '@/utils/cn';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
@@ -100,7 +101,7 @@ export function MeasurementPreviewModal({
           className="flex items-center justify-between border-b px-5 py-4 border-line"
         >
           <div className="flex items-center gap-3">
-            <span className="text-2xl">{silhouette.icon}</span>
+            <Icon name={silhouette.icon} size={24} />
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="font-heading text-base font-bold tracking-wide">
@@ -132,7 +133,7 @@ export function MeasurementPreviewModal({
             className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer border-line"
             aria-label="Close modal"
           >
-            ✕
+            <Icon name="close" size={16} />
           </button>
         </div>
 
@@ -193,7 +194,7 @@ export function MeasurementPreviewModal({
                 disabled={isApproving}
                 className="inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-bold bg-amber-500 text-ink hover:bg-amber-400 transition cursor-pointer disabled:opacity-50"
               >
-                <span>✓</span>
+                <span><Icon name="check" size={14} className="mr-1 inline align-middle" /> </span>
                 <span>{isApproving ? 'Approving...' : 'Approve Profile'}</span>
               </button>
             </div>
@@ -299,7 +300,7 @@ export function MeasurementPreviewModal({
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold bg-emerald-600/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-600/25 transition cursor-pointer"
           >
-            <span>💬</span>
+            <span><Icon name="message" size={14} className="mr-1 inline align-middle" /> </span>
             <span>WhatsApp Spec</span>
           </a>
 
@@ -316,7 +317,7 @@ export function MeasurementPreviewModal({
               onClick={() => onEdit(profile)}
               className="rounded-lg px-3.5 py-1.5 text-xs font-bold shadow-xs transition hover:opacity-90 cursor-pointer bg-brand text-ink-on-brand"
             >
-              ✏️ Edit Dimensions
+              <Icon name="edit" size={14} className="mr-1 inline align-middle" /> Edit Dimensions
             </button>
           </div>
         </div>

@@ -1,4 +1,5 @@
-﻿import { SPECIALIZATIONS, EMPLOYMENT_TYPES } from './types';
+﻿import { Icon } from '@/components/icons';
+import { SPECIALIZATIONS, EMPLOYMENT_TYPES } from './types';
 
 interface StaffToolbarProps {
   searchQuery: string;
@@ -45,7 +46,7 @@ export function StaffToolbar({
           {/* Search box */}
           <div className="relative min-w-[200px] flex-1 sm:max-w-xs">
             <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-xs opacity-50">
-              🔍
+              <Icon name="search" size={14} />
             </span>
             <input
               type="text"
@@ -61,7 +62,7 @@ export function StaffToolbar({
                 className="absolute inset-y-0 right-2.5 flex items-center text-xs opacity-50 hover:opacity-100 cursor-pointer"
                 title="Clear search"
               >
-                ✕
+                <Icon name="close" size={12} />
               </button>
             ) : null}
           </div>

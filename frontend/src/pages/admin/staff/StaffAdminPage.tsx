@@ -1,5 +1,6 @@
 ﻿import { useState, useEffect, useCallback, useMemo } from 'react';
 import { staffApi, type Staff } from '@/services/staff/staffService';
+import { Icon } from '@/components/icons';
 import { useToast } from '@/components/ui';
 import { PageMeta, staticPageMeta } from '@/seo';
 import { StaffMetrics } from './StaffMetrics';
@@ -127,7 +128,7 @@ export default function StaffAdminPage() {
               disabled={loading}
               className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold transition hover:bg-current/[0.05] active:scale-98 cursor-pointer border-line"
             >
-              <span className={loading ? 'animate-spin' : ''}>🔄</span>
+              <Icon name="refresh" size={14} className={loading ? 'animate-spin' : ''} />
               <span>Sync Roster</span>
             </button>
           </div>

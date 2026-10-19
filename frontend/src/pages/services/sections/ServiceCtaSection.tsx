@@ -10,7 +10,7 @@ interface ServiceCtaSectionProps {
 }
 
 /**
- * Service detail conversion CTA → request / WhatsApp.
+ * Service detail conversion CTA, taking the visitor to a request or WhatsApp.
  */
 export function ServiceCtaSection({ service }: ServiceCtaSectionProps) {
   const navigate = useNavigate();

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Icon } from '@/components/icons';
 import type { Lead, LeadStatus } from '@/pages/leads/data';
 import { formatLeadDate } from '@/pages/leads/data';
 import { whatsappDeepLink } from '@/utils/whatsapp';
@@ -150,7 +151,16 @@ export function LeadsTable({
                               : 'bg-slate-500/15 text-slate-400 border border-slate-500/30',
                           )}
                         >
-                          {lead.quality === 'hot' ? '🔥' : lead.quality === 'warm' ? '⚡' : '❄️'}
+                          <Icon
+                            name={
+                              lead.quality === 'hot'
+                                ? 'hot'
+                                : lead.quality === 'warm'
+                                  ? 'priorityHigh'
+                                  : 'cold'
+                            }
+                            size={13}
+                          />
                           {lead.quality || 'warm'}
                         </span>
                         <span className="font-mono text-[11px] font-semibold opacity-75">
@@ -246,7 +256,7 @@ export function LeadsTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">👁️</span>
+              <Icon name="view" size={14} />
               <span>Quick Preview</span>
             </button>
 
@@ -255,7 +265,7 @@ export function LeadsTable({
               onClick={() => setMenuAnchor(null)}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">📋</span>
+              <Icon name="copy" size={14} />
               <span>Full Lead Dossier</span>
             </Link>
 
@@ -269,7 +279,7 @@ export function LeadsTable({
               onClick={() => setMenuAnchor(null)}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-500 hover:bg-emerald-500/10 transition cursor-pointer"
             >
-              <span className="text-sm">💬</span>
+              <Icon name="message" size={14} />
               <span>WhatsApp Chat</span>
             </a>
 
@@ -286,7 +296,7 @@ export function LeadsTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-500 hover:bg-emerald-500/10 cursor-pointer"
             >
-              <span className="text-sm">🏆</span>
+              <Icon name="won" size={14} />
               <span>Mark Completed</span>
             </button>
           </div>

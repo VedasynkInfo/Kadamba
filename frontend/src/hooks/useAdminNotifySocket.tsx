@@ -109,7 +109,7 @@ export function AdminNotifyProvider({ children }: { children: ReactNode }) {
         tone: 'info',
         title: 'Order update',
         description: payload.orderNumber
-          ? `#${payload.orderNumber}${payload.status ? ` → ${payload.status}` : ''}`
+          ? `#${payload.orderNumber}${payload.status ? ` is now ${payload.status}` : ''}`
           : 'An order changed status',
       });
       invalidateForRealtime('notify:order');

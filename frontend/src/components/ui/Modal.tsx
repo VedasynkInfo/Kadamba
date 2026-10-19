@@ -1,5 +1,6 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import { useRef, type ReactNode } from 'react';
+import { Icon } from '@/components/icons';
 import { cn } from '@/utils/cn';
 import { Button } from './Button';
 import { PortalShell } from './PortalShell';
@@ -85,7 +86,7 @@ export function Modal({
                     aria-label="Close dialog"
                     className="px-2 text-inherit opacity-70 hover:bg-current/[0.06] hover:opacity-100"
                   >
-                    ✕
+                    <Icon name="close" size={16} />
                   </Button>
                 </Dialog.Close>
               </div>

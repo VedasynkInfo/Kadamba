@@ -1,4 +1,5 @@
 import type { ServiceDetail } from '@/pages/services/data';
+import { Icon } from '@/components/icons';
 import { cn } from '@/utils/cn';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
 
@@ -59,7 +60,7 @@ export function ServicesPreviewModal({
             className="h-8 w-8 rounded-lg border flex items-center justify-center text-xs opacity-70 hover:opacity-100 hover:bg-current/[0.06] transition cursor-pointer border-line"
             aria-label="Close preview"
           >
-            ✕
+            <Icon name="close" size={16} />
           </button>
         </div>
 
@@ -105,7 +106,14 @@ export function ServicesPreviewModal({
                   Catalog Status
                 </span>
                 <span className="font-semibold text-xs">
-                  {item.isFulfillable ? '✓ Order fulfillment linked' : 'Bespoke Atelier Service'}
+                  {item.isFulfillable ? (
+                    <span className="inline-flex items-center gap-1">
+                      <Icon name="check" size={12} />
+                      Order fulfillment linked
+                    </span>
+                  ) : (
+                    'Bespoke Atelier Service'
+                  )}
                 </span>
               </div>
             </div>
@@ -156,7 +164,7 @@ export function ServicesPreviewModal({
               onClick={() => onCopyUrl(item.slug)}
               className="rounded-lg border px-3 py-1.5 text-xs font-semibold opacity-80 hover:opacity-100 hover:bg-current/[0.05] transition cursor-pointer border-line"
             >
-              📋 Copy Link
+              <Icon name="copy" size={14} className="mr-1 inline align-middle" /> Copy Link
             </button>
             <a
               href={`/services/${item.slug}`}
@@ -165,7 +173,7 @@ export function ServicesPreviewModal({
               className="rounded-lg border px-3 py-1.5 text-xs font-semibold opacity-80 hover:opacity-100 hover:bg-current/[0.05] transition inline-flex items-center gap-1 cursor-pointer border-line"
             >
               <span>View Public Page</span>
-              <span>↗</span>
+              <span><Icon name="arrowUpRight" size={14} className="mr-1 inline align-middle" /> </span>
             </a>
           </div>
 

@@ -1,3 +1,4 @@
+import { Icon } from '@/components/icons';
 import { useOfflineState } from '@/hooks/useOfflineState';
 
 /**
@@ -31,7 +32,7 @@ export function OfflineBanner() {
       aria-live="polite"
       className="sticky top-0 z-[60] flex items-center justify-center gap-2 bg-amber-400 px-4 py-1.5 text-center text-xs font-medium text-ink"
     >
-      <span aria-hidden="true">{online ? '↑' : '⚠'}</span>
+      <Icon name={online ? 'upload' : 'warning'} size={14} />
       <span>{message}</span>
     </div>
   );

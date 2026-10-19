@@ -1,4 +1,5 @@
-﻿import type { FinanceSummary } from '@/services/finance/financeService';
+﻿import { Icon } from '@/components/icons';
+import type { FinanceSummary } from '@/services/finance/financeService';
 
 function formatINR(v: number) {
   return `₹${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
@@ -16,7 +17,7 @@ export function FinanceMetrics({ summary }: FinanceMetricsProps) {
       subtext: `MTD: ${formatINR(summary.revenueMtd)}`,
       accent: 'text-emerald-400',
       borderAccent: 'border-l-emerald-500',
-      icon: '📈',
+      icon: 'revenue',
     },
     {
       label: 'Operational Expenses',
@@ -24,7 +25,7 @@ export function FinanceMetrics({ summary }: FinanceMetricsProps) {
       subtext: 'Fabrics, material, atelier overheads',
       accent: 'text-rose-400',
       borderAccent: 'border-l-rose-500',
-      icon: '💸',
+      icon: 'expense',
     },
     {
       label: 'Artisan Salaries',
@@ -32,7 +33,7 @@ export function FinanceMetrics({ summary }: FinanceMetricsProps) {
       subtext: 'Craftsmen & tailoring payroll',
       accent: 'text-amber-400',
       borderAccent: 'border-l-amber-500',
-      icon: '👥',
+      icon: 'salary',
     },
     {
       label: 'Pending Receivables',
@@ -40,7 +41,7 @@ export function FinanceMetrics({ summary }: FinanceMetricsProps) {
       subtext: 'Uncollected client balances',
       accent: 'text-purple-400',
       borderAccent: 'border-l-purple-500',
-      icon: '⏳',
+      icon: 'outstanding',
     },
     {
       label: 'Net Studio Profit',
@@ -48,9 +49,9 @@ export function FinanceMetrics({ summary }: FinanceMetricsProps) {
       subtext: summary.netProfit >= 0 ? 'Profitable operating period' : 'Operating deficit',
       accent: summary.netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400',
       borderAccent: summary.netProfit >= 0 ? 'border-l-emerald-500' : 'border-l-rose-500',
-      icon: '💎',
+      icon: 'profit',
     },
-  ];
+  ] as const;
 
   return (
     <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-5">
@@ -61,7 +62,7 @@ export function FinanceMetrics({ summary }: FinanceMetricsProps) {
         >
           <div className="flex items-center justify-between text-xs opacity-65">
             <span className="font-semibold uppercase tracking-wider text-[10px]">{c.label}</span>
-            <span className="text-base">{c.icon}</span>
+            <span className="text-base"><Icon name={c.icon} size={16} /></span>
           </div>
           <div className={`mt-2 font-heading text-xl font-bold tracking-tight ${c.accent}`}>
             {c.value}

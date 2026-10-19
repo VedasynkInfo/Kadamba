@@ -1,4 +1,5 @@
 ﻿import { useState, useMemo, useEffect } from 'react';
+import { Icon } from '@/components/icons';
 import type { ExpenseRecord } from '@/services/finance/financeService';
 import { EmptyState } from '../components/EmptyState';
 import { cn } from '@/utils/cn';
@@ -102,7 +103,7 @@ export function FinanceExpensesTab({
         <div className="flex flex-1 flex-wrap items-center gap-2.5">
           <div className="relative min-w-[180px] flex-1 sm:max-w-xs">
             <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-xs opacity-50">
-              🔍
+              <Icon name="search" size={14} />
             </span>
             <input
               type="text"
@@ -258,7 +259,7 @@ export function FinanceExpensesTab({
                 }}
                 className="w-full flex items-center gap-2 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
               >
-                <span>✏️</span>
+                <span><Icon name="edit" size={14} className="mr-1 inline align-middle" /> </span>
                 <span>Edit Expense</span>
               </button>
               <button
@@ -272,7 +273,7 @@ export function FinanceExpensesTab({
                 }}
                 className="w-full flex items-center gap-2 rounded-lg px-3 py-2 font-medium text-rose-400 hover:bg-rose-500/10 transition cursor-pointer"
               >
-                <span>🗑️</span>
+                <Icon name="delete" size={14} />
                 <span>Delete Expense</span>
               </button>
             </div>

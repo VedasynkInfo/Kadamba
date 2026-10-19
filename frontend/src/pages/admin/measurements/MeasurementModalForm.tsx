@@ -4,6 +4,7 @@ import {
   type MeasurementProfile,
   type MeasurementTemplate,
 } from '@/services/measurements/measurementsService';
+import { Icon } from '@/components/icons';
 import type { Customer } from '@/services/customers/customerService';
 import {
   SILHOUETTE_FALLBACKS,
@@ -217,7 +218,7 @@ export function MeasurementModalForm({
           className="flex items-center justify-between border-b px-6 py-4 border-line"
         >
           <div className="flex items-center gap-3">
-            <span className="text-2xl">📏</span>
+            <span className="text-2xl"><Icon name="measurements" size={14} className="mr-1 inline align-middle" /> </span>
             <div>
               <h3 className="font-heading text-base font-bold tracking-wide">
                 {profile ? `Edit Fit Profile: ${profile.profileName}` : 'New Couture Fit Specification'}
@@ -233,7 +234,7 @@ export function MeasurementModalForm({
             className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer border-line"
             aria-label="Close modal"
           >
-            ✕
+            <Icon name="close" size={16} />
           </button>
         </div>
 
@@ -329,7 +330,7 @@ export function MeasurementModalForm({
                   }
                   className="rounded-xl px-4 py-2 text-xs font-semibold border hover:bg-current/[0.05] transition cursor-pointer border-line"
                 >
-                  ← Back
+                  <Icon name="arrowLeft" size={14} className="mr-1 inline align-middle" /> Back
                 </button>
               ) : null}
             </div>
@@ -352,7 +353,7 @@ export function MeasurementModalForm({
                   }
                   className="rounded-xl px-5 py-2 text-xs font-bold border border-brand hover:bg-brand/10 text-brand transition cursor-pointer"
                 >
-                  Next Step →
+                  Next Step <Icon name="arrowRight" size={14} className="mr-1 inline align-middle" /> 
                 </button>
               ) : (
                 <button

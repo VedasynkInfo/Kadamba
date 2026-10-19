@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Icon, type GlyphName } from '@/components/icons';
 import { cn } from '@/utils/cn';
 
 export interface StatCardProps {
@@ -8,7 +9,7 @@ export interface StatCardProps {
   sub?: string;
   tone?: 'default' | 'success' | 'warning' | 'danger';
   className?: string;
-  icon?: string;
+  icon?: GlyphName;
 }
 
 export function StatCard({
@@ -45,7 +46,7 @@ export function StatCard({
         </p>
         {icon ? (
           <span className="text-base opacity-75 group-hover:scale-110 group-hover:opacity-100 transition-all">
-            {icon}
+            <Icon name={icon} size={16} />
           </span>
         ) : null}
       </div>

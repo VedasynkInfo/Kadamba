@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Icon } from '@/components/icons';
 import { Button, Checkbox, Input, Select, Textarea } from '@/components/ui';
 import type { BlogCategory, BlogPost } from '@/pages/blogs/data';
 import { BannerSizeGuide } from '../components/BannerSizeGuide';
@@ -79,7 +80,7 @@ export function BlogsModalForm({
             className="h-8 w-8 rounded-lg border flex items-center justify-center text-xs opacity-70 hover:opacity-100 hover:bg-current/[0.06] transition cursor-pointer border-line"
             aria-label="Close dialog"
           >
-            ✕
+            <Icon name="close" size={16} />
           </button>
         </div>
 
@@ -97,7 +98,7 @@ export function BlogsModalForm({
                 : 'border-transparent opacity-60 hover:opacity-100',
             )}
           >
-            📝 Article Content
+            <Icon name="note" size={14} className="mr-1 inline align-middle" /> Article Content
           </button>
 
           <button
@@ -110,7 +111,7 @@ export function BlogsModalForm({
                 : 'border-transparent opacity-60 hover:opacity-100',
             )}
           >
-            ⚙️ Tags & Settings
+            <Icon name="settings" size={14} className="mr-1 inline align-middle" /> Tags & Settings
           </button>
 
           <button
@@ -123,7 +124,7 @@ export function BlogsModalForm({
                 : 'border-transparent opacity-60 hover:opacity-100',
             )}
           >
-            🌐 SEO & Search Snippets
+            <Icon name="seo" size={14} className="mr-1 inline align-middle" /> SEO & Search Snippets
           </button>
         </div>
 

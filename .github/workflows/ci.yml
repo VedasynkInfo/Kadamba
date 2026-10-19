@@ -72,7 +72,11 @@ jobs:
       - run: npm run lint
       - run: npm run check:contract
       - run: npm run check:tokens
+      - run: npm run check:emoji
       - run: npm run typecheck
+      # The suite was green locally and ungated in CI; a design-system refactor
+      # is exactly the change that needs it run on every push.
+      - run: npm test
       - run: npm run build
         env:
           VITE_API_URL: https://api.example.com/api

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Icon } from '@/components/icons';
 import { Alert, useToast } from '@/components/ui';
 import { PageMeta, staticPageMeta } from '@/seo';
 import { toAppError } from '@/lib/apiError';
@@ -207,7 +208,7 @@ export default function MeasurementsPage() {
               disabled={loading}
               className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold transition hover:bg-current/[0.05] active:scale-98 cursor-pointer border-line"
             >
-              <span className={loading ? 'animate-spin' : ''}>🔄</span>
+              <span className={loading ? 'animate-spin' : ''}><Icon name="refresh" size={14} className="mr-1 inline align-middle" /> </span>
               <span>Sync Fit Cards</span>
             </button>
           </div>

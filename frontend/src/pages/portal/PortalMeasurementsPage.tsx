@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Icon } from '@/components/icons';
 import { Button, Input, Spinner, useToast } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import {
@@ -206,9 +207,10 @@ export default function PortalMeasurementsPage() {
             <button
               type="button"
               onClick={closeEditor}
-              className="text-xs uppercase tracking-[0.18em] text-ink-inverse/50 hover:text-gold"
+              className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.18em] text-ink-inverse/50 hover:text-gold"
             >
-              ← Back to list
+              <Icon name="arrowLeft" size={14} />
+              Back to list
             </button>
 
             <div className="border border-gold/25 bg-gradient-to-br from-black/50 to-black/20 p-5 sm:p-7">

@@ -1,4 +1,5 @@
 ﻿import { useState } from 'react';
+import { Icon } from '@/components/icons';
 import { Button, Input, Select, Textarea } from '@/components/ui';
 import { CUSTOMER_SOURCES, type CustomerFormData } from './types';
 import { cn } from '@/utils/cn';
@@ -52,7 +53,7 @@ export function CustomerModalForm({
             className="h-8 w-8 rounded-lg border flex items-center justify-center text-xs opacity-70 hover:opacity-100 hover:bg-current/[0.06] transition cursor-pointer border-line"
             aria-label="Close dialog"
           >
-            ✕
+            <Icon name="close" size={16} />
           </button>
         </div>
 
@@ -70,7 +71,7 @@ export function CustomerModalForm({
                 : 'border-transparent opacity-60 hover:opacity-100',
             )}
           >
-            👤 Personal & Contact
+            <Icon name="user" size={14} className="mr-1 inline align-middle" /> Personal & Contact
           </button>
 
           <button
@@ -83,7 +84,7 @@ export function CustomerModalForm({
                 : 'border-transparent opacity-60 hover:opacity-100',
             )}
           >
-            📍 Address & Delivery
+            <Icon name="location" size={14} className="mr-1 inline align-middle" /> Address & Delivery
           </button>
         </div>
 

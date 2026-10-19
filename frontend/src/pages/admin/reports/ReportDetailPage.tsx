@@ -13,6 +13,7 @@ import {
   Cell,
   Legend,
 } from 'recharts';
+import { Icon } from '@/components/icons';
 import { AdminHorizonBanner } from '../components/AdminHorizonBanner';
 import { adminBanners } from '../data';
 import { Button, Select, Spinner } from '@/components/ui';
@@ -122,8 +123,12 @@ export default function ReportDetailPage() {
 
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 md:px-10">
         <div className="mb-6">
-          <Link to="/admin/reports" className="text-xs font-medium text-ink/50 hover:text-ink">
-            ← Reports hub
+          <Link
+            to="/admin/reports"
+            className="inline-flex items-center gap-1 text-xs font-medium text-ink/50 hover:text-ink"
+          >
+            <Icon name="arrowLeft" size={14} />
+            Reports hub
           </Link>
           <h2 className="mt-2 font-heading text-2xl text-ink">{meta?.title}</h2>
           <p className="mt-1 text-sm text-ink/55">{meta?.description}</p>

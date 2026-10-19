@@ -1,4 +1,6 @@
-﻿interface SettingsHeaderProps {
+﻿import { Icon } from '@/components/icons';
+
+interface SettingsHeaderProps {
   dirty: boolean;
   saving: boolean;
   onSave: () => void;
@@ -54,12 +56,12 @@ export function SettingsHeader({
         >
           {saving ? (
             <>
-              <span className="animate-spin text-sm">⏳</span>
+              <Icon name="loading" size={14} className="animate-spin" />
               <span>Saving...</span>
             </>
           ) : (
             <>
-              <span>💾</span>
+              <Icon name="save" size={14} />
               <span>Save All Settings</span>
             </>
           )}

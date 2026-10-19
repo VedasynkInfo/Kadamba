@@ -1,5 +1,6 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import { useRef, type ReactNode } from 'react';
+import { Icon } from '@/components/icons';
 import { cn } from '@/utils/cn';
 import { Button } from './Button';
 import { PortalShell } from './PortalShell';
@@ -69,7 +70,7 @@ export function Drawer({
                   aria-label="Close drawer"
                   className="text-inherit opacity-70 hover:bg-current/[0.08] hover:opacity-100"
                 >
-                  ✕
+                  <Icon name="close" size={16} />
                 </Button>
               </Dialog.Close>
             </div>

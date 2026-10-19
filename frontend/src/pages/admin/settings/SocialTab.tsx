@@ -1,4 +1,6 @@
-﻿import type { WebsiteSettings } from '../data';
+﻿import { Icon } from '@/components/icons';
+import { SocialIcon } from '@/components/icons/social';
+import type { WebsiteSettings } from '../data';
 
 interface SocialTabProps {
   form: WebsiteSettings;
@@ -39,8 +41,9 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1">
-            <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">
-              📸 Instagram Profile
+            <label className="block inline-flex items-center gap-1.5 text-[11px] font-semibold opacity-75 uppercase tracking-wider">
+              <SocialIcon name="instagram" size={12} />
+              Instagram Profile
             </label>
             <div className="flex gap-2">
               <input
@@ -55,17 +58,19 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
                   href={named.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-current/[0.05] transition border-line"
+                  className="inline-flex items-center gap-1 rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-current/[0.05] transition border-line"
                 >
-                  Test ↗
+                  Test
+                  <Icon name="arrowUpRight" size={12} />
                 </a>
               ) : null}
             </div>
           </div>
 
           <div className="space-y-1">
-            <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">
-              📘 Facebook Page
+            <label className="block inline-flex items-center gap-1.5 text-[11px] font-semibold opacity-75 uppercase tracking-wider">
+              <SocialIcon name="facebook" size={12} />
+              Facebook Page
             </label>
             <div className="flex gap-2">
               <input
@@ -80,17 +85,19 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
                   href={named.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-current/[0.05] transition border-line"
+                  className="inline-flex items-center gap-1 rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-current/[0.05] transition border-line"
                 >
-                  Test ↗
+                  Test
+                  <Icon name="arrowUpRight" size={12} />
                 </a>
               ) : null}
             </div>
           </div>
 
           <div className="space-y-1">
-            <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">
-              ▶️ YouTube Channel
+            <label className="block inline-flex items-center gap-1.5 text-[11px] font-semibold opacity-75 uppercase tracking-wider">
+              <SocialIcon name="youtube" size={12} />
+              YouTube Channel
             </label>
             <div className="flex gap-2">
               <input
@@ -105,17 +112,19 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
                   href={named.youtube}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-current/[0.05] transition border-line"
+                  className="inline-flex items-center gap-1 rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-current/[0.05] transition border-line"
                 >
-                  Test ↗
+                  Test
+                  <Icon name="arrowUpRight" size={12} />
                 </a>
               ) : null}
             </div>
           </div>
 
           <div className="space-y-1">
-            <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">
-              📍 Google Business / Maps Listing
+            <label className="block inline-flex items-center gap-1.5 text-[11px] font-semibold opacity-75 uppercase tracking-wider">
+              <Icon name="location" size={12} />
+              Google Business / Maps Listing
             </label>
             <div className="flex gap-2">
               <input
@@ -130,9 +139,10 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
                   href={named.googleBusiness}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-current/[0.05] transition border-line"
+                  className="inline-flex items-center gap-1 rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-current/[0.05] transition border-line"
                 >
-                  Test ↗
+                  Test
+                  <Icon name="arrowUpRight" size={12} />
                 </a>
               ) : null}
             </div>
@@ -199,7 +209,7 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
                 className="p-1.5 text-xs opacity-50 hover:opacity-100 text-rose-400 cursor-pointer"
                 title="Remove platform"
               >
-                ✕
+                <Icon name="close" size={14} />
               </button>
             </div>
           ))}

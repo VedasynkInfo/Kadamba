@@ -1,5 +1,6 @@
 ﻿import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Icon } from '@/components/icons';
 import type { PaymentRecord } from '@/services/finance/financeService';
 import { whatsappDeepLink } from '@/utils/whatsapp';
 import { EmptyState } from '../components/EmptyState';
@@ -184,12 +185,12 @@ export function PaymentsTable({
                         )}
                       >
                         {pay.method === 'upi'
-                          ? '📱 UPI'
+                          ? 'UPI'
                           : pay.method === 'cash'
-                          ? '💵 Cash'
+                          ? 'Cash'
                           : pay.method === 'card'
-                          ? '💳 Card'
-                          : '🏦 Bank'}
+                          ? 'Card'
+                          : 'Bank'}
                       </span>
                     </td>
 
@@ -249,7 +250,7 @@ export function PaymentsTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">👁️</span>
+              <Icon name="view" size={14} />
               <span>Quick Receipt Preview</span>
             </button>
 
@@ -259,7 +260,7 @@ export function PaymentsTable({
                 onClick={() => setMenuAnchor(null)}
                 className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
               >
-                <span className="text-sm">🧵</span>
+                <Icon name="thread" size={14} />
                 <span>Open Order Workspace</span>
               </Link>
             ) : null}
@@ -275,7 +276,7 @@ export function PaymentsTable({
                 onClick={() => setMenuAnchor(null)}
                 className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-500 hover:bg-emerald-500/10 transition cursor-pointer"
               >
-                <span className="text-sm">💬</span>
+                <Icon name="message" size={14} />
                 <span>Send WhatsApp Receipt</span>
               </a>
             ) : null}

@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { Icon } from '@/components/icons';
 import { customerApi, type Customer } from '@/services/customers/customerService';
 import {
   MEASUREMENT_UNITS,
@@ -118,7 +119,7 @@ export function MeasurementFormClientTab({
                           {c.phone || 'No phone'} {c.email ? `• ${c.email}` : ''}
                         </span>
                       </div>
-                      <span className="text-[10px] font-mono opacity-50">Select →</span>
+                      <span className="text-[10px] font-mono opacity-50">Select <Icon name="arrowRight" size={14} className="mr-1 inline align-middle" /> </span>
                     </button>
                   </li>
                 ))}

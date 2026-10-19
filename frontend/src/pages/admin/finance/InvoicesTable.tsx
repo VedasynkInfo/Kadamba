@@ -1,5 +1,6 @@
 ﻿import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Icon } from '@/components/icons';
 import type { InvoiceRecord } from '@/services/finance/financeService';
 import { whatsappDeepLink } from '@/utils/whatsapp';
 import { EmptyState } from '../components/EmptyState';
@@ -274,7 +275,7 @@ export function InvoicesTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">👁️</span>
+              <Icon name="view" size={14} />
               <span>Quick Preview</span>
             </button>
 
@@ -283,7 +284,7 @@ export function InvoicesTable({
               onClick={() => setMenuAnchor(null)}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">🖨️</span>
+              <Icon name="print" size={14} />
               <span>Printable Invoice Document</span>
             </Link>
 
@@ -298,7 +299,7 @@ export function InvoicesTable({
                 onClick={() => setMenuAnchor(null)}
                 className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-500 hover:bg-emerald-500/10 transition cursor-pointer"
               >
-                <span className="text-sm">💬</span>
+                <Icon name="message" size={14} />
                 <span>Send Payment Reminder</span>
               </a>
             ) : null}
@@ -312,7 +313,7 @@ export function InvoicesTable({
               onClick={() => setMenuAnchor(null)}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-brand hover:bg-current/[0.06] cursor-pointer"
             >
-              <span className="text-sm">💳</span>
+              <Icon name="card" size={14} />
               <span>Record Payment</span>
             </Link>
           </div>

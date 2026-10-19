@@ -1,6 +1,7 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import type { ReactNode } from 'react';
 import { useAuth } from '@/hooks/useAuth';
+import { Icon } from '@/components/icons';
 import { Spinner } from '@/components/ui';
 
 /**
@@ -30,8 +31,12 @@ export function RequireAdmin({ children }: { children: ReactNode }) {
         <p className="max-w-sm text-sm text-ink-inverse/70">
           This console is for studio administrators only.
         </p>
-        <a href="/" className="text-xs uppercase tracking-[0.2em] text-gold/80 hover:text-gold">
-          ← Public site
+        <a
+          href="/"
+          className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.2em] text-gold/80 hover:text-gold"
+        >
+          <Icon name="arrowLeft" size={14} />
+          Public site
         </a>
       </div>
     );

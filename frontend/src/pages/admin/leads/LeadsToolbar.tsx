@@ -1,4 +1,5 @@
-﻿import { LEAD_DESK_OPTIONS, LEAD_QUALITY_OPTIONS, LEAD_STATUS_OPTIONS } from './types';
+﻿import { Icon } from '@/components/icons';
+import { LEAD_DESK_OPTIONS, LEAD_QUALITY_OPTIONS, LEAD_STATUS_OPTIONS } from './types';
 
 interface LeadsToolbarProps {
   query: string;
@@ -43,7 +44,7 @@ export function LeadsToolbar({
           {/* Search input */}
           <div className="relative min-w-[200px] flex-1 sm:max-w-xs">
             <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-xs opacity-50">
-              🔍
+              <Icon name="search" size={14} />
             </span>
             <input
               type="text"
@@ -59,7 +60,7 @@ export function LeadsToolbar({
                 className="absolute inset-y-0 right-2.5 flex items-center text-xs opacity-50 hover:opacity-100 cursor-pointer"
                 title="Clear search"
               >
-                ✕
+                <Icon name="close" size={16} />
               </button>
             ) : null}
           </div>
@@ -92,7 +93,7 @@ export function LeadsToolbar({
               <option value="All">All Quality</option>
               {LEAD_QUALITY_OPTIONS.map((q) => (
                 <option key={q} value={q}>
-                  {q === 'hot' ? '🔥 Hot' : q === 'warm' ? '⚡ Warm' : '❄️ Cold'}
+                  {q === 'hot' ? 'Hot' : q === 'warm' ? 'Warm' : 'Cold'}
                 </option>
               ))}
             </select>
@@ -139,7 +140,7 @@ export function LeadsToolbar({
             onClick={onExportCsv}
             className="rounded-lg border px-3 py-2 text-xs font-semibold opacity-80 hover:opacity-100 hover:bg-current/[0.05] transition cursor-pointer whitespace-nowrap border-line"
           >
-            📥 Export CSV
+            <Icon name="download" size={14} className="mr-1 inline align-middle" /> Export CSV
           </button>
 
           <button

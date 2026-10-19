@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { portalApi } from '@/services/portal/portalService';
+import { Icon } from '@/components/icons';
 import { Spinner } from '@/components/ui';
 import { cn } from '@/utils/cn';
 
@@ -126,9 +127,10 @@ export default function PortalPaymentsPage() {
                     </p>
                     <Link
                       to={`/portal/invoices/${inv.orderId}`}
-                      className="mt-3 inline-block text-xs uppercase tracking-[0.16em] text-gold hover:underline"
+                      className="mt-3 inline-flex items-center gap-1 text-xs uppercase tracking-[0.16em] text-gold hover:underline"
                     >
-                      View invoice →
+                      View invoice
+                      <Icon name="arrowRight" size={14} />
                     </Link>
                   </div>
                 </div>

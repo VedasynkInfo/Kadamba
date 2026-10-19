@@ -1,4 +1,5 @@
-﻿function formatINR(v: number) {
+﻿import { Icon } from '@/components/icons';
+function formatINR(v: number) {
   return `₹${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
 }
 
@@ -14,29 +15,29 @@ export function PaymentsMetrics({ totalAmount, count, upiTotal, cashTotal }: Pay
     {
       label: 'Monthly Inflow',
       value: formatINR(totalAmount),
-      icon: '💵',
+      icon: 'cash',
       sub: `${count} total recorded payments`,
     },
     {
       label: 'UPI / Digital Share',
       value: formatINR(upiTotal),
-      icon: '📱',
+      icon: 'card',
       sub: 'Direct bank & QR transactions',
       highlight: true,
     },
     {
       label: 'Cash & Counter',
       value: formatINR(cashTotal),
-      icon: '🪙',
+      icon: 'coins',
       sub: 'Studio desk receipts',
     },
     {
       label: 'Average Receipt',
       value: count > 0 ? formatINR(Math.round(totalAmount / count)) : '₹0',
-      icon: '📊',
+      icon: 'chart',
       sub: 'Per transaction average',
     },
-  ];
+  ] as const;
 
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -47,7 +48,7 @@ export function PaymentsMetrics({ totalAmount, count, upiTotal, cashTotal }: Pay
         >
           <div className="flex items-center justify-between opacity-70">
             <span className="text-[11px] font-semibold uppercase tracking-wider">{c.label}</span>
-            <span className="text-sm">{c.icon}</span>
+            <span className="text-sm"><Icon name={c.icon} size={16} /></span>
           </div>
           <div className="mt-2 text-2xl font-bold font-heading tracking-tight text-inherit truncate">
             {c.value}

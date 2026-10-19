@@ -23,7 +23,7 @@ const steps = [
 ] as const;
 
 /**
- * Portal journey strip — Enquire → Confirm → Reference ID → Portal.
+ * Portal journey strip: Enquire, Confirm, Reference ID, Portal.
  */
 export function HowItWorksPortalSection() {
   const reduced = usePrefersReducedMotion();

@@ -1,4 +1,5 @@
-﻿function formatINR(v: number) {
+﻿import { Icon } from '@/components/icons';
+function formatINR(v: number) {
   return `₹${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
 }
 
@@ -19,29 +20,29 @@ export function InvoicesMetrics({ summary }: InvoicesMetricsProps) {
     {
       label: 'Total Quoted Value',
       value: formatINR(summary.totalQuoted || 0),
-      icon: '📜',
+      icon: 'invoice',
       sub: 'All atelier commissioned work',
     },
     {
       label: 'Collected Payments',
       value: formatINR(summary.totalPaid || 0),
-      icon: '💰',
+      icon: 'cash',
       sub: 'Advances & completed payments',
       highlight: true,
     },
     {
       label: 'Outstanding Balance',
       value: formatINR(summary.totalBalance || 0),
-      icon: '⏳',
+      icon: 'outstanding',
       sub: `${summary.unpaid || 0} unpaid · ${summary.partial || 0} partial`,
     },
     {
       label: 'Fully Cleared Invoices',
       value: summary.paid || 0,
-      icon: '✅',
+      icon: 'successDouble',
       sub: 'Orders settled in full',
     },
-  ];
+  ] as const;
 
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -52,7 +53,7 @@ export function InvoicesMetrics({ summary }: InvoicesMetricsProps) {
         >
           <div className="flex items-center justify-between opacity-70">
             <span className="text-[11px] font-semibold uppercase tracking-wider">{c.label}</span>
-            <span className="text-sm">{c.icon}</span>
+            <span className="text-sm"><Icon name={c.icon} size={16} /></span>
           </div>
           <div className="mt-2 text-2xl font-bold font-heading tracking-tight text-inherit truncate">
             {c.value}

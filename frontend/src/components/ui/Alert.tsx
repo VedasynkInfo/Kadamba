@@ -1,4 +1,5 @@
 import { type ReactNode } from 'react';
+import { Icon } from '@/components/icons';
 import { cn } from '@/utils/cn';
 
 export type AlertTone = 'error' | 'success' | 'warning' | 'info';
@@ -55,7 +56,7 @@ export function Alert({
             className="shrink-0 opacity-60 hover:opacity-100 transition-opacity"
             aria-label="Dismiss"
           >
-            ✕
+            <Icon name="close" size={16} />
           </button>
         ) : null}
       </div>

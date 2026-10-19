@@ -1,3 +1,4 @@
+import type { GlyphName } from '@/components/icons';
 import type { MeasurementProfile, MeasurementTemplate } from '@/services/measurements/measurementsService';
 
 export type DeskTab = 'all' | 'pending';
@@ -14,26 +15,29 @@ export const MEASUREMENT_STATUSES = [
   { value: 'archived', label: 'Archived / Historical' },
 ];
 
-export const SILHOUETTE_FALLBACKS = [
-  { code: 'BR-LH', name: 'Bridal Lehenga Set', icon: '👑' },
-  { code: 'BLOUSE', name: 'Maggam / Couture Blouse', icon: '✨' },
-  { code: 'KURTA', name: 'Designer Kurta & Anarkali', icon: '🧵' },
-  { code: 'GOWN', name: 'Indo-Western Evening Gown', icon: '👗' },
-  { code: 'SAREE', name: 'Pre-stitched Draped Saree', icon: '🥻' },
+export const SILHOUETTE_FALLBACKS: { code: string; name: string; icon: GlyphName }[] = [
+  { code: 'BR-LH', name: 'Bridal Lehenga Set', icon: 'bridal' },
+  { code: 'BLOUSE', name: 'Maggam / Couture Blouse', icon: 'couture' },
+  { code: 'KURTA', name: 'Designer Kurta & Anarkali', icon: 'thread' },
+  { code: 'GOWN', name: 'Indo-Western Evening Gown', icon: 'garment' },
+  { code: 'SAREE', name: 'Pre-stitched Draped Saree', icon: 'drape' },
 ];
 
-export function getSilhouetteMeta(code: string, templates: MeasurementTemplate[] = []) {
+export function getSilhouetteMeta(
+  code: string,
+  templates: MeasurementTemplate[] = [],
+): { code: string; name: string; icon: GlyphName } {
   const foundTemplate = templates.find((t) => t.code === code);
   if (foundTemplate) {
     return {
       code: foundTemplate.code,
       name: foundTemplate.name,
-      icon: '✨',
+      icon: 'couture',
     };
   }
   const fallback = SILHOUETTE_FALLBACKS.find((s) => s.code === code);
   if (fallback) return fallback;
-  return { code, name: code, icon: '🧵' };
+  return { code, name: code, icon: 'thread' };
 }
 
 export interface ProfileFormData {

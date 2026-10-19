@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
+import { Icon } from '@/components/icons';
 import { Section, SectionIntro } from '@/components/ui';
 import { ContentEmpty, ContentLoading } from '@/components/feedback/ContentState';
 import { usePublicContent } from '@/hooks/usePublicContent';
@@ -167,11 +168,12 @@ export function ServicesSection() {
                   </p>
                   <span
                     className={cn(
-                      'mt-4 inline-flex text-xs font-semibold uppercase tracking-[0.18em] text-gold transition-opacity duration-300',
+                      'mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-[0.18em] text-gold transition-opacity duration-300',
                       isActive ? 'opacity-100' : 'opacity-0',
                     )}
                   >
-                    Explore →
+                    Explore
+                    <Icon name="arrowRight" size={14} />
                   </span>
                 </div>
               </button>

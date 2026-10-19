@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Icon } from '@/components/icons';
 import { productApi, type ProductCategory, type ProductType } from '@/services/products/productService';
 import { measurementApi, type MeasurementTemplate } from '@/services/measurements/measurementsService';
 import {
@@ -347,7 +348,14 @@ export default function ProductsAdminPage() {
                 disabled={seeding}
                 onClick={handleSeedCatalog}
               >
-                {seeding ? 'Seeding...' : '🚀 Seed catalog templates'}
+                {seeding ? (
+                  'Seeding...'
+                ) : (
+                  <span className="inline-flex items-center gap-1">
+                    <Icon name="database" size={14} />
+                    Seed catalog templates
+                  </span>
+                )}
               </Button>
             </div>
           </div>
@@ -425,7 +433,7 @@ export default function ProductsAdminPage() {
                       header: 'Fit Template',
                       className: 'font-mono text-[10px]',
                       render: (t) => t.measurementTemplateId
-                        ? <Link to="/admin/measurements" className="bg-surface-sunken px-1.5 py-0.5 rounded border border-line font-semibold hover:underline">📏 {t.measurementTemplateId}</Link>
+                        ? <Link to="/admin/measurements" className="bg-surface-sunken px-1.5 py-0.5 rounded border border-line font-semibold hover:underline"><Icon name="measurements" size={14} className="mr-1 inline align-middle" /> {t.measurementTemplateId}</Link>
                         : <span className="text-ink/35">Unmeasurable</span>,
                     },
                     { key: 'indicativePriceRange', header: 'Indicative Price', render: (t) => t.indicativePriceRange || '—' },

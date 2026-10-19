@@ -1,5 +1,6 @@
 import { useMemo, useState, type FormEvent } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Icon } from '@/components/icons';
 import { Button, Input, useToast } from '@/components/ui';
 import { authApi } from '@/services/auth/authService';
 import { PageMeta, staticPageMeta } from '@/seo';
@@ -118,16 +119,36 @@ export default function ResetPasswordPage() {
 
             <ul className="space-y-1.5 text-xs text-ink-inverse/55">
               <li className={checks.length ? 'text-emerald-400' : ''}>
-                {checks.length ? '✓' : '•'} At least 10 characters
+                <Icon
+                  name={checks.length ? 'check' : 'dot'}
+                  size={12}
+                  className="mr-1 inline align-middle"
+                />
+                At least 10 characters
               </li>
               <li className={checks.letter ? 'text-emerald-400' : ''}>
-                {checks.letter ? '✓' : '•'} Contains a letter
+                <Icon
+                  name={checks.letter ? 'check' : 'dot'}
+                  size={12}
+                  className="mr-1 inline align-middle"
+                />
+                Contains a letter
               </li>
               <li className={checks.number ? 'text-emerald-400' : ''}>
-                {checks.number ? '✓' : '•'} Contains a number
+                <Icon
+                  name={checks.number ? 'check' : 'dot'}
+                  size={12}
+                  className="mr-1 inline align-middle"
+                />
+                Contains a number
               </li>
               <li className={checks.match ? 'text-emerald-400' : ''}>
-                {checks.match ? '✓' : '•'} Passwords match
+                <Icon
+                  name={checks.match ? 'check' : 'dot'}
+                  size={12}
+                  className="mr-1 inline align-middle"
+                />
+                Passwords match
               </li>
             </ul>
 

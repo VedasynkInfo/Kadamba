@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Icon } from '@/components/icons';
 import { Spinner, useToast } from '@/components/ui';
 import { PageMeta, staticPageMeta } from '@/seo';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
@@ -259,7 +260,7 @@ export default function MediaLibraryPage() {
                     <div className="relative aspect-[4/3] w-full overflow-hidden bg-black/20">
                       {asset.kind === 'video' ? (
                         <span className="flex h-full w-full items-center justify-center text-2xl">
-                          ▶
+                          <Icon name="play" size={28} />
                         </span>
                       ) : (
                         <OptimizedImage

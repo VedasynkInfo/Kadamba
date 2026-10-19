@@ -1,4 +1,5 @@
 ﻿import type { GalleryItem } from '@/pages/gallery/data';
+import { Icon } from '@/components/icons';
 import { cn } from '@/utils/cn';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
 
@@ -57,7 +58,7 @@ export function GalleryPreviewModal({
             className="h-8 w-8 rounded-lg border flex items-center justify-center text-xs opacity-70 hover:opacity-100 hover:bg-current/[0.06] transition cursor-pointer border-line"
             aria-label="Close preview"
           >
-            ✕
+            <Icon name="close" size={16} />
           </button>
         </div>
 
@@ -132,7 +133,7 @@ export function GalleryPreviewModal({
               onClick={() => onCopyUrl(item.src)}
               className="rounded-lg border px-3 py-1.5 text-xs font-semibold opacity-80 hover:opacity-100 hover:bg-current/[0.05] transition cursor-pointer border-line"
             >
-              📋 Copy URL
+              <Icon name="copy" size={14} className="mr-1 inline align-middle" /> Copy URL
             </button>
             <a
               href={item.src}
@@ -141,7 +142,7 @@ export function GalleryPreviewModal({
               className="rounded-lg border px-3 py-1.5 text-xs font-semibold opacity-80 hover:opacity-100 hover:bg-current/[0.05] transition inline-flex items-center gap-1 cursor-pointer border-line"
             >
               <span>Open Media</span>
-              <span>↗</span>
+              <span><Icon name="arrowUpRight" size={14} className="mr-1 inline align-middle" /> </span>
             </a>
           </div>
 

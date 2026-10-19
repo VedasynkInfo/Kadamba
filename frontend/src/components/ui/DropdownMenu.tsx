@@ -1,5 +1,6 @@
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import { forwardRef, type ComponentPropsWithoutRef, type ElementRef } from 'react';
+import { Icon } from '@/components/icons';
 import { cn } from '@/utils/cn';
 import { PortalShell } from './PortalShell';
 
@@ -96,7 +97,9 @@ export const DropdownMenuCheckboxItem = forwardRef<
     {...props}
   >
     <span className="pointer-events-none absolute left-2.5 flex size-4 items-center justify-center">
-      <DropdownMenuPrimitive.ItemIndicator>✓</DropdownMenuPrimitive.ItemIndicator>
+      <DropdownMenuPrimitive.ItemIndicator>
+        <Icon name="check" size={14} />
+      </DropdownMenuPrimitive.ItemIndicator>
     </span>
     {children}
   </DropdownMenuPrimitive.CheckboxItem>

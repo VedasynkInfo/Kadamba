@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
+import { Icon } from '@/components/icons';
 import { cn } from '@/utils/cn';
 import type { GalleryItem } from '../data';
 
@@ -132,7 +133,12 @@ export function GalleryLightbox({
             <div className="mt-4 flex items-center justify-between gap-3">
               <p className="text-sm text-ink-inverse/55">
                 {activeIndex !== null ? activeIndex + 1 : 0} / {items.length}
-                <span className="ml-3 hidden sm:inline">Use ← → to browse</span>
+                <span className="ml-3 hidden items-center gap-1 sm:inline-flex">
+                  Use
+                  <Icon name="arrowLeft" size={12} />
+                  <Icon name="arrowRight" size={12} />
+                  to browse
+                </span>
               </p>
               <div className="flex gap-2">
                 <NavButton

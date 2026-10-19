@@ -8,9 +8,19 @@ import { AdminHorizonBanner } from './components/AdminHorizonBanner';
 import { adminBanners } from './data';
 import { dashboardApi, type DashboardSummary } from '@/services/dashboard/dashboardService';
 import { useAdminNotifyOptional } from '@/hooks/useAdminNotifySocket';
+import { Icon, type GlyphName } from '@/components/icons';
 import { Spinner, Button, StatCard, StatusBadge, Table, type Column } from '@/components/ui';
 import { cn } from '@/utils/cn';
 import { CHART_COLORS, CHART_REVENUE } from '@/theme/palettes';
+
+const QUICK_ACTIONS: { to: string; icon: GlyphName; label: string }[] = [
+  { to: '/admin/services', icon: 'services', label: 'Add Service' },
+  { to: '/admin/gallery', icon: 'gallery', label: 'Add Gallery' },
+  { to: '/admin/portfolio', icon: 'portfolio', label: 'Add Project' },
+  { to: '/admin/blogs', icon: 'blogs', label: 'New Post' },
+  { to: '/admin/measurements', icon: 'measurements', label: 'New Fitting' },
+  { to: '/admin/settings', icon: 'settings', label: 'Settings' },
+];
 
 export default function AdminDashboardPage() {
   const [datePreset, setDatePreset] = useState<'30days' | '6months' | '12months' | 'ytd'>('12months');
@@ -149,21 +159,21 @@ export default function AdminDashboardPage() {
                 value={summary.metrics.leadsOpen}
                 href="/admin/leads/list"
                 sub={`${summary.metrics.enquiriesPending} pending review`}
-                icon="🎯"
+                icon="leads"
               />
               <StatCard
                 label="Active Orders"
                 value={summary.metrics.ordersActive ?? 0}
                 href="/admin/orders"
                 sub={`${summary.metrics.deliverablesDue ?? 0} with delivery dates`}
-                icon="📦"
+                icon="orders"
               />
               <StatCard
                 label="Revenue (MTD)"
                 value={`₹${Math.round(summary.metrics.revenueMtd ?? 0).toLocaleString('en-IN')}`}
                 href="/admin/finance"
                 sub={`Balance ₹${Math.round(summary.metrics.outstandingBalance ?? 0).toLocaleString('en-IN')}`}
-                icon="💳"
+                icon="revenue"
                 tone="success"
               />
               <StatCard
@@ -171,7 +181,7 @@ export default function AdminDashboardPage() {
                 value={summary.metrics.pendingMeasurementApprovals ?? 0}
                 href="/admin/measurements"
                 sub="Measurement approvals"
-                icon="📏"
+                icon="measurements"
                 tone="warning"
               />
             </div>
@@ -190,20 +200,15 @@ export default function AdminDashboardPage() {
               </div>
 
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-                {[
-                  { to: '/admin/services', icon: '✂️', label: 'Add Service' },
-                  { to: '/admin/gallery', icon: '📸', label: 'Add Gallery' },
-                  { to: '/admin/portfolio', icon: '✨', label: 'Add Project' },
-                  { to: '/admin/blogs', icon: '✍️', label: 'New Post' },
-                  { to: '/admin/measurements', icon: '📏', label: 'New Fitting' },
-                  { to: '/admin/settings', icon: '⚙️', label: 'Settings' },
-                ].map((item) => (
+                {QUICK_ACTIONS.map((item) => (
                   <Link
                     key={item.to}
                     to={item.to}
                     className="flex flex-col items-center justify-center p-3 rounded-lg border border-current/10 bg-current/[0.02] text-center transition hover:border-brand hover:bg-current/[0.05] hover:shadow-xs text-inherit"
                   >
-                    <span className="text-xl mb-1.5">{item.icon}</span>
+                    <span className="mb-1.5 text-brand">
+                      <Icon name={item.icon} size={20} />
+                    </span>
                     <span className="text-xs font-semibold text-inherit">{item.label}</span>
                   </Link>
                 ))}
@@ -362,8 +367,12 @@ export default function AdminDashboardPage() {
                     <h3 className="text-sm font-semibold tracking-wide text-inherit">Recent Consultations</h3>
                     <p className="text-[11px] opacity-60">Latest design enquiries from bespoke clientele</p>
                   </div>
-                  <Link to="/admin/leads/list" className="text-xs font-semibold text-brand hover:underline">
-                    All Leads →
+                  <Link
+                    to="/admin/leads/list"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:underline"
+                  >
+                    All Leads
+                    <Icon name="arrowRight" size={14} />
                   </Link>
                 </div>
                 <Table
@@ -381,8 +390,12 @@ export default function AdminDashboardPage() {
                     <h3 className="text-sm font-semibold tracking-wide text-inherit">Production Queue</h3>
                     <p className="text-[11px] opacity-60">Upcoming trials & client handovers</p>
                   </div>
-                  <Link to="/admin/orders" className="text-xs font-semibold text-brand hover:underline">
-                    Orders →
+                  <Link
+                    to="/admin/orders"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:underline"
+                  >
+                    Orders
+                    <Icon name="arrowRight" size={14} />
                   </Link>
                 </div>
 

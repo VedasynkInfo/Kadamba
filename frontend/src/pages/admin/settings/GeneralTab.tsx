@@ -1,4 +1,5 @@
-﻿import type { WebsiteSettings } from '../data';
+﻿import { Icon } from '@/components/icons';
+import type { WebsiteSettings } from '../data';
 import { MediaUpload } from '../components/MediaUpload';
 
 interface GeneralTabProps {
@@ -13,7 +14,9 @@ export function GeneralTab({ form, patchForm }: GeneralTabProps) {
       <div
         className="rounded-xl border p-4 shadow-xs flex items-start gap-3 transition-colors bg-brand/[0.08] border-brand/25 text-ink-raised"
       >
-        <span className="text-lg">ℹ️</span>
+        <span className="text-lg">
+          <Icon name="info" size={18} />
+        </span>
         <div>
           <h4 className="font-semibold text-xs text-brand">
             Live Public Site Synchronization
@@ -307,7 +310,7 @@ export function GeneralTab({ form, patchForm }: GeneralTabProps) {
                   className="p-1.5 text-xs opacity-50 hover:opacity-100 text-rose-400 cursor-pointer"
                   title="Remove row"
                 >
-                  ✕
+                  <Icon name="close" size={14} />
                 </button>
               </div>
             ))}

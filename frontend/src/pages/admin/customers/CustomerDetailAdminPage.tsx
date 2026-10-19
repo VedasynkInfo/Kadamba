@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
+import { Icon } from '@/components/icons';
 import { customerApi, type Customer } from '@/services/customers/customerService';
 import api, { getAdminToken } from '@/services/api/client';
 import type { ApiResponse } from '@/types';
@@ -305,7 +306,7 @@ export default function CustomerDetailAdminPage() {
         <h3 className="font-heading text-xl text-ink">Client not found</h3>
         <p className="text-ink/55 text-xs mt-2">The requested client profile workspace could not be resolved.</p>
         <Link to="/admin/customers" className="text-xs font-semibold hover:underline block mt-4 text-ink">
-          ← Back to customers directory
+          <Icon name="arrowLeft" size={14} className="mr-1 inline align-middle" /> Back to customers directory
         </Link>
       </div>
     );
@@ -338,7 +339,7 @@ export default function CustomerDetailAdminPage() {
             </div>
             <div className="flex flex-wrap items-center gap-4 text-xs text-ink/60">
               <a href={`tel:${customer.phone}`} className="hover:underline font-semibold text-ink flex items-center gap-1">
-                📞 {customer.phone}
+                <Icon name="phoneCall" size={14} className="mr-1 inline align-middle" /> {customer.phone}
               </a>
               <a
                 href={`https://wa.me/91${customer.phone.replace(/[^0-9]/g, '')}`}
@@ -346,7 +347,7 @@ export default function CustomerDetailAdminPage() {
                 rel="noopener noreferrer"
                 className="hover:underline text-emerald-800 font-semibold flex items-center gap-1"
               >
-                💬 WhatsApp
+                <Icon name="message" size={14} className="mr-1 inline align-middle" /> WhatsApp
               </a>
               {customer.email && <span className="text-ink/45">· {customer.email}</span>}
               {customer.address?.locality && <span className="text-ink/45">· {customer.address.locality}</span>}
@@ -399,7 +400,7 @@ export default function CustomerDetailAdminPage() {
                 <div className="flex justify-between items-center border-b border-line pb-2">
                   <h3 className="font-heading text-lg text-ink">Customer order book</h3>
                   <Link to="/admin/orders">
-                    <Button size="sm" variant="ghost">Place new order →</Button>
+                    <Button size="sm" variant="ghost">Place new order <Icon name="arrowRight" size={14} className="mr-1 inline align-middle" /> </Button>
                   </Link>
                 </div>
 
@@ -444,7 +445,7 @@ export default function CustomerDetailAdminPage() {
                             </td>
                             <td className="p-3 text-right">
                               <Link to={`/admin/orders/${order._id || order.id}`} className="font-semibold hover:underline">
-                                View →
+                                View <Icon name="arrowRight" size={14} className="mr-1 inline align-middle" /> 
                               </Link>
                             </td>
                           </tr>
@@ -461,7 +462,7 @@ export default function CustomerDetailAdminPage() {
                 <div className="flex justify-between items-center border-b border-line pb-2">
                   <h3 className="font-heading text-lg text-ink">Linked fit cards</h3>
                   <Link to="/admin/measurements">
-                    <Button size="sm" variant="ghost">New fit profile →</Button>
+                    <Button size="sm" variant="ghost">New fit profile <Icon name="arrowRight" size={14} className="mr-1 inline align-middle" /> </Button>
                   </Link>
                 </div>
 
@@ -487,7 +488,7 @@ export default function CustomerDetailAdminPage() {
                         <div className="flex justify-between text-[10px] text-ink/50 pt-2 border-t border-line">
                           <span>Measured: {new Date(m.measuredAt || m.createdAt).toLocaleDateString('en-IN')}</span>
                           <Link to="/admin/measurements" className="font-bold text-ink hover:underline">
-                            Open fitting →
+                            Open fitting <Icon name="arrowRight" size={14} className="mr-1 inline align-middle" /> 
                           </Link>
                         </div>
                       </div>
@@ -505,7 +506,7 @@ export default function CustomerDetailAdminPage() {
                 {pinnedNotes.length > 0 && (
                   <div className="p-4 bg-yellow-50/70 border border-yellow-200 rounded space-y-3 text-xs">
                     <span className="font-semibold text-amber-800 uppercase tracking-wider text-[9px] block">
-                      📌 Pinned fit instructions
+                      <Icon name="pin" size={14} className="mr-1 inline align-middle" /> Pinned fit instructions
                     </span>
                     <div className="space-y-3.5">
                       {pinnedNotes.map((note, idx) => (

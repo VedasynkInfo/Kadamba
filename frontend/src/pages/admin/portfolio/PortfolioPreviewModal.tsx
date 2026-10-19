@@ -1,4 +1,5 @@
 ﻿import type { PortfolioProject } from '@/pages/portfolio/data';
+import { Icon } from '@/components/icons';
 import { cn } from '@/utils/cn';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
 
@@ -59,7 +60,7 @@ export function PortfolioPreviewModal({
             className="h-8 w-8 rounded-lg border flex items-center justify-center text-xs opacity-70 hover:opacity-100 hover:bg-current/[0.06] transition cursor-pointer border-line"
             aria-label="Close preview"
           >
-            ✕
+            <Icon name="close" size={16} />
           </button>
         </div>
 
@@ -149,7 +150,7 @@ export function PortfolioPreviewModal({
               onClick={() => onCopyUrl(item.slug)}
               className="rounded-lg border px-3 py-1.5 text-xs font-semibold opacity-80 hover:opacity-100 hover:bg-current/[0.05] transition cursor-pointer border-line"
             >
-              📋 Copy Link
+              <Icon name="copy" size={14} className="mr-1 inline align-middle" /> Copy Link
             </button>
             <a
               href={`/portfolio/${item.slug}`}
@@ -158,7 +159,7 @@ export function PortfolioPreviewModal({
               className="rounded-lg border px-3 py-1.5 text-xs font-semibold opacity-80 hover:opacity-100 hover:bg-current/[0.05] transition inline-flex items-center gap-1 cursor-pointer border-line"
             >
               <span>View Public Page</span>
-              <span>↗</span>
+              <span><Icon name="arrowUpRight" size={14} className="mr-1 inline align-middle" /> </span>
             </a>
           </div>
 

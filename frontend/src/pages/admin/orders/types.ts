@@ -60,8 +60,8 @@ export function transitionNeedsNote(from: string, to: OrderStatus): boolean {
 
 export const ORDER_PRIORITIES = [
   { value: 'normal', label: 'Normal' },
-  { value: 'high', label: 'High Priority ⚡' },
-  { value: 'rush', label: 'Rush Order 🔥' },
+  { value: 'high', label: 'High Priority' },
+  { value: 'rush', label: 'Rush Order' },
 ];
 
 export interface OrderLineItemForm {

@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Icon } from '@/components/icons';
 import { Button, Input, useToast } from '@/components/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
@@ -148,9 +149,10 @@ export default function AdminLoginPage() {
                       setCode('');
                       setError('');
                     }}
-                    className="w-full text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/45 transition hover:text-gold"
+                    className="w-full inline-flex items-center justify-center gap-1 text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/45 transition hover:text-gold"
                   >
-                    ← Back to sign in
+                    <Icon name="arrowLeft" size={14} />
+                    Back to sign in
                   </button>
                 </form>
               </>
@@ -211,9 +213,10 @@ export default function AdminLoginPage() {
 
             <a
               href="/"
-              className="mt-10 block text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/40 transition hover:text-gold"
+              className="mt-10 inline-flex items-center gap-1 text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/40 transition hover:text-gold"
             >
-              ← Public site
+              <Icon name="arrowLeft" size={14} />
+              Public site
             </a>
           </motion.div>
         </div>

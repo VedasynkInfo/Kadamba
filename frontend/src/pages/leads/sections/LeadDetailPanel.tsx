@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Icon } from '@/components/icons';
 import { Button, Select, Textarea } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { cn } from '@/utils/cn';
@@ -63,9 +64,10 @@ export function LeadDetailPanel({
       <button
         type="button"
         onClick={() => navigate('/admin/leads/list')}
-        className="text-xs uppercase tracking-[0.22em] text-ink/45 transition hover:text-ink"
+        className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.22em] text-ink/45 transition hover:text-ink"
       >
-        ← All leads
+        <Icon name="arrowLeft" size={14} />
+        All leads
       </button>
 
       <motion.div
@@ -93,7 +95,21 @@ export function LeadDetailPanel({
                     : 'bg-slate-100 text-slate-700 border border-slate-300',
                 )}
               >
-                {lead.quality === 'hot' ? '🔥 Hot Lead' : lead.quality === 'warm' ? '⚡ Warm Lead' : '❄️ Cold Lead'}
+                <Icon
+                  name={
+                    lead.quality === 'hot'
+                      ? 'hot'
+                      : lead.quality === 'warm'
+                        ? 'priorityHigh'
+                        : 'cold'
+                  }
+                  size={14}
+                />
+                {lead.quality === 'hot'
+                  ? 'Hot Lead'
+                  : lead.quality === 'warm'
+                    ? 'Warm Lead'
+                    : 'Cold Lead'}
                 <span className="font-mono font-extrabold">({lead.score ?? 50}/100)</span>
               </span>
               <span
@@ -266,8 +282,22 @@ export function LeadDetailPanel({
                   >
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-semibold uppercase tracking-wider text-[0.65rem]">
-                          {fu.type === 'whatsapp' ? '💬 WhatsApp' : fu.type === 'call' ? '📞 Call' : '📅 Consultation'}
+                        <span className="inline-flex items-center gap-1 font-semibold uppercase tracking-wider text-[0.65rem]">
+                          <Icon
+                            name={
+                              fu.type === 'whatsapp'
+                                ? 'whatsapp'
+                                : fu.type === 'call'
+                                  ? 'phoneCall'
+                                  : 'calendar'
+                            }
+                            size={14}
+                          />
+                          {fu.type === 'whatsapp'
+                            ? 'WhatsApp'
+                            : fu.type === 'call'
+                              ? 'Call'
+                              : 'Consultation'}
                         </span>
                         <span>·</span>
                         <span className="font-mono">

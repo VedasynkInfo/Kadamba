@@ -1,5 +1,6 @@
 ﻿import { useState, useEffect } from 'react';
 import type { Staff } from '@/services/staff/staffService';
+import { Icon } from '@/components/icons';
 import { SPECIALIZATIONS } from './types';
 import { whatsappDeepLink } from '@/utils/whatsapp';
 import { EmptyState } from '../components/EmptyState';
@@ -282,7 +283,7 @@ export function StaffTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">👁️</span>
+              <Icon name="view" size={14} />
               <span>View Artisan Dossier</span>
             </button>
 
@@ -295,7 +296,7 @@ export function StaffTable({
               }}
               className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
             >
-              <span className="text-sm">✏️</span>
+              <Icon name="edit" size={14} />
               <span>Edit Staff Details</span>
             </button>
 
@@ -310,7 +311,7 @@ export function StaffTable({
                 onClick={() => setMenuAnchor(null)}
                 className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-500 hover:bg-emerald-500/10 transition cursor-pointer"
               >
-                <span className="text-sm">💬</span>
+                <Icon name="whatsapp" size={14} />
                 <span>Send WhatsApp</span>
               </a>
             ) : null}
@@ -329,7 +330,7 @@ export function StaffTable({
                 }}
                 className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-rose-400 hover:bg-rose-500/10 transition cursor-pointer"
               >
-                <span className="text-sm">⏸️</span>
+                <Icon name="idle" size={14} />
                 <span>Deactivate Member</span>
               </button>
             ) : (
@@ -342,7 +343,7 @@ export function StaffTable({
                 }}
                 className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-400 hover:bg-emerald-500/10 transition cursor-pointer"
               >
-                <span className="text-sm">▶️</span>
+                <Icon name="play" size={14} />
                 <span>Reactivate Member</span>
               </button>
             )}

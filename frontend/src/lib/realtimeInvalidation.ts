@@ -8,7 +8,7 @@ import { qk } from './queryKeys';
  * previous design treated it as a command — every list page subscribed to a
  * "soft refresh" signal and re-ran its own hand-rolled fetch, so one order edit
  * could fire a dozen uncoordinated requests, and a page that forgot to subscribe
- * silently stopped updating. Inverting that (event → invalidate → whoever is
+ * silently stopped updating. Inverting that (an event invalidates, and whoever is
  * looking refetches once, through the same query layer as everything else) means
  * correctness no longer depends on each surface remembering to listen.
  *

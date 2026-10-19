@@ -1,4 +1,5 @@
-﻿interface MonthOption {
+﻿import { Icon } from '@/components/icons';
+interface MonthOption {
   value: string;
   label: string;
   disabled?: boolean;
@@ -99,7 +100,7 @@ export function PaymentsToolbar({
           {/* Search query */}
           <div className="relative min-w-[170px] flex-1 sm:max-w-xs">
             <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-xs opacity-50">
-              🔍
+              <Icon name="search" size={14} />
             </span>
             <input
               type="text"
@@ -115,7 +116,7 @@ export function PaymentsToolbar({
                 className="absolute inset-y-0 right-2.5 flex items-center text-xs opacity-50 hover:opacity-100 cursor-pointer"
                 title="Clear search"
               >
-                ✕
+                <Icon name="close" size={16} />
               </button>
             ) : null}
           </div>

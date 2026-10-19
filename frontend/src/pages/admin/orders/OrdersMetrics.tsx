@@ -1,4 +1,5 @@
-﻿import type { OrdersMetricsData } from './types';
+﻿import { Icon } from '@/components/icons';
+import type { OrdersMetricsData } from './types';
 
 interface OrdersMetricsProps {
   metrics: OrdersMetricsData;
@@ -9,29 +10,29 @@ export function OrdersMetrics({ metrics }: OrdersMetricsProps) {
     {
       label: 'Total Orders',
       value: metrics.total,
-      icon: '🧵',
+      icon: 'orders',
       sub: 'All registered studio commissions',
     },
     {
       label: 'In Production',
       value: metrics.inProduction,
-      icon: '✂️',
+      icon: 'stitching',
       sub: 'Cutting, stitching & maggam work',
       highlight: true,
     },
     {
       label: 'Rush / High Priority',
       value: metrics.rushOrders,
-      icon: '🔥',
+      icon: 'hot',
       sub: 'Expedited bridal delivery targets',
     },
     {
       label: 'Trial & Fittings',
       value: metrics.readyForTrial,
-      icon: '👗',
+      icon: 'fitting',
       sub: 'Trial appointments scheduled',
     },
-  ];
+  ] as const;
 
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -42,7 +43,7 @@ export function OrdersMetrics({ metrics }: OrdersMetricsProps) {
         >
           <div className="flex items-center justify-between opacity-70">
             <span className="text-[11px] font-semibold uppercase tracking-wider">{c.label}</span>
-            <span className="text-sm">{c.icon}</span>
+            <span className="text-sm"><Icon name={c.icon} size={16} /></span>
           </div>
           <div className="mt-2 text-2xl font-bold font-heading tracking-tight text-inherit">
             {c.value}

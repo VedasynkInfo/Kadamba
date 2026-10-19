@@ -365,7 +365,7 @@ export const ERROR_CODES = [
 export type ErrorCode = (typeof ERROR_CODES)[number];
 
 /**
- * HTTP status → error code, for the many handlers that do not name a code.
+ * HTTP status mapped to error code, for the many handlers that do not name a code.
  * Specific cases (lockout, MFA, uploads, rate limits) pass an explicit code.
  */
 export function defaultErrorCode(statusCode: number): ErrorCode {

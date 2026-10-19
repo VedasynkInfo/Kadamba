@@ -1,4 +1,5 @@
 ﻿import type { BlogPost } from '@/pages/blogs/data';
+import { Icon } from '@/components/icons';
 import { cn } from '@/utils/cn';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
 
@@ -42,7 +43,7 @@ export function BlogsPreviewModal({
             </span>
             {item.featured ? (
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-500/15 text-amber-500 border border-amber-500/30">
-                ⭐ Featured
+                <Icon name="featured" size={14} className="mr-1 inline align-middle" /> Featured
               </span>
             ) : null}
             <span
@@ -62,7 +63,7 @@ export function BlogsPreviewModal({
             className="h-8 w-8 rounded-lg border flex items-center justify-center text-xs opacity-70 hover:opacity-100 hover:bg-current/[0.06] transition cursor-pointer border-line"
             aria-label="Close preview"
           >
-            ✕
+            <Icon name="close" size={16} />
           </button>
         </div>
 
@@ -153,7 +154,7 @@ export function BlogsPreviewModal({
               onClick={() => onCopyUrl(item.slug)}
               className="rounded-lg border px-3 py-1.5 text-xs font-semibold opacity-80 hover:opacity-100 hover:bg-current/[0.05] transition cursor-pointer border-line"
             >
-              📋 Copy Link
+              <Icon name="copy" size={14} className="mr-1 inline align-middle" /> Copy Link
             </button>
             <a
               href={`/blogs/${item.slug}`}
@@ -162,7 +163,7 @@ export function BlogsPreviewModal({
               className="rounded-lg border px-3 py-1.5 text-xs font-semibold opacity-80 hover:opacity-100 hover:bg-current/[0.05] transition inline-flex items-center gap-1 cursor-pointer border-line"
             >
               <span>View Public Article</span>
-              <span>↗</span>
+              <span><Icon name="arrowUpRight" size={14} className="mr-1 inline align-middle" /> </span>
             </a>
           </div>
 

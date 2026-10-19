@@ -1,4 +1,5 @@
-﻿interface MeasurementsMetricsProps {
+﻿import { Icon } from '@/components/icons';
+interface MeasurementsMetricsProps {
   totalCount: number;
   activeCount: number;
   pendingCount: number;
@@ -18,7 +19,7 @@ export function MeasurementsMetrics({
       subtext: 'Client anatomical records',
       accent: 'text-brand',
       borderAccent: 'border-l-brand',
-      icon: '📏',
+      icon: 'measurements',
     },
     {
       label: 'Active on Floor',
@@ -26,7 +27,7 @@ export function MeasurementsMetrics({
       subtext: 'Approved for cutting & stitching',
       accent: 'text-emerald-400',
       borderAccent: 'border-l-emerald-500',
-      icon: '⚡',
+      icon: 'speed',
     },
     {
       label: 'Pending Tailor Check',
@@ -34,7 +35,7 @@ export function MeasurementsMetrics({
       subtext: 'Awaiting master review',
       accent: 'text-amber-400',
       borderAccent: 'border-l-amber-500',
-      icon: '⏳',
+      icon: 'waiting',
     },
     {
       label: 'Archived Histories',
@@ -42,9 +43,9 @@ export function MeasurementsMetrics({
       subtext: 'Past couture commissions',
       accent: 'text-purple-400',
       borderAccent: 'border-l-purple-500',
-      icon: '📂',
+      icon: 'folder',
     },
-  ];
+  ] as const;
 
   return (
     <div className="grid grid-cols-2 gap-3.5 lg:grid-cols-4">
@@ -55,7 +56,7 @@ export function MeasurementsMetrics({
         >
           <div className="flex items-center justify-between text-xs opacity-65">
             <span className="font-semibold uppercase tracking-wider text-[10px]">{c.label}</span>
-            <span className="text-base">{c.icon}</span>
+            <span className="text-base"><Icon name={c.icon} size={16} /></span>
           </div>
           <div className={`mt-2 font-heading text-2xl font-bold tracking-tight ${c.accent}`}>
             {c.value}

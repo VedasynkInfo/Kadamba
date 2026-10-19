@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
+import { Icon } from '@/components/icons';
 import { Button, Section, SectionIntro } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { fadeUp, staggerChildren } from '@/motion/variants';
@@ -116,7 +117,10 @@ export function FeaturedCollectionsSection() {
                       {featured.title}
                     </p>
                   </div>
-                  <span className="text-sm text-ink-inverse/80">Open preview →</span>
+                  <span className="inline-flex items-center gap-1 text-sm text-ink-inverse/80">
+                    Open preview
+                    <Icon name="arrowRight" size={14} />
+                  </span>
                 </div>
               </motion.button>
             </AnimatePresence>

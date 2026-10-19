@@ -1,4 +1,5 @@
 ﻿import { useState } from 'react';
+import { Icon } from '@/components/icons';
 import { Button, Input, Select } from '@/components/ui';
 import type { GalleryCategory, GalleryMediaType } from '@/pages/gallery/data';
 import { BannerSizeGuide } from '../components/BannerSizeGuide';
@@ -76,7 +77,7 @@ export function GalleryModalForm({
             className="h-8 w-8 rounded-lg border flex items-center justify-center text-xs opacity-70 hover:opacity-100 hover:bg-current/[0.06] transition cursor-pointer border-line"
             aria-label="Close dialog"
           >
-            ✕
+            <Icon name="close" size={16} />
           </button>
         </div>
 
@@ -94,7 +95,7 @@ export function GalleryModalForm({
                 : 'border-transparent opacity-60 hover:opacity-100',
             )}
           >
-            🖼️ Media & Details
+            <Icon name="image" size={14} className="mr-1 inline align-middle" /> Media & Details
           </button>
 
           <button
@@ -107,7 +108,7 @@ export function GalleryModalForm({
                 : 'border-transparent opacity-60 hover:opacity-100',
             )}
           >
-            🌐 SEO & Social Metadata
+            <Icon name="seo" size={14} className="mr-1 inline align-middle" /> SEO & Social Metadata
           </button>
         </div>
 
@@ -152,8 +153,8 @@ export function GalleryModalForm({
                     setForm((f) => ({ ...f, mediaType: e.target.value as GalleryMediaType }))
                   }
                   options={[
-                    { value: 'image', label: '🖼️ Image' },
-                    { value: 'video', label: '🎥 Video' },
+                    { value: 'image', label: 'Image' },
+                    { value: 'video', label: 'Video' },
                   ]}
                 />
               </div>

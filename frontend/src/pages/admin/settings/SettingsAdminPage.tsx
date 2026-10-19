@@ -1,4 +1,5 @@
 ﻿import { useEffect, useState } from 'react';
+import { Icon, type GlyphName } from '@/components/icons';
 import { useToast } from '@/components/ui';
 import { PageMeta, staticPageMeta } from '@/seo';
 import { useAdminContent } from '../AdminContentContext';
@@ -17,14 +18,14 @@ import { cn } from '@/utils/cn';
 
 type TabId = 'general' | 'theme' | 'seo' | 'social' | 'media' | 'email' | 'staff';
 
-const TABS: { id: TabId; label: string; icon: string }[] = [
-  { id: 'general', label: 'Studio Identity', icon: '🏛️' },
-  { id: 'theme', label: 'Theme Studio', icon: '🎨' },
-  { id: 'seo', label: 'SEO & Meta', icon: '🔍' },
-  { id: 'social', label: 'Social Channels', icon: '📱' },
-  { id: 'media', label: 'Media Rules', icon: '🖼️' },
-  { id: 'email', label: 'SMTP & Email', icon: '✉️' },
-  { id: 'staff', label: 'Roles & Access', icon: '👥' },
+const TABS: { id: TabId; label: string; icon: GlyphName }[] = [
+  { id: 'general', label: 'Studio Identity', icon: 'studio' },
+  { id: 'theme', label: 'Theme Studio', icon: 'palette' },
+  { id: 'seo', label: 'SEO & Meta', icon: 'seo' },
+  { id: 'social', label: 'Social Channels', icon: 'globe' },
+  { id: 'media', label: 'Media Rules', icon: 'media' },
+  { id: 'email', label: 'SMTP & Email', icon: 'email' },
+  { id: 'staff', label: 'Roles & Access', icon: 'users' },
 ];
 
 function isHex(value: string) {
@@ -136,7 +137,7 @@ export default function SettingsAdminPage() {
                     : 'border-transparent opacity-65 hover:opacity-100',
                 )}
               >
-                <span>{t.icon}</span>
+                <Icon name={t.icon} size={16} />
                 <span>{t.label}</span>
               </button>
             );

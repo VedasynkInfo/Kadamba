@@ -1,4 +1,5 @@
 import { type ReactNode } from 'react';
+import { Icon } from '@/components/icons';
 import { cn } from '@/utils/cn';
 
 export interface Column<T> {
@@ -90,7 +91,11 @@ export function Table<T>({
                 <span className="inline-flex items-center gap-1">
                   {col.header ?? col.label}
                   {col.sortable && sortKey === col.key ? (
-                    <span className="text-gold">{sortDir === 'asc' ? '↑' : '↓'}</span>
+                    <Icon
+                      name={sortDir === 'asc' ? 'sortAsc' : 'sortDesc'}
+                      size={14}
+                      className="text-gold"
+                    />
                   ) : null}
                 </span>
               </th>

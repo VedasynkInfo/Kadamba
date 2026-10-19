@@ -1,3 +1,4 @@
+import { Icon } from '@/components/icons';
 import type { MeasurementTemplate } from '@/services/measurements/measurementsService';
 import { SILHOUETTE_FALLBACKS, type DeskTab } from './types';
 import { cn } from '@/utils/cn';
@@ -43,8 +44,8 @@ export function MeasurementsToolbar({
 
   const silhouetteOptions =
     templates.length > 0
-      ? templates.map((t) => ({ code: t.code, name: t.name, icon: '✨' }))
-      : SILHOUETTE_FALLBACKS;
+      ? templates.map((t) => ({ code: t.code, name: t.name }))
+      : SILHOUETTE_FALLBACKS.map((t) => ({ code: t.code, name: t.name }));
 
   return (
     <div className="space-y-3">
@@ -98,7 +99,7 @@ export function MeasurementsToolbar({
             {/* Search box */}
             <div className="relative min-w-[200px] flex-1 sm:max-w-xs">
               <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-xs opacity-50">
-                🔍
+                <Icon name="search" size={14} />
               </span>
               <input
                 type="text"
@@ -114,7 +115,7 @@ export function MeasurementsToolbar({
                   className="absolute inset-y-0 right-2.5 flex items-center text-xs opacity-50 hover:opacity-100 cursor-pointer"
                   title="Clear search"
                 >
-                  ✕
+                  <Icon name="close" size={16} />
                 </button>
               ) : null}
             </div>
@@ -130,7 +131,7 @@ export function MeasurementsToolbar({
                 <option value="">All Silhouettes</option>
                 {silhouetteOptions.map((t) => (
                   <option key={t.code} value={t.code}>
-                    {t.icon} {t.name}
+                    {t.name}
                   </option>
                 ))}
               </select>

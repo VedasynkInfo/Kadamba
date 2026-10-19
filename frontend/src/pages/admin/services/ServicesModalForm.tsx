@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Icon } from '@/components/icons';
 import { Button, Checkbox, Input, Select, Textarea } from '@/components/ui';
 import type { ServiceCategory, ServiceDetail, ServiceIcon } from '@/pages/services/data';
 import type { ProductType } from '@/services/products/productService';
@@ -78,7 +79,7 @@ export function ServicesModalForm({
             className="h-8 w-8 rounded-lg border flex items-center justify-center text-xs opacity-70 hover:opacity-100 hover:bg-current/[0.06] transition cursor-pointer border-line"
             aria-label="Close dialog"
           >
-            ✕
+            <Icon name="close" size={16} />
           </button>
         </div>
 
@@ -96,7 +97,7 @@ export function ServicesModalForm({
                 : 'border-transparent opacity-60 hover:opacity-100',
             )}
           >
-            📋 Basic Info & Media
+            <Icon name="copy" size={14} className="mr-1 inline align-middle" /> Basic Info & Media
           </button>
 
           <button
@@ -109,7 +110,7 @@ export function ServicesModalForm({
                 : 'border-transparent opacity-60 hover:opacity-100',
             )}
           >
-            💎 Offerings & Pricing
+            <Icon name="premium" size={14} className="mr-1 inline align-middle" /> Offerings & Pricing
           </button>
 
           <button
@@ -122,7 +123,7 @@ export function ServicesModalForm({
                 : 'border-transparent opacity-60 hover:opacity-100',
             )}
           >
-            🌐 SEO & Search Snippets
+            <Icon name="seo" size={14} className="mr-1 inline align-middle" /> SEO & Search Snippets
           </button>
         </div>
 
@@ -282,7 +283,7 @@ export function ServicesModalForm({
                                 : 'opacity-70 hover:opacity-100 border-current/20',
                             )}
                           >
-                            {isSelected ? '✓ ' : '+ '}
+                            {isSelected ? <Icon name="check" size={12} /> : '+ '}
                             {pt.name}
                           </button>
                         );

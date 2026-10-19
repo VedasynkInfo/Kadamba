@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Icon } from '@/components/icons';
 import { Button, Input, Select } from '@/components/ui';
 import { cn } from '@/utils/cn';
 import { whatsappDeepLink } from '@/utils/whatsapp';
@@ -131,7 +132,16 @@ export function LeadsTableSection({
                             : 'bg-slate-100 text-slate-700 border border-slate-200',
                         )}
                       >
-                        {lead.quality === 'hot' ? '🔥' : lead.quality === 'warm' ? '⚡' : '❄️'}
+                        <Icon
+                          name={
+                            lead.quality === 'hot'
+                              ? 'hot'
+                              : lead.quality === 'warm'
+                                ? 'priorityHigh'
+                                : 'cold'
+                          }
+                          size={14}
+                        />
                         {lead.quality || 'warm'}
                       </span>
                       <span className="text-xs font-semibold text-ink/60">
@@ -178,7 +188,8 @@ export function LeadsTableSection({
                   <td className="py-4 pr-4 text-xs text-ink/60">
                     {lead.nextFollowUpDate ? (
                       <span className="inline-flex items-center gap-1 text-amber-800 font-medium bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
-                        📅 {new Date(lead.nextFollowUpDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
+                        <Icon name="calendar" size={14} />
+                        {new Date(lead.nextFollowUpDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
                       </span>
                     ) : (
                       <span className="text-ink/40">—</span>

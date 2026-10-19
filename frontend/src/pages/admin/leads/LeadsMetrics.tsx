@@ -1,4 +1,5 @@
-﻿import type { LeadsMetricsData } from './types';
+﻿import { Icon } from '@/components/icons';
+import type { LeadsMetricsData } from './types';
 
 interface LeadsMetricsProps {
   metrics: LeadsMetricsData;
@@ -31,7 +32,7 @@ export function LeadsMetrics({ metrics }: LeadsMetricsProps) {
       <div
         className="rounded-xl border p-4 shadow-xs bg-surface-raised border-line text-ink-raised"
       >
-        <p className="text-[11px] font-medium opacity-60 uppercase tracking-wider">Hot Quality 🔥</p>
+        <p className="text-[11px] font-medium opacity-60 uppercase tracking-wider">Hot Quality <Icon name="hot" size={14} className="mr-1 inline align-middle" /> </p>
         <p className="mt-1 text-2xl font-bold tracking-tight text-rose-500">
           {metrics.hotLeads}
         </p>

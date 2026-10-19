@@ -1,8 +1,9 @@
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { Button } from '@/components/ui';
+import { Button, Drawer, Tooltip } from '@/components/ui';
+import { Icon } from '@/components/icons';
 import { useAuth } from '@/hooks/useAuth';
-import { AdminNotifyProvider, useAdminNotify } from '@/hooks/useAdminNotifySocket';
+import { AdminNotifyProvider } from '@/hooks/useAdminNotifySocket';
 import { brand } from '@/pages/home/data';
 import { LeadsProvider } from '@/pages/leads/LeadsContext';
 import { useTheme } from '@/context/ThemeContext';
@@ -10,104 +11,14 @@ import { PageMeta, staticPageMeta } from '@/seo';
 import { cn } from '@/utils/cn';
 import { AdminContentProvider } from './AdminContentContext';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
-import { adminNav } from './data';
+import { AdminNav } from './components/AdminNav';
 import { RequireAdmin } from './RequireAdmin';
-
-const navIcons: Record<string, string> = {
-  '/admin': '📊',
-  '/admin/gallery': '📸',
-  '/admin/services': '✂️',
-  '/admin/portfolio': '✨',
-  '/admin/blogs': '✍️',
-  '/admin/leads': '🎯',
-  '/admin/customers': '👥',
-  '/admin/products': '👗',
-  '/admin/orders': '📦',
-  '/admin/measurements': '📏',
-  '/admin/invoices': '🧾',
-  '/admin/payments': '💳',
-  '/admin/staff': '🧑‍🎨',
-  '/admin/finance': '📈',
-  '/admin/reports': '📋',
-  '/admin/settings': '⚙️',
-  '/admin/users': '🔐',
-  '/admin/audit': '📜',
-  '/admin/media': '🖼️',
-  '/admin/profile': '👤',
-};
-
-function NavBadge({ count }: { count: number }) {
-  if (!count) return null;
-  return (
-    <span className="ml-1.5 inline-flex min-w-[1.15rem] items-center justify-center rounded-sm bg-gold/25 px-1 py-0.5 text-[0.6rem] font-semibold text-gold">
-      {count > 99 ? '99+' : count}
-    </span>
-  );
-}
-
-function AdminNavLinks({ collapsed, mobile }: { collapsed?: boolean; mobile?: boolean }) {
-  const { badges } = useAdminNotify();
-  const { user } = useAuth();
-
-  /** Admins see everything; staff only see what they can actually open. */
-  const visibleNav = adminNav.filter((item) => {
-    if (!item.permission) return true;
-    if (!user) return false;
-    if (user.role === 'admin') return true;
-    return (user.permissions ?? []).includes(item.permission);
-  });
-
-  function badgeFor(to: string) {
-    if (to.startsWith('/admin/leads')) return badges.leads;
-    if (to.startsWith('/admin/measurements')) return badges.measurements;
-    return 0;
-  }
-
-  return (
-    <>
-      {visibleNav.map((item) => {
-        const count = badgeFor(item.to);
-        const icon = navIcons[item.to] || '📁';
-        return (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            end={item.end}
-            title={item.label}
-            style={({ isActive }) => ({
-              color: isActive ? 'var(--color-accent)' : 'var(--admin-sidebar-text)',
-              backgroundColor: isActive ? 'rgba(255, 215, 0, 0.12)' : undefined,
-            })}
-            className={({ isActive }) =>
-              cn(
-                'group flex items-center gap-2.5 transition rounded-md',
-                mobile
-                  ? 'shrink-0 px-3 py-2 text-[0.65rem] uppercase tracking-[0.14em]'
-                  : 'px-3 py-2.5 text-sm',
-                !mobile && collapsed && 'justify-center px-2 py-2 text-center text-xs',
-                !isActive && 'opacity-75 hover:opacity-100 hover:bg-white/[0.06]',
-                isActive && 'font-semibold',
-              )
-            }
-          >
-            <span className={cn('text-sm shrink-0', collapsed && !mobile && 'text-base')}>
-              {icon}
-            </span>
-            {collapsed && !mobile ? null : (
-              <span className="inline-flex flex-1 items-center justify-between">
-                <span className="truncate">{item.label}</span>
-                <NavBadge count={count} />
-              </span>
-            )}
-          </NavLink>
-        );
-      })}
-    </>
-  );
-}
 
 /**
  * Phase 12 admin shell — collapsible atelier console with live notify badges.
+ *
+ * The chrome below the rail is deliberately bare: desks own their own header
+ * (`AdminHorizonBanner`) so that adding a desk never means touching the shell.
  */
 export function AdminLayout() {
   const { user, logout } = useAuth();
@@ -116,6 +27,7 @@ export function AdminLayout() {
   const [collapsed, setCollapsed] = useState(() => {
     return localStorage.getItem('kadamba_admin_sidebar_collapsed') === 'true';
   });
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   const activeLogo = logoDarkUrl || logoUrl;
 
@@ -125,6 +37,11 @@ export function AdminLayout() {
       localStorage.setItem('kadamba_admin_sidebar_collapsed', String(next));
       return next;
     });
+  };
+
+  const signOut = () => {
+    logout();
+    navigate('/admin/login');
   };
 
   return (
@@ -137,13 +54,21 @@ export function AdminLayout() {
                 console's palette (index.css) for the whole chrome — sidebar,
                 header and page alike. The colours come from those tokens, never
                 from inline styles. */}
-            <div
-              className="admin-shell flex min-h-screen font-admin bg-surface text-ink"
-            >
+            <div className="admin-shell flex min-h-screen font-admin bg-surface text-ink">
+              {/* The rail is 4rem of navigation before the keyboard ever reaches
+                  a desk; this is the first tab stop in the console. */}
+              <a
+                href="#admin-main"
+                className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-50 focus:rounded-md focus:bg-surface-raised focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-ink-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              >
+                Skip to content
+              </a>
+
               <aside
                 className={cn(
-                  'hidden shrink-0 flex-col border-r border-white/10 transition-[width] duration-300 md:flex',
-                  collapsed ? 'w-[4.25rem]' : 'w-60', 'bg-surface-inverse text-ink-inverse'
+                  'hidden shrink-0 flex-col border-r border-line transition-[width] duration-300 md:flex',
+                  collapsed ? 'w-[4.25rem]' : 'w-60',
+                  'bg-surface-inverse text-ink-inverse',
                 )}
               >
                 <div className={cn('px-4 py-6', collapsed && 'px-2 text-center')}>
@@ -173,72 +98,103 @@ export function AdminLayout() {
                   )}
                 </div>
 
-                <nav
-                  className="flex flex-1 flex-col gap-1 px-2 pb-4 overflow-y-auto"
-                  aria-label="Admin navigation"
-                >
-                  <AdminNavLinks collapsed={collapsed} />
-                </nav>
+                <AdminNav collapsed={collapsed} scope="rail" />
 
-                <div className="mt-auto space-y-3 border-t border-white/10 px-3 py-5">
+                <div className="mt-auto space-y-3 border-t border-ink-inverse/10 px-3 py-5">
                   <button
                     type="button"
                     onClick={toggleCollapse}
-                    className="w-full text-left text-[0.65rem] uppercase tracking-[0.18em] opacity-60 transition hover:opacity-100 hover:text-gold"
-                  >
-                    {collapsed ? '»' : 'Collapse'}
-                  </button>
-                  {!collapsed && user ? (
-                    <p className="truncate text-xs opacity-60">{user.email}</p>
-                  ) : null}
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    className={cn('w-full', collapsed && 'px-1 text-[0.6rem]')}
-                    onClick={() => {
-                      logout();
-                      navigate('/admin/login');
-                    }}
-                  >
-                    {collapsed ? 'Out' : 'Sign out'}
-                  </Button>
-                  <a
-                    href="/"
+                    aria-label={collapsed ? 'Expand navigation' : 'Collapse navigation'}
                     className={cn(
-                      'block text-[0.65rem] uppercase tracking-[0.18em] opacity-60 transition hover:opacity-100 hover:text-gold',
-                      collapsed && 'text-center',
+                      'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-[0.65rem] uppercase tracking-[0.18em] text-ink-inverse/60 transition-colors hover:bg-ink-inverse/[0.06] hover:text-ink-inverse',
+                      collapsed && 'justify-center',
                     )}
                   >
-                    {collapsed ? '←' : '← Public site'}
-                  </a>
+                    <Icon name={collapsed ? 'chevronRight' : 'chevronLeft'} size={14} />
+                    {collapsed ? null : <span>Collapse</span>}
+                  </button>
+
+                  {!collapsed && user ? (
+                    <p className="truncate px-2 text-xs text-ink-inverse/60">{user.email}</p>
+                  ) : null}
+
+                  {collapsed ? (
+                    <Tooltip label="Sign out" side="right">
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        aria-label="Sign out"
+                        className="w-full px-1"
+                        onClick={signOut}
+                      >
+                        <Icon name="logout" size={16} />
+                      </Button>
+                    </Tooltip>
+                  ) : (
+                    <Button variant="secondary" size="sm" className="w-full" onClick={signOut}>
+                      <Icon name="logout" size={14} />
+                      <span>Sign out</span>
+                    </Button>
+                  )}
+
+                  {collapsed ? (
+                    <Tooltip label="Public site" side="right">
+                      <a
+                        href="/"
+                        aria-label="Public site"
+                        className="flex items-center justify-center rounded-md px-2 py-1.5 text-ink-inverse/60 transition-colors hover:bg-ink-inverse/[0.06] hover:text-ink-inverse"
+                      >
+                        <Icon name="arrowLeft" size={16} />
+                      </a>
+                    </Tooltip>
+                  ) : (
+                    <a
+                      href="/"
+                      className="flex items-center gap-2 px-2 text-[0.65rem] uppercase tracking-[0.18em] text-ink-inverse/60 transition-colors hover:text-ink-inverse"
+                    >
+                      <Icon name="arrowLeft" size={14} />
+                      <span>Public site</span>
+                    </a>
+                  )}
                 </div>
               </aside>
 
               <div className="flex min-w-0 flex-1 flex-col">
-                <header
-                  className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3 md:hidden bg-surface-inverse text-ink-inverse"
-                >
-                  <p className="font-heading text-lg text-gold">{brand.shortName}</p>
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={() => {
-                      logout();
-                      navigate('/admin/login');
-                    }}
+                <header className="flex items-center justify-between gap-3 border-b border-line px-4 py-3 md:hidden bg-surface-inverse text-ink-inverse">
+                  <button
+                    type="button"
+                    onClick={() => setMobileNavOpen(true)}
+                    aria-label="Open navigation"
+                    className="flex items-center rounded-md p-1.5 transition-colors hover:bg-ink-inverse/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
                   >
-                    Sign out
+                    <Icon name="menu" size={20} />
+                  </button>
+                  <p className="font-heading text-lg text-gold">{brand.shortName}</p>
+                  <Button variant="secondary" size="sm" onClick={signOut}>
+                    <Icon name="logout" size={14} />
+                    <span>Sign out</span>
                   </Button>
                 </header>
-                <nav
-                  className="flex gap-1 overflow-x-auto border-b border-white/10 px-2 py-2 md:hidden bg-surface-inverse text-ink-inverse"
-                  aria-label="Admin mobile"
+
+                {/* A drawer, not a scroll strip. Twenty links in a horizontal
+                    strip is a nav you have to swat at. */}
+                <Drawer
+                  open={mobileNavOpen}
+                  onClose={() => setMobileNavOpen(false)}
+                  title={brand.shortName}
+                  side="left"
+                  className="bg-surface-inverse text-ink-inverse"
                 >
-                  <AdminNavLinks mobile />
-                </nav>
-                <div className="flex-1 transition-colors min-h-screen">
+                  <AdminNav scope="drawer" onNavigate={() => setMobileNavOpen(false)} />
+                </Drawer>
+
+                <main
+                  id="admin-main"
+                  tabIndex={-1}
+                  className="min-h-screen flex-1 outline-none transition-colors"
+                >
                   <Outlet />
-                </div>
+                </main>
               </div>
             </div>
           </LeadsProvider>

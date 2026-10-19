@@ -1,4 +1,5 @@
 ﻿import { Link } from 'react-router-dom';
+import { Icon } from '@/components/icons';
 import type { FinanceSummary } from '@/services/finance/financeService';
 
 function formatINR(v: number) {
@@ -89,7 +90,7 @@ export function FinanceOverviewTab({ summary }: FinanceOverviewTabProps) {
         >
           <div className="flex items-center justify-between mb-2">
             <h4 className="font-heading text-sm font-bold">Invoices & Billing Hub</h4>
-            <span className="text-lg">📄</span>
+            <Icon name="file" size={14} />
           </div>
           <p className="text-xs opacity-60 mb-4">
             Manage tax invoices, proforma bills, settlement statuses, and client billing links.
@@ -99,7 +100,7 @@ export function FinanceOverviewTab({ summary }: FinanceOverviewTabProps) {
             className="inline-flex items-center gap-1 font-semibold text-brand hover:underline"
           >
             <span>Open Invoices Desk</span>
-            <span>→</span>
+            <span><Icon name="arrowRight" size={14} className="mr-1 inline align-middle" /> </span>
           </Link>
         </div>
 
@@ -108,7 +109,7 @@ export function FinanceOverviewTab({ summary }: FinanceOverviewTabProps) {
         >
           <div className="flex items-center justify-between mb-2">
             <h4 className="font-heading text-sm font-bold">Payments & Receipts</h4>
-            <span className="text-lg">💳</span>
+            <span className="text-lg"><Icon name="card" size={14} className="mr-1 inline align-middle" /> </span>
           </div>
           <p className="text-xs opacity-60 mb-4">
             Audit daily receipts across UPI, cash counter, cards, and send WhatsApp receipts.
@@ -118,7 +119,7 @@ export function FinanceOverviewTab({ summary }: FinanceOverviewTabProps) {
             className="inline-flex items-center gap-1 font-semibold text-brand hover:underline"
           >
             <span>Open Payments Desk</span>
-            <span>→</span>
+            <span><Icon name="arrowRight" size={14} className="mr-1 inline align-middle" /> </span>
           </Link>
         </div>
       </div>

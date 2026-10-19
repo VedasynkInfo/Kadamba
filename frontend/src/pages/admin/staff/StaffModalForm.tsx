@@ -8,6 +8,7 @@ import {
   createBlankStaffForm,
   staffToFormData,
 } from './types';
+import { Icon } from '@/components/icons';
 import { cn } from '@/utils/cn';
 
 interface StaffModalFormProps {
@@ -144,7 +145,9 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
           className="flex items-center justify-between border-b px-5 py-4 border-line"
         >
           <div className="flex items-center gap-2.5">
-            <span className="text-xl">{staff ? '✏️' : '👥'}</span>
+            <span className="text-brand">
+              <Icon name={staff ? 'edit' : 'staff'} size={20} />
+            </span>
             <div>
               <h3 className="font-heading text-base font-bold tracking-wide">
                 {staff ? `Edit Artisan: ${staff.fullName}` : 'Register New Artisan'}
@@ -160,7 +163,7 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
             className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer border-line"
             aria-label="Close modal"
           >
-            ✕
+            <Icon name="close" size={16} />
           </button>
         </div>
 
@@ -374,7 +377,11 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                         )}
                       >
                         <span className="truncate">{s.label}</span>
-                        {isSelected ? <span className="ml-1">✓</span> : null}
+                        {isSelected ? (
+                          <span className="ml-1 inline-flex">
+                            <Icon name="check" size={12} />
+                          </span>
+                        ) : null}
                       </button>
                     );
                   })}
@@ -478,7 +485,10 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                         : 'border-line opacity-60 hover:opacity-100',
                     )}
                   >
-                    ⚡ Active (On Floor)
+                    <span className="inline-flex items-center justify-center gap-1">
+                      <Icon name="speed" size={14} />
+                      Active (On Floor)
+                    </span>
                   </button>
                   <button
                     type="button"
@@ -490,7 +500,10 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                         : 'border-line opacity-60 hover:opacity-100',
                     )}
                   >
-                    ⏸️ Inactive / Leave
+                    <span className="inline-flex items-center justify-center gap-1">
+                      <Icon name="idle" size={14} />
+                      Inactive / Leave
+                    </span>
                   </button>
                 </div>
               </div>
@@ -508,9 +521,10 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                   onClick={() =>
                     setActiveTab(activeTab === 'payroll' ? 'craft' : 'contact')
                   }
-                  className="rounded-xl px-4 py-2 text-xs font-semibold border hover:bg-current/[0.05] transition cursor-pointer border-line"
+                  className="inline-flex items-center gap-1 rounded-xl px-4 py-2 text-xs font-semibold border hover:bg-current/[0.05] transition cursor-pointer border-line"
                 >
-                  ← Back
+                  <Icon name="arrowLeft" size={14} />
+                  Back
                 </button>
               ) : null}
             </div>
@@ -531,9 +545,10 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                   onClick={() =>
                     setActiveTab(activeTab === 'contact' ? 'craft' : 'payroll')
                   }
-                  className="rounded-xl px-5 py-2 text-xs font-bold border border-brand hover:bg-brand/10 text-brand transition cursor-pointer"
+                  className="inline-flex items-center gap-1 rounded-xl px-5 py-2 text-xs font-bold border border-brand hover:bg-brand/10 text-brand transition cursor-pointer"
                 >
-                  Next Step →
+                  Next Step
+                  <Icon name="arrowRight" size={14} />
                 </button>
               ) : (
                 <button

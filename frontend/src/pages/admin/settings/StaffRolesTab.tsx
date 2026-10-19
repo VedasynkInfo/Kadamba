@@ -1,30 +1,37 @@
 ﻿import { Link } from 'react-router-dom';
+import { Icon, type GlyphName } from '@/components/icons';
 
-const ROLES = [
+const ROLES: {
+  role: string;
+  badge: { icon: GlyphName; label: string };
+  desc: string;
+  permissions: string[];
+  badgeClass: string;
+}[] = [
   {
     role: 'Superadmin / Owner',
-    badge: '👑 Master Access',
+    badge: { icon: 'roleAdmin', label: 'Master Access' },
     desc: 'Unrestricted control across all atelier financial accounts, settings, staff remuneration, and client records.',
     permissions: ['Manage Settings & Theme', 'Disburse Salaries & P&L', 'Full Order Production Access', 'Staff Roster Management'],
     badgeClass: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
   },
   {
     role: 'Studio Manager',
-    badge: '🏛️ Atelier Ops',
+    badge: { icon: 'studio', label: 'Atelier Ops' },
     desc: 'Oversees daily bridal appointments, client measurements, production queue assignments, and trial scheduling.',
     permissions: ['Create & Edit Orders', 'Approve Measurements', 'Manage Customer Directory', 'Assign Master Tailors'],
     badgeClass: 'bg-blue-500/15 text-blue-400 border-blue-500/30',
   },
   {
     role: 'Master Craftsman / Tailor',
-    badge: '✂️ Workshop Floor',
+    badge: { icon: 'stitching', label: 'Workshop Floor' },
     desc: 'Assigned to active garment construction, maggam embroidery, and trial alteration fittings.',
     permissions: ['View Work Orders & Line Items', 'View Anatomical Fit Cards', 'Update Garment Stages', 'Log Trial Notes'],
     badgeClass: 'bg-purple-500/15 text-purple-400 border-purple-500/30',
   },
   {
     role: 'Front Desk / Billing Clerk',
-    badge: '🧾 Reception & Cash',
+    badge: { icon: 'invoice', label: 'Reception & Cash' },
     desc: 'Handles boutique consultations, receipt generation, and client advance collection.',
     permissions: ['Record Client Payments', 'Send WhatsApp Receipts', 'Schedule Consultations', 'View Invoice Records'],
     badgeClass: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
@@ -52,7 +59,7 @@ export function StaffRolesTab() {
           className="inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 whitespace-nowrap bg-brand text-ink-on-brand"
         >
           <span>Open Staff Roster</span>
-          <span>→</span>
+          <Icon name="arrowRight" size={14} />
         </Link>
       </div>
 
@@ -65,8 +72,9 @@ export function StaffRolesTab() {
           >
             <div className="flex items-center justify-between">
               <h4 className="font-heading text-sm font-bold">{r.role}</h4>
-              <span className={`px-2 py-0.5 rounded text-[10px] font-bold border uppercase tracking-wider ${r.badgeClass}`}>
-                {r.badge}
+              <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold border uppercase tracking-wider ${r.badgeClass}`}>
+                <Icon name={r.badge.icon} size={11} />
+                {r.badge.label}
               </span>
             </div>
 
@@ -79,7 +87,9 @@ export function StaffRolesTab() {
               <ul className="space-y-1 text-[11px]">
                 {r.permissions.map((p, idx) => (
                   <li key={idx} className="flex items-center gap-2 opacity-85">
-                    <span className="text-emerald-400">✓</span>
+                    <span className="text-emerald-400">
+                      <Icon name="check" size={12} />
+                    </span>
                     <span>{p}</span>
                   </li>
                 ))}

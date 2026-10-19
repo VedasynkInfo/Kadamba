@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
+import { Icon } from '@/components/icons';
 import { Button, Input, Section, SectionIntro } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { usePublicContent } from '@/hooks/usePublicContent';
@@ -225,8 +226,9 @@ function ServiceCard({
         <p className="mt-3 font-heading text-lg text-ink">
           From <span className="text-gold">{service.pricing.startingFrom}</span>
         </p>
-        <span className="mt-3 text-sm font-medium text-ink transition-colors group-hover:text-gold">
-          View details & pricing →
+        <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-ink transition-colors group-hover:text-gold">
+          View details & pricing
+          <Icon name="arrowRight" size={14} />
         </span>
       </button>
     </motion.li>

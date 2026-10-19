@@ -1,4 +1,5 @@
 ﻿import { Link } from 'react-router-dom';
+import { Icon } from '@/components/icons';
 import type { Lead, LeadStatus } from '@/pages/leads/data';
 import { whatsappDeepLink } from '@/utils/whatsapp';
 import { LEAD_STATUS_OPTIONS } from './types';
@@ -44,7 +45,7 @@ export function LeadPreviewModal({ lead, onClose, onStatusChange }: LeadPreviewM
                   : 'bg-slate-500/15 text-slate-400 border border-slate-500/30',
               )}
             >
-              {lead.quality === 'hot' ? '🔥 Hot' : lead.quality === 'warm' ? '⚡ Warm' : '❄️ Cold'}
+              {lead.quality === 'hot' ? 'Hot' : lead.quality === 'warm' ? 'Warm' : 'Cold'}
             </span>
             <span className="font-mono text-xs opacity-75 font-semibold">
               Score: {lead.score ?? 60}/100
@@ -57,7 +58,7 @@ export function LeadPreviewModal({ lead, onClose, onStatusChange }: LeadPreviewM
             className="h-8 w-8 rounded-lg border flex items-center justify-center text-xs opacity-70 hover:opacity-100 hover:bg-current/[0.06] transition cursor-pointer border-line"
             aria-label="Close dialog"
           >
-            ✕
+            <Icon name="close" size={16} />
           </button>
         </div>
 
@@ -66,7 +67,7 @@ export function LeadPreviewModal({ lead, onClose, onStatusChange }: LeadPreviewM
           <div>
             <h3 className="text-xl font-bold font-heading text-inherit">{lead.name}</h3>
             <p className="opacity-70 mt-0.5">
-              📞 {lead.phone} · 📍 {lead.city} {lead.email ? `· ✉️ ${lead.email}` : ''}
+              <Icon name="phoneCall" size={14} className="mr-1 inline align-middle" /> {lead.phone} · <Icon name="location" size={14} className="mr-1 inline align-middle" /> {lead.city} {lead.email ? `· <Icon name="email" size={14} className="mr-1 inline align-middle" /> ${lead.email}` : ''}
             </p>
           </div>
 
@@ -106,7 +107,7 @@ export function LeadPreviewModal({ lead, onClose, onStatusChange }: LeadPreviewM
                         : 'opacity-70 hover:opacity-100 border-current/20 hover:bg-current/[0.04]',
                     )}
                   >
-                    {isActive ? '✓ ' : ''}
+                    {isActive ? <Icon name="check" size={12} /> : null}
                     {st}
                   </button>
                 );
@@ -126,7 +127,7 @@ export function LeadPreviewModal({ lead, onClose, onStatusChange }: LeadPreviewM
                 to={`/admin/orders/${lead.orderNumber}`}
                 className="text-xs font-bold text-emerald-500 hover:underline"
               >
-                View Order →
+                View Order <Icon name="arrowRight" size={14} className="mr-1 inline align-middle" /> 
               </Link>
             </div>
           ) : null}
@@ -142,7 +143,7 @@ export function LeadPreviewModal({ lead, onClose, onStatusChange }: LeadPreviewM
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 rounded-lg border px-3.5 py-1.5 font-bold text-emerald-500 hover:bg-emerald-500/10 transition cursor-pointer border-emerald-500/30"
           >
-            <span>💬 WhatsApp Concierge</span>
+            <span><Icon name="message" size={14} className="mr-1 inline align-middle" /> WhatsApp Concierge</span>
           </a>
 
           <div className="flex items-center gap-2">
@@ -158,7 +159,7 @@ export function LeadPreviewModal({ lead, onClose, onStatusChange }: LeadPreviewM
               className="inline-flex items-center gap-1 rounded-lg px-4 py-1.5 font-bold shadow-xs transition hover:opacity-95 bg-brand text-ink-on-brand"
             >
               <span>Full Lead Dossier</span>
-              <span>→</span>
+              <span><Icon name="arrowRight" size={14} className="mr-1 inline align-middle" /> </span>
             </Link>
           </div>
         </div>

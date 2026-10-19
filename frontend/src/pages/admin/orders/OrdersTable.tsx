@@ -128,7 +128,7 @@ export function OrdersTable({
               </tr>
             </thead>
             <tbody
-              className="divide-y border-line"
+              className="stagger-rows divide-y border-line"
             >
               {items.map((order) => {
                 const isMenuOpen = menuAnchor?.order.id === order.id;

@@ -175,7 +175,7 @@ export function FinanceExpensesTab({
                 </tr>
               </thead>
               <tbody
-                className="divide-y border-line"
+                className="stagger-rows divide-y border-line"
               >
                 {filtered.map((exp) => {
                   const isMenuOpen = menuAnchor?.expense.id === exp.id;

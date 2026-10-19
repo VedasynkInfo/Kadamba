@@ -111,7 +111,7 @@ export function LeadsTable({
               </tr>
             </thead>
             <tbody
-              className="divide-y border-line"
+              className="stagger-rows divide-y border-line"
             >
               {items.map((lead) => {
                 const isMenuOpen = menuAnchor?.lead.id === lead.id;

@@ -95,7 +95,7 @@ export function FinanceSalariesTab({ salaries, onAddSalary }: FinanceSalariesTab
                 </tr>
               </thead>
               <tbody
-                className="divide-y border-line"
+                className="stagger-rows divide-y border-line"
               >
                 {salaries.map((sal) => {
                   const staffObj = typeof sal.staffId === 'object' ? sal.staffId : null;

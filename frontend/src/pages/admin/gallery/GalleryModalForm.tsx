@@ -1,4 +1,5 @@
 ﻿import { useState } from 'react';
+import { TabStrip } from '@/components/ui/TabStrip';
 import { Icon } from '@/components/icons';
 import { Button, Input, Select } from '@/components/ui';
 import type { GalleryCategory, GalleryMediaType } from '@/pages/gallery/data';
@@ -8,7 +9,6 @@ import { SeoFields } from '../components/SeoFields';
 import { SlugField } from '../components/SlugField';
 import type { SeoAutoFlags } from '@/seo/generateSeo';
 import { GALLERY_CATEGORIES, type GalleryFormData } from './types';
-import { cn } from '@/utils/cn';
 
 interface GalleryModalFormProps {
   open: boolean;
@@ -82,35 +82,17 @@ export function GalleryModalForm({
         </div>
 
         {/* Tab Navigation */}
-        <div
-          className="flex border-b px-6 pt-2 gap-4 text-xs font-semibold border-line"
-        >
-          <button
-            type="button"
-            onClick={() => setActiveTab('content')}
-            className={cn(
-              'pb-2.5 transition border-b-2 cursor-pointer',
-              activeTab === 'content'
-                ? 'border-brand text-brand'
-                : 'border-transparent opacity-60 hover:opacity-100',
-            )}
-          >
-            <Icon name="image" size={14} className="mr-1 inline align-middle" /> Media & Details
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('seo')}
-            className={cn(
-              'pb-2.5 transition border-b-2 cursor-pointer',
-              activeTab === 'seo'
-                ? 'border-brand text-brand'
-                : 'border-transparent opacity-60 hover:opacity-100',
-            )}
-          >
-            <Icon name="seo" size={14} className="mr-1 inline align-middle" /> SEO & Social Metadata
-          </button>
-        </div>
+        <TabStrip
+          items={[
+            { id: 'content', label: 'Media & Details', icon: 'image' },
+            { id: 'seo', label: 'SEO & Social Metadata', icon: 'seo' },
+          ]}
+          value={activeTab}
+          onChange={(id) => setActiveTab(id as typeof activeTab)}
+          layoutId="modal-tab-gallerymodalform"
+          className="px-6 gap-4"
+          itemClassName="pb-2.5 pt-2"
+        />
 
         {/* Modal Scrollable Body */}
         <div className="p-6 space-y-4 overflow-y-auto flex-1 text-xs">

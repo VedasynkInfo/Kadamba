@@ -172,7 +172,7 @@ export default function UsersAdminPage() {
                     <th className="px-4 py-3 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="stagger-rows">
                   {users.map((user) => (
                     <tr
                       key={user.id}

@@ -115,7 +115,7 @@ export function PaymentsTable({
               </tr>
             </thead>
             <tbody
-              className="divide-y border-line"
+              className="stagger-rows divide-y border-line"
             >
               {items.map((pay) => {
                 const isMenuOpen = menuAnchor?.payment.id === pay.id;

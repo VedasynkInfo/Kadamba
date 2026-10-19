@@ -1,3 +1,4 @@
+import { TabStrip } from '@/components/ui/TabStrip';
 import { useState } from 'react';
 import { Icon } from '@/components/icons';
 import { Button, Checkbox, Input, Select, Textarea } from '@/components/ui';
@@ -84,48 +85,18 @@ export function ServicesModalForm({
         </div>
 
         {/* Tab Navigation */}
-        <div
-          className="flex border-b px-6 pt-2 gap-4 text-xs font-semibold border-line"
-        >
-          <button
-            type="button"
-            onClick={() => setActiveTab('info')}
-            className={cn(
-              'pb-2.5 transition border-b-2 cursor-pointer',
-              activeTab === 'info'
-                ? 'border-brand text-brand'
-                : 'border-transparent opacity-60 hover:opacity-100',
-            )}
-          >
-            <Icon name="copy" size={14} className="mr-1 inline align-middle" /> Basic Info & Media
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('pricing')}
-            className={cn(
-              'pb-2.5 transition border-b-2 cursor-pointer',
-              activeTab === 'pricing'
-                ? 'border-brand text-brand'
-                : 'border-transparent opacity-60 hover:opacity-100',
-            )}
-          >
-            <Icon name="premium" size={14} className="mr-1 inline align-middle" /> Offerings & Pricing
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('seo')}
-            className={cn(
-              'pb-2.5 transition border-b-2 cursor-pointer',
-              activeTab === 'seo'
-                ? 'border-brand text-brand'
-                : 'border-transparent opacity-60 hover:opacity-100',
-            )}
-          >
-            <Icon name="seo" size={14} className="mr-1 inline align-middle" /> SEO & Search Snippets
-          </button>
-        </div>
+        <TabStrip
+          items={[
+            { id: 'info', label: 'Basic Info & Media', icon: 'copy' },
+            { id: 'pricing', label: 'Offerings & Pricing', icon: 'premium' },
+            { id: 'seo', label: 'SEO & Search Snippets', icon: 'seo' },
+          ]}
+          value={activeTab}
+          onChange={(id) => setActiveTab(id as typeof activeTab)}
+          layoutId="modal-tab-servicesmodalform"
+          className="px-6 gap-4"
+          itemClassName="pb-2.5 pt-2"
+        />
 
         {/* Tab Content Body */}
         <div className="p-6 space-y-4 overflow-y-auto flex-1 text-xs">

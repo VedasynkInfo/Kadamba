@@ -1,4 +1,5 @@
-﻿import { Icon } from '@/components/icons';
+﻿import { CountUp } from '@/components/motion/CountUp';
+import { Icon } from '@/components/icons';
 import type { FinanceSummary } from '@/services/finance/financeService';
 
 function formatINR(v: number) {
@@ -54,7 +55,7 @@ export function FinanceMetrics({ summary }: FinanceMetricsProps) {
   ] as const;
 
   return (
-    <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-5">
+    <div className="stagger-items grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-5">
       {cards.map((c) => (
         <div
           key={c.label}
@@ -65,7 +66,7 @@ export function FinanceMetrics({ summary }: FinanceMetricsProps) {
             <span className="text-base"><Icon name={c.icon} size={16} /></span>
           </div>
           <div className={`mt-2 font-heading text-xl font-bold tracking-tight ${c.accent}`}>
-            {c.value}
+            {typeof c.value === 'number' ? <CountUp value={c.value} /> : c.value}
           </div>
           <p className="mt-1 text-[10px] opacity-60 truncate">{c.subtext}</p>
         </div>

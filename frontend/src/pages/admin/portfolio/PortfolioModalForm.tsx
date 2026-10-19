@@ -1,3 +1,4 @@
+import { TabStrip } from '@/components/ui/TabStrip';
 import { useState } from 'react';
 import { Icon } from '@/components/icons';
 import { Button, Input, Select, Textarea } from '@/components/ui';
@@ -9,7 +10,6 @@ import { SlugField } from '../components/SlugField';
 import { TagsInput } from '../components/TagsInput';
 import type { SeoAutoFlags } from '@/seo/generateSeo';
 import { PORTFOLIO_CATEGORIES } from './types';
-import { cn } from '@/utils/cn';
 
 interface PortfolioModalFormProps {
   open: boolean;
@@ -58,7 +58,7 @@ export function PortfolioModalForm({
       aria-modal="true"
     >
       <div
-        className="relative w-full max-w-2xl rounded-2xl border shadow-2xl overflow-hidden animate-fade-in-up flex flex-col max-h-[90vh] bg-surface-raised border-line text-ink-raised"
+        className="relative w-full max-w-2xl rounded-2xl border shadow-2xl overflow-hidden animate-spring-in flex flex-col max-h-[90vh] bg-surface-raised border-line text-ink-raised"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -85,48 +85,18 @@ export function PortfolioModalForm({
         </div>
 
         {/* Tabs */}
-        <div
-          className="flex border-b px-6 pt-2 gap-4 text-xs font-semibold border-line"
-        >
-          <button
-            type="button"
-            onClick={() => setActiveTab('info')}
-            className={cn(
-              'pb-2.5 transition border-b-2 cursor-pointer',
-              activeTab === 'info'
-                ? 'border-brand text-brand'
-                : 'border-transparent opacity-60 hover:opacity-100',
-            )}
-          >
-            <Icon name="image" size={14} className="mr-1 inline align-middle" /> Media & Details
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('story')}
-            className={cn(
-              'pb-2.5 transition border-b-2 cursor-pointer',
-              activeTab === 'story'
-                ? 'border-brand text-brand'
-                : 'border-transparent opacity-60 hover:opacity-100',
-            )}
-          >
-            <Icon name="couture" size={14} className="mr-1 inline align-middle" /> Story & Tags
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('seo')}
-            className={cn(
-              'pb-2.5 transition border-b-2 cursor-pointer',
-              activeTab === 'seo'
-                ? 'border-brand text-brand'
-                : 'border-transparent opacity-60 hover:opacity-100',
-            )}
-          >
-            <Icon name="seo" size={14} className="mr-1 inline align-middle" /> SEO & Search Snippets
-          </button>
-        </div>
+        <TabStrip
+          items={[
+            { id: 'info', label: 'Media & Details', icon: 'image' },
+            { id: 'story', label: 'Story & Tags', icon: 'couture' },
+            { id: 'seo', label: 'SEO & Search Snippets', icon: 'seo' },
+          ]}
+          value={activeTab}
+          onChange={(id) => setActiveTab(id as typeof activeTab)}
+          layoutId="modal-tab-portfolio"
+          className="px-6 gap-4"
+          itemClassName="pb-2.5 pt-2"
+        />
 
         {/* Body */}
         <div className="p-6 space-y-4 overflow-y-auto flex-1 text-xs">

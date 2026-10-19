@@ -118,7 +118,7 @@ export function StaffTable({
               </tr>
             </thead>
             <tbody
-              className="divide-y border-line"
+              className="stagger-rows divide-y border-line"
             >
               {items.map((s) => {
                 const isMenuOpen = menuAnchor?.staff.id === s.id;

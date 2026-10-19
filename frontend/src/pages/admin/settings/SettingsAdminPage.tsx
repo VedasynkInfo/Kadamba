@@ -1,6 +1,6 @@
 ﻿import { useEffect, useState } from 'react';
-import { Icon, type GlyphName } from '@/components/icons';
-import { useToast } from '@/components/ui';
+import { type GlyphName } from '@/components/icons';
+import { TabStrip, useToast } from '@/components/ui';
 import { PageMeta, staticPageMeta } from '@/seo';
 import { useAdminContent } from '../AdminContentContext';
 import { useTheme } from '@/context/ThemeContext';
@@ -14,7 +14,6 @@ import { MediaTab } from './MediaTab';
 import { EmailTab } from './EmailTab';
 import { ThemeTab } from './ThemeTab';
 import { StaffRolesTab } from './StaffRolesTab';
-import { cn } from '@/utils/cn';
 
 type TabId = 'general' | 'theme' | 'seo' | 'social' | 'media' | 'email' | 'staff';
 
@@ -120,29 +119,13 @@ export default function SettingsAdminPage() {
         />
 
         {/* Tab Navigation */}
-        <div
-          className="flex border-b text-xs font-semibold overflow-x-auto border-line"
-        >
-          {TABS.map((t) => {
-            const isActive = tab === t.id;
-            return (
-              <button
-                key={t.id}
-                type="button"
-                onClick={() => setTab(t.id)}
-                className={cn(
-                  'flex items-center gap-2 py-3 px-4 border-b-2 whitespace-nowrap transition cursor-pointer',
-                  isActive
-                    ? 'border-brand text-brand font-bold'
-                    : 'border-transparent opacity-65 hover:opacity-100',
-                )}
-              >
-                <Icon name={t.icon} size={16} />
-                <span>{t.label}</span>
-              </button>
-            );
-          })}
-        </div>
+        <TabStrip
+          items={TABS}
+          value={tab}
+          onChange={(id) => setTab(id as TabId)}
+          layoutId="settings-tab-indicator"
+          className="overflow-x-auto"
+        />
 
         {/* Tab Content Panes */}
         {tab === 'general' ? <GeneralTab form={form} patchForm={patchForm} /> : null}

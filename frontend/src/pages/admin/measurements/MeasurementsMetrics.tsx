@@ -1,4 +1,5 @@
-﻿import { Icon } from '@/components/icons';
+﻿import { CountUp } from '@/components/motion/CountUp';
+import { Icon } from '@/components/icons';
 interface MeasurementsMetricsProps {
   totalCount: number;
   activeCount: number;
@@ -48,7 +49,7 @@ export function MeasurementsMetrics({
   ] as const;
 
   return (
-    <div className="grid grid-cols-2 gap-3.5 lg:grid-cols-4">
+    <div className="stagger-items grid grid-cols-2 gap-3.5 lg:grid-cols-4">
       {cards.map((c) => (
         <div
           key={c.label}
@@ -59,7 +60,7 @@ export function MeasurementsMetrics({
             <span className="text-base"><Icon name={c.icon} size={16} /></span>
           </div>
           <div className={`mt-2 font-heading text-2xl font-bold tracking-tight ${c.accent}`}>
-            {c.value}
+            {typeof c.value === 'number' ? <CountUp value={c.value} /> : c.value}
           </div>
           <p className="mt-1 text-[11px] opacity-60 truncate">{c.subtext}</p>
         </div>

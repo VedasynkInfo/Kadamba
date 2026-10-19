@@ -421,7 +421,7 @@ export default function CustomerDetailAdminPage() {
                           <th className="p-3 text-right">Action</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-black/5 bg-white/30">
+                      <tbody className="stagger-rows divide-y divide-black/5 bg-white/30">
                         {orders.map((order) => (
                           <tr key={order._id || order.id} className="hover:bg-black/[0.01]">
                             <td className="p-3 font-mono font-bold">

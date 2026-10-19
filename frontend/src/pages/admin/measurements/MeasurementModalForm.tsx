@@ -1,21 +1,12 @@
+import { TabStrip } from '@/components/ui/TabStrip';
 import { useState, useEffect, useMemo } from 'react';
-import {
-  measurementApi,
-  type MeasurementProfile,
-  type MeasurementTemplate,
-} from '@/services/measurements/measurementsService';
+import { measurementApi, type MeasurementProfile, type MeasurementTemplate } from '@/services/measurements/measurementsService';
 import { Icon } from '@/components/icons';
 import type { Customer } from '@/services/customers/customerService';
-import {
-  SILHOUETTE_FALLBACKS,
-  type ProfileFormData,
-  createBlankProfileForm,
-  profileToFormData,
-} from './types';
+import { SILHOUETTE_FALLBACKS, type ProfileFormData, createBlankProfileForm, profileToFormData } from './types';
 import { MeasurementFormClientTab } from './MeasurementFormClientTab';
 import { MeasurementFormDimensionsTab } from './MeasurementFormDimensionsTab';
 import { MeasurementFormDirectivesTab } from './MeasurementFormDirectivesTab';
-import { cn } from '@/utils/cn';
 
 interface MeasurementModalFormProps {
   open: boolean;
@@ -239,46 +230,20 @@ export function MeasurementModalForm({
         </div>
 
         {/* 3-Step Tabs */}
-        <div
-          className="flex border-b px-6 text-xs font-semibold border-line bg-surface-sunken"
-        >
-          <button
-            type="button"
-            onClick={() => setActiveTab('identity')}
-            className={cn(
-              'py-3 px-4 border-b-2 transition cursor-pointer',
-              activeTab === 'identity'
-                ? 'border-brand text-brand font-bold'
-                : 'border-transparent opacity-60 hover:opacity-100',
-            )}
-          >
-            1. Client & Silhouette
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('dimensions')}
-            className={cn(
-              'py-3 px-4 border-b-2 transition cursor-pointer',
-              activeTab === 'dimensions'
-                ? 'border-brand text-brand font-bold'
-                : 'border-transparent opacity-60 hover:opacity-100',
-            )}
-          >
-            2. Anatomical Dimensions ({Object.keys(form.values).length})
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('notes')}
-            className={cn(
-              'py-3 px-4 border-b-2 transition cursor-pointer',
-              activeTab === 'notes'
-                ? 'border-brand text-brand font-bold'
-                : 'border-transparent opacity-60 hover:opacity-100',
-            )}
-          >
-            3. Sketches & Directives
-          </button>
-        </div>
+        <TabStrip
+          items={[
+            { id: 'identity', label: '1. Client & Silhouette' },
+            {
+              id: 'dimensions',
+              label: `2. Anatomical Dimensions (${Object.keys(form.values).length})`,
+            },
+            { id: 'notes', label: '3. Sketches & Directives' },
+          ]}
+          value={activeTab}
+          onChange={(id) => setActiveTab(id as typeof activeTab)}
+          layoutId="modal-tab-measurement"
+          className="px-6 bg-surface-sunken"
+        />
 
         {error ? (
           <div className="mx-6 mt-4 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-red-400">

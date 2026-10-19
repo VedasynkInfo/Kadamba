@@ -102,7 +102,7 @@ export function Table<T>({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-current/[0.06]">
+        <tbody className="stagger-rows divide-y divide-current/[0.06]">
           {loading ? (
             Array.from({ length: 5 }).map((_, i) => (
               <tr key={`skeleton-${i}`}>

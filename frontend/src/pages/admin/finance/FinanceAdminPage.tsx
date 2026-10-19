@@ -1,14 +1,9 @@
 ﻿import { useState, useEffect, useCallback } from 'react';
-import {
-  financeApi,
-  type FinanceSummary,
-  type ProfitLossReport,
-  type ExpenseRecord,
-  type SalaryRecord,
-} from '@/services/finance/financeService';
+import { financeApi, type FinanceSummary, type ProfitLossReport, type ExpenseRecord, type SalaryRecord } from '@/services/finance/financeService';
 import { Icon, type GlyphName } from '@/components/icons';
 import { staffApi, type Staff } from '@/services/staff/staffService';
 import { useToast } from '@/components/ui';
+import { TabStrip } from '@/components/ui/TabStrip';
 import { PageMeta, staticPageMeta } from '@/seo';
 import { FinanceMetrics } from './FinanceMetrics';
 import { FinanceOverviewTab } from './FinanceOverviewTab';
@@ -17,7 +12,6 @@ import { FinanceSalariesTab } from './FinanceSalariesTab';
 import { FinanceProfitLossTab } from './FinanceProfitLossTab';
 import { ExpenseModalForm } from './ExpenseModalForm';
 import { SalaryModalForm } from './SalaryModalForm';
-import { cn } from '@/utils/cn';
 
 type FinanceTab = 'overview' | 'expenses' | 'salaries' | 'profit-loss';
 
@@ -142,29 +136,17 @@ export default function FinanceAdminPage() {
         {summary ? <FinanceMetrics summary={summary} /> : null}
 
         {/* Modern Tab Bar */}
-        <div
-          className="flex border-b text-xs font-semibold overflow-x-auto border-line"
-        >
-          {TABS.map((tab) => {
-            const isActive = activeTab === tab.key;
-            return (
-              <button
-                key={tab.key}
-                type="button"
-                onClick={() => setActiveTab(tab.key)}
-                className={cn(
-                  'flex items-center gap-2 py-3 px-4 border-b-2 whitespace-nowrap transition cursor-pointer',
-                  isActive
-                    ? 'border-brand text-brand font-bold'
-                    : 'border-transparent opacity-65 hover:opacity-100',
-                )}
-              >
-                <Icon name={tab.icon} size={16} />
-                <span>{tab.label}</span>
-              </button>
-            );
-          })}
-        </div>
+        <TabStrip
+          items={TABS.map((tab) => ({
+            id: tab.key,
+            label: tab.label,
+            icon: tab.icon,
+          }))}
+          value={activeTab}
+          onChange={(id) => setActiveTab(id as FinanceTab)}
+          layoutId="finance-tab-indicator"
+          className="overflow-x-auto"
+        />
 
         {/* Active Tab Content */}
         {activeTab === 'overview' && summary ? (

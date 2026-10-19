@@ -32,6 +32,7 @@ export { FilterBar, FilterGroup, type FilterBarProps, type FilterGroupProps } fr
 export { Alert, type AlertProps, type AlertTone } from './Alert';
 export { StatCard, type StatCardProps } from './StatCard';
 export { Tabs, type TabsProps, type Tab } from './Tabs';
+export { TabStrip, type TabStripProps, type TabStripItem } from './TabStrip';
 export {
   DropdownMenu,
   DropdownMenuTrigger,

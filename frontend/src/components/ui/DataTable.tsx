@@ -239,7 +239,7 @@ export function DataTable<T>({
             })}
           </tr>
         </thead>
-        <tbody className="divide-y divide-current/[0.06]">
+        <tbody className="stagger-rows divide-y divide-current/[0.06]">
           {loading ? (
             Array.from({ length: 5 }).map((_, rowIndex) => (
               <tr key={`skeleton-${rowIndex}`}>

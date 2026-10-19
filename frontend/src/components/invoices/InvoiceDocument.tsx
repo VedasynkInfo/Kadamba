@@ -197,7 +197,7 @@ export function InvoiceDocument({ invoice, className, footerNote }: InvoiceDocum
               <th className="pb-2 pr-3 font-medium text-right">Qty</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="stagger-rows">
             {lineItems.length === 0 ? (
               <tr>
                 <td className="py-4 text-ink/50" colSpan={2}>
@@ -267,7 +267,7 @@ export function InvoiceDocument({ invoice, className, footerNote }: InvoiceDocum
                 <th className="pb-2 font-medium text-right">Amount</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="stagger-rows">
               {payments.map((p) => (
                 <tr key={p.id} className="border-b border-line/8">
                   <td className="py-2.5 pr-3">{formatDate(p.paidAt)}</td>

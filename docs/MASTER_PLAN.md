@@ -304,7 +304,7 @@
 | 7.1 | Lucide SVG icons replace all emoji | ✅ |
 | 7.1 | Collapsible nav groups + `layoutId` spring | ✅ |
 | 7.2 | `⌘K` command palette (cmdk) across all entities | ✅ |
-| 7.3 | Motion language (row stagger, count-up, spring modals, tab indicators) | ⬜ |
+| 7.3 | Motion language (row stagger, count-up, spring modals, tab indicators) | ✅ |
 | 7.4 | **Order Kanban pipeline** (dnd-kit, optimistic + audit) | ⬜ |
 | 7.5 | Data table upgrade (sticky, bulk actions, virtualised, saved filters) | ⬜ |
 | 7.6 | Real dashboard (metrics, sparklines, needs-action queue) | ⬜ |
@@ -330,6 +330,14 @@
 - The record search is the only part that touches the network, so it is debounced (220ms), only runs once there is something to search for, and ignores a response that a newer query has already superseded.
 - The palette is a Radix Dialog around cmdk inside a `PortalShell` — the same escape hatch `Modal` and `Drawer` use, because a portal to `document.body` would resolve the console's colours against the light root palette.
 - `src/test/setup.ts` carries the two jsdom shims any Radix-plus-cmdk test needs (`ResizeObserver`, `scrollIntoView`); without them the palette cannot be rendered in a test at all.
+
+**7.3 — the console's motion language**
+- Three ideas and nothing else: a panel arrives with a little weight, a list arrives row by row, and a number counts up to its value.
+- **The row stagger is CSS.** The delay is a `:nth-child` rule, not an inline style and not twenty motion components: a table of twenty rows animates with one stylesheet rule that runs on the compositor, so the INP budget of a desk is spent on the desk's data. The delays stop at the twelfth row — a long table should not take a second to finish arriving.
+- **The count-up runs once, when the figure scrolls into view** (`components/motion/CountUp`), and never for anyone who has asked the system not to animate: `usePrefersReducedMotion` sets the value outright.
+- **The tab strips were ten hand-written underlines.** Each drew its own `border-b-2`, so switching tabs looked like a page reload rather than a move. `ui/TabStrip` draws the indicator with a framer-motion `layoutId` that slides from one tab to the next, and every strip in the console uses it now: settings, finance, the order wizard, the measurement wizard, the staff wizard and the content forms.
+- A dialog arrives with weight (`animate-spring-in`) instead of sliding in from nowhere.
+- **The reduced-motion story is now complete.** The JavaScript half was already there (`usePrefersReducedMotion`); the CSS half was missing, so the stylesheet animations ran regardless of the preference. There is now a `prefers-reduced-motion` block in `index.css` that turns the entrance animations off.
 
 
 ---

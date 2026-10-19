@@ -37,7 +37,7 @@ export function InvoicePreviewModal({ invoice, onClose }: InvoicePreviewModalPro
       aria-modal="true"
     >
       <div
-        className="relative w-full max-w-lg rounded-2xl border shadow-2xl overflow-hidden animate-fade-in-up text-xs bg-surface-raised border-line text-ink-raised"
+        className="relative w-full max-w-lg rounded-2xl border shadow-2xl overflow-hidden animate-spring-in text-xs bg-surface-raised border-line text-ink-raised"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}

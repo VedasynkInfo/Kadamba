@@ -1,5 +1,6 @@
 ﻿import { useState } from 'react';
-import { Icon, type GlyphName } from '@/components/icons';
+import { TabStrip } from '@/components/ui/TabStrip';
+import { Icon } from '@/components/icons';
 import { Button, Input, Select, Textarea } from '@/components/ui';
 import type { CustomerProfile } from '@/services/orders/orderService';
 import { ORDER_PRIORITIES, type OrderFormData } from './types';
@@ -64,7 +65,7 @@ export function OrderCreateModal({
       aria-modal="true"
     >
       <div
-        className="relative w-full max-w-2xl rounded-2xl border shadow-2xl overflow-hidden animate-fade-in-up flex flex-col max-h-[90vh] text-xs bg-surface-raised border-line text-ink-raised"
+        className="relative w-full max-w-2xl rounded-2xl border shadow-2xl overflow-hidden animate-spring-in flex flex-col max-h-[90vh] text-xs bg-surface-raised border-line text-ink-raised"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -89,32 +90,18 @@ export function OrderCreateModal({
         </div>
 
         {/* Tab Strip */}
-        <div
-          className="flex border-b px-6 gap-2 bg-current/[0.02] border-line"
-        >
-          {(
-            [
-              { id: 'client', label: '1. Client & Dates', icon: 'user' },
-              { id: 'items', label: `2. Garments (${form.lineItems.length})`, icon: 'stitching' },
-              { id: 'pricing', label: '3. Pricing & Priority', icon: 'premium' },
-            ] satisfies { id: string; label: string; icon: GlyphName }[]
-          ).map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => setActiveTab(tab.id as any)}
-              className={cn(
-                'py-3 px-3.5 border-b-2 font-semibold transition cursor-pointer flex items-center gap-1.5',
-                activeTab === tab.id
-                  ? 'border-brand text-brand'
-                  : 'border-transparent opacity-60 hover:opacity-100',
-              )}
-            >
-              <Icon name={tab.icon} size={15} />
-              <span>{tab.label}</span>
-            </button>
-          ))}
-        </div>
+        <TabStrip
+          items={[
+            { id: 'client', label: '1. Client & Dates', icon: 'user' },
+            { id: 'items', label: `2. Garments (${form.lineItems.length})`, icon: 'stitching' },
+            { id: 'pricing', label: '3. Pricing & Priority', icon: 'premium' },
+          ]}
+          value={activeTab}
+          onChange={(id) => setActiveTab(id as typeof activeTab)}
+          layoutId="order-wizard-tab"
+          className="px-6 gap-2 bg-current/[0.02]"
+          itemClassName="px-3.5"
+        />
 
         {/* Body */}
         <div className="p-6 space-y-4 overflow-y-auto flex-1">

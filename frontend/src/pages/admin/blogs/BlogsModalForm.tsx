@@ -1,3 +1,4 @@
+import { TabStrip } from '@/components/ui/TabStrip';
 import { useState } from 'react';
 import { Icon } from '@/components/icons';
 import { Button, Checkbox, Input, Select, Textarea } from '@/components/ui';
@@ -9,7 +10,6 @@ import { SlugField } from '../components/SlugField';
 import { TagsInput } from '../components/TagsInput';
 import type { SeoAutoFlags } from '@/seo/generateSeo';
 import { BLOG_CATEGORIES } from './types';
-import { cn } from '@/utils/cn';
 
 interface BlogsModalFormProps {
   open: boolean;
@@ -85,48 +85,18 @@ export function BlogsModalForm({
         </div>
 
         {/* Tab Navigation */}
-        <div
-          className="flex border-b px-6 pt-2 gap-4 text-xs font-semibold border-line"
-        >
-          <button
-            type="button"
-            onClick={() => setActiveTab('content')}
-            className={cn(
-              'pb-2.5 transition border-b-2 cursor-pointer',
-              activeTab === 'content'
-                ? 'border-brand text-brand'
-                : 'border-transparent opacity-60 hover:opacity-100',
-            )}
-          >
-            <Icon name="note" size={14} className="mr-1 inline align-middle" /> Article Content
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('settings')}
-            className={cn(
-              'pb-2.5 transition border-b-2 cursor-pointer',
-              activeTab === 'settings'
-                ? 'border-brand text-brand'
-                : 'border-transparent opacity-60 hover:opacity-100',
-            )}
-          >
-            <Icon name="settings" size={14} className="mr-1 inline align-middle" /> Tags & Settings
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('seo')}
-            className={cn(
-              'pb-2.5 transition border-b-2 cursor-pointer',
-              activeTab === 'seo'
-                ? 'border-brand text-brand'
-                : 'border-transparent opacity-60 hover:opacity-100',
-            )}
-          >
-            <Icon name="seo" size={14} className="mr-1 inline align-middle" /> SEO & Search Snippets
-          </button>
-        </div>
+        <TabStrip
+          items={[
+            { id: 'content', label: 'Article Content', icon: 'note' },
+            { id: 'settings', label: 'Tags & Settings', icon: 'settings' },
+            { id: 'seo', label: 'SEO & Search Snippets', icon: 'seo' },
+          ]}
+          value={activeTab}
+          onChange={(id) => setActiveTab(id as typeof activeTab)}
+          layoutId="modal-tab-blogsmodalform"
+          className="px-6 gap-4"
+          itemClassName="pb-2.5 pt-2"
+        />
 
         {/* Modal Scrollable Body */}
         <div className="p-6 space-y-4 overflow-y-auto flex-1 text-xs">

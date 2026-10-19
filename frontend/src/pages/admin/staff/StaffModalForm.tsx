@@ -1,4 +1,5 @@
 ﻿import { useState, useEffect } from 'react';
+import { TabStrip } from '@/components/ui/TabStrip';
 import { staffApi, type Staff } from '@/services/staff/staffService';
 import {
   SPECIALIZATIONS,
@@ -168,46 +169,17 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
         </div>
 
         {/* Tab Navigation */}
-        <div
-          className="flex border-b px-5 text-xs font-semibold border-line bg-surface-sunken"
-        >
-          <button
-            type="button"
-            onClick={() => setActiveTab('contact')}
-            className={cn(
-              'py-3 px-4 border-b-2 transition cursor-pointer',
-              activeTab === 'contact'
-                ? 'border-brand text-brand font-bold'
-                : 'border-transparent opacity-60 hover:opacity-100',
-            )}
-          >
-            1. Personal & Contact
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('craft')}
-            className={cn(
-              'py-3 px-4 border-b-2 transition cursor-pointer',
-              activeTab === 'craft'
-                ? 'border-brand text-brand font-bold'
-                : 'border-transparent opacity-60 hover:opacity-100',
-            )}
-          >
-            2. Craft & Specialization ({form.specializations.length})
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('payroll')}
-            className={cn(
-              'py-3 px-4 border-b-2 transition cursor-pointer',
-              activeTab === 'payroll'
-                ? 'border-brand text-brand font-bold'
-                : 'border-transparent opacity-60 hover:opacity-100',
-            )}
-          >
-            3. Payroll & Status
-          </button>
-        </div>
+        <TabStrip
+          items={[
+            { id: 'contact', label: '1. Personal & Contact' },
+            { id: 'craft', label: `2. Craft & Specialization (${form.specializations.length})` },
+            { id: 'payroll', label: '3. Payroll & Status' },
+          ]}
+          value={activeTab}
+          onChange={(id) => setActiveTab(id as typeof activeTab)}
+          layoutId="modal-tab-staff"
+          className="px-5 bg-surface-sunken"
+        />
 
         {error ? (
           <div className="mx-5 mt-4 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-red-400">

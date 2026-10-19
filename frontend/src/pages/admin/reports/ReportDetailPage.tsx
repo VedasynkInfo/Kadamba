@@ -573,7 +573,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
             <th className="px-4 py-3">%</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="stagger-rows">
           {rows.map((r) => (
             <tr key={r.status} className="border-t border-line/8">
               <td className="px-4 py-2.5 capitalize">{formatStatusLabel(r.status)}</td>
@@ -608,7 +608,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
             <th className="px-4 py-3">Delivery</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="stagger-rows">
           {rows.map((r) => (
             <tr key={r.orderId} className="border-t border-line/8">
               <td className="px-4 py-2.5">
@@ -641,7 +641,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
             <th className="px-4 py-3">%</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="stagger-rows">
           {rows.map((r) => (
             <tr key={r.period} className="border-t border-line/8">
               <td className="px-4 py-2.5">{r.period}</td>
@@ -677,7 +677,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
             <th className="px-4 py-3">%</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="stagger-rows">
           {rows.map((r) => (
             <tr key={r.productCode} className="border-t border-line/8">
               <td className="px-4 py-2.5">{r.productName}</td>
@@ -712,7 +712,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
             <th className="px-4 py-3">%</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="stagger-rows">
           {rows.map((r) => (
             <tr key={r.serviceId} className="border-t border-line/8">
               <td className="px-4 py-2.5">{r.serviceName}</td>
@@ -752,7 +752,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
             <th className="px-4 py-3">Balance</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="stagger-rows">
           {rows.map((r) => (
             <tr key={r.orderId} className="border-t border-line/8">
               <td className="px-4 py-2.5">
@@ -800,7 +800,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
             <th className="px-4 py-3">%</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="stagger-rows">
           {expenseRows.map((r) => (
             <tr key={`e-${r.category}`} className="border-t border-line/8">
               <td className="px-4 py-2.5">Expense</td>
@@ -840,7 +840,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
             <th className="px-4 py-3">Amount</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="stagger-rows">
           {rows.map((r) => (
             <tr key={r.metric} className="border-t border-line/8">
               <td className="px-4 py-2.5">{r.metric}</td>
@@ -873,7 +873,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
             <th className="px-4 py-3">% of leads</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="stagger-rows">
           {rows.map((r) => (
             <tr key={r.source} className="border-t border-line/8">
               <td className="px-4 py-2.5">{r.source}</td>
@@ -902,7 +902,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
             <th className="px-4 py-3">Total</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="stagger-rows">
           {rows.map((r) => (
             <tr key={r.staffId || r.name} className="border-t border-line/8">
               <td className="px-4 py-2.5">{r.name}</td>
@@ -936,7 +936,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
             <th className="px-4 py-3">Segment</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="stagger-rows">
           {rows.map((r) => (
             <tr key={r.customerId} className="border-t border-line/8">
               <td className="px-4 py-2.5">

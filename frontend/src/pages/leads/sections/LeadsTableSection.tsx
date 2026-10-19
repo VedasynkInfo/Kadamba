@@ -108,7 +108,7 @@ export function LeadsTableSection({
                 <th className="py-3 pr-4 font-medium">Follow-Up</th>
                 <th className="py-3 font-medium"> </th>
               </tr>
-            <tbody>
+            <tbody className="stagger-rows">
               {filtered.map((lead) => (
                 <tr
                   key={lead.id}

@@ -1,4 +1,5 @@
-﻿import { Icon, type GlyphName } from '@/components/icons';
+﻿import { CountUp } from '@/components/motion/CountUp';
+import { Icon, type GlyphName } from '@/components/icons';
 
 function formatINR(v: number) {
   return `₹${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
@@ -60,7 +61,7 @@ export function StaffMetrics({
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-3.5 lg:grid-cols-4">
+    <div className="stagger-items grid grid-cols-2 gap-3.5 lg:grid-cols-4">
       {cards.map((c) => (
         <div
           key={c.label}
@@ -73,7 +74,7 @@ export function StaffMetrics({
             </span>
           </div>
           <div className={`mt-2 font-heading text-2xl font-bold tracking-tight ${c.accent}`}>
-            {c.value}
+            {typeof c.value === 'number' ? <CountUp value={c.value} /> : c.value}
           </div>
           <p className="mt-1 text-[11px] opacity-60 truncate">{c.subtext}</p>
         </div>

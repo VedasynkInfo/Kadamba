@@ -116,7 +116,7 @@ export function GalleryTable({
               </tr>
             </thead>
             <tbody
-              className="divide-y border-line"
+              className="stagger-rows divide-y border-line"
             >
               {items.map((item) => {
                 const isVideo = item.mediaType === 'video';

@@ -353,6 +353,44 @@ body {
 }
 
 /*
+  The console's motion language.
+
+  Three ideas, and nothing else:
+  - a panel arrives with a little weight (spring-in) rather than sliding
+  - a list arrives row by row, in CSS, so twenty rows cost one rule instead
+    of twenty animated components
+  - a number counts up to its value, because a figure that has just changed
+    deserves a beat of attention
+
+  All of it is optional: the reduced-motion block at the end of this file
+  turns it off for anyone who has asked the system not to move things.
+*/
+@keyframes spring-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem) scale(0.97);
+  }
+  60% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes row-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/*
  * `animate-fade-in` is referenced by the row menus and the preview shells, but
  * was never defined — those panels appeared with no entrance at all. A fade is
  * the right one for a menu that is already where it belongs: translate would
@@ -372,4 +410,69 @@ body {
 
 .animate-toast-in {
   animation: toast-in var(--duration-base) var(--ease-luxury) both;
+}
+
+/* A dialog that arrives with weight rather than sliding in from nowhere. */
+.animate-spring-in {
+  animation: spring-in var(--duration-slow) var(--ease-luxury) both;
+}
+
+/*
+  Row stagger, in CSS.
+
+  The delay is a `:nth-child` rule rather than an inline style, so a table of
+  twenty rows animates with one stylesheet rule instead of twenty motion
+  components — the animation runs on the compositor, not in React's render
+  loop, and the INP budget of a desk is spent on the desk's data instead.
+
+  The delays stop at the twelfth item: a long table should not take a second
+  to finish arriving.
+*/
+.stagger-rows > tr,
+.stagger-items > * {
+  animation: row-in 0.28s var(--ease-out-soft) both;
+}
+
+.stagger-rows > tr:nth-child(1),
+.stagger-items > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-rows > tr:nth-child(2),
+.stagger-items > *:nth-child(2) { animation-delay: 20ms; }
+.stagger-rows > tr:nth-child(3),
+.stagger-items > *:nth-child(3) { animation-delay: 40ms; }
+.stagger-rows > tr:nth-child(4),
+.stagger-items > *:nth-child(4) { animation-delay: 60ms; }
+.stagger-rows > tr:nth-child(5),
+.stagger-items > *:nth-child(5) { animation-delay: 80ms; }
+.stagger-rows > tr:nth-child(6),
+.stagger-items > *:nth-child(6) { animation-delay: 100ms; }
+.stagger-rows > tr:nth-child(7),
+.stagger-items > *:nth-child(7) { animation-delay: 120ms; }
+.stagger-rows > tr:nth-child(8),
+.stagger-items > *:nth-child(8) { animation-delay: 140ms; }
+.stagger-rows > tr:nth-child(9),
+.stagger-items > *:nth-child(9) { animation-delay: 160ms; }
+.stagger-rows > tr:nth-child(10),
+.stagger-items > *:nth-child(10) { animation-delay: 180ms; }
+.stagger-rows > tr:nth-child(11),
+.stagger-items > *:nth-child(11) { animation-delay: 200ms; }
+.stagger-rows > tr:nth-child(n + 12),
+.stagger-items > *:nth-child(n + 12) { animation-delay: 220ms; }
+
+/*
+  Reduced motion.
+
+  Anyone who has asked the system not to move things gets the same interface
+  with the movement removed: the panels appear, the rows are simply there,
+  the counters read their value. The JavaScript motion (framer-motion) is
+  switched off by `usePrefersReducedMotion`; this is the CSS half.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-fade-in-up,
+  .animate-spring-in,
+  .animate-toast-in,
+  .stagger-rows > tr,
+  .stagger-items > * {
+    animation: none !important;
+  }
 }

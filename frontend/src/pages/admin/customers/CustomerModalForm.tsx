@@ -1,8 +1,8 @@
 ﻿import { useState } from 'react';
+import { TabStrip } from '@/components/ui/TabStrip';
 import { Icon } from '@/components/icons';
 import { Button, Input, Select, Textarea } from '@/components/ui';
 import { CUSTOMER_SOURCES, type CustomerFormData } from './types';
-import { cn } from '@/utils/cn';
 
 interface CustomerModalFormProps {
   open: boolean;
@@ -58,35 +58,17 @@ export function CustomerModalForm({
         </div>
 
         {/* Tab Navigation */}
-        <div
-          className="flex border-b px-6 pt-2 gap-4 text-xs font-semibold border-line"
-        >
-          <button
-            type="button"
-            onClick={() => setActiveTab('contact')}
-            className={cn(
-              'pb-2.5 transition border-b-2 cursor-pointer',
-              activeTab === 'contact'
-                ? 'border-brand text-brand'
-                : 'border-transparent opacity-60 hover:opacity-100',
-            )}
-          >
-            <Icon name="user" size={14} className="mr-1 inline align-middle" /> Personal & Contact
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('address')}
-            className={cn(
-              'pb-2.5 transition border-b-2 cursor-pointer',
-              activeTab === 'address'
-                ? 'border-brand text-brand'
-                : 'border-transparent opacity-60 hover:opacity-100',
-            )}
-          >
-            <Icon name="location" size={14} className="mr-1 inline align-middle" /> Address & Delivery
-          </button>
-        </div>
+        <TabStrip
+          items={[
+            { id: 'contact', label: 'Personal & Contact', icon: 'user' },
+            { id: 'address', label: 'Address & Delivery', icon: 'location' },
+          ]}
+          value={activeTab}
+          onChange={(id) => setActiveTab(id as typeof activeTab)}
+          layoutId="modal-tab-customermodalform"
+          className="px-6 gap-4"
+          itemClassName="pb-2.5 pt-2"
+        />
 
         {/* Modal Scrollable Body */}
         <div className="p-6 space-y-4 overflow-y-auto flex-1">

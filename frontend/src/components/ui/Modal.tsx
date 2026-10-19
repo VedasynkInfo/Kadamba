@@ -70,7 +70,7 @@ export function Modal({
               }}
               className={cn(
                 'pointer-events-auto relative w-full rounded-xl border border-line bg-surface-raised p-6 text-ink-raised shadow-soft',
-                'animate-fade-in-up outline-none',
+                'animate-spring-in outline-none',
                 sizeClasses[size],
                 className,
               )}

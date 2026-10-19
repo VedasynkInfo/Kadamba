@@ -8,6 +8,7 @@ import { OrdersTable } from './OrdersTable';
 import { OrderPreviewModal } from './OrderPreviewModal';
 import { OrderCreateModal } from './OrderCreateModal';
 import { createBlankOrderForm, orderStatusLabel, type OrderFormData, type OrdersMetricsData } from './types';
+import { useCreateIntent } from '../hooks/useCreateIntent';
 import type { OrderStatus } from '@/shared/enums';
 import { toAppError } from '@/lib/apiError';
 
@@ -25,6 +26,9 @@ export default function OrdersAdminPage() {
   const [previewOrder, setPreviewOrder] = useState<Order | null>(null);
   const [form, setForm] = useState<OrderFormData>(createBlankOrderForm());
   const [submitting, setSubmitting] = useState(false);
+
+  // The palette can ask this desk to open its intake form.
+  useCreateIntent(setCreateOpen);
 
   // Customer search for intake
   const [customerSearch, setCustomerSearch] = useState('');

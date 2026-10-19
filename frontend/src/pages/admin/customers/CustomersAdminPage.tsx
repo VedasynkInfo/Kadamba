@@ -8,6 +8,7 @@ import { CustomersTable } from './CustomersTable';
 import { CustomerPreviewModal } from './CustomerPreviewModal';
 import { CustomerModalForm } from './CustomerModalForm';
 import { createEmptyCustomerForm, type CustomerFormData } from './types';
+import { useCreateIntent } from '../hooks/useCreateIntent';
 
 export default function CustomersAdminPage() {
   const { toast } = useToast();
@@ -26,6 +27,9 @@ export default function CustomersAdminPage() {
   const [previewCustomer, setPreviewCustomer] = useState<Customer | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState<CustomerFormData>(createEmptyCustomerForm());
+
+  // The palette can ask this desk to open its create form.
+  useCreateIntent(setModalOpen);
 
   // Duplicate detection modal
   const [dupModalOpen, setDupModalOpen] = useState(false);

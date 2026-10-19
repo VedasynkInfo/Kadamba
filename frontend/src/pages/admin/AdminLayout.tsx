@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Drawer, Tooltip } from '@/components/ui';
 import { Icon } from '@/components/icons';
 import { useAuth } from '@/hooks/useAuth';
@@ -12,6 +12,7 @@ import { cn } from '@/utils/cn';
 import { AdminContentProvider } from './AdminContentContext';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
 import { AdminNav } from './components/AdminNav';
+import { CommandPalette } from './components/CommandPalette';
 import { RequireAdmin } from './RequireAdmin';
 
 /**
@@ -28,6 +29,19 @@ export function AdminLayout() {
     return localStorage.getItem('kadamba_admin_sidebar_collapsed') === 'true';
   });
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+
+  // ⌘K / Ctrl+K opens the palette from anywhere in the console.
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        setPaletteOpen((open) => !open);
+      }
+    }
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, []);
 
   const activeLogo = logoDarkUrl || logoUrl;
 
@@ -97,6 +111,31 @@ export function AdminLayout() {
                     </p>
                   )}
                 </div>
+
+                {collapsed ? (
+                  <Tooltip label="Search the console" side="right">
+                    <button
+                      type="button"
+                      onClick={() => setPaletteOpen(true)}
+                      aria-label="Search the console"
+                      className="mx-2 mb-3 flex items-center justify-center rounded-lg border border-ink-inverse/10 bg-ink-inverse/[0.04] p-2 text-ink-inverse/60 transition hover:border-brand/40 hover:text-ink-inverse"
+                    >
+                      <Icon name="search" size={16} />
+                    </button>
+                  </Tooltip>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setPaletteOpen(true)}
+                    className="mx-2 mb-3 flex items-center gap-2 rounded-lg border border-ink-inverse/10 bg-ink-inverse/[0.04] px-2.5 py-1.5 text-left text-xs text-ink-inverse/55 transition hover:border-brand/40 hover:text-ink-inverse"
+                  >
+                    <Icon name="search" size={14} />
+                    <span className="flex-1">Search…</span>
+                    <kbd className="rounded border border-ink-inverse/15 px-1 py-0.5 text-[0.6rem] tracking-wider">
+                      ⌘K
+                    </kbd>
+                  </button>
+                )}
 
                 <AdminNav collapsed={collapsed} scope="rail" />
 
@@ -169,6 +208,14 @@ export function AdminLayout() {
                   >
                     <Icon name="menu" size={20} />
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => setPaletteOpen(true)}
+                    aria-label="Search the console"
+                    className="flex items-center rounded-md p-1.5 transition-colors hover:bg-ink-inverse/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                  >
+                    <Icon name="search" size={18} />
+                  </button>
                   <p className="font-heading text-lg text-gold">{brand.shortName}</p>
                   <Button variant="secondary" size="sm" onClick={signOut}>
                     <Icon name="logout" size={14} />
@@ -197,6 +244,8 @@ export function AdminLayout() {
                 </main>
               </div>
             </div>
+
+            <CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} />
           </LeadsProvider>
         </AdminNotifyProvider>
       </AdminContentProvider>

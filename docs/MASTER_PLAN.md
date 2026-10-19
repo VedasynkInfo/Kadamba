@@ -301,9 +301,9 @@
 
 | # | Task | Status |
 |---|------|--------|
-| 7.1 | Lucide SVG icons replace all emoji | ⬜ |
-| 7.1 | Collapsible nav groups + `layoutId` spring | ⬜ |
-| 7.2 | `⌘K` command palette (cmdk) across all entities | ⬜ |
+| 7.1 | Lucide SVG icons replace all emoji | ✅ |
+| 7.1 | Collapsible nav groups + `layoutId` spring | ✅ |
+| 7.2 | `⌘K` command palette (cmdk) across all entities | ✅ |
 | 7.3 | Motion language (row stagger, count-up, spring modals, tab indicators) | ⬜ |
 | 7.4 | **Order Kanban pipeline** (dnd-kit, optimistic + audit) | ⬜ |
 | 7.5 | Data table upgrade (sticky, bulk actions, virtualised, saved filters) | ⬜ |
@@ -314,6 +314,23 @@
 | 7.10 | Virtualisation + `React.memo` + per-desk chunks | ⬜ |
 
 **Gate:** INP <200ms; `⌘K` ≤3 keystrokes to any record; Kanban writes audit row; 100% keyboard; zero emoji nav; zero inline colour styles.
+
+**7.1 — one vocabulary, and the gate that keeps it**
+- **417 → 0.** `scripts/check-emoji.mjs` fails the build on a pictographic emoji, and on the dingbats this codebase used as icons (✕ ✓ ↑ ↓ ← → ↗ ⚠ ⌕), with a `// emoji-lint-disable-next-line` escape for genuine prose. It sits beside `check-tokens.mjs`, runs in CI, and its baseline is locked at 0.
+- The vocabulary is one file (`components/icons/glyphs.ts`) behind one component (`<Icon>`), so "which glyph means orders?" has exactly one answer. A call site asks for `orders`, not for lucide's `ShoppingBag`: retheming the console's iconography becomes one edit, and two desks cannot pick two different metaphors for the same noun.
+- lucide ships no logos, so the social channels use the official Simple Icons marks (CC0) in `components/icons/social.tsx`. A social channel is the one place a generic icon is the wrong answer, because a designer reads the mark, not the label beside it.
+- A glyph is a font character: it renders differently on every platform, cannot take a stroke weight, cannot inherit `currentColor` cleanly, and carries no accessible name. The nav used twenty of them, and the row-menu triggers were emoji with *no label at all* — an icon-only button whose accessible name was "👁️".
+- The nav is six named groups (Overview, Front desk, Atelier, Catalogue, Ledger, Console) rather than twenty flat links: a flat list is a list, a named map is a place you can learn. Groups collapse, and the open one is *derived* — the group holding the current page is always open whatever the stored state says, because hiding where you are is the one way a nav can lie. The active desk is marked by a framer-motion `layoutId` pill that springs between items.
+- The mobile console had a horizontally scrolling strip of twenty links. It is a Drawer now, with the focus trap, Escape and scroll lock Radix gives for free.
+- The console shell gained the two things the public shell already had: a skip link and a `#admin-main` target.
+
+**7.2 — the palette**
+- `⌘K` opens a cmdk palette that answers three questions in order: *where do I go* (the desks, filtered by what this user may actually open), *what do I make* (the four things a studio makes), and *where is that* (leads, orders and customers, searched as you type).
+- "New order" is not a menu item that navigates to a page and hopes: the palette goes to `/admin/orders?new=1`, the desk sees the intent, opens the form it already owns, and drops the parameter again (`useCreateIntent`). The alternative — a shell-level "open the order modal" event bus — would give the shell a handle on every desk's internals.
+- The record search is the only part that touches the network, so it is debounced (220ms), only runs once there is something to search for, and ignores a response that a newer query has already superseded.
+- The palette is a Radix Dialog around cmdk inside a `PortalShell` — the same escape hatch `Modal` and `Drawer` use, because a portal to `document.body` would resolve the console's colours against the light root palette.
+- `src/test/setup.ts` carries the two jsdom shims any Radix-plus-cmdk test needs (`ResizeObserver`, `scrollIntoView`); without them the palette cannot be rendered in a test at all.
+
 
 ---
 

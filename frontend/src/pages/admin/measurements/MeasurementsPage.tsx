@@ -14,6 +14,7 @@ import { MeasurementsToolbar } from './MeasurementsToolbar';
 import { MeasurementsTable } from './MeasurementsTable';
 import { MeasurementPreviewModal } from './MeasurementPreviewModal';
 import { MeasurementModalForm } from './MeasurementModalForm';
+import { useCreateIntent } from '../hooks/useCreateIntent';
 
 export default function MeasurementsPage() {
   const { toast } = useToast();
@@ -33,6 +34,9 @@ export default function MeasurementsPage() {
   const [previewProfile, setPreviewProfile] = useState<MeasurementProfile | null>(null);
   const [formOpen, setFormOpen] = useState(false);
   const [editingProfile, setEditingProfile] = useState<MeasurementProfile | null>(null);
+
+  // The palette can ask this desk to open its create form.
+  useCreateIntent(setFormOpen);
 
   const loadData = useCallback(async () => {
     setLoading(true);

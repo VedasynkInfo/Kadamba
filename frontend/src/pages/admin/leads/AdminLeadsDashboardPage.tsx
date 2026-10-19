@@ -9,6 +9,7 @@ import { LeadsTable } from './LeadsTable';
 import { LeadPreviewModal } from './LeadPreviewModal';
 import { LeadCreateModal } from './LeadCreateModal';
 import { createEmptyLeadForm, type LeadFormData } from './types';
+import { useCreateIntent } from '../hooks/useCreateIntent';
 
 export default function AdminLeadsDashboardPage() {
   const { leads, updateLeadStatus, addLead } = useLeads();
@@ -18,6 +19,9 @@ export default function AdminLeadsDashboardPage() {
   const [previewLead, setPreviewLead] = useState<Lead | null>(null);
   const [createForm, setCreateForm] = useState<LeadFormData>(createEmptyLeadForm());
   const [saving, setSaving] = useState(false);
+
+  // The palette can ask this desk to open its create form.
+  useCreateIntent(setCreateOpen);
 
   const recent = useMemo(
     () =>

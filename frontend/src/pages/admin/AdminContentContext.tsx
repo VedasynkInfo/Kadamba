@@ -1,55 +1,33 @@
+import { createContext, useCallback, useContext, useMemo, type ReactNode } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import type { GalleryItem } from '@/pages/gallery/data';
+import type { ServiceDetail } from '@/pages/services/data';
+import type { PortfolioProject } from '@/pages/portfolio/data';
+import type { BlogPost } from '@/pages/blogs/data';
+import type { WebsiteSettings } from './data';
+import { qk } from '@/lib/queryKeys';
+import type { AppError } from '@/lib/apiError';
 import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from 'react';
-import { galleryItems, type GalleryItem } from '@/pages/gallery/data';
-import { serviceDetails, type ServiceDetail } from '@/pages/services/data';
-import { portfolioProjects, type PortfolioProject } from '@/pages/portfolio/data';
-import { blogPosts, type BlogPost } from '@/pages/blogs/data';
-import { galleryApi } from '@/services/gallery/galleryService';
-import { servicesApi } from '@/services/services/servicesService';
-import { portfolioApi } from '@/services/portfolio/portfolioService';
-import { blogsApi } from '@/services/blogs/blogsService';
-import { settingsApi } from '@/services/settings/settingsService';
-import { defaultWebsiteSettings, type WebsiteSettings } from './data';
+  useAdminBlogs,
+  useAdminGallery,
+  useAdminPortfolio,
+  useAdminServices,
+  useAdminSettings,
+} from '@/hooks/useCmsContent';
+import {
+  useBlogWrites,
+  useGalleryWrites,
+  usePortfolioWrites,
+  useServiceWrites,
+  useSettingsWrites,
+} from '@/hooks/useCmsMutations';
+import { mergeWebsiteSettings } from '@/utils/websiteSettings';
 
-/** Deep-merge API settings onto defaults so nested sections always exist. */
-export function mergeWebsiteSettings(partial?: Partial<WebsiteSettings> | null): WebsiteSettings {
-  const base = structuredClone(defaultWebsiteSettings);
-  if (!partial) return base;
-  return {
-    ...base,
-    ...partial,
-    addressLines: partial.addressLines?.length ? partial.addressLines : base.addressLines,
-    hours: partial.hours?.length ? partial.hours : base.hours,
-    social: partial.social?.length ? partial.social : base.social,
-    socialNamed: { ...base.socialNamed, ...(partial.socialNamed || {}) },
-    seo: { ...base.seo, ...(partial.seo || {}) },
-    media: {
-      ...base.media,
-      ...(partial.media || {}),
-      bannerPresets: partial.media?.bannerPresets?.length
-        ? partial.media.bannerPresets
-        : base.media.bannerPresets,
-    },
-    emailConfig: {
-      ...base.emailConfig!,
-      ...(partial.emailConfig || {}),
-      templates: partial.emailConfig?.templates?.length
-        ? partial.emailConfig.templates
-        : base.emailConfig!.templates,
-    },
-    theme: { ...base.theme, ...(partial.theme || {}) },
-  };
-}
-
-interface AdminContentStore {
+export interface AdminContentStore {
+  /** True only on first load; background refreshes do not set this. */
   loading: boolean;
+  /** The first collection failure, so a desk can explain why it is empty. */
+  error: AppError | null;
   gallery: GalleryItem[];
   upsertGallery: (item: GalleryItem) => Promise<void>;
   removeGallery: (id: string) => Promise<void>;
@@ -65,156 +43,125 @@ interface AdminContentStore {
   settings: WebsiteSettings;
   saveSettings: (next: WebsiteSettings) => Promise<void>;
   resetSettings: () => Promise<void>;
-  refresh: () => Promise<void>;
+  refresh: () => void;
 }
 
 const AdminContentContext = createContext<AdminContentStore | null>(null);
 
+/**
+ * CMS collections for the admin console.
+ *
+ * Previously this substituted bundled demo arrays whenever the API was empty or
+ * failed (in development only), which meant an editor could never tell the
+ * difference between "nothing published" and "the request did not work". Reads
+ * now always reflect the server, failures surface as `error`, and writes
+ * invalidate the cache instead of patching local state by hand.
+ */
 export function AdminContentProvider({ children }: { children: ReactNode }) {
-  const [loading, setLoading] = useState(true);
-  const [gallery, setGallery] = useState<GalleryItem[]>([]);
-  const [services, setServices] = useState<ServiceDetail[]>([]);
-  const [portfolio, setPortfolio] = useState<PortfolioProject[]>([]);
-  const [blogs, setBlogs] = useState<BlogPost[]>([]);
-  const [settings, setSettings] = useState<WebsiteSettings>(() => mergeWebsiteSettings());
+  const queryClient = useQueryClient();
 
-  const refresh = useCallback(async () => {
-    setLoading(true);
-    try {
-      const [g, s, p, b, site] = await Promise.all([
-        galleryApi.list(),
-        servicesApi.list(),
-        portfolioApi.list(),
-        blogsApi.list(),
-        settingsApi.getAdmin().catch(() => settingsApi.get()),
-      ]);
+  const galleryQuery = useAdminGallery();
+  const servicesQuery = useAdminServices();
+  const portfolioQuery = useAdminPortfolio();
+  const blogsQuery = useAdminBlogs();
+  const siteQuery = useAdminSettings();
 
-      setGallery(g.items.length ? g.items : import.meta.env.DEV ? structuredClone(galleryItems) : []);
-      setServices(
-        s.items.length ? s.items : import.meta.env.DEV ? structuredClone(serviceDetails) : [],
-      );
-      setPortfolio(
-        p.items.length
-          ? p.items
-          : import.meta.env.DEV
-            ? structuredClone(portfolioProjects)
-            : [],
-      );
-      setBlogs(b.items.length ? b.items : import.meta.env.DEV ? structuredClone(blogPosts) : []);
-      setSettings(mergeWebsiteSettings(site));
-    } catch (err) {
-      console.warn('Admin content API unavailable — using seed data', err);
-      if (import.meta.env.DEV) {
-        setGallery(structuredClone(galleryItems));
-        setServices(structuredClone(serviceDetails));
-        setPortfolio(structuredClone(portfolioProjects));
-        setBlogs(structuredClone(blogPosts));
-        setSettings(structuredClone(defaultWebsiteSettings));
-      }
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const galleryWrites = useGalleryWrites();
+  const serviceWrites = useServiceWrites();
+  const portfolioWrites = usePortfolioWrites();
+  const blogWrites = useBlogWrites();
+  const settingsWrites = useSettingsWrites();
 
-  useEffect(() => {
-    void refresh();
-  }, [refresh]);
+  const loading =
+    galleryQuery.isLoading ||
+    servicesQuery.isLoading ||
+    portfolioQuery.isLoading ||
+    blogsQuery.isLoading ||
+    siteQuery.isLoading;
 
-  const upsertGallery = useCallback(async (item: GalleryItem) => {
-    const saved = await galleryApi.upsert(item);
-    setGallery((prev) => {
-      const idx = prev.findIndex((g) => g.id === saved.id || g.id === item.id);
-      if (idx >= 0) {
-        const next = [...prev];
-        next[idx] = saved;
-        return next;
-      }
-      return [...prev, saved];
-    });
-  }, []);
+  const error =
+    galleryQuery.error ?? servicesQuery.error ?? portfolioQuery.error ?? blogsQuery.error ?? null;
 
-  const removeGallery = useCallback(async (id: string) => {
-    await galleryApi.remove(id);
-    setGallery((prev) => prev.filter((g) => g.id !== id));
-  }, []);
+  const settings = useMemo(() => mergeWebsiteSettings(siteQuery.settings), [siteQuery.settings]);
 
-  const upsertService = useCallback(async (item: ServiceDetail) => {
-    const saved = await servicesApi.upsert(item);
-    setServices((prev) => {
-      const idx = prev.findIndex((s) => s.id === saved.id || s.id === item.id);
-      if (idx >= 0) {
-        const next = [...prev];
-        next[idx] = saved;
-        return next;
-      }
-      return [...prev, saved];
-    });
-  }, []);
+  const refresh = useCallback(() => {
+    void queryClient.invalidateQueries({ queryKey: qk.cms.all });
+  }, [queryClient]);
 
-  const removeService = useCallback(async (id: string) => {
-    await servicesApi.remove(id);
-    setServices((prev) => prev.filter((s) => s.id !== id));
-  }, []);
-
-  const upsertProject = useCallback(async (item: PortfolioProject) => {
-    const saved = await portfolioApi.upsert(item);
-    setPortfolio((prev) => {
-      const idx = prev.findIndex((p) => p.id === saved.id || p.id === item.id);
-      if (idx >= 0) {
-        const next = [...prev];
-        next[idx] = saved;
-        return next;
-      }
-      return [...prev, saved];
-    });
-  }, []);
-
-  const removeProject = useCallback(async (id: string) => {
-    await portfolioApi.remove(id);
-    setPortfolio((prev) => prev.filter((p) => p.id !== id));
-  }, []);
-
-  const upsertBlog = useCallback(async (item: BlogPost) => {
-    const saved = await blogsApi.upsert(item);
-    setBlogs((prev) => {
-      const idx = prev.findIndex((b) => b.id === saved.id || b.id === item.id);
-      if (idx >= 0) {
-        const next = [...prev];
-        next[idx] = saved;
-        return next;
-      }
-      return [...prev, saved];
-    });
-  }, []);
-
-  const removeBlog = useCallback(async (id: string) => {
-    await blogsApi.remove(id);
-    setBlogs((prev) => prev.filter((b) => b.id !== id));
-  }, []);
-
-  const saveSettings = useCallback(async (next: WebsiteSettings) => {
-    const saved = await settingsApi.update(next);
-    setSettings(mergeWebsiteSettings(saved));
-  }, []);
-
+  // The store keeps its promise-returning shape so desk components did not have
+  // to change; rejections propagate to their existing try/catch + toast.
+  const upsertGallery = useCallback(
+    async (item: GalleryItem) => {
+      await galleryWrites.upsert(item);
+    },
+    [galleryWrites],
+  );
+  const removeGallery = useCallback(
+    async (id: string) => {
+      await galleryWrites.remove(id);
+    },
+    [galleryWrites],
+  );
+  const upsertService = useCallback(
+    async (item: ServiceDetail) => {
+      await serviceWrites.upsert(item);
+    },
+    [serviceWrites],
+  );
+  const removeService = useCallback(
+    async (id: string) => {
+      await serviceWrites.remove(id);
+    },
+    [serviceWrites],
+  );
+  const upsertProject = useCallback(
+    async (item: PortfolioProject) => {
+      await portfolioWrites.upsert(item);
+    },
+    [portfolioWrites],
+  );
+  const removeProject = useCallback(
+    async (id: string) => {
+      await portfolioWrites.remove(id);
+    },
+    [portfolioWrites],
+  );
+  const upsertBlog = useCallback(
+    async (item: BlogPost) => {
+      await blogWrites.upsert(item);
+    },
+    [blogWrites],
+  );
+  const removeBlog = useCallback(
+    async (id: string) => {
+      await blogWrites.remove(id);
+    },
+    [blogWrites],
+  );
+  const saveSettings = useCallback(
+    async (next: WebsiteSettings) => {
+      await settingsWrites.save(next);
+    },
+    [settingsWrites],
+  );
   const resetSettings = useCallback(async () => {
-    const next = mergeWebsiteSettings();
-    await saveSettings(next);
-  }, [saveSettings]);
+    await settingsWrites.save(mergeWebsiteSettings());
+  }, [settingsWrites]);
 
   const value = useMemo<AdminContentStore>(
     () => ({
       loading,
-      gallery,
+      error,
+      gallery: galleryQuery.items,
       upsertGallery,
       removeGallery,
-      services,
+      services: servicesQuery.items,
       upsertService,
       removeService,
-      portfolio,
+      portfolio: portfolioQuery.items,
       upsertProject,
       removeProject,
-      blogs,
+      blogs: blogsQuery.items,
       upsertBlog,
       removeBlog,
       settings,
@@ -224,16 +171,17 @@ export function AdminContentProvider({ children }: { children: ReactNode }) {
     }),
     [
       loading,
-      gallery,
+      error,
+      galleryQuery.items,
       upsertGallery,
       removeGallery,
-      services,
+      servicesQuery.items,
       upsertService,
       removeService,
-      portfolio,
+      portfolioQuery.items,
       upsertProject,
       removeProject,
-      blogs,
+      blogsQuery.items,
       upsertBlog,
       removeBlog,
       settings,
@@ -243,9 +191,7 @@ export function AdminContentProvider({ children }: { children: ReactNode }) {
     ],
   );
 
-  return (
-    <AdminContentContext.Provider value={value}>{children}</AdminContentContext.Provider>
-  );
+  return <AdminContentContext.Provider value={value}>{children}</AdminContentContext.Provider>;
 }
 
 export function useAdminContent(): AdminContentStore {

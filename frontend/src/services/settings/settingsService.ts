@@ -2,11 +2,6 @@ import api from '../api/client';
 import type { ApiResponse } from '@/types';
 import type { WebsiteSettings } from '@/pages/admin/data';
 
-function mergeSettings(data: Partial<WebsiteSettings> | undefined): WebsiteSettings {
-  // Lazy import avoided — callers pass defaults when needed
-  return data as WebsiteSettings;
-}
-
 export const settingsApi = {
   /** Public-safe settings (no SMTP secrets) */
   get: async () => {
@@ -41,5 +36,3 @@ export const settingsApi = {
     return data.data!;
   },
 };
-
-export { mergeSettings };

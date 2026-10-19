@@ -16,13 +16,13 @@ import { registerUploadedFile } from '../services/mediaService';
  */
 export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
   if (!req.file) {
-    throw new ApiError(400, 'No file uploaded');
+    throw ApiError.uploadInvalid('No file uploaded');
   }
 
   const file = req.file as Express.Multer.File;
   const absPath = file.path || (file as { destination?: string }).destination;
   if (!absPath) {
-    throw new ApiError(400, 'Upload failed: no stored file');
+    throw ApiError.uploadInvalid('Upload failed: no stored file');
   }
 
   const folder =

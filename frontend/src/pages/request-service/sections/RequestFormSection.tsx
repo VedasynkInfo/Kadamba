@@ -13,6 +13,7 @@ import {
 } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { usePublicContent } from '@/hooks/usePublicContent';
+import { ContentEmpty, ContentError, ContentLoading } from '@/components/feedback/ContentState';
 import { fadeUp } from '@/motion/variants';
 import { submitLeadRequest } from '@/services/leads/leadService';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
@@ -24,7 +25,6 @@ import {
   occasionLabelFromValue,
   occasionOptions,
   serviceLabelFromSlug,
-  serviceOptions as seedServiceOptions,
   type FormStepId,
 } from '../data';
 
@@ -94,12 +94,11 @@ export function RequestFormSection() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const reduced = usePrefersReducedMotion();
-  const { services, whatsappHref } = usePublicContent();
+  const { services, whatsappHref, error, loading, refresh } = usePublicContent();
+  // Enquiries can only be raised against a published service, so this list comes
+  // straight from the CMS — there is no bundled fallback to fall back to.
   const serviceOptions = useMemo(
-    () =>
-      services.length
-        ? services.map((s) => ({ value: s.slug, label: s.title }))
-        : seedServiceOptions,
+    () => services.map((s) => ({ value: s.slug, label: s.title })),
     [services],
   );
   const [searchParams] = useSearchParams();
@@ -117,11 +116,13 @@ export function RequestFormSection() {
   const progressValue = ((stepIndex + 1) / stepOrder.length) * 100;
 
   useEffect(() => {
+    // Also runs when the catalogue arrives, so a `?service=` deep link still
+    // resolves if the visitor got here before services finished loading.
     const slug = searchParams.get('service');
     if (slug && serviceOptions.some((o) => o.value === slug)) {
       setForm((prev) => (prev.service ? prev : { ...prev, service: slug }));
     }
-  }, [searchParams]);
+  }, [searchParams, serviceOptions]);
 
   useEffect(() => {
     return () => {
@@ -333,6 +334,44 @@ export function RequestFormSection() {
             </Button>
           </div>
         </motion.div>
+      </Section>
+    );
+  }
+
+  if (loading) {
+    return (
+      <Section id="request-form" tone="light" className="scroll-mt-24 py-16 md:py-24">
+        <SectionIntro tone="light" title={formCopy.title} description={formCopy.lede} />
+        <ContentLoading className="mt-8" variant="block" label="Loading the enquiry form" />
+      </Section>
+    );
+  }
+
+  if (serviceOptions.length === 0) {
+    return (
+      <Section id="request-form" tone="light" className="scroll-mt-24 py-16 md:py-24">
+        <SectionIntro tone="light" title={formCopy.title} description={formCopy.lede} />
+        <div className="mt-8">
+          {error ? (
+            <ContentError error={error} onRetry={refresh} />
+          ) : (
+            <ContentEmpty
+              title="Enquiries are paused while we update our services"
+              description={
+                <>
+                  Please message the studio on{' '}
+                  <a
+                    href={whatsappHref()}
+                    className="underline decoration-gold/50 underline-offset-2 hover:text-black"
+                  >
+                    WhatsApp
+                  </a>{' '}
+                  and we will take your details directly.
+                </>
+              }
+            />
+          )}
+        </div>
       </Section>
     );
   }
@@ -561,7 +600,7 @@ export function RequestFormSection() {
                   <ReviewRow label="Phone" value={form.phone} />
                   <ReviewRow label="Email" value={form.email} />
                   <ReviewRow label="City" value={form.city} />
-                  <ReviewRow label="Service" value={serviceLabelFromSlug(form.service)} />
+                  <ReviewRow label="Service" value={serviceLabelFromSlug(form.service, serviceOptions)} />
                   <ReviewRow label="Occasion" value={occasionLabelFromValue(form.occasion)} />
                   <ReviewRow label="Preferred date" value={form.preferredDate} />
                   <ReviewRow label="Budget" value={budgetLabelFromValue(form.budget)} />

@@ -1,10 +1,13 @@
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
 import { Button, Section, SectionIntro } from '@/components/ui';
+import { ContentEmpty, ContentLoading } from '@/components/feedback/ContentState';
+import { usePublicContent } from '@/hooks/usePublicContent';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { fadeUp, staggerChildren } from '@/motion/variants';
-import { latestBlogs } from '../data';
+import type { BlogPreview } from '../data';
 
 /**
  * Latest blog previews with excerpts.
@@ -12,6 +15,23 @@ import { latestBlogs } from '../data';
 export function LatestBlogsSection() {
   const navigate = useNavigate();
   const reduced = usePrefersReducedMotion();
+  const { blogs, loading } = usePublicContent();
+
+  const latestBlogs = useMemo<BlogPreview[]>(
+    () =>
+      [...blogs]
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .slice(0, 3)
+        .map((post) => ({
+          id: post.id,
+          title: post.title,
+          excerpt: post.excerpt,
+          date: post.date,
+          href: `/blogs/${post.slug}`,
+          image: post.coverImage,
+        })),
+    [blogs],
+  );
 
   return (
     <Section tone="light" className="py-16 md:py-24">
@@ -25,6 +45,15 @@ export function LatestBlogsSection() {
         }
       />
 
+      {loading ? (
+        <ContentLoading className="mt-10" count={3} label="Loading journal posts" />
+      ) : latestBlogs.length === 0 ? (
+        <ContentEmpty
+          className="mt-10"
+          title="No journal posts yet"
+          description="Our first stories are on their way. Follow the studio to hear when they land."
+        />
+      ) : (
       <motion.ul
         className="mt-10 grid gap-8 md:grid-cols-3"
         variants={reduced ? undefined : staggerChildren}
@@ -69,6 +98,7 @@ export function LatestBlogsSection() {
           </motion.li>
         ))}
       </motion.ul>
+      )}
     </Section>
   );
 }

@@ -17,7 +17,7 @@ export function verifyUploadedFile(req: Request, _res: Response, next: NextFunct
 
   const path = (file as { path?: string }).path;
   if (!path) {
-    return next(new ApiError(400, 'Upload failed: no stored file'));
+    return next(ApiError.uploadInvalid('Upload failed: no stored file'));
   }
 
   let buf: Buffer;
@@ -32,7 +32,7 @@ export function verifyUploadedFile(req: Request, _res: Response, next: NextFunct
       fs.closeSync(fd);
     }
   } catch {
-    return next(new ApiError(400, 'Upload failed: could not read file'));
+    return next(ApiError.uploadInvalid('Upload failed: could not read file'));
   }
 
   const detected = detectFileType(buf);
@@ -40,8 +40,7 @@ export function verifyUploadedFile(req: Request, _res: Response, next: NextFunct
     // Remove the unsafe/mislabelled file immediately.
     fs.unlink(path, () => undefined);
     return next(
-      new ApiError(
-        400,
+      ApiError.uploadInvalid(
         'Unsupported or spoofed file type. Allowed: JPEG, PNG, WebP, GIF, AVIF, BMP, MP4, WebM, MOV.',
       ),
     );

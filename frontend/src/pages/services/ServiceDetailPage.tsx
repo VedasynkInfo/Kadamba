@@ -1,5 +1,6 @@
 import { Navigate, useParams } from 'react-router-dom';
 import { Spinner } from '@/components/ui';
+import { ContentError } from '@/components/feedback/ContentState';
 import { usePublicContent } from '@/hooks/usePublicContent';
 import { JsonLd, PageMeta, serviceJsonLd } from '@/seo';
 import { getServiceBySlug } from './data';
@@ -17,13 +18,23 @@ import {
  */
 export default function ServiceDetailPage() {
   const { slug } = useParams<{ slug: string }>();
-  const { services, loading } = usePublicContent();
+  const { services, loading, error, refresh } = usePublicContent();
   const service = slug ? getServiceBySlug(slug, services) : undefined;
 
   if (loading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center">
         <Spinner label="Loading service" />
+      </div>
+    );
+  }
+
+  // A failed request is not a missing service — redirecting here would hide the
+  // outage behind a page change.
+  if (error) {
+    return (
+      <div className="mx-auto max-w-2xl px-4 py-20">
+        <ContentError error={error} onRetry={refresh} />
       </div>
     );
   }

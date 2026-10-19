@@ -138,7 +138,7 @@ function signMfaTicket(userId: string): string {
 function verifyMfaTicket(ticket: string): string {
   const [encoded, signature] = String(ticket ?? '').split('.');
   if (!encoded || !signature) {
-    throw new ApiError(401, 'Invalid verification ticket');
+    throw ApiError.unauthenticated('Invalid verification ticket');
   }
   const payload = Buffer.from(encoded, 'base64url').toString('utf8');
   const expected = crypto
@@ -149,12 +149,12 @@ function verifyMfaTicket(ticket: string): string {
   const a = Buffer.from(signature);
   const b = Buffer.from(expected);
   if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
-    throw new ApiError(401, 'Invalid verification ticket');
+    throw ApiError.unauthenticated('Invalid verification ticket');
   }
 
   const [userId, issuedAt] = payload.split('.');
   if (!userId || !issuedAt) {
-    throw new ApiError(401, 'Invalid verification ticket');
+    throw ApiError.unauthenticated('Invalid verification ticket');
   }
   if (Date.now() - Number(issuedAt) > 5 * 60_000) {
     throw new ApiError(401, 'Verification ticket expired. Please sign in again.');
@@ -179,8 +179,7 @@ export async function loginUser(
     const minutes = Math.ceil(
       ((user.lockedUntil?.getTime() ?? Date.now()) - Date.now()) / 60_000,
     );
-    throw new ApiError(
-      423,
+    throw ApiError.accountLocked(
       `Too many failed attempts. Try again in ${minutes} minute${minutes === 1 ? '' : 's'}.`,
     );
   }
@@ -242,7 +241,7 @@ export async function verifyLoginMfa(input: {
   const user = await User.findById(userId).select('+mfa.secret');
 
   if (!user) {
-    throw new ApiError(401, 'Invalid verification ticket');
+    throw ApiError.unauthenticated('Invalid verification ticket');
   }
   if (user.status === 'disabled') {
     throw new ApiError(403, 'Account is disabled');
@@ -251,7 +250,7 @@ export async function verifyLoginMfa(input: {
     throw new ApiError(400, 'Two-factor authentication is not enabled for this account');
   }
   if (isLocked(user)) {
-    throw new ApiError(423, 'Too many failed attempts. Try again later.');
+    throw ApiError.accountLocked('Too many failed attempts. Try again later.');
   }
 
   let verified = false;
@@ -269,7 +268,7 @@ export async function verifyLoginMfa(input: {
 
   if (!verified) {
     await registerFailedLogin(user);
-    throw new ApiError(401, 'Invalid authentication code');
+    throw ApiError.mfaInvalid();
   }
 
   await registerSuccessfulLogin(user);
@@ -471,7 +470,7 @@ export async function confirmMfaEnrollment(userId: string, code: string) {
     throw new ApiError(400, 'Start enrolment before confirming');
   }
   if (!verifyTotp(user.mfa.secret, code)) {
-    throw new ApiError(400, 'Invalid authentication code');
+    throw new ApiError(400, 'Invalid authentication code', undefined, 'MFA_INVALID');
   }
 
   const backupCodes = generateBackupCodes(8);
@@ -495,7 +494,7 @@ export async function disableMfa(userId: string, password: string, code: string)
     throw new ApiError(401, 'Password is incorrect');
   }
   if (!user.mfa.secret || !verifyTotp(user.mfa.secret, code)) {
-    throw new ApiError(400, 'Invalid authentication code');
+    throw new ApiError(400, 'Invalid authentication code', undefined, 'MFA_INVALID');
   }
 
   user.mfa = { enabled: false, secret: undefined, backupCodes: [], enrolledAt: undefined };

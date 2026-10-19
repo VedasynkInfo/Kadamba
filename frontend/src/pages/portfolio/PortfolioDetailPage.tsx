@@ -1,5 +1,6 @@
 import { Navigate, useParams } from 'react-router-dom';
 import { Spinner } from '@/components/ui';
+import { ContentError } from '@/components/feedback/ContentState';
 import { usePublicContent } from '@/hooks/usePublicContent';
 import { creativeWorkJsonLd, JsonLd, PageMeta } from '@/seo';
 import { getProjectBySlug } from './data';
@@ -17,13 +18,23 @@ import {
  */
 export default function PortfolioDetailPage() {
   const { slug } = useParams<{ slug: string }>();
-  const { portfolio, loading } = usePublicContent();
+  const { portfolio, loading, error, refresh } = usePublicContent();
   const project = slug ? getProjectBySlug(slug, portfolio) : undefined;
 
   if (loading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center">
         <Spinner label="Loading project" />
+      </div>
+    );
+  }
+
+  // A failed request is not a missing project — redirecting here would hide the
+  // outage behind a page change.
+  if (error) {
+    return (
+      <div className="mx-auto max-w-2xl px-4 py-20">
+        <ContentError error={error} onRetry={refresh} />
       </div>
     );
   }

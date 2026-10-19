@@ -19,7 +19,7 @@ export const globalApiRateLimiter = rateLimit({
   legacyHeaders: false,
   validate,
   skip: skipInTest,
-  message: { success: false, message: 'Too many requests. Try again later.' },
+  message: { success: false, code: 'RATE_LIMITED', message: 'Too many requests. Try again later.' },
 });
 
 /** Auth login — modest abuse protection. */
@@ -30,7 +30,7 @@ export const authRateLimiter = rateLimit({
   legacyHeaders: false,
   validate,
   skip: skipInTest,
-  message: { success: false, message: 'Too many auth attempts. Try again later.' },
+  message: { success: false, code: 'RATE_LIMITED', message: 'Too many auth attempts. Try again later.' },
 });
 
 /** Public form posts (contact / leads). */
@@ -41,7 +41,7 @@ export const publicWriteRateLimiter = rateLimit({
   legacyHeaders: false,
   validate,
   skip: skipInTest,
-  message: { success: false, message: 'Too many submissions. Try again later.' },
+  message: { success: false, code: 'RATE_LIMITED', message: 'Too many submissions. Try again later.' },
 });
 
 /**
@@ -55,7 +55,7 @@ export const passwordResetRateLimiter = rateLimit({
   legacyHeaders: false,
   validate,
   skip: skipInTest,
-  message: { success: false, message: 'Too many reset attempts. Try again later.' },
+  message: { success: false, code: 'RATE_LIMITED', message: 'Too many reset attempts. Try again later.' },
 });
 
 /**
@@ -76,6 +76,7 @@ export const loginAccountRateLimiter = rateLimit({
   },
   message: {
     success: false,
+    code: 'RATE_LIMITED',
     message: 'Too many sign-in attempts for this account. Try again later.',
   },
 });

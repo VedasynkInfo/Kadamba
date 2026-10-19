@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
 import { Section, SectionIntro } from '@/components/ui';
+import { ContentEmpty, ContentLoading } from '@/components/feedback/ContentState';
+import { usePublicContent } from '@/hooks/usePublicContent';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { fadeUp, staggerChildren } from '@/motion/variants';
 import { cn } from '@/utils/cn';
-import { brand, services, type ServiceItem } from '../data';
+import { brand, type ServiceItem } from '../data';
 
 function ServiceIcon({ name }: { name: ServiceItem['icon'] }) {
   const common = 'size-7 stroke-current sm:size-8';
@@ -52,6 +54,23 @@ export function ServicesSection() {
   const navigate = useNavigate();
   const reduced = usePrefersReducedMotion();
   const [active, setActive] = useState(0);
+  const { services: publishedServices, loading } = usePublicContent();
+
+  // The home strip is a preview of the catalogue, so it shows the first few
+  // published services in the order the studio arranged them. Everything else
+  // lives on /services.
+  const services = useMemo<ServiceItem[]>(
+    () =>
+      publishedServices.slice(0, 4).map((service) => ({
+        id: service.id,
+        title: service.title,
+        description: service.summary,
+        href: `/services/${service.slug}`,
+        image: service.cardImage,
+        icon: service.icon,
+      })),
+    [publishedServices],
+  );
 
   return (
     <Section tone="light" className="overflow-hidden py-16 md:py-24">
@@ -65,6 +84,16 @@ export function ServicesSection() {
         }
       />
 
+      {loading ? (
+        <ContentLoading className="mt-10" count={4} label="Loading services" />
+      ) : services.length === 0 ? (
+        <ContentEmpty
+          className="mt-10"
+          title="Our services are being updated"
+          description="Please check back shortly, or contact the studio and we will guide you personally."
+        />
+      ) : (
+        <>
       <motion.ul
         className="mt-10 hidden h-[min(68vh,560px)] gap-2 md:flex"
         variants={reduced ? undefined : staggerChildren}
@@ -185,6 +214,8 @@ export function ServicesSection() {
           </motion.li>
         ))}
       </motion.ul>
+        </>
+      )}
     </Section>
   );
 }

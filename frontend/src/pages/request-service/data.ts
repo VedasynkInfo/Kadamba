@@ -1,5 +1,4 @@
 import { brand } from '@/pages/home/data';
-import { serviceDetails } from '@/pages/services/data';
 import { whatsappHref } from '@/pages/contact/data';
 
 export { brand, whatsappHref };
@@ -31,11 +30,6 @@ export const formSteps = [
 
 export type FormStepId = (typeof formSteps)[number]['id'];
 
-export const serviceOptions = serviceDetails.map((s) => ({
-  value: s.slug,
-  label: s.title,
-}));
-
 export const occasionOptions = [
   { value: 'wedding-bridal', label: 'Wedding / bridal' },
   { value: 'engagement', label: 'Engagement' },
@@ -65,8 +59,15 @@ export const formCopy = {
   maxImageMb: 5,
 } as const;
 
-export function serviceLabelFromSlug(slug: string): string {
-  return serviceOptions.find((o) => o.value === slug)?.label ?? slug;
+/**
+ * Resolves a service slug to the label shown in the review step. The options
+ * come from the loaded catalogue, so this stays a pure lookup.
+ */
+export function serviceLabelFromSlug(
+  slug: string,
+  options: ReadonlyArray<{ value: string; label: string }> = [],
+): string {
+  return options.find((o) => o.value === slug)?.label ?? slug;
 }
 
 export function occasionLabelFromValue(value: string): string {

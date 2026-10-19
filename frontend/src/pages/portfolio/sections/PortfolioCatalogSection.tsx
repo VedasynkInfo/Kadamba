@@ -5,6 +5,7 @@ import { OptimizedImage } from '@/components/media/OptimizedImage';
 import { Button, Input, Section, SectionIntro } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { usePublicContent } from '@/hooks/usePublicContent';
+import { ContentEmpty, ContentError, ContentLoading } from '@/components/feedback/ContentState';
 import { fadeUp, staggerChildren } from '@/motion/variants';
 import { cn } from '@/utils/cn';
 import {
@@ -21,7 +22,7 @@ import {
 export function PortfolioCatalogSection() {
   const navigate = useNavigate();
   const reduced = usePrefersReducedMotion();
-  const { portfolio } = usePublicContent();
+  const { portfolio, loading, error, refresh } = usePublicContent();
   const [category, setCategory] = useState<PortfolioCategoryFilter>('All');
   const [query, setQuery] = useState('');
 
@@ -67,25 +68,59 @@ export function PortfolioCatalogSection() {
         />
       </div>
 
-      <AnimatePresence mode="wait">
-        <motion.ul
-          key={`${category}-${query}`}
-          className="mt-12 grid list-none grid-cols-1 gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3"
-          variants={reduced ? undefined : staggerChildren}
-          initial={reduced ? false : 'hidden'}
-          animate="visible"
-        >
-          {filtered.map((project) => (
-            <motion.li key={project.id} variants={reduced ? undefined : fadeUp}>
-              <ProjectTile project={project} onOpen={() => navigate(`/portfolio/${project.slug}`)} />
-            </motion.li>
-          ))}
-        </motion.ul>
-      </AnimatePresence>
-
-      {filtered.length === 0 ? (
-        <p className="mt-12 text-center text-black/60">No projects match your search.</p>
-      ) : null}
+      {loading ? (
+        <ContentLoading
+          className="mt-12"
+          count={6}
+          columns={3}
+          label="Loading portfolio"
+        />
+      ) : error ? (
+        <ContentError className="mt-12" error={error} onRetry={refresh} />
+      ) : portfolio.length === 0 ? (
+        <ContentEmpty
+          className="mt-12"
+          title="Our portfolio is being updated"
+          description="New commissions are photographed and published regularly. Please check back soon, or visit the studio."
+        />
+      ) : filtered.length === 0 ? (
+        <ContentEmpty
+          className="mt-12"
+          title="No projects match your search"
+          description="Try another category, or clear the search to see the full portfolio."
+          action={
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={() => {
+                setCategory('All');
+                setQuery('');
+              }}
+            >
+              Clear filters
+            </Button>
+          }
+        />
+      ) : (
+        <AnimatePresence mode="wait">
+          <motion.ul
+            key={`${category}-${query}`}
+            className="mt-12 grid list-none grid-cols-1 gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3"
+            variants={reduced ? undefined : staggerChildren}
+            initial={reduced ? false : 'hidden'}
+            animate="visible"
+          >
+            {filtered.map((project) => (
+              <motion.li key={project.id} variants={reduced ? undefined : fadeUp}>
+                <ProjectTile
+                  project={project}
+                  onOpen={() => navigate(`/portfolio/${project.slug}`)}
+                />
+              </motion.li>
+            ))}
+          </motion.ul>
+        </AnimatePresence>
+      )}
     </Section>
   );
 }

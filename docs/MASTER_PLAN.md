@@ -37,7 +37,7 @@
 | 0.3 | CI: gitleaks secret scan | ✅ |
 | 0.3 | CI: token-lint ratchet (hex literals cannot increase) | ✅ |
 | 0.3 | CI: frontend `typecheck` step | ✅ |
-| 0.4 | Error-code taxonomy in shared contract (`ERROR_CODES`) | ✅ (defined; adoption in Phase 5) |
+| 0.4 | Error-code taxonomy in shared contract (`ERROR_CODES`) | ✅ (defined + adopted in 5.1) |
 | 0.5 | Purge leaked password from git history (`git filter-repo`) | ⬜ manual |
 | 0.6 | Move root scratch docs (`chunk_summary.md`, `active_chunk.md`, …) into `docs/` | ⬜ |
 
@@ -159,8 +159,9 @@
 
 | # | Task | Status |
 |---|------|--------|
-| 5.1 | TanStack Query v5 — replace data responsibilities of 9 contexts | ⬜ |
-| 5.1 | Delete seed-data swallowing → real error states | ⬜ |
+| 5.1 | TanStack Query v5 — replace data responsibilities of 9 contexts | 🚧 (CMS + leads + theme done; admin desks remain) |
+| 5.1 | Delete seed-data swallowing → real error states | ✅ |
+| 5.1 | Error-code adoption on the backend (`code` on every error) | ✅ |
 | 5.2 | Zod schemas shared via contract (server + client) | ⬜ |
 | 5.3 | React Router v7 data router (loaders/actions/errorElement) | ⬜ |
 | 5.4 | Typed order state machine (shared transitions) | ⬜ (transitions defined ✅) |
@@ -168,6 +169,16 @@
 | 5.6 | Offline mutation retry queue + offline banner | ⬜ |
 
 **Gate:** every surface has loading/error/empty; optimistic UI rolls back on 4xx; zero raw `useEffect` fetches.
+
+**Notes / follow-ups**
+- **Backend error contract** (Phase 0.4's deferred half) is live: `errorHandler` always emits `code`, and `ApiError` derives one from the status code unless a call site names a specific code — so all 211 existing `new ApiError(...)` sites were correct without edits. Multer, duplicate-key (11000), Mongoose `ValidationError`/`CastError` and the upload-message branches each carry an explicit code. `notFoundHandler` → `NOT_FOUND`. Covered by `backend/src/__tests__/errorContract.test.ts` (401/403/404/400/409/423/upload + the `defaultErrorCode` mapping).
+- **Frontend query backbone:** one `QueryClient` singleton (`lib/queryClient.ts`); 4xx responses are never retried; queries surface failures through a single global toast handler, mutations only when they opt in via `meta.surfaceErrors`. `lib/apiError.ts` normalises anything thrown (axios envelope, transport failure, timeout, plain `Error`) into `AppError { code, status, message, fieldErrors, requestId }`. `lib/queryKeys.ts` roots every domain (`qk.<domain>.all`) so one call invalidates a whole domain, and keeps public (`published:true`) reads in a separate cache family from admin reads — drafts can never be served to a visitor.
+- **Seed swallowing is gone.** `usePublicContent`, `AdminContentContext`, `useLeadsStore` and `ThemeContext` no longer substitute bundled demo content on an empty or failed response; they expose `error` and `isEmpty`, and writes reject instead of swallowing (a failed lead create used to toast a success that never happened). The ~1,300 lines of demo arrays those fallbacks fed were deleted from `frontend/src/pages/{gallery,services,portfolio,blogs,leads,home,request-service}/data.ts`, leaving types, pure helpers and brand prose. That content now lives in the database: `backend npm run seed:cms` (`--dry-run`, `--force`; idempotent on slug/id; never deletes).
+- **Every CMS-backed public surface has all three states.** New shared primitives `components/feedback/ContentState.tsx` (`ContentLoading` / `ContentEmpty` / `ContentError`, `tone` for light vs dark sections) are used by the home services + journal strips, all four catalogue sections, the three detail pages and the enquiry form. Detail pages distinguish "failed to load" from "no such slug" — a 500 no longer silently redirects to the index. `MeasurementsPage` no longer swallows a failed silhouette-template fetch (inline warning, desk still usable).
+- **Settings defaults are configuration, not demo data.** `mergeWebsiteSettings` deep-merges the API document onto the studio's own defaults so an unconfigured section renders sensibly instead of crashing on `settings.media.bannerPresets[0]`. Its input type is a *shallow-per-section* partial (`WebsiteSettingsInput`), which is what the API actually sends.
+- **Tests:** the frontend had no unit runner. Added Vitest + jsdom + Testing Library (`npm test`, currently 36 tests) covering `apiError`, the query-key hierarchy (including the published-vs-draft separation), `mergeWebsiteSettings`, and the loading → data → error behaviour of the CMS query hook. The token ratchet now skips `*.test.ts(x)`: a test asserting `{ accent: '#123456' }` round-trips is checking plumbing, not shipping a colour.
+- **Remaining for 5.1:** ~30 admin desks still own hand-rolled `useEffect` fetches; they need the same query treatment (Phase 7 rewrites most of those components anyway, so the two phases meet there).
+- **Routing smell found while testing:** `router.use('/admin', createSlugAvailableRouter())` applies its `content:write` gate to *any* unmatched `/api/admin/*` path, so a staff user without `content:write` gets `403` instead of `404` for an unknown admin URL. Existing routes all mount before it, so nothing is shadowed today — but the gate should be attached per-route. Folding this into 5.3.
 
 ---
 

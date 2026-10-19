@@ -1,5 +1,13 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import { settingsApi } from '@/services/settings/settingsService';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react';
+import { usePublicSettings } from '@/hooks/useCmsContent';
 import type { WebsiteSettings } from '@/pages/admin/data';
 
 interface ThemeContextType {
@@ -96,41 +104,66 @@ export function applyThemeVariables(theme: WebsiteSettings['theme']) {
   }
 }
 
+/** Live theme tweaks made in the settings editor, before anything is saved. */
+interface ThemeOverride {
+  theme: WebsiteSettings['theme'];
+  logoUrl?: string;
+  logoDarkUrl?: string;
+}
+
+/**
+ * Applies the studio's theme tokens and logo.
+ *
+ * The saved settings come from the same query the public site already runs
+ * (`usePublicSettings`), so this costs no extra request and the two can never
+ * disagree. Until settings arrive — or if the request fails — the built-in
+ * tokens keep the site legible; the failure itself is reported by the query
+ * layer rather than swallowed here.
+ */
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<WebsiteSettings['theme']>(defaultThemeTokens);
-  const [logoUrl, setLogoUrl] = useState<string>('');
-  const [logoDarkUrl, setLogoDarkUrl] = useState<string>('');
+  const site = usePublicSettings();
+  const [override, setOverride] = useState<ThemeOverride | null>(null);
+
+  const saved = useMemo<ThemeOverride | null>(
+    () =>
+      site.settings
+        ? {
+            theme: { ...defaultThemeTokens, ...site.settings.theme },
+            logoUrl: site.settings.logoUrl,
+            logoDarkUrl: site.settings.logoDarkUrl,
+          }
+        : null,
+    [site.settings],
+  );
+
+  const active: ThemeOverride = override ?? saved ?? { theme: defaultThemeTokens };
 
   useEffect(() => {
-    settingsApi
-      .get()
-      .then((settings) => {
-        if (settings?.theme) {
-          const merged = { ...defaultThemeTokens, ...settings.theme };
-          setTheme(merged);
-          applyThemeVariables(merged);
-        }
-        if (settings?.logoUrl) setLogoUrl(settings.logoUrl);
-        if (settings?.logoDarkUrl) setLogoDarkUrl(settings.logoDarkUrl);
-      })
-      .catch((err) => {
-        console.warn('Could not load theme settings, using defaults', err);
-        applyThemeVariables(defaultThemeTokens);
-      });
-  }, []);
+    applyThemeVariables(active.theme);
+  }, [active.theme]);
 
-  const updateThemeTokens = (next: WebsiteSettings['theme'], newLogo?: string, newDarkLogo?: string) => {
-    setTheme(next);
-    applyThemeVariables(next);
-    if (newLogo !== undefined) setLogoUrl(newLogo);
-    if (newDarkLogo !== undefined) setLogoDarkUrl(newDarkLogo);
-  };
-
-  return (
-    <ThemeContext.Provider value={{ theme, logoUrl, logoDarkUrl, updateThemeTokens }}>
-      {children}
-    </ThemeContext.Provider>
+  const updateThemeTokens = useCallback(
+    (next: WebsiteSettings['theme'], newLogo?: string, newDarkLogo?: string) => {
+      setOverride((prev) => ({
+        theme: next,
+        logoUrl: newLogo !== undefined ? newLogo : prev?.logoUrl ?? saved?.logoUrl,
+        logoDarkUrl: newDarkLogo !== undefined ? newDarkLogo : prev?.logoDarkUrl ?? saved?.logoDarkUrl,
+      }));
+    },
+    [saved],
   );
+
+  const value = useMemo<ThemeContextType>(
+    () => ({
+      theme: active.theme,
+      logoUrl: active.logoUrl,
+      logoDarkUrl: active.logoDarkUrl,
+      updateThemeTokens,
+    }),
+    [active.theme, active.logoUrl, active.logoDarkUrl, updateThemeTokens],
+  );
+
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }
 
 export function useTheme() {

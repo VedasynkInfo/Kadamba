@@ -317,6 +317,7 @@ export const ERROR_CODES = [
   'UNAUTHENTICATED',
   'TOKEN_EXPIRED',
   'FORBIDDEN',
+  'BAD_REQUEST',
   'VALIDATION_FAILED',
   'NOT_FOUND',
   'CONFLICT',
@@ -328,6 +329,45 @@ export const ERROR_CODES = [
   'ACCOUNT_LOCKED',
 ] as const;
 export type ErrorCode = (typeof ERROR_CODES)[number];
+
+/**
+ * HTTP status → error code, for the many handlers that do not name a code.
+ * Specific cases (lockout, MFA, uploads, rate limits) pass an explicit code.
+ */
+export function defaultErrorCode(statusCode: number): ErrorCode {
+  if (statusCode === 401) return 'UNAUTHENTICATED';
+  if (statusCode === 403) return 'FORBIDDEN';
+  if (statusCode === 404) return 'NOT_FOUND';
+  if (statusCode === 409) return 'CONFLICT';
+  if (statusCode === 422) return 'VALIDATION_FAILED';
+  if (statusCode === 423) return 'ACCOUNT_LOCKED';
+  if (statusCode === 429) return 'RATE_LIMITED';
+  if (statusCode >= 500) return 'INTERNAL';
+  return 'BAD_REQUEST';
+}
+
+/* -------------------------------------------------------------------------- */
+/* API envelopes                                                              */
+/* -------------------------------------------------------------------------- */
+
+/** Every error response from the API has this shape. */
+export interface ApiErrorResponse {
+  success: false;
+  /** Stable machine-readable cause; preferred over parsing `message`. */
+  code: ErrorCode;
+  message: string;
+  /** Field-level detail (validation errors, conflicting keys, usage lists). */
+  errors?: unknown[];
+  /** Correlates a user-visible failure with the server logs. */
+  requestId?: string;
+}
+
+/** Every success response from the API has this shape. */
+export interface ApiSuccessResponse<T = unknown> {
+  success: true;
+  data: T;
+  message?: string;
+}
 
 /* -------------------------------------------------------------------------- */
 /* Audit                                                                      */

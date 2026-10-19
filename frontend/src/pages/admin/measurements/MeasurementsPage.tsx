@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useToast } from '@/components/ui';
+import { Alert, useToast } from '@/components/ui';
 import { PageMeta, staticPageMeta } from '@/seo';
+import { toAppError } from '@/lib/apiError';
 import {
   measurementApi,
   type MeasurementProfile,
@@ -18,6 +19,7 @@ export default function MeasurementsPage() {
   const [profiles, setProfiles] = useState<MeasurementProfile[]>([]);
   const [templates, setTemplates] = useState<MeasurementTemplate[]>([]);
   const [loading, setLoading] = useState(true);
+  const [templateError, setTemplateError] = useState<string | null>(null);
   const [approvingId, setApprovingId] = useState<string | null>(null);
 
   // Filters & Desk Mode
@@ -34,17 +36,31 @@ export default function MeasurementsPage() {
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
-      const [profData, tplData] = await Promise.all([
+      // Templates are fetched alongside the fit cards but their failure is kept
+      // separate: the desk is still usable without silhouette templates, so it
+      // degrades with an explicit warning instead of pretending they loaded.
+      const [profData, tplResult] = await Promise.all([
         measurementApi.list({ limit: 100 }),
-        measurementApi.listTemplates({ active: true }).catch(() => ({
-          items: [],
-          pagination: { page: 1, limit: 50, total: 0 },
-        })),
+        measurementApi.listTemplates({ active: true }).then(
+          (data) => ({ data, error: null as string | null }),
+          (err: unknown) => ({
+            data: {
+              items: [] as MeasurementTemplate[],
+              pagination: { page: 1, limit: 50, total: 0, pages: 1 },
+            },
+            error: toAppError(err).message,
+          }),
+        ),
       ]);
       setProfiles(profData.items || []);
-      setTemplates(tplData.items || []);
-    } catch {
-      toast({ title: 'Failed to load measurement fit cards', tone: 'error' });
+      setTemplates(tplResult.data.items || []);
+      setTemplateError(tplResult.error);
+    } catch (err) {
+      toast({
+        title: 'Failed to load measurement fit cards',
+        description: toAppError(err).message,
+        tone: 'error',
+      });
       setProfiles([]);
     } finally {
       setLoading(false);
@@ -206,6 +222,12 @@ export default function MeasurementsPage() {
           pendingCount={pendingCount}
           archivedCount={archivedCount}
         />
+
+        {templateError ? (
+          <Alert tone="warning" title="Silhouette templates unavailable">
+            {templateError} Silhouette options fall back to the built-in list until templates load.
+          </Alert>
+        ) : null}
 
         {/* Desk Tabs & Single Row Aligned Toolbar */}
         <MeasurementsToolbar

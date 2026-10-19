@@ -11,6 +11,10 @@
  *   - src/theme/designTokens.ts (the palette definition itself)
  *   - an explicit `// token-lint-disable-next-line` comment
  *
+ * Unit tests are not scanned: a test that asserts a theme token round-trips
+ * (`{ accent: '#123456' }`) is checking plumbing, not shipping a colour. The
+ * ratchet measures production source only.
+ *
  * Usage:
  *   node scripts/check-tokens.mjs            # report + ratchet check
  *   node scripts/check-tokens.mjs --baseline # rewrite the baseline
@@ -40,7 +44,7 @@ function walk(dir) {
     const full = join(dir, entry);
     const st = statSync(full);
     if (st.isDirectory()) out.push(...walk(full));
-    else if (/\.(ts|tsx)$/.test(entry)) out.push(full);
+    else if (/\.(ts|tsx)$/.test(entry) && !/\.test\.(ts|tsx)$/.test(entry)) out.push(full);
   }
   return out;
 }

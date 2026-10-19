@@ -54,7 +54,7 @@ export async function authenticate(req: Request, _res: Response, next: NextFunct
   try {
     const token = extractToken(req);
     if (!token) {
-      throw new ApiError(401, 'No authentication token found');
+      throw ApiError.unauthenticated('No authentication token found');
     }
 
     let claims: AccessClaims;
@@ -62,11 +62,13 @@ export async function authenticate(req: Request, _res: Response, next: NextFunct
       claims = verifyAccessToken(token);
     } catch (err) {
       const expired = err instanceof Error && err.name === 'TokenExpiredError';
-      throw new ApiError(401, expired ? 'Access token expired' : 'Invalid access token');
+      throw expired
+        ? ApiError.tokenExpired('Access token expired')
+        : ApiError.unauthenticated('Invalid access token');
     }
 
     if (!claims.id) {
-      throw new ApiError(401, 'Invalid access token');
+      throw ApiError.unauthenticated('Invalid access token');
     }
 
     const state = await getUserState(claims.id);

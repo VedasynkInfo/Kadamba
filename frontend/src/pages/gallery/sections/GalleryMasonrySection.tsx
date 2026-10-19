@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
 import { Button, Section } from '@/components/ui';
+import { ContentEmpty, ContentError, ContentLoading } from '@/components/feedback/ContentState';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { usePublicContent } from '@/hooks/usePublicContent';
 import { cn } from '@/utils/cn';
@@ -18,7 +19,7 @@ import { GalleryLightbox } from './GalleryLightbox';
  */
 export function GalleryMasonrySection() {
   const reduced = usePrefersReducedMotion();
-  const { gallery } = usePublicContent();
+  const { gallery, loading, error, refresh } = usePublicContent();
   const [filter, setFilter] = useState<GalleryFilter>('All');
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
@@ -73,28 +74,50 @@ export function GalleryMasonrySection() {
         </div>
       </div>
 
-      <p className="mt-6 text-sm text-cream/50" aria-live="polite">
-        {filtered.length} {filtered.length === 1 ? 'piece' : 'pieces'}
-      </p>
-
-      {/* CSS columns masonry — organic heights, no card chrome */}
-      <ul className="mt-8 columns-1 gap-3 sm:columns-2 sm:gap-4 lg:columns-3">
-        <AnimatePresence mode="popLayout">
-          {filtered.map((item, index) => (
-            <MasonryTile
-              key={item.id}
-              item={item}
-              index={index}
-              reduced={reduced}
-              onOpen={() => setActiveIndex(index)}
-            />
-          ))}
-        </AnimatePresence>
-      </ul>
-
-      {filtered.length === 0 ? (
-        <p className="mt-12 text-center text-cream/60">No pieces in this category yet.</p>
+      {!loading ? (
+        <p className="mt-6 text-sm text-cream/50" aria-live="polite">
+          {filtered.length} {filtered.length === 1 ? 'piece' : 'pieces'}
+        </p>
       ) : null}
+
+      {loading ? (
+        <ContentLoading className="mt-8" count={6} tone="dark" label="Loading the lookbook" />
+      ) : error ? (
+        <ContentError className="mt-8" error={error} tone="dark" onRetry={refresh} />
+      ) : filtered.length === 0 ? (
+        <ContentEmpty
+          className="mt-8"
+          tone="dark"
+          title={published.length === 0 ? 'The lookbook is being updated' : 'Nothing in this category yet'}
+          description={
+            published.length === 0
+              ? 'New work is photographed and published regularly. Please check back soon.'
+              : 'Try another occasion, or view the full collection.'
+          }
+          action={
+            published.length > 0 ? (
+              <Button size="sm" variant="secondary" className="!text-cream" onClick={() => setFilter('All')}>
+                Show everything
+              </Button>
+            ) : undefined
+          }
+        />
+      ) : (
+        /* CSS columns masonry — organic heights, no card chrome */
+        <ul className="mt-8 columns-1 gap-3 sm:columns-2 sm:gap-4 lg:columns-3">
+          <AnimatePresence mode="popLayout">
+            {filtered.map((item, index) => (
+              <MasonryTile
+                key={item.id}
+                item={item}
+                index={index}
+                reduced={reduced}
+                onOpen={() => setActiveIndex(index)}
+              />
+            ))}
+          </AnimatePresence>
+        </ul>
+      )}
 
       <GalleryLightbox
         items={filtered}

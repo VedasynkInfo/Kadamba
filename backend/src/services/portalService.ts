@@ -335,7 +335,7 @@ export async function loginPortal(
   }
 
   if (user.lockedUntil && user.lockedUntil.getTime() > Date.now()) {
-    throw new ApiError(423, 'Too many failed attempts. Try again later.');
+    throw ApiError.accountLocked('Too many failed attempts. Try again later.');
   }
 
   if (!(await user.comparePassword(input.password))) {
@@ -351,7 +351,7 @@ export async function loginPortal(
   }
 
   if (user.status === 'disabled') {
-    throw new ApiError(403, 'Account is locked. Contact the boutique.');
+    throw new ApiError(403, 'Account is locked. Contact the boutique.', undefined, 'ACCOUNT_LOCKED');
   }
   if (!user.customerId) {
     throw new ApiError(403, 'Portal account is incomplete. Contact the boutique.');

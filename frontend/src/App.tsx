@@ -4,6 +4,7 @@ import { ErrorBoundary } from '@/components/feedback/ErrorBoundary';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { Spinner } from '@/components/ui';
 import { ToastProvider } from '@/components/ui';
+import { QueryErrorBridge } from '@/lib/QueryErrorBridge';
 import { AuthProvider } from '@/hooks/useAuth';
 import { PortalAuthProvider } from '@/hooks/usePortalAuth';
 import { ThemeProvider } from '@/context/ThemeContext';
@@ -80,6 +81,7 @@ export default function App() {
         <PortalAuthProvider>
           <ThemeProvider>
             <ToastProvider>
+              <QueryErrorBridge />
               <BrowserRouter>
                 <Suspense fallback={<RouteFallback />}>
                   <Routes>

@@ -1,109 +1,83 @@
+import { createContext, useCallback, useContext, useMemo, type ReactNode } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import type { GalleryItem } from '@/pages/gallery/data';
+import type { ServiceDetail } from '@/pages/services/data';
+import type { PortfolioProject } from '@/pages/portfolio/data';
+import type { BlogPost } from '@/pages/blogs/data';
+import type { WebsiteSettings } from '@/pages/admin/data';
+import { qk } from '@/lib/queryKeys';
+import type { AppError } from '@/lib/apiError';
 import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from 'react';
-import { galleryItems, type GalleryItem } from '@/pages/gallery/data';
-import { serviceDetails, type ServiceDetail } from '@/pages/services/data';
-import { portfolioProjects, type PortfolioProject } from '@/pages/portfolio/data';
-import { blogPosts, type BlogPost } from '@/pages/blogs/data';
-import { defaultWebsiteSettings, type WebsiteSettings } from '@/pages/admin/data';
-import { galleryApi } from '@/services/gallery/galleryService';
-import { servicesApi } from '@/services/services/servicesService';
-import { portfolioApi } from '@/services/portfolio/portfolioService';
-import { blogsApi } from '@/services/blogs/blogsService';
-import { settingsApi } from '@/services/settings/settingsService';
+  usePublicBlogs,
+  usePublicGallery,
+  usePublicPortfolio,
+  usePublicServices,
+  usePublicSettings,
+} from '@/hooks/useCmsContent';
+import { mergeWebsiteSettings } from '@/utils/websiteSettings';
 import { whatsappDeepLink } from '@/utils/whatsapp';
 
-interface PublicContentStore {
+export interface PublicContentStore {
+  /** True only on first load; background refreshes do not set this. */
   loading: boolean;
+  /** The first collection failure, so a page can explain why it is empty. */
+  error: AppError | null;
   gallery: GalleryItem[];
   services: ServiceDetail[];
   portfolio: PortfolioProject[];
   blogs: BlogPost[];
+  /** Every collection loaded successfully and none has any content. */
+  isEmpty: boolean;
   /** Settings win for contact/address/logo/social — brand prose stays in home/data.ts */
   settings: WebsiteSettings;
   whatsappHref: (prefill?: string) => string;
-  refresh: () => Promise<void>;
+  refresh: () => void;
 }
 
 const PublicContentContext = createContext<PublicContentStore | null>(null);
 
 /**
- * Loads published CMS content for the public site.
- * Falls back to seed data only when the API returns empty or is offline.
+ * Published CMS content for the public site.
+ *
+ * This used to fall back to bundled demo content whenever the API returned
+ * nothing *or* failed — so the site could not tell a visitor that content was
+ * missing, and an editor could never see that their change had not saved. Now a
+ * failure surfaces as `error` and an empty collection stays empty, so pages can
+ * render honest loading / empty / error states.
  */
 export function PublicContentProvider({ children }: { children: ReactNode }) {
-  const [loading, setLoading] = useState(true);
-  const [gallery, setGallery] = useState<GalleryItem[]>(galleryItems);
-  const [services, setServices] = useState<ServiceDetail[]>(serviceDetails);
-  const [portfolio, setPortfolio] = useState<PortfolioProject[]>(portfolioProjects);
-  const [blogs, setBlogs] = useState<BlogPost[]>(blogPosts);
-  const [settings, setSettings] = useState<WebsiteSettings>(defaultWebsiteSettings);
+  const queryClient = useQueryClient();
 
-  const refresh = useCallback(async () => {
-    setLoading(true);
-    try {
-      const [g, s, p, b, site] = await Promise.all([
-        galleryApi.list({ published: true, limit: 100 }),
-        servicesApi.list({ published: true, limit: 100 }),
-        portfolioApi.list({ published: true, limit: 100 }),
-        blogsApi.list({ published: true, limit: 100 }),
-        settingsApi.get().catch(() => null),
-      ]);
+  const gallery = usePublicGallery();
+  const services = usePublicServices();
+  const portfolio = usePublicPortfolio();
+  const blogs = usePublicBlogs();
+  const site = usePublicSettings();
 
-      setGallery(g.items.length ? g.items : galleryItems);
-      setServices(s.items.length ? s.items : serviceDetails);
-      setPortfolio(p.items.length ? p.items : portfolioProjects);
-      setBlogs(b.items.length ? b.items : blogPosts);
-      if (site) {
-        setSettings({
-          ...defaultWebsiteSettings,
-          ...site,
-          addressLines: site.addressLines?.length ? site.addressLines : defaultWebsiteSettings.addressLines,
-          hours: site.hours?.length ? site.hours : defaultWebsiteSettings.hours,
-          social: site.social?.length ? site.social : defaultWebsiteSettings.social,
-          socialNamed: { ...defaultWebsiteSettings.socialNamed, ...(site.socialNamed || {}) },
-          seo: { ...defaultWebsiteSettings.seo, ...(site.seo || {}) },
-          media: {
-            ...defaultWebsiteSettings.media,
-            ...(site.media || {}),
-            bannerPresets: site.media?.bannerPresets?.length
-              ? site.media.bannerPresets
-              : defaultWebsiteSettings.media.bannerPresets,
-          },
-          theme: { ...defaultWebsiteSettings.theme, ...(site.theme || {}) },
-        });
-      }
-    } catch (err) {
-      console.warn('Public content API unavailable — using seed data', err);
-      setGallery(galleryItems);
-      setServices(serviceDetails);
-      setPortfolio(portfolioProjects);
-      setBlogs(blogPosts);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const loading =
+    gallery.isLoading ||
+    services.isLoading ||
+    portfolio.isLoading ||
+    blogs.isLoading ||
+    site.isLoading;
 
-  useEffect(() => {
-    void refresh();
-  }, [refresh]);
+  // One broken collection should not blank the whole site, so the first failure
+  // is reported while whatever did load still renders.
+  const error = gallery.error ?? services.error ?? portfolio.error ?? blogs.error ?? null;
 
-  // Refetch when returning to the tab after editing in admin
-  useEffect(() => {
-    function onVisible() {
-      if (document.visibilityState === 'visible') {
-        void refresh();
-      }
-    }
-    document.addEventListener('visibilitychange', onVisible);
-    return () => document.removeEventListener('visibilitychange', onVisible);
-  }, [refresh]);
+  const isEmpty =
+    !loading &&
+    !error &&
+    gallery.items.length === 0 &&
+    services.items.length === 0 &&
+    portfolio.items.length === 0 &&
+    blogs.items.length === 0;
+
+  const settings = useMemo(() => mergeWebsiteSettings(site.settings), [site.settings]);
+
+  const refresh = useCallback(() => {
+    void queryClient.invalidateQueries({ queryKey: qk.publicContent.all });
+  }, [queryClient]);
 
   const whatsappHref = useCallback(
     (prefill?: string) =>
@@ -114,14 +88,34 @@ export function PublicContentProvider({ children }: { children: ReactNode }) {
     [settings.whatsappNumber, settings.phoneTel, settings.whatsappPrefill],
   );
 
-  const value = useMemo(
-    () => ({ loading, gallery, services, portfolio, blogs, settings, whatsappHref, refresh }),
-    [loading, gallery, services, portfolio, blogs, settings, whatsappHref, refresh],
+  const value = useMemo<PublicContentStore>(
+    () => ({
+      loading,
+      error,
+      gallery: gallery.items,
+      services: services.items,
+      portfolio: portfolio.items,
+      blogs: blogs.items,
+      isEmpty,
+      settings,
+      whatsappHref,
+      refresh,
+    }),
+    [
+      loading,
+      error,
+      gallery.items,
+      services.items,
+      portfolio.items,
+      blogs.items,
+      isEmpty,
+      settings,
+      whatsappHref,
+      refresh,
+    ],
   );
 
-  return (
-    <PublicContentContext.Provider value={value}>{children}</PublicContentContext.Provider>
-  );
+  return <PublicContentContext.Provider value={value}>{children}</PublicContentContext.Provider>;
 }
 
 export function usePublicContent(): PublicContentStore {

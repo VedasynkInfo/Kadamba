@@ -8,6 +8,7 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "seed:admin": "tsx src/scripts/seedAdmin.ts",
+    "seed:cms": "tsx src/scripts/seedCms.ts",
     "uploads:migrate": "tsx src/scripts/migrateUploads.ts",
     "uploads:optimize": "tsx src/scripts/optimizeExisting.ts",
     "assets:placeholders": "tsx src/scripts/generatePlaceholders.ts",
@@ -45,6 +46,7 @@
     "sharp": "^0.35.5",
     "socket.io": "^4.8.3",
     "typescript": "6.0.3",
+    "zod": "^4.6.7",
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {

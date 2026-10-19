@@ -128,41 +128,6 @@ export const heroSlides: HeroSlide[] = [
   },
 ];
 
-export const services: ServiceItem[] = [
-  {
-    id: 's1',
-    title: 'Bridal Wear',
-    description: 'Wedding lehengas, sarees, and bridal sets designed and tailored for your day.',
-    href: '/services/bridal-wear',
-    image: img.bridal,
-    icon: 'bridal',
-  },
-  {
-    id: 's2',
-    title: 'Traditional Wear',
-    description: 'Festive and everyday ethnic wear — classic silhouettes with refined finishing.',
-    href: '/services/traditional-wear',
-    image: img.saree,
-    icon: 'traditional',
-  },
-  {
-    id: 's3',
-    title: 'Custom Tailoring',
-    description: 'Precise measurements, fittings, and alterations for a perfect personal fit.',
-    href: '/services/custom-tailoring',
-    image: img.stitching,
-    icon: 'tailoring',
-  },
-  {
-    id: 's4',
-    title: 'Boutique Styling',
-    description: 'In-store guidance to choose fabrics, cuts, and looks that suit the occasion.',
-    href: '/services/boutique-styling',
-    image: img.boutique,
-    icon: 'boutique',
-  },
-];
-
 export const collectionCategories = [
   'All',
   'Bridal',
@@ -301,33 +266,6 @@ export const stats: StatItem[] = [
   { id: 'st2', value: 2500, suffix: '+', label: 'Garments tailored' },
   { id: 'st3', value: 800, suffix: '+', label: 'Bridal outfits completed' },
   { id: 'st4', value: 95, suffix: '%', label: 'Clients who return' },
-];
-
-export const latestBlogs: BlogPreview[] = [
-  {
-    id: 'b1',
-    title: 'Choosing a bridal lehenga for a Kurnool wedding',
-    excerpt: 'Fabric, season, and ceremony timing — a simple guide from our boutique floor.',
-    date: '2026-06-12',
-    href: '/blogs/choosing-bridal-lehenga-kurnool',
-    image: img.lehenga,
-  },
-  {
-    id: 'b2',
-    title: 'Why custom tailoring still matters',
-    excerpt: 'How a proper fitting transforms traditional wear from beautiful to unforgettable.',
-    date: '2026-05-28',
-    href: '/blogs/why-custom-tailoring-still-matters',
-    image: img.stitching,
-  },
-  {
-    id: 'b3',
-    title: 'Festive saree blouse trends we love',
-    excerpt: 'Classic necklines and finishes our clients request most this season.',
-    date: '2026-05-04',
-    href: '/blogs/festive-saree-blouse-trends',
-    image: img.saree,
-  },
 ];
 
 export const heroImage = img.bridal;

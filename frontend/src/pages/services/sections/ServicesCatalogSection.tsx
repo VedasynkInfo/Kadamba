@@ -5,6 +5,7 @@ import { OptimizedImage } from '@/components/media/OptimizedImage';
 import { Button, Input, Section, SectionIntro } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { usePublicContent } from '@/hooks/usePublicContent';
+import { ContentEmpty, ContentError, ContentLoading } from '@/components/feedback/ContentState';
 import { fadeUp, staggerChildren } from '@/motion/variants';
 import { cn } from '@/utils/cn';
 import {
@@ -59,7 +60,7 @@ function ServiceIconMark({ name }: { name: ServiceIcon }) {
 export function ServicesCatalogSection() {
   const navigate = useNavigate();
   const reduced = usePrefersReducedMotion();
-  const { services } = usePublicContent();
+  const { services, loading, error, refresh } = usePublicContent();
   const [category, setCategory] = useState<ServiceCategoryFilter>('All');
   const [query, setQuery] = useState('');
 
@@ -106,42 +107,76 @@ export function ServicesCatalogSection() {
         />
       </div>
 
-      <p className="mt-4 text-sm text-black/55" aria-live="polite">
-        {filtered.length} {filtered.length === 1 ? 'service' : 'services'}
-        {category !== 'All' ? ` in ${category}` : ''}
-        {query.trim() ? ` matching “${query.trim()}”` : ''}
-      </p>
+      {loading ? (
+        <ContentLoading
+          className="mt-10"
+          count={4}
+          columns={2}
+          label="Loading services"
+        />
+      ) : error ? (
+        <ContentError className="mt-10" error={error} onRetry={refresh} />
+      ) : services.length === 0 ? (
+        <ContentEmpty
+          className="mt-10"
+          title="Our service list is being updated"
+          description="Please check back shortly, or contact the studio and we will guide you personally."
+        />
+      ) : (
+        <>
+          <p className="mt-4 text-sm text-black/55" aria-live="polite">
+            {filtered.length} {filtered.length === 1 ? 'service' : 'services'}
+            {category !== 'All' ? ` in ${category}` : ''}
+            {query.trim() ? ` matching “${query.trim()}”` : ''}
+          </p>
 
-      <AnimatePresence mode="wait">
-        {filtered.length === 0 ? (
-          <motion.p
-            key="empty"
-            className="mt-12 text-base text-black/70"
-            initial={reduced ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={reduced ? undefined : { opacity: 0 }}
-          >
-            No services match your search. Try another category or clear the search.
-          </motion.p>
-        ) : (
-          <motion.ul
-            key={`${category}-${query}`}
-            className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-2"
-            variants={reduced ? undefined : staggerChildren}
-            initial={reduced ? false : 'hidden'}
-            animate={reduced ? undefined : 'visible'}
-          >
-            {filtered.map((service) => (
-              <ServiceCard
-                key={service.id}
-                service={service}
-                reduced={reduced}
-                onOpen={() => navigate(`/services/${service.slug}`)}
-              />
-            ))}
-          </motion.ul>
-        )}
-      </AnimatePresence>
+          <AnimatePresence mode="wait">
+            {filtered.length === 0 ? (
+              <motion.div
+                key="empty"
+                initial={reduced ? false : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={reduced ? undefined : { opacity: 0 }}
+              >
+                <ContentEmpty
+                  className="mt-10"
+                  title="No services match your search"
+                  description="Try another category, or clear the search to see everything we offer."
+                  action={
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => {
+                        setCategory('All');
+                        setQuery('');
+                      }}
+                    >
+                      Clear filters
+                    </Button>
+                  }
+                />
+              </motion.div>
+            ) : (
+              <motion.ul
+                key={`${category}-${query}`}
+                className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-2"
+                variants={reduced ? undefined : staggerChildren}
+                initial={reduced ? false : 'hidden'}
+                animate={reduced ? undefined : 'visible'}
+              >
+                {filtered.map((service) => (
+                  <ServiceCard
+                    key={service.id}
+                    service={service}
+                    reduced={reduced}
+                    onOpen={() => navigate(`/services/${service.slug}`)}
+                  />
+                ))}
+              </motion.ul>
+            )}
+          </AnimatePresence>
+        </>
+      )}
     </Section>
   );
 }

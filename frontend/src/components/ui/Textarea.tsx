@@ -44,7 +44,7 @@ export function Textarea({
         }
         className={cn(
           'w-full resize-y rounded-lg border px-3.5 py-2 text-sm transition-all',
-          'bg-[var(--public-card,#ffffff)] text-[var(--public-card-text,#171717)] border-black/15',
+          'bg-surface-field text-ink-raised border-line',
           'placeholder:opacity-40',
           'focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30',
           'disabled:cursor-not-allowed disabled:opacity-50',
@@ -54,7 +54,7 @@ export function Textarea({
         {...props}
       />
       {hint && !error ? (
-        <p id={`${areaId}-hint`} className="text-xs text-black/50">
+        <p id={`${areaId}-hint`} className="text-xs text-ink/50">
           {hint}
         </p>
       ) : null}

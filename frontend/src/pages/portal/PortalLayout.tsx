@@ -24,7 +24,7 @@ function RequirePortal({ children }: { children: React.ReactNode }) {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#0c0a08]">
+      <div className="portal-shell flex min-h-screen items-center justify-center bg-surface">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-gold/30 border-t-gold" />
       </div>
     );
@@ -65,7 +65,7 @@ function PortalShell() {
   }, [notify, refreshUnread]);
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_#2a2118_0%,_#0c0a08_55%)] text-cream">
+    <div className="portal-shell min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--color-ember)_0%,_var(--color-espresso)_55%)] text-ink-inverse">
       <header className="border-b border-gold/20 bg-black/40 backdrop-blur-md">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
           <Link to="/portal/dashboard" className="flex items-center gap-3 min-w-0">
@@ -83,14 +83,14 @@ function PortalShell() {
               </p>
             )}
             <div>
-              <p className="truncate text-[0.62rem] uppercase tracking-[0.28em] text-cream/50">
+              <p className="truncate text-[0.62rem] uppercase tracking-[0.28em] text-ink-inverse/50">
                 Customer portal · {brand.location}
               </p>
             </div>
           </Link>
           <div className="flex items-center gap-3 text-right">
             <div className="hidden sm:block">
-              <p className="text-sm text-cream/90">{user?.name}</p>
+              <p className="text-sm text-ink-inverse/90">{user?.name}</p>
               {user?.referenceId ? (
                 <p className="font-mono text-[0.65rem] text-gold/80">{user.referenceId}</p>
               ) : null}
@@ -120,7 +120,7 @@ function PortalShell() {
                     'shrink-0 rounded-sm px-3 py-2 text-xs uppercase tracking-[0.16em] transition',
                     isActive
                       ? 'bg-gold/15 text-gold'
-                      : 'text-cream/55 hover:bg-white/5 hover:text-cream',
+                      : 'text-ink-inverse/55 hover:bg-white/5 hover:text-ink-inverse',
                   )
                 }
               >

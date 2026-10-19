@@ -17,7 +17,7 @@ export function Checkbox({ label, error, id, className, disabled, ...props }: Ch
       <label
         htmlFor={checkId}
         className={cn(
-          'inline-flex cursor-pointer items-start gap-2.5 text-sm text-black',
+          'inline-flex cursor-pointer items-start gap-2.5 text-sm text-ink',
           disabled && 'cursor-not-allowed opacity-50',
           className,
         )}
@@ -28,7 +28,7 @@ export function Checkbox({ label, error, id, className, disabled, ...props }: Ch
           disabled={disabled}
           aria-invalid={error ? true : undefined}
           className={cn(
-            'mt-0.5 size-4 shrink-0 appearance-none rounded border border-black/25 bg-cream',
+            'mt-0.5 size-4 shrink-0 appearance-none rounded border border-line-strong bg-surface-field',
             'checked:border-gold checked:bg-gold',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40',
             'disabled:cursor-not-allowed',

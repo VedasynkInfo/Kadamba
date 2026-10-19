@@ -12,14 +12,9 @@ export function MediaTab({ form, patchForm }: MediaTabProps) {
     <div className="space-y-6 text-xs">
       {/* Upload Limits & Processing */}
       <div
-        className="rounded-2xl border p-5 shadow-xs space-y-4 transition-colors"
-        style={{
-          backgroundColor: 'var(--admin-card, #141b26)',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-        }}
+        className="rounded-2xl border p-5 shadow-xs space-y-4 transition-colors bg-surface-raised border-line text-ink-raised"
       >
-        <div className="border-b pb-3" style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}>
+        <div className="border-b pb-3 border-line">
           <h3 className="font-heading text-sm font-bold tracking-wide">Media & Storage Rules</h3>
           <p className="text-[10px] opacity-60 mt-0.5">Asset upload limits, CDN compression, and format requirements</p>
         </div>
@@ -41,12 +36,7 @@ export function MediaTab({ form, patchForm }: MediaTabProps) {
                   media: { ...f.media, maxUploadBytes: mb * 1024 * 1024 },
                 }));
               }}
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-              style={{
-                backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
             />
             <span className="text-[10px] opacity-50 block mt-0.5">
               Applies to lookbook pictures, gallery items, and customer fit photos
@@ -65,12 +55,7 @@ export function MediaTab({ form, patchForm }: MediaTabProps) {
                   media: { ...f.media, defaultUnit: e.target.value as 'in' | 'cm' },
                 }))
               }
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)] cursor-pointer"
-              style={{
-                backgroundColor: 'var(--admin-card, #141b26)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand cursor-pointer bg-surface-raised border-line"
             >
               <option value="in">Inches (Standard Indian Couture)</option>
               <option value="cm">Centimeters (Metric)</option>
@@ -81,14 +66,9 @@ export function MediaTab({ form, patchForm }: MediaTabProps) {
 
       {/* Preset Aspect Ratios */}
       <div
-        className="rounded-2xl border p-5 shadow-xs space-y-4 transition-colors"
-        style={{
-          backgroundColor: 'var(--admin-card, #141b26)',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-        }}
+        className="rounded-2xl border p-5 shadow-xs space-y-4 transition-colors bg-surface-raised border-line text-ink-raised"
       >
-        <div className="border-b pb-3" style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}>
+        <div className="border-b pb-3 border-line">
           <h3 className="font-heading text-sm font-bold tracking-wide">Lookbook & Banner Presets</h3>
           <p className="text-[10px] opacity-60 mt-0.5">Target canvas resolutions used for responsive atelier media</p>
         </div>
@@ -97,11 +77,7 @@ export function MediaTab({ form, patchForm }: MediaTabProps) {
           {(form.media?.bannerPresets || []).map((preset, idx) => (
             <div
               key={idx}
-              className="rounded-xl border p-3.5 space-y-1"
-              style={{
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))',
-                backgroundColor: 'rgba(128, 128, 128, 0.04)',
-              }}
+              className="rounded-xl border p-3.5 space-y-1 border-line bg-surface-sunken"
             >
               <span className="font-bold text-xs block">{preset.label}</span>
               <div className="flex justify-between text-[11px] opacity-65 font-mono">

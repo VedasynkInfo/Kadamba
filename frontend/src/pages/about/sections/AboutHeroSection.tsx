@@ -14,7 +14,7 @@ export function AboutHeroSection() {
 
   return (
     <section
-      className="relative isolate w-full overflow-hidden bg-black text-cream"
+      className="relative isolate w-full overflow-hidden bg-black text-ink-inverse"
       aria-label="About Kadamba's Designer Studio"
     >
       <div className="relative min-h-[min(88svh,880px)] w-full md:min-h-[calc(100svh-4.25rem)]">
@@ -53,10 +53,10 @@ export function AboutHeroSection() {
             <p className="font-heading text-4xl tracking-wide text-gold sm:text-5xl md:text-6xl lg:text-7xl">
               Kadamba
             </p>
-            <h1 className="mt-4 font-heading text-2xl font-medium text-cream sm:text-3xl md:text-4xl">
+            <h1 className="mt-4 font-heading text-2xl font-medium text-ink-inverse sm:text-3xl md:text-4xl">
               {aboutHero.headline}
             </h1>
-            <p className="text-lede mt-5 text-cream/85">{aboutHero.copy}</p>
+            <p className="text-lede mt-5 text-ink-inverse/85">{aboutHero.copy}</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button variant="primary" size="lg" onClick={() => navigate('/request-service')}>
                 Request a consultation
@@ -64,7 +64,7 @@ export function AboutHeroSection() {
               <Button
                 variant="secondary"
                 size="lg"
-                className="!text-cream"
+                className="text-ink-inverse"
                 onClick={() => navigate('/contact')}
               >
                 Contact the studio

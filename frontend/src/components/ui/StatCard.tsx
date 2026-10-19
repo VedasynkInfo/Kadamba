@@ -30,15 +30,10 @@ export function StatCard({
   const content = (
     <div
       className={cn(
-        'group relative overflow-hidden rounded-xl border p-4 sm:p-5 transition-all duration-300 shadow-2xs',
-        'hover:border-gold/50 hover:shadow-[0_8px_30px_rgba(0,0,0,0.15)] hover:-translate-y-0.5',
-        className
+        'group relative overflow-hidden rounded-xl border border-line bg-surface-raised p-4 text-ink transition-all duration-300 sm:p-5 shadow-2xs',
+        'hover:border-gold/50 hover:shadow-lg hover:-translate-y-0.5',
+        className,
       )}
-      style={{
-        backgroundColor: 'var(--admin-card, #1f2937)',
-        borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-        color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-      }}
     >
       <span
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent"

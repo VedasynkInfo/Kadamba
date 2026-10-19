@@ -26,10 +26,10 @@ interface ToastContextValue {
 const ToastContext = createContext<ToastContextValue | null>(null);
 
 const toneClasses: Record<ToastTone, string> = {
-  default: 'border-gold/40 bg-black text-cream',
-  success: 'border-emerald-500/50 bg-black text-cream',
-  error: 'border-red-500/50 bg-black text-cream',
-  info: 'border-gold bg-black text-cream',
+  default: 'border-gold/40 bg-black text-ink-inverse',
+  success: 'border-emerald-500/50 bg-black text-ink-inverse',
+  error: 'border-red-500/50 bg-black text-ink-inverse',
+  info: 'border-gold bg-black text-ink-inverse',
 };
 
 /**
@@ -67,7 +67,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             key={item.id}
             role="status"
             className={cn(
-              'pointer-events-auto animate-toast-in rounded-md border px-4 py-3 shadow-[var(--shadow-soft)]',
+              'pointer-events-auto animate-toast-in rounded-md border px-4 py-3 shadow-soft',
               toneClasses[item.tone ?? 'default'],
             )}
           >
@@ -75,13 +75,13 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               <div>
                 <p className="font-heading text-sm text-gold">{item.title}</p>
                 {item.description ? (
-                  <p className="mt-1 text-xs text-cream/70">{item.description}</p>
+                  <p className="mt-1 text-xs text-ink-inverse/70">{item.description}</p>
                 ) : null}
               </div>
               <button
                 type="button"
                 onClick={() => dismiss(item.id)}
-                className="text-cream/60 hover:text-gold"
+                className="text-ink-inverse/60 hover:text-gold"
                 aria-label="Dismiss notification"
               >
                 ✕

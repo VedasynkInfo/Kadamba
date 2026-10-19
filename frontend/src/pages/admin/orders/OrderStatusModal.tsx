@@ -25,7 +25,7 @@ export function OrderStatusModal({
   return (
     <Modal open={open} onClose={onClose} title="Reason for lifecycle transition">
       <div className="space-y-4">
-        <p className="text-xs text-black/65">
+        <p className="text-xs text-ink/65">
           You are moving this order status to{' '}
           <span className="font-semibold uppercase">
             {nextStatus ? orderStatusLabel(nextStatus) : ''}
@@ -39,7 +39,7 @@ export function OrderStatusModal({
           value={transitionNote}
           onChange={(e) => setTransitionNote(e.target.value)}
         />
-        <div className="flex gap-3 justify-end pt-2 border-t border-black/5">
+        <div className="flex gap-3 justify-end pt-2 border-t border-line">
           <Button variant="secondary" size="sm" onClick={onClose}>
             Abort
           </Button>

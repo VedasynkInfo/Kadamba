@@ -58,7 +58,7 @@ export function FeaturedCollectionsSection() {
                 variant={filter === category ? 'primary' : 'secondary'}
                 className={cn(
                   'min-h-10',
-                  filter !== category && '!text-cream hover:!border-gold hover:!text-gold',
+                  filter !== category && 'text-ink-inverse hover:border-gold hover:text-gold',
                 )}
                 onClick={() => setFilter(category)}
                 aria-pressed={filter === category}
@@ -112,11 +112,11 @@ export function FeaturedCollectionsSection() {
                 <div className="absolute inset-x-0 bottom-0 flex flex-col gap-2 p-5 sm:flex-row sm:items-end sm:justify-between sm:p-8">
                   <div>
                     <p className="text-xs uppercase tracking-[0.2em] text-gold">{featured.category}</p>
-                    <p className="mt-2 font-heading text-2xl text-cream sm:text-3xl md:text-4xl">
+                    <p className="mt-2 font-heading text-2xl text-ink-inverse sm:text-3xl md:text-4xl">
                       {featured.title}
                     </p>
                   </div>
-                  <span className="text-sm text-cream/80">Open preview →</span>
+                  <span className="text-sm text-ink-inverse/80">Open preview →</span>
                 </div>
               </motion.button>
             </AnimatePresence>
@@ -135,7 +135,7 @@ export function FeaturedCollectionsSection() {
                   className={cn(
                     'h-1.5 rounded-full transition-all duration-300',
                     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold',
-                    i === featuredIndex ? 'w-8 bg-gold' : 'w-2.5 bg-cream/30 hover:bg-cream/50',
+                    i === featuredIndex ? 'w-8 bg-gold' : 'w-2.5 bg-ink-inverse/30 hover:bg-ink-inverse/50',
                   )}
                 />
               ))}
@@ -194,7 +194,7 @@ export function FeaturedCollectionsSection() {
                   sizes="(min-width: 1200px) 368px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                   src={item.image}
                   alt={item.alt}
-                  className="h-full w-full object-cover transition-transform duration-700 ease-[var(--ease-luxury)] group-hover:scale-110 group-focus-visible:scale-105"
+                  className="h-full w-full object-cover transition-transform duration-700 ease-luxury group-hover:scale-110 group-focus-visible:scale-105"
                   width={900}
                   height={700}
                 />
@@ -203,7 +203,7 @@ export function FeaturedCollectionsSection() {
                   aria-hidden
                 />
                 <div className="absolute inset-x-0 bottom-0 translate-y-1 p-4 transition-transform duration-300 group-hover:translate-y-0 sm:p-5">
-                  <p className="font-heading text-lg text-cream sm:text-xl">{item.title}</p>
+                  <p className="font-heading text-lg text-ink-inverse sm:text-xl">{item.title}</p>
                   <p className="mt-1 text-xs uppercase tracking-[0.18em] text-gold">{item.category}</p>
                 </div>
                 <span
@@ -241,7 +241,7 @@ function ControlButton({
       type="button"
       onClick={onClick}
       aria-label={label}
-      className="flex size-10 items-center justify-center border border-gold/40 text-cream transition-colors hover:border-gold hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+      className="flex size-10 items-center justify-center border border-gold/40 text-ink-inverse transition-colors hover:border-gold hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
     >
       <svg className="size-4" viewBox="0 0 24 24" fill="none" aria-hidden>
         <path

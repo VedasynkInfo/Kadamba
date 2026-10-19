@@ -13,9 +13,9 @@ export interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
 }
 
 const levelClasses: Record<HeadingLevel, string> = {
-  1: 'text-4xl md:text-5xl lg:text-[length:var(--font-size-h1)]',
-  2: 'text-3xl md:text-[length:var(--font-size-h2)]',
-  3: 'text-2xl md:text-[length:var(--font-size-h3)]',
+  1: 'text-4xl md:text-5xl lg:text-h1',
+  2: 'text-3xl md:text-h2',
+  3: 'text-2xl md:text-h3',
   4: 'text-xl',
 };
 

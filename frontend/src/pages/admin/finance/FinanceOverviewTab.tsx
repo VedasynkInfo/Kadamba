@@ -20,12 +20,7 @@ export function FinanceOverviewTab({ summary }: FinanceOverviewTabProps) {
       {/* Visual Revenue vs Expense Progression */}
       {summary.series.length > 0 ? (
         <div
-          className="rounded-xl border p-5 shadow-xs transition-colors"
-          style={{
-            backgroundColor: 'var(--admin-card, #141b26)',
-            borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-            color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-          }}
+          className="rounded-xl border p-5 shadow-xs transition-colors bg-surface-raised border-line text-ink-raised"
         >
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-5">
             <div>
@@ -67,8 +62,7 @@ export function FinanceOverviewTab({ summary }: FinanceOverviewTabProps) {
                   </div>
 
                   <div
-                    className="h-3 w-full rounded-full overflow-hidden flex gap-1 p-0.5"
-                    style={{ backgroundColor: 'rgba(128, 128, 128, 0.1)' }}
+                    className="h-3 w-full rounded-full overflow-hidden flex gap-1 p-0.5 bg-surface-sunken"
                   >
                     <div
                       className="h-full rounded-full bg-emerald-400 transition-all duration-500"
@@ -91,12 +85,7 @@ export function FinanceOverviewTab({ summary }: FinanceOverviewTabProps) {
       {/* Quick Access Portals */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div
-          className="rounded-xl border p-5 shadow-xs transition hover:border-[var(--admin-primary,#b59410)]"
-          style={{
-            backgroundColor: 'var(--admin-card, #141b26)',
-            borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-            color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-          }}
+          className="rounded-xl border p-5 shadow-xs transition hover:border-brand bg-surface-raised border-line text-ink-raised"
         >
           <div className="flex items-center justify-between mb-2">
             <h4 className="font-heading text-sm font-bold">Invoices & Billing Hub</h4>
@@ -107,7 +96,7 @@ export function FinanceOverviewTab({ summary }: FinanceOverviewTabProps) {
           </p>
           <Link
             to="/admin/invoices"
-            className="inline-flex items-center gap-1 font-semibold text-[var(--admin-primary,#b59410)] hover:underline"
+            className="inline-flex items-center gap-1 font-semibold text-brand hover:underline"
           >
             <span>Open Invoices Desk</span>
             <span>→</span>
@@ -115,12 +104,7 @@ export function FinanceOverviewTab({ summary }: FinanceOverviewTabProps) {
         </div>
 
         <div
-          className="rounded-xl border p-5 shadow-xs transition hover:border-[var(--admin-primary,#b59410)]"
-          style={{
-            backgroundColor: 'var(--admin-card, #141b26)',
-            borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-            color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-          }}
+          className="rounded-xl border p-5 shadow-xs transition hover:border-brand bg-surface-raised border-line text-ink-raised"
         >
           <div className="flex items-center justify-between mb-2">
             <h4 className="font-heading text-sm font-bold">Payments & Receipts</h4>
@@ -131,7 +115,7 @@ export function FinanceOverviewTab({ summary }: FinanceOverviewTabProps) {
           </p>
           <Link
             to="/admin/payments"
-            className="inline-flex items-center gap-1 font-semibold text-[var(--admin-primary,#b59410)] hover:underline"
+            className="inline-flex items-center gap-1 font-semibold text-brand hover:underline"
           >
             <span>Open Payments Desk</span>
             <span>→</span>

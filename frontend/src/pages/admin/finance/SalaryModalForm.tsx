@@ -118,18 +118,12 @@ export function SalaryModalForm({ open, staffList, onClose, onSuccess }: SalaryM
       aria-label="Disburse salary modal"
     >
       <div
-        className="w-full max-w-lg rounded-2xl border shadow-2xl overflow-hidden transition-all text-xs"
-        style={{
-          backgroundColor: 'var(--admin-card, #141b26)',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.22))',
-          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-        }}
+        className="w-full max-w-lg rounded-2xl border shadow-2xl overflow-hidden transition-all text-xs bg-surface-raised border-line text-ink-raised"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div
-          className="flex items-center justify-between border-b px-5 py-4"
-          style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))' }}
+          className="flex items-center justify-between border-b px-5 py-4 border-line"
         >
           <div className="flex items-center gap-2.5">
             <span className="text-xl">💰</span>
@@ -145,8 +139,7 @@ export function SalaryModalForm({ open, staffList, onClose, onSuccess }: SalaryM
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer"
-            style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))' }}
+            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer border-line"
             aria-label="Close modal"
           >
             ✕
@@ -168,12 +161,7 @@ export function SalaryModalForm({ open, staffList, onClose, onSuccess }: SalaryM
             <select
               value={staffId}
               onChange={(e) => handleStaffChange(e.target.value)}
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)] cursor-pointer"
-              style={{
-                backgroundColor: 'var(--admin-card, #141b26)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand cursor-pointer bg-surface-raised border-line"
             >
               {staffList.map((s) => (
                 <option key={s.id} value={s.id}>
@@ -192,12 +180,7 @@ export function SalaryModalForm({ open, staffList, onClose, onSuccess }: SalaryM
               <select
                 value={month}
                 onChange={(e) => setMonth(e.target.value)}
-                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)] cursor-pointer"
-                style={{
-                  backgroundColor: 'var(--admin-card, #141b26)',
-                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                  color: 'inherit',
-                }}
+                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand cursor-pointer bg-surface-raised border-line"
               >
                 {MONTH_NAMES.map((name, idx) => (
                   <option key={idx + 1} value={String(idx + 1)}>
@@ -215,12 +198,7 @@ export function SalaryModalForm({ open, staffList, onClose, onSuccess }: SalaryM
                 type="number"
                 value={year}
                 onChange={(e) => setYear(e.target.value)}
-                className="w-full rounded-xl border py-2 px-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-                style={{
-                  backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                  color: 'inherit',
-                }}
+                className="w-full rounded-xl border py-2 px-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
               />
             </div>
           </div>
@@ -239,11 +217,7 @@ export function SalaryModalForm({ open, staffList, onClose, onSuccess }: SalaryM
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="e.g. 25000"
-                className="w-full rounded-xl border py-2 px-3 text-xs font-bold text-amber-400 focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-                style={{
-                  backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                }}
+                className="w-full rounded-xl border py-2 px-3 text-xs font-bold text-amber-400 focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
               />
             </div>
 
@@ -256,12 +230,7 @@ export function SalaryModalForm({ open, staffList, onClose, onSuccess }: SalaryM
                 required
                 value={paidAt}
                 onChange={(e) => setPaidAt(e.target.value)}
-                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-                style={{
-                  backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                  color: 'inherit',
-                }}
+                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
               />
             </div>
           </div>
@@ -276,37 +245,26 @@ export function SalaryModalForm({ open, staffList, onClose, onSuccess }: SalaryM
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Bank transfer reference, IMPS txn ID, or cash payout notes..."
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-              style={{
-                backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
             />
           </div>
 
           {/* Footer */}
           <div
-            className="flex items-center justify-end gap-3 pt-3 border-t"
-            style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}
+            className="flex items-center justify-end gap-3 pt-3 border-t border-line"
           >
             <button
               type="button"
               onClick={onClose}
               disabled={submitting}
-              className="rounded-xl px-4 py-2 text-xs font-semibold border hover:bg-current/[0.05] transition cursor-pointer"
-              style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
+              className="rounded-xl px-4 py-2 text-xs font-semibold border hover:bg-current/[0.05] transition cursor-pointer border-line"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting || !staffId}
-              className="rounded-xl px-5 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 disabled:opacity-50 cursor-pointer"
-              style={{
-                backgroundColor: 'var(--admin-primary, #b59410)',
-                color: 'var(--admin-primary-text, #ffffff)',
-              }}
+              className="rounded-xl px-5 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 disabled:opacity-50 cursor-pointer bg-brand text-ink-on-brand"
             >
               {submitting ? 'Disbursing...' : 'Disburse Salary'}
             </button>

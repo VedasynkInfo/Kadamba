@@ -6,10 +6,10 @@ import { Navbar } from './Navbar';
 export function MainLayout() {
   return (
     <PublicContentProvider>
-      <div className="flex min-h-screen flex-col bg-cream">
+      <div className="flex min-h-screen flex-col bg-surface">
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-black focus:px-4 focus:py-2 focus:text-sm focus:text-cream focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-black focus:px-4 focus:py-2 focus:text-sm focus:text-ink-inverse focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
         >
           Skip to content
         </a>

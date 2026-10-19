@@ -24,26 +24,16 @@ export function CustomerPreviewModal({ customer, onClose }: CustomerPreviewModal
       aria-modal="true"
     >
       <div
-        className="relative w-full max-w-xl rounded-2xl border shadow-2xl overflow-hidden animate-fade-in-up text-xs"
-        style={{
-          backgroundColor: 'var(--admin-card, #141b26)',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-        }}
+        className="relative w-full max-w-xl rounded-2xl border shadow-2xl overflow-hidden animate-fade-in-up text-xs bg-surface-raised border-line text-ink-raised"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div
-          className="flex items-center justify-between border-b px-6 py-4"
-          style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))' }}
+          className="flex items-center justify-between border-b px-6 py-4 border-line"
         >
           <div className="flex items-center gap-2">
             <span
-              className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider"
-              style={{
-                backgroundColor: 'rgba(181, 148, 16, 0.15)',
-                color: 'var(--admin-primary, #b59410)',
-              }}
+              className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-brand/15 text-brand"
             >
               #{customer.id.slice(-6).toUpperCase()}
             </span>
@@ -63,8 +53,7 @@ export function CustomerPreviewModal({ customer, onClose }: CustomerPreviewModal
           <button
             type="button"
             onClick={onClose}
-            className="h-8 w-8 rounded-lg border flex items-center justify-center text-xs opacity-70 hover:opacity-100 hover:bg-current/[0.06] transition cursor-pointer"
-            style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))' }}
+            className="h-8 w-8 rounded-lg border flex items-center justify-center text-xs opacity-70 hover:opacity-100 hover:bg-current/[0.06] transition cursor-pointer border-line"
             aria-label="Close dialog"
           >
             ✕
@@ -82,11 +71,7 @@ export function CustomerPreviewModal({ customer, onClose }: CustomerPreviewModal
 
           {/* Contact Details Card */}
           <div
-            className="grid grid-cols-2 gap-3 rounded-xl p-3.5 border"
-            style={{
-              backgroundColor: 'rgba(128, 128, 128, 0.05)',
-              borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))',
-            }}
+            className="grid grid-cols-2 gap-3 rounded-xl p-3.5 border bg-surface-sunken border-line"
           >
             <div>
               <span className="opacity-50 block text-[10px] uppercase font-semibold">Primary Mobile</span>
@@ -107,11 +92,7 @@ export function CustomerPreviewModal({ customer, onClose }: CustomerPreviewModal
           {/* Address Information */}
           {customer.address ? (
             <div
-              className="rounded-xl p-3.5 border text-xs space-y-1"
-              style={{
-                backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))',
-              }}
+              className="rounded-xl p-3.5 border text-xs space-y-1 bg-surface-sunken border-line"
             >
               <span className="opacity-50 block text-[10px] uppercase font-semibold">Bespoke Atelier Address</span>
               <p className="opacity-90">
@@ -137,8 +118,7 @@ export function CustomerPreviewModal({ customer, onClose }: CustomerPreviewModal
                 {customer.tags.map((t, idx) => (
                   <span
                     key={idx}
-                    className="px-2 py-0.5 rounded-full border text-[11px] opacity-80"
-                    style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))' }}
+                    className="px-2 py-0.5 rounded-full border text-[11px] opacity-80 border-line"
                   >
                     🏷️ {t}
                   </span>
@@ -150,15 +130,13 @@ export function CustomerPreviewModal({ customer, onClose }: CustomerPreviewModal
 
         {/* Footer Actions */}
         <div
-          className="flex flex-wrap items-center justify-between gap-3 border-t px-6 py-4"
-          style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))' }}
+          className="flex flex-wrap items-center justify-between gap-3 border-t px-6 py-4 border-line"
         >
           <a
             href={waHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-lg border px-3.5 py-1.5 font-bold text-emerald-500 hover:bg-emerald-500/10 transition cursor-pointer"
-            style={{ borderColor: 'rgba(16, 185, 129, 0.3)' }}
+            className="inline-flex items-center gap-1.5 rounded-lg border px-3.5 py-1.5 font-bold text-emerald-500 hover:bg-emerald-500/10 transition cursor-pointer border-emerald-500/30"
           >
             <span>💬 WhatsApp Concierge</span>
           </a>
@@ -167,18 +145,13 @@ export function CustomerPreviewModal({ customer, onClose }: CustomerPreviewModal
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg border px-3 py-1.5 text-xs font-semibold opacity-80 hover:opacity-100 hover:bg-current/[0.05] transition cursor-pointer"
-              style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))' }}
+              className="rounded-lg border px-3 py-1.5 text-xs font-semibold opacity-80 hover:opacity-100 hover:bg-current/[0.05] transition cursor-pointer border-line"
             >
               Close
             </button>
             <Link
               to={`/admin/customers/${customer.id}`}
-              className="inline-flex items-center gap-1 rounded-lg px-4 py-1.5 font-bold shadow-xs transition hover:opacity-95"
-              style={{
-                backgroundColor: 'var(--admin-primary, #b59410)',
-                color: 'var(--admin-primary-text, #ffffff)',
-              }}
+              className="inline-flex items-center gap-1 rounded-lg px-4 py-1.5 font-bold shadow-xs transition hover:opacity-95 bg-brand text-ink-on-brand"
             >
               <span>View Full Profile</span>
               <span>→</span>

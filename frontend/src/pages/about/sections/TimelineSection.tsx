@@ -35,8 +35,8 @@ export function TimelineSection() {
               <span className="inline-flex min-w-10 items-center justify-center rounded-full border border-gold/50 bg-black px-3 py-2 font-heading text-xs tracking-wide text-gold">
                 {item.year}
               </span>
-              <h3 className="mt-4 font-heading text-xl text-cream">{item.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-cream/70">{item.description}</p>
+              <h3 className="mt-4 font-heading text-xl text-ink-inverse">{item.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-ink-inverse/70">{item.description}</p>
             </motion.li>
           ))}
         </motion.ol>

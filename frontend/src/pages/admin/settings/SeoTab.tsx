@@ -15,27 +15,18 @@ export function SeoTab({ form, patchForm }: SeoTabProps) {
     <div className="space-y-6 text-xs">
       {/* Live Google Search Snippet Preview */}
       <div
-        className="rounded-2xl border p-5 shadow-xs transition-colors"
-        style={{
-          backgroundColor: 'var(--admin-card, #141b26)',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-        }}
+        className="rounded-2xl border p-5 shadow-xs transition-colors bg-surface-raised border-line text-ink-raised"
       >
-        <div className="border-b pb-3 mb-4" style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}>
+        <div className="border-b pb-3 mb-4 border-line">
           <h3 className="font-heading text-sm font-bold tracking-wide">Google Search Snippet Simulation</h3>
           <p className="text-[10px] opacity-60 mt-0.5">Real-time preview of how your atelier appears in search engine results</p>
         </div>
 
         <div
-          className="rounded-xl border p-4 max-w-xl space-y-1.5"
-          style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.25)',
-            borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))',
-          }}
+          className="rounded-xl border p-4 max-w-xl space-y-1.5 bg-black/25 border-line"
         >
           <div className="flex items-center gap-2">
-            <span className="h-4 w-4 rounded-full bg-[var(--admin-primary,#b59410)] flex items-center justify-center text-[9px] text-white font-bold">
+            <span className="h-4 w-4 rounded-full bg-brand flex items-center justify-center text-[9px] text-white font-bold">
               K
             </span>
             <span className="text-[11px] opacity-60 font-mono">
@@ -53,14 +44,9 @@ export function SeoTab({ form, patchForm }: SeoTabProps) {
 
       {/* Meta Configuration */}
       <div
-        className="rounded-2xl border p-5 shadow-xs space-y-4 transition-colors"
-        style={{
-          backgroundColor: 'var(--admin-card, #141b26)',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-        }}
+        className="rounded-2xl border p-5 shadow-xs space-y-4 transition-colors bg-surface-raised border-line text-ink-raised"
       >
-        <div className="border-b pb-3" style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}>
+        <div className="border-b pb-3 border-line">
           <h3 className="font-heading text-sm font-bold tracking-wide">Search Engine Metadata</h3>
           <p className="text-[10px] opacity-60 mt-0.5">Global title templates, default descriptions, and crawl directives</p>
         </div>
@@ -80,12 +66,7 @@ export function SeoTab({ form, patchForm }: SeoTabProps) {
                 }))
               }
               placeholder="Kadamba's Designer Studio"
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-              style={{
-                backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
             />
           </div>
 
@@ -103,12 +84,7 @@ export function SeoTab({ form, patchForm }: SeoTabProps) {
                 }))
               }
               placeholder="{{title}} | {{siteName}}"
-              className="w-full rounded-xl border py-2 px-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-              style={{
-                backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-xl border py-2 px-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
             />
           </div>
         </div>
@@ -127,16 +103,11 @@ export function SeoTab({ form, patchForm }: SeoTabProps) {
               }))
             }
             placeholder="Luxury bespoke atelier specializing in bridal lehengas, hand embroidery, maggam art, and couture tailoring."
-            className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-            style={{
-              backgroundColor: 'rgba(128, 128, 128, 0.05)',
-              borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-              color: 'inherit',
-            }}
+            className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
           />
         </div>
 
-        <div className="pt-2 border-t" style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}>
+        <div className="pt-2 border-t border-line">
           <MediaUpload
             label="Default OpenGraph / Social Share Image"
             value={form.seo.defaultOgImage}
@@ -153,7 +124,7 @@ export function SeoTab({ form, patchForm }: SeoTabProps) {
           />
         </div>
 
-        <div className="pt-2 border-t flex items-center justify-between" style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}>
+        <div className="pt-2 border-t flex items-center justify-between border-line">
           <div>
             <span className="font-semibold text-xs block">Allow Search Engine Indexing (robots.txt)</span>
             <span className="text-[11px] opacity-60 block mt-0.5">
@@ -172,7 +143,7 @@ export function SeoTab({ form, patchForm }: SeoTabProps) {
               }
               className="sr-only peer"
             />
-            <div className="w-9 h-5 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[var(--admin-primary,#b59410)]" />
+            <div className="w-9 h-5 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-raised after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand" />
           </label>
         </div>
       </div>

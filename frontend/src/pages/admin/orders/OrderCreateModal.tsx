@@ -63,18 +63,12 @@ export function OrderCreateModal({
       aria-modal="true"
     >
       <div
-        className="relative w-full max-w-2xl rounded-2xl border shadow-2xl overflow-hidden animate-fade-in-up flex flex-col max-h-[90vh] text-xs"
-        style={{
-          backgroundColor: 'var(--admin-card, #141b26)',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-        }}
+        className="relative w-full max-w-2xl rounded-2xl border shadow-2xl overflow-hidden animate-fade-in-up flex flex-col max-h-[90vh] text-xs bg-surface-raised border-line text-ink-raised"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div
-          className="flex items-center justify-between border-b px-6 py-4"
-          style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))' }}
+          className="flex items-center justify-between border-b px-6 py-4 border-line"
         >
           <div>
             <h2 className="font-heading text-lg font-bold text-inherit">Create Atelier Production Order</h2>
@@ -86,8 +80,7 @@ export function OrderCreateModal({
           <button
             type="button"
             onClick={onClose}
-            className="h-8 w-8 rounded-lg border flex items-center justify-center text-xs opacity-70 hover:opacity-100 hover:bg-current/[0.06] transition cursor-pointer"
-            style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))' }}
+            className="h-8 w-8 rounded-lg border flex items-center justify-center text-xs opacity-70 hover:opacity-100 hover:bg-current/[0.06] transition cursor-pointer border-line"
             aria-label="Close dialog"
           >
             ✕
@@ -96,8 +89,7 @@ export function OrderCreateModal({
 
         {/* Tab Strip */}
         <div
-          className="flex border-b px-6 gap-2 bg-current/[0.02]"
-          style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}
+          className="flex border-b px-6 gap-2 bg-current/[0.02] border-line"
         >
           {[
             { id: 'client', label: '1. Client & Dates', icon: '👤' },
@@ -111,7 +103,7 @@ export function OrderCreateModal({
               className={cn(
                 'py-3 px-3.5 border-b-2 font-semibold transition cursor-pointer flex items-center gap-1.5',
                 activeTab === tab.id
-                  ? 'border-[var(--admin-primary,#b59410)] text-[var(--admin-primary,#b59410)]'
+                  ? 'border-brand text-brand'
                   : 'border-transparent opacity-60 hover:opacity-100',
               )}
             >
@@ -144,7 +136,7 @@ export function OrderCreateModal({
                       className={cn(
                         'px-2.5 py-1 rounded text-[11px] font-semibold transition',
                         form.customerMode === 'search'
-                          ? 'bg-[var(--admin-primary,#b59410)] text-white'
+                          ? 'bg-brand text-white'
                           : 'opacity-60 hover:opacity-100',
                       )}
                     >
@@ -156,7 +148,7 @@ export function OrderCreateModal({
                       className={cn(
                         'px-2.5 py-1 rounded text-[11px] font-semibold transition',
                         form.customerMode === 'create'
-                          ? 'bg-[var(--admin-primary,#b59410)] text-white'
+                          ? 'bg-brand text-white'
                           : 'opacity-60 hover:opacity-100',
                       )}
                     >
@@ -169,11 +161,7 @@ export function OrderCreateModal({
                   <div className="space-y-2">
                     {form.selectedCustomer ? (
                       <div
-                        className="p-3 rounded-xl border flex items-center justify-between"
-                        style={{
-                          backgroundColor: 'rgba(16, 185, 129, 0.08)',
-                          borderColor: 'rgba(16, 185, 129, 0.3)',
-                        }}
+                        className="p-3 rounded-xl border flex items-center justify-between bg-emerald-500/[0.08] border-emerald-500/30"
                       >
                         <div>
                           <span className="font-bold text-emerald-400 block">{form.selectedCustomer.name}</span>
@@ -196,19 +184,13 @@ export function OrderCreateModal({
                           value={customerSearch}
                           onChange={(e) => onCustomerSearchChange(e.target.value)}
                           placeholder="Type name or phone to search customers..."
-                          className="w-full rounded-lg border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-                          style={{
-                            backgroundColor: 'transparent',
-                            borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                            color: 'inherit',
-                          }}
+                          className="w-full rounded-lg border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand border-line"
                         />
                         {searchingCustomers ? (
                           <div className="py-2 text-[11px] opacity-50 text-center">Searching...</div>
                         ) : customerResults.length > 0 ? (
                           <div
-                            className="mt-1 max-h-36 overflow-y-auto rounded-lg border divide-y"
-                            style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}
+                            className="mt-1 max-h-36 overflow-y-auto rounded-lg border divide-y border-line"
                           >
                             {customerResults.map((c) => (
                               <button
@@ -234,7 +216,7 @@ export function OrderCreateModal({
                     )}
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 gap-3 p-3 rounded-xl border bg-current/[0.02]" style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}>
+                  <div className="grid grid-cols-2 gap-3 p-3 rounded-xl border bg-current/[0.02] border-line">
                     <Input
                       label="Client Name *"
                       required
@@ -288,8 +270,7 @@ export function OrderCreateModal({
                 <button
                   type="button"
                   onClick={addLineItem}
-                  className="px-2.5 py-1 rounded text-xs font-bold border hover:bg-current/[0.05] cursor-pointer"
-                  style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
+                  className="px-2.5 py-1 rounded text-xs font-bold border hover:bg-current/[0.05] cursor-pointer border-line"
                 >
                   + Add Garment
                 </button>
@@ -299,11 +280,7 @@ export function OrderCreateModal({
                 {form.lineItems.map((item, idx) => (
                   <div
                     key={idx}
-                    className="p-3.5 rounded-xl border space-y-2 relative"
-                    style={{
-                      backgroundColor: 'rgba(128, 128, 128, 0.04)',
-                      borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-                    }}
+                    className="p-3.5 rounded-xl border space-y-2 relative bg-surface-sunken border-line"
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-xs opacity-75">Garment #{idx + 1}</span>
@@ -395,8 +372,7 @@ export function OrderCreateModal({
 
         {/* Footer */}
         <div
-          className="flex items-center justify-between gap-3 border-t px-6 py-4"
-          style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))' }}
+          className="flex items-center justify-between gap-3 border-t px-6 py-4 border-line"
         >
           <div className="text-xs opacity-50">
             {form.title ? `Order: ${form.title}` : 'Title and customer required (*)'}

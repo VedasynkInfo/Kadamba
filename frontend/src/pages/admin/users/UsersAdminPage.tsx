@@ -136,8 +136,7 @@ export default function UsersAdminPage() {
         <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h1
-              className="font-heading text-xl font-bold tracking-tight sm:text-2xl"
-              style={{ color: 'var(--admin-text)' }}
+              className="font-heading text-xl font-bold tracking-tight sm:text-2xl text-ink"
             >
               Users & Roles
             </h1>
@@ -150,12 +149,7 @@ export default function UsersAdminPage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search name or email"
-            className="w-full rounded-xl border px-3 py-2 text-xs sm:w-64"
-            style={{
-              backgroundColor: 'rgba(128,128,128,0.05)',
-              borderColor: 'var(--admin-border)',
-              color: 'inherit',
-            }}
+            className="w-full rounded-xl border px-3 py-2 text-xs sm:w-64 bg-surface-sunken border-line"
           />
         </header>
 
@@ -165,16 +159,11 @@ export default function UsersAdminPage() {
           </div>
         ) : (
           <div
-            className="overflow-hidden rounded-2xl border"
-            style={{
-              backgroundColor: 'var(--admin-card)',
-              borderColor: 'var(--admin-border)',
-            }}
+            className="overflow-hidden rounded-2xl border bg-surface-raised border-line"
           >
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="border-b text-[10px] uppercase tracking-wider opacity-60"
-                  style={{ borderColor: 'var(--admin-border)' }}>
+                <thead className="border-b text-[10px] uppercase tracking-wider opacity-60 border-line">
                   <tr>
                     <th className="px-4 py-3">Person</th>
                     <th className="px-4 py-3">Role</th>
@@ -187,8 +176,7 @@ export default function UsersAdminPage() {
                   {users.map((user) => (
                     <tr
                       key={user.id}
-                      className="border-b last:border-0"
-                      style={{ borderColor: 'var(--admin-border)' }}
+                      className="border-b last:border-0 border-line"
                     >
                       <td className="px-4 py-3">
                         <p className="font-semibold">{user.name}</p>
@@ -201,12 +189,7 @@ export default function UsersAdminPage() {
                             void changeRole(user, e.target.value as 'admin' | 'staff' | 'user')
                           }
                           disabled={savingId === user.id}
-                          className="rounded-lg border px-2 py-1 text-[11px] capitalize"
-                          style={{
-                            backgroundColor: 'rgba(128,128,128,0.06)',
-                            borderColor: 'var(--admin-border)',
-                            color: 'inherit',
-                          }}
+                          className="rounded-lg border px-2 py-1 text-[11px] capitalize border-line bg-current/[0.06]"
                         >
                           <option value="admin">Admin</option>
                           <option value="staff">Staff</option>
@@ -243,8 +226,7 @@ export default function UsersAdminPage() {
                             <button
                               type="button"
                               onClick={() => openPermissions(user)}
-                              className="rounded-lg border px-2.5 py-1 text-[11px] transition hover:bg-white/5"
-                              style={{ borderColor: 'var(--admin-border)' }}
+                              className="rounded-lg border px-2.5 py-1 text-[11px] transition hover:bg-white/5 border-line"
                             >
                               Permissions
                             </button>
@@ -253,8 +235,7 @@ export default function UsersAdminPage() {
                             type="button"
                             onClick={() => void toggleStatus(user)}
                             disabled={savingId === user.id}
-                            className="rounded-lg border px-2.5 py-1 text-[11px] transition hover:bg-white/5 disabled:opacity-50"
-                            style={{ borderColor: 'var(--admin-border)' }}
+                            className="rounded-lg border px-2.5 py-1 text-[11px] transition hover:bg-white/5 disabled:opacity-50 border-line"
                           >
                             {user.status === 'active' ? 'Disable' : 'Enable'}
                           </button>
@@ -279,12 +260,7 @@ export default function UsersAdminPage() {
       {editing ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
           <div
-            className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-2xl border p-6"
-            style={{
-              backgroundColor: 'var(--admin-card)',
-              borderColor: 'var(--admin-border)',
-              color: 'var(--admin-card-text)',
-            }}
+            className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-2xl border p-6 bg-surface-raised border-line text-ink-raised"
           >
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -310,8 +286,7 @@ export default function UsersAdminPage() {
                     {group.permissions.map((permission) => (
                       <label
                         key={permission.key}
-                        className="flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-[11px]"
-                        style={{ borderColor: 'var(--admin-border)' }}
+                        className="flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-[11px] border-line"
                       >
                         <input
                           type="checkbox"
@@ -339,8 +314,7 @@ export default function UsersAdminPage() {
                 <button
                   type="button"
                   onClick={() => setEditing(null)}
-                  className="rounded-xl border px-4 py-2 text-xs"
-                  style={{ borderColor: 'var(--admin-border)' }}
+                  className="rounded-xl border px-4 py-2 text-xs border-line"
                 >
                   Cancel
                 </button>
@@ -348,7 +322,7 @@ export default function UsersAdminPage() {
                   type="button"
                   onClick={() => void savePermissions()}
                   disabled={savingId === editing.id}
-                  className="rounded-xl bg-gold px-4 py-2 text-xs font-bold text-black disabled:opacity-50"
+                  className="rounded-xl bg-gold px-4 py-2 text-xs font-bold text-ink disabled:opacity-50"
                 >
                   {savingId === editing.id ? 'Saving…' : 'Save permissions'}
                 </button>

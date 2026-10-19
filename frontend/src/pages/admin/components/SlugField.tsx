@@ -99,7 +99,7 @@ export function SlugField({
       {status === 'taken' && suggestion ? (
         <button
           type="button"
-          className="text-xs font-semibold text-black underline"
+          className="text-xs font-semibold text-ink underline"
           onClick={() => onChange(suggestion, { locked: true })}
         >
           Use suggestion: {suggestion}

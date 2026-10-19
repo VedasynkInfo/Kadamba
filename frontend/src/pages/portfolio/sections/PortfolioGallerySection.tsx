@@ -18,7 +18,7 @@ export function PortfolioGallerySection({ project }: PortfolioGallerySectionProp
   if (project.gallery.length === 0) return null;
 
   return (
-    <Section tone="light" className="border-t border-black/8 py-16 md:py-24">
+    <Section tone="light" className="border-t border-line/8 py-16 md:py-24">
       <SectionIntro
         title="Gallery"
         description="Details from fittings, fabric, and finishing."
@@ -36,7 +36,7 @@ export function PortfolioGallerySection({ project }: PortfolioGallerySectionProp
             variants={reduced ? undefined : fadeUp}
             className={index === 0 ? 'sm:col-span-2 lg:col-span-2' : undefined}
           >
-            <figure className="group relative overflow-hidden bg-black/5">
+            <figure className="group relative overflow-hidden bg-surface-sunken">
               <OptimizedImage
                 sizes="(min-width: 1200px) 368px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                 src={item.image}
@@ -48,7 +48,7 @@ export function PortfolioGallerySection({ project }: PortfolioGallerySectionProp
                 height={index === 0 ? 875 : 1000}
               />
               {item.caption ? (
-                <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4 font-heading text-sm text-cream">
+                <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4 font-heading text-sm text-ink-inverse">
                   {item.caption}
                 </figcaption>
               ) : null}

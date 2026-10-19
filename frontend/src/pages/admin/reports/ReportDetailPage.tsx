@@ -31,8 +31,13 @@ import {
   formatStatusLabel,
   type DatePreset,
 } from './reportCatalog';
+import {
+  REPORT_CHART_COLORS,
+  REPORT_CHART_GRID,
+  REPORT_CHART_SERIES,
+} from '@/theme/palettes';
 
-const COLORS = ['#000000', '#b59410', '#8a731e', '#4a3f12', '#c5a228', '#6b5a1a'];
+const COLORS = REPORT_CHART_COLORS;
 
 function toDateInputValue(iso: string) {
   return iso.slice(0, 10);
@@ -117,15 +122,15 @@ export default function ReportDetailPage() {
 
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 md:px-10">
         <div className="mb-6">
-          <Link to="/admin/reports" className="text-xs font-medium text-black/50 hover:text-black">
+          <Link to="/admin/reports" className="text-xs font-medium text-ink/50 hover:text-ink">
             ← Reports hub
           </Link>
-          <h2 className="mt-2 font-heading text-2xl text-black">{meta?.title}</h2>
-          <p className="mt-1 text-sm text-black/55">{meta?.description}</p>
+          <h2 className="mt-2 font-heading text-2xl text-ink">{meta?.title}</h2>
+          <p className="mt-1 text-sm text-ink/55">{meta?.description}</p>
         </div>
 
         {/* Controls */}
-        <div className="flex flex-col gap-4 border-b border-black/10 pb-6 mb-8 lg:flex-row lg:items-end lg:justify-between">
+        <div className="flex flex-col gap-4 border-b border-line pb-6 mb-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="flex flex-wrap items-center gap-2">
             {(
               [
@@ -142,7 +147,7 @@ export default function ReportDetailPage() {
                 className={cn(
                   'px-3 py-1.5 text-xs font-medium rounded border transition',
                   preset === key
-                    ? 'bg-[var(--admin-primary,#b59410)] text-[var(--admin-primary-text,#ffffff)] border-transparent font-bold shadow-xs'
+                    ? 'bg-brand text-ink-on-brand border-transparent font-bold shadow-xs'
                     : 'border-current/15 opacity-70 hover:opacity-100 hover:border-current/40',
                 )}
               >
@@ -154,28 +159,28 @@ export default function ReportDetailPage() {
           <div className="flex flex-wrap items-end gap-3">
             {preset === 'custom' && (
               <>
-                <label className="text-xs text-black/55">
+                <label className="text-xs text-ink/55">
                   From
                   <input
                     type="date"
                     value={customFrom}
                     onChange={(e) => setCustomFrom(e.target.value)}
-                    className="mt-1 block rounded border border-black/15 bg-white px-2 py-1.5 text-sm text-black"
+                    className="mt-1 block rounded border border-line bg-surface-raised px-2 py-1.5 text-sm text-ink"
                   />
                 </label>
-                <label className="text-xs text-black/55">
+                <label className="text-xs text-ink/55">
                   To
                   <input
                     type="date"
                     value={customTo}
                     onChange={(e) => setCustomTo(e.target.value)}
-                    className="mt-1 block rounded border border-black/15 bg-white px-2 py-1.5 text-sm text-black"
+                    className="mt-1 block rounded border border-line bg-surface-raised px-2 py-1.5 text-sm text-ink"
                   />
                 </label>
               </>
             )}
             {meta?.needsGroupBy && (
-              <label className="text-xs text-black/55">
+              <label className="text-xs text-ink/55">
                 Group by
                 <Select
                   value={groupBy}
@@ -198,7 +203,7 @@ export default function ReportDetailPage() {
         </div>
 
         {definition && (
-          <p className="mb-6 text-xs text-black/45 border-l-2 border-gold/60 pl-3">
+          <p className="mb-6 text-xs text-ink/45 border-l-2 border-gold/60 pl-3">
             {definition}
           </p>
         )}
@@ -208,8 +213,8 @@ export default function ReportDetailPage() {
             <Spinner size="lg" label="Building report…" />
           </div>
         ) : error ? (
-          <div className="rounded border border-black/10 bg-cream/40 p-8 text-center">
-            <p className="text-black/70 mb-4">{error}</p>
+          <div className="rounded border border-line bg-surface-sunken p-8 text-center">
+            <p className="text-ink/70 mb-4">{error}</p>
             <Button variant="secondary" onClick={() => setRunKey((k) => k + 1)}>
               Retry
             </Button>
@@ -237,9 +242,9 @@ function ReportBody({
 
   if (empty) {
     return (
-      <div className="flex min-h-[240px] flex-col items-center justify-center rounded border border-dashed border-black/15 bg-cream/30 p-10 text-center">
-        <p className="font-heading text-lg text-black">No data for this range</p>
-        <p className="mt-2 text-sm text-black/50 max-w-md">
+      <div className="flex min-h-[240px] flex-col items-center justify-center rounded border border-dashed border-line bg-surface-sunken p-10 text-center">
+        <p className="font-heading text-lg text-ink">No data for this range</p>
+        <p className="mt-2 text-sm text-ink/50 max-w-md">
           Try a wider date range, or record payments and orders first — reports use live boutique data.
         </p>
       </div>
@@ -252,16 +257,16 @@ function ReportBody({
       <ReportChart data={data} type={type} />
       <div>
         <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-          <h3 className="text-sm font-medium text-black">Detail table</h3>
+          <h3 className="text-sm font-medium text-ink">Detail table</h3>
           <input
             type="search"
             placeholder="Search table…"
             value={search}
             onChange={(e) => onSearch(e.target.value)}
-            className="rounded border border-black/15 bg-white px-3 py-1.5 text-sm text-black w-full max-w-xs"
+            className="rounded border border-line bg-surface-raised px-3 py-1.5 text-sm text-ink w-full max-w-xs"
           />
         </div>
-        <div className="overflow-x-auto border border-black/10">
+        <div className="overflow-x-auto border border-line">
           <ReportTable data={data} type={type} search={search} />
         </div>
       </div>
@@ -381,9 +386,9 @@ function SummaryStrip({ data, type }: { data: AnyReport; type: ReportType }) {
   return (
     <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
       {cards.map((c) => (
-        <div key={c.label} className="border-t border-black/15 pt-3">
-          <p className="text-xs uppercase tracking-wider text-black/45">{c.label}</p>
-          <p className="mt-1 font-heading text-2xl text-black">{c.value}</p>
+        <div key={c.label} className="border-t border-line pt-3">
+          <p className="text-xs uppercase tracking-wider text-ink/45">{c.label}</p>
+          <p className="mt-1 font-heading text-2xl text-ink">{c.value}</p>
         </div>
       ))}
     </div>
@@ -426,11 +431,11 @@ function ReportChart({ data, type }: { data: AnyReport; type: ReportType }) {
       <div className="h-72 w-full">
         <ResponsiveContainer>
           <BarChart data={rows}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#00000015" />
+            <CartesianGrid strokeDasharray="3 3" stroke={REPORT_CHART_GRID} />
             <XAxis dataKey="period" tick={{ fontSize: 11 }} />
             <YAxis tick={{ fontSize: 11 }} />
             <Tooltip formatter={(v) => [formatINR(Number(v)), 'Payments']} />
-            <Bar dataKey="amount" fill="#b59410" radius={[2, 2, 0, 0]} />
+            <Bar dataKey="amount" fill={REPORT_CHART_SERIES.gold} radius={[2, 2, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -448,11 +453,11 @@ function ReportChart({ data, type }: { data: AnyReport; type: ReportType }) {
       <div className="h-72 w-full">
         <ResponsiveContainer>
           <BarChart data={rows} layout="vertical" margin={{ left: 40 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#00000015" />
+            <CartesianGrid strokeDasharray="3 3" stroke={REPORT_CHART_GRID} />
             <XAxis type="number" tick={{ fontSize: 11 }} />
             <YAxis type="category" dataKey="name" width={100} tick={{ fontSize: 11 }} />
             <Tooltip formatter={(v) => [formatINR(Number(v)), 'Payments']} />
-            <Bar dataKey="amount" fill="#000000" radius={[0, 2, 2, 0]} />
+            <Bar dataKey="amount" fill={REPORT_CHART_SERIES.ink} radius={[0, 2, 2, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -465,13 +470,13 @@ function ReportChart({ data, type }: { data: AnyReport; type: ReportType }) {
       <div className="h-72 w-full">
         <ResponsiveContainer>
           <BarChart data={rows}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#00000015" />
+            <CartesianGrid strokeDasharray="3 3" stroke={REPORT_CHART_GRID} />
             <XAxis dataKey="source" tick={{ fontSize: 11 }} />
             <YAxis tick={{ fontSize: 11 }} />
             <Tooltip />
             <Legend />
-            <Bar dataKey="leads" fill="#000000" name="Leads" />
-            <Bar dataKey="converted" fill="#b59410" name="Converted" />
+            <Bar dataKey="leads" fill={REPORT_CHART_SERIES.ink} name="Leads" />
+            <Bar dataKey="converted" fill={REPORT_CHART_SERIES.gold} name="Converted" />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -484,13 +489,13 @@ function ReportChart({ data, type }: { data: AnyReport; type: ReportType }) {
       <div className="h-72 w-full">
         <ResponsiveContainer>
           <BarChart data={rows}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#00000015" />
+            <CartesianGrid strokeDasharray="3 3" stroke={REPORT_CHART_GRID} />
             <XAxis dataKey="name" tick={{ fontSize: 11 }} />
             <YAxis tick={{ fontSize: 11 }} />
             <Tooltip />
             <Legend />
-            <Bar dataKey="open" stackId="a" fill="#8a731e" name="Open" />
-            <Bar dataKey="completed" stackId="a" fill="#000000" name="Completed" />
+            <Bar dataKey="open" stackId="a" fill={REPORT_CHART_SERIES.bronze} name="Open" />
+            <Bar dataKey="completed" stackId="a" fill={REPORT_CHART_SERIES.ink} name="Completed" />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -509,11 +514,11 @@ function ReportChart({ data, type }: { data: AnyReport; type: ReportType }) {
       <div className="h-72 w-full">
         <ResponsiveContainer>
           <BarChart data={rows}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#00000015" />
+            <CartesianGrid strokeDasharray="3 3" stroke={REPORT_CHART_GRID} />
             <XAxis dataKey="name" tick={{ fontSize: 11 }} />
             <YAxis tick={{ fontSize: 11 }} />
             <Tooltip formatter={(v) => [formatINR(Number(v)), '']} />
-            <Bar dataKey="amount" fill="#b59410" radius={[2, 2, 0, 0]} />
+            <Bar dataKey="amount" fill={REPORT_CHART_SERIES.gold} radius={[2, 2, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -529,11 +534,11 @@ function ReportChart({ data, type }: { data: AnyReport; type: ReportType }) {
       <div className="h-72 w-full">
         <ResponsiveContainer>
           <BarChart data={rows}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#00000015" />
+            <CartesianGrid strokeDasharray="3 3" stroke={REPORT_CHART_GRID} />
             <XAxis dataKey="name" tick={{ fontSize: 11 }} />
             <YAxis tick={{ fontSize: 11 }} />
             <Tooltip formatter={(v) => [formatINR(Number(v)), 'Amount']} />
-            <Bar dataKey="amount" fill="#4a3f12" radius={[2, 2, 0, 0]} />
+            <Bar dataKey="amount" fill={REPORT_CHART_SERIES.umber} radius={[2, 2, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -556,7 +561,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
     );
     return (
       <table className="min-w-full text-sm">
-        <thead className="bg-cream/60 text-left text-xs uppercase tracking-wider text-black/50">
+        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/50">
           <tr>
             <th className="px-4 py-3">Status</th>
             <th className="px-4 py-3">Count</th>
@@ -565,7 +570,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
         </thead>
         <tbody>
           {rows.map((r) => (
-            <tr key={r.status} className="border-t border-black/8">
+            <tr key={r.status} className="border-t border-line/8">
               <td className="px-4 py-2.5 capitalize">{formatStatusLabel(r.status)}</td>
               <td className="px-4 py-2.5">{r.count}</td>
               <td className="px-4 py-2.5">{r.percent}%</td>
@@ -589,7 +594,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
     ).filter((r) => matchesSearch(r as unknown as Record<string, unknown>, search));
     return (
       <table className="min-w-full text-sm">
-        <thead className="bg-cream/60 text-left text-xs uppercase tracking-wider text-black/50">
+        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/50">
           <tr>
             <th className="px-4 py-3">Order</th>
             <th className="px-4 py-3">Title</th>
@@ -600,7 +605,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
         </thead>
         <tbody>
           {rows.map((r) => (
-            <tr key={r.orderId} className="border-t border-black/8">
+            <tr key={r.orderId} className="border-t border-line/8">
               <td className="px-4 py-2.5">
                 <Link to={`/admin/orders/${r.orderId}`} className="text-gold hover:underline">
                   #{r.orderNumber}
@@ -623,7 +628,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
     );
     return (
       <table className="min-w-full text-sm">
-        <thead className="bg-cream/60 text-left text-xs uppercase tracking-wider text-black/50">
+        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/50">
           <tr>
             <th className="px-4 py-3">Period</th>
             <th className="px-4 py-3">Amount</th>
@@ -633,7 +638,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
         </thead>
         <tbody>
           {rows.map((r) => (
-            <tr key={r.period} className="border-t border-black/8">
+            <tr key={r.period} className="border-t border-line/8">
               <td className="px-4 py-2.5">{r.period}</td>
               <td className="px-4 py-2.5">{formatINR(r.amount)}</td>
               <td className="px-4 py-2.5">{r.paymentCount}</td>
@@ -658,7 +663,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
     ).filter((r) => matchesSearch(r, search));
     return (
       <table className="min-w-full text-sm">
-        <thead className="bg-cream/60 text-left text-xs uppercase tracking-wider text-black/50">
+        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/50">
           <tr>
             <th className="px-4 py-3">Product</th>
             <th className="px-4 py-3">Orders</th>
@@ -669,7 +674,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
         </thead>
         <tbody>
           {rows.map((r) => (
-            <tr key={r.productCode} className="border-t border-black/8">
+            <tr key={r.productCode} className="border-t border-line/8">
               <td className="px-4 py-2.5">{r.productName}</td>
               <td className="px-4 py-2.5">{r.ordersCount}</td>
               <td className="px-4 py-2.5">{formatINR(r.grossPayments)}</td>
@@ -694,7 +699,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
     ).filter((r) => matchesSearch(r, search));
     return (
       <table className="min-w-full text-sm">
-        <thead className="bg-cream/60 text-left text-xs uppercase tracking-wider text-black/50">
+        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/50">
           <tr>
             <th className="px-4 py-3">Service</th>
             <th className="px-4 py-3">Orders</th>
@@ -704,7 +709,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
         </thead>
         <tbody>
           {rows.map((r) => (
-            <tr key={r.serviceId} className="border-t border-black/8">
+            <tr key={r.serviceId} className="border-t border-line/8">
               <td className="px-4 py-2.5">{r.serviceName}</td>
               <td className="px-4 py-2.5">{r.ordersCount}</td>
               <td className="px-4 py-2.5">{formatINR(r.grossPayments)}</td>
@@ -732,7 +737,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
     ).filter((r) => matchesSearch(r as unknown as Record<string, unknown>, search));
     return (
       <table className="min-w-full text-sm">
-        <thead className="bg-cream/60 text-left text-xs uppercase tracking-wider text-black/50">
+        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/50">
           <tr>
             <th className="px-4 py-3">Order</th>
             <th className="px-4 py-3">Customer</th>
@@ -744,12 +749,12 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
         </thead>
         <tbody>
           {rows.map((r) => (
-            <tr key={r.orderId} className="border-t border-black/8">
+            <tr key={r.orderId} className="border-t border-line/8">
               <td className="px-4 py-2.5">
                 <Link to={`/admin/orders/${r.orderId}`} className="text-gold hover:underline">
                   #{r.orderNumber}
                 </Link>
-                <span className="block text-xs text-black/45">{r.title}</span>
+                <span className="block text-xs text-ink/45">{r.title}</span>
               </td>
               <td className="px-4 py-2.5">
                 {r.customerId ? (
@@ -781,7 +786,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
     ).filter((r) => matchesSearch({ ...r, type: 'salary' }, search));
     return (
       <table className="min-w-full text-sm">
-        <thead className="bg-cream/60 text-left text-xs uppercase tracking-wider text-black/50">
+        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/50">
           <tr>
             <th className="px-4 py-3">Type</th>
             <th className="px-4 py-3">Label</th>
@@ -792,7 +797,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
         </thead>
         <tbody>
           {expenseRows.map((r) => (
-            <tr key={`e-${r.category}`} className="border-t border-black/8">
+            <tr key={`e-${r.category}`} className="border-t border-line/8">
               <td className="px-4 py-2.5">Expense</td>
               <td className="px-4 py-2.5 capitalize">{r.category}</td>
               <td className="px-4 py-2.5">{formatINR(r.amount)}</td>
@@ -801,7 +806,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
             </tr>
           ))}
           {salaryRows.map((r) => (
-            <tr key={`s-${r.period}`} className="border-t border-black/8">
+            <tr key={`s-${r.period}`} className="border-t border-line/8">
               <td className="px-4 py-2.5">Salary</td>
               <td className="px-4 py-2.5">{r.period}</td>
               <td className="px-4 py-2.5">{formatINR(r.amount)}</td>
@@ -824,7 +829,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
     ].filter((r) => matchesSearch(r, search));
     return (
       <table className="min-w-full text-sm">
-        <thead className="bg-cream/60 text-left text-xs uppercase tracking-wider text-black/50">
+        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/50">
           <tr>
             <th className="px-4 py-3">Metric</th>
             <th className="px-4 py-3">Amount</th>
@@ -832,7 +837,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
         </thead>
         <tbody>
           {rows.map((r) => (
-            <tr key={r.metric} className="border-t border-black/8">
+            <tr key={r.metric} className="border-t border-line/8">
               <td className="px-4 py-2.5">{r.metric}</td>
               <td className="px-4 py-2.5 font-medium">{formatINR(r.amount)}</td>
             </tr>
@@ -854,7 +859,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
     ).filter((r) => matchesSearch(r, search));
     return (
       <table className="min-w-full text-sm">
-        <thead className="bg-cream/60 text-left text-xs uppercase tracking-wider text-black/50">
+        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/50">
           <tr>
             <th className="px-4 py-3">Source</th>
             <th className="px-4 py-3">Leads</th>
@@ -865,7 +870,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
         </thead>
         <tbody>
           {rows.map((r) => (
-            <tr key={r.source} className="border-t border-black/8">
+            <tr key={r.source} className="border-t border-line/8">
               <td className="px-4 py-2.5">{r.source}</td>
               <td className="px-4 py-2.5">{r.leads}</td>
               <td className="px-4 py-2.5">{r.converted}</td>
@@ -884,7 +889,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
     ).filter((r) => matchesSearch(r, search));
     return (
       <table className="min-w-full text-sm">
-        <thead className="bg-cream/60 text-left text-xs uppercase tracking-wider text-black/50">
+        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/50">
           <tr>
             <th className="px-4 py-3">Staff</th>
             <th className="px-4 py-3">Open</th>
@@ -894,7 +899,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
         </thead>
         <tbody>
           {rows.map((r) => (
-            <tr key={r.staffId || r.name} className="border-t border-black/8">
+            <tr key={r.staffId || r.name} className="border-t border-line/8">
               <td className="px-4 py-2.5">{r.name}</td>
               <td className="px-4 py-2.5">{r.open}</td>
               <td className="px-4 py-2.5">{r.completed}</td>
@@ -918,7 +923,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
     ).filter((r) => matchesSearch(r, search));
     return (
       <table className="min-w-full text-sm">
-        <thead className="bg-cream/60 text-left text-xs uppercase tracking-wider text-black/50">
+        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/50">
           <tr>
             <th className="px-4 py-3">Customer</th>
             <th className="px-4 py-3">Orders in period</th>
@@ -928,7 +933,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
         </thead>
         <tbody>
           {rows.map((r) => (
-            <tr key={r.customerId} className="border-t border-black/8">
+            <tr key={r.customerId} className="border-t border-line/8">
               <td className="px-4 py-2.5">
                 <Link to={`/admin/customers/${r.customerId}`} className="text-gold hover:underline">
                   {r.customerName}
@@ -944,5 +949,5 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
     );
   }
 
-  return <p className="p-4 text-sm text-black/50">No table for this report.</p>;
+  return <p className="p-4 text-sm text-ink/50">No table for this report.</p>;
 }

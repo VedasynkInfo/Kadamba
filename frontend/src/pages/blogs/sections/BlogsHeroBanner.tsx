@@ -22,14 +22,14 @@ export function BlogsHeroBanner() {
 
   return (
     <section
-      className="relative isolate w-full overflow-hidden bg-black text-cream"
+      className="relative isolate w-full overflow-hidden bg-black text-ink-inverse"
       aria-label="Kadamba Journal"
     >
       <div className="grid min-h-[min(78svh,820px)] w-full lg:min-h-[min(80svh,860px)] lg:grid-cols-12">
         {/* Type column */}
         <motion.div
           className={cn(
-            'relative z-10 flex flex-col justify-end bg-[#0a0a0a] px-6 pb-14 pt-28 sm:px-8 md:pb-16 lg:px-10 lg:pb-20 xl:px-14',
+            'relative z-10 flex flex-col justify-end bg-surface-inverse px-6 pb-14 pt-28 sm:px-8 md:pb-16 lg:px-10 lg:pb-20 xl:px-14',
             featured ? 'lg:col-span-5' : 'lg:col-span-12',
           )}
           initial={reduced ? false : { opacity: 0, x: -28 }}
@@ -37,10 +37,7 @@ export function BlogsHeroBanner() {
           transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
         >
           <div
-            className="pointer-events-none absolute inset-0 opacity-[0.04]"
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 20h40M20 0v40' stroke='%23FFD700' stroke-width='0.5'/%3E%3C/svg%3E")`,
-            }}
+            className="pointer-events-none absolute inset-0 opacity-[0.04] text-gold pattern-grid"
             aria-hidden
           />
           <div className="relative max-w-md">
@@ -50,10 +47,10 @@ export function BlogsHeroBanner() {
             <p className="mt-5 font-heading text-5xl leading-none tracking-wide text-gold sm:text-6xl md:text-7xl">
               {blogsHero.brandName}
             </p>
-            <h1 className="mt-2 font-heading text-3xl font-medium text-cream sm:text-4xl md:text-5xl">
+            <h1 className="mt-2 font-heading text-3xl font-medium text-ink-inverse sm:text-4xl md:text-5xl">
               {blogsHero.journalLabel}
             </h1>
-            <p className="mt-6 max-w-sm text-base leading-relaxed text-cream/80">{blogsHero.lede}</p>
+            <p className="mt-6 max-w-sm text-base leading-relaxed text-ink-inverse/80">{blogsHero.lede}</p>
             <div className="mt-9">
               <Button
                 variant="primary"
@@ -107,10 +104,10 @@ export function BlogsHeroBanner() {
               <span className="text-[0.65rem] uppercase tracking-[0.28em] text-gold">
                 Featured · {featured.category}
               </span>
-              <span className="mt-3 block font-heading text-2xl leading-snug text-cream transition-colors group-hover:text-gold sm:text-3xl md:text-[2rem]">
+              <span className="mt-3 block font-heading text-2xl leading-snug text-ink-inverse transition-colors group-hover:text-gold sm:text-3xl md:text-[2rem]">
                 {featured.title}
               </span>
-              <span className="mt-2 block text-sm text-cream/70">
+              <span className="mt-2 block text-sm text-ink-inverse/70">
                 {formatBlogDate(featured.date)} · {featured.readMinutes} min read
               </span>
             </button>

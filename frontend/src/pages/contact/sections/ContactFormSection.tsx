@@ -96,7 +96,7 @@ export function ContactFormSection() {
   }
 
   return (
-    <Section id="contact-form" tone="light" className="scroll-mt-24 border-t border-black/8 py-16 md:py-24">
+    <Section id="contact-form" tone="light" className="scroll-mt-24 border-t border-line/8 py-16 md:py-24">
       <div className="grid gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
         <motion.div
           initial={reduced ? false : 'hidden'}
@@ -115,8 +115,8 @@ export function ContactFormSection() {
         >
           {submitted ? (
             <div className="border-t border-gold/40 pt-6">
-              <p className="font-heading text-2xl text-black">{contactFormCopy.successTitle}</p>
-              <p className="text-lede mt-3 text-black/70">{contactFormCopy.successBody}</p>
+              <p className="font-heading text-2xl text-ink">{contactFormCopy.successTitle}</p>
+              <p className="text-lede mt-3 text-ink/70">{contactFormCopy.successBody}</p>
               <Button
                 variant="ghost"
                 className="mt-6"

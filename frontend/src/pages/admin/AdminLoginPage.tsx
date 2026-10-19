@@ -75,7 +75,7 @@ export default function AdminLoginPage() {
   return (
     <>
       <PageMeta {...staticPageMeta.admin} path="/admin/login" title="Admin Login" />
-      <div className="grid min-h-screen bg-[var(--admin-bg)] lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+      <div className="admin-shell grid min-h-screen bg-surface lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
         <div className="relative hidden overflow-hidden lg:block">
           <motion.img
             src={adminHorizonMedia.image}
@@ -85,7 +85,7 @@ export default function AdminLoginPage() {
             animate={{ scale: 1 }}
             transition={{ duration: reduced ? 0 : 1.4, ease: [0.22, 1, 0.36, 1] }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[var(--admin-bg)]/40 via-transparent to-[var(--admin-bg)]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-surface/40 via-transparent to-surface" />
           <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
         </div>
 
@@ -105,16 +105,16 @@ export default function AdminLoginPage() {
 
             {mfaChallenge ? (
               <>
-                <h1 className="mt-5 font-heading text-2xl text-cream sm:text-3xl">
+                <h1 className="mt-5 font-heading text-2xl text-ink-inverse sm:text-3xl">
                   Two-step verification
                 </h1>
-                <p className="mt-3 text-sm leading-relaxed text-cream/65">
+                <p className="mt-3 text-sm leading-relaxed text-ink-inverse/65">
                   Enter the 6-digit code from your authenticator app. You can also use one of
                   your recovery codes.
                 </p>
 
                 <form onSubmit={onVerify} className="mt-10 space-y-5" noValidate>
-                  <div className="[&_label]:text-cream/80">
+                  <div className="[&_label]:text-ink-inverse/80">
                     <Input
                       label="Verification code"
                       name="code"
@@ -148,7 +148,7 @@ export default function AdminLoginPage() {
                       setCode('');
                       setError('');
                     }}
-                    className="w-full text-[0.65rem] uppercase tracking-[0.22em] text-cream/45 transition hover:text-gold"
+                    className="w-full text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/45 transition hover:text-gold"
                   >
                     ← Back to sign in
                   </button>
@@ -156,13 +156,13 @@ export default function AdminLoginPage() {
               </>
             ) : (
               <>
-                <h1 className="mt-5 font-heading text-2xl text-cream sm:text-3xl">
+                <h1 className="mt-5 font-heading text-2xl text-ink-inverse sm:text-3xl">
                   {loginCopy.headline}
                 </h1>
-                <p className="mt-3 text-sm leading-relaxed text-cream/65">{loginCopy.copy}</p>
+                <p className="mt-3 text-sm leading-relaxed text-ink-inverse/65">{loginCopy.copy}</p>
 
                 <form onSubmit={onSubmit} className="mt-10 space-y-5" noValidate>
-                  <div className="[&_label]:text-cream/80">
+                  <div className="[&_label]:text-ink-inverse/80">
                     <Input
                       label="Email"
                       type="email"
@@ -173,7 +173,7 @@ export default function AdminLoginPage() {
                       onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
-                  <div className="[&_label]:text-cream/80">
+                  <div className="[&_label]:text-ink-inverse/80">
                     <Input
                       label="Password"
                       type="password"
@@ -202,7 +202,7 @@ export default function AdminLoginPage() {
 
                 <a
                   href="/admin/forgot-password"
-                  className="mt-6 inline-block text-[0.65rem] uppercase tracking-[0.22em] text-cream/45 transition hover:text-gold"
+                  className="mt-6 inline-block text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/45 transition hover:text-gold"
                 >
                   Forgot password?
                 </a>
@@ -211,7 +211,7 @@ export default function AdminLoginPage() {
 
             <a
               href="/"
-              className="mt-10 block text-[0.65rem] uppercase tracking-[0.22em] text-cream/40 transition hover:text-gold"
+              className="mt-10 block text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/40 transition hover:text-gold"
             >
               ← Public site
             </a>

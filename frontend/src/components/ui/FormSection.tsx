@@ -16,8 +16,8 @@ export function FormSection({
   className,
   tone = 'light',
 }: FormSectionProps) {
-  const titleColor = tone === 'dark' ? 'text-cream' : 'text-black';
-  const descColor = tone === 'dark' ? 'text-cream/50' : 'text-black/50';
+  const titleColor = tone === 'dark' ? 'text-ink-inverse' : 'text-ink';
+  const descColor = tone === 'dark' ? 'text-ink-inverse/50' : 'text-ink/50';
 
   return (
     <div className={cn('space-y-4', className)}>
@@ -29,7 +29,7 @@ export function FormSection({
           {description ? (
             <p className={cn('mt-1 text-xs', descColor)}>{description}</p>
           ) : null}
-          <div className="mt-2 border-b border-black/10" />
+          <div className="mt-2 border-b border-line" />
         </div>
       ) : null}
       {children}

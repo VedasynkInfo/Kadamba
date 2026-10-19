@@ -41,7 +41,7 @@ export default function PortalInvoicePage() {
         <button
           type="button"
           onClick={() => navigate('/portal/payments')}
-          className="text-xs uppercase tracking-[0.18em] text-cream/50 hover:text-gold"
+          className="text-xs uppercase tracking-[0.18em] text-ink-inverse/50 hover:text-gold"
         >
           ← Payments & invoices
         </button>
@@ -49,7 +49,7 @@ export default function PortalInvoicePage() {
           {invoice ? (
             <Link
               to={`/portal/orders/${invoice.order.id}`}
-              className="inline-flex items-center border border-gold/25 px-3 py-2 text-xs uppercase tracking-[0.14em] text-cream/70 hover:border-gold hover:text-gold"
+              className="inline-flex items-center border border-gold/25 px-3 py-2 text-xs uppercase tracking-[0.14em] text-ink-inverse/70 hover:border-gold hover:text-gold"
             >
               View order
             </Link>

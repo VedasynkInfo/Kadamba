@@ -32,7 +32,7 @@ function billTone(status?: string) {
     case 'unpaid':
       return 'border-rose-400/40 bg-rose-500/10 text-rose-200';
     default:
-      return 'border-cream/20 bg-white/5 text-cream/70';
+      return 'border-cream/20 bg-white/5 text-ink-inverse/70';
   }
 }
 
@@ -70,14 +70,14 @@ export default function PortalPaymentsPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="font-heading text-3xl text-cream">Payments & invoices</h1>
-        <p className="mt-2 text-sm text-cream/55">
+        <h1 className="font-heading text-3xl text-ink-inverse">Payments & invoices</h1>
+        <p className="mt-2 text-sm text-ink-inverse/55">
           Open any invoice for a full billing document — quoted amount, payments, and balance.
         </p>
       </div>
 
       <div className="border border-gold/20 bg-black/30 px-5 py-6">
-        <p className="text-[0.65rem] uppercase tracking-[0.2em] text-cream/45">Outstanding balance</p>
+        <p className="text-[0.65rem] uppercase tracking-[0.2em] text-ink-inverse/45">Outstanding balance</p>
         <p className="mt-2 font-heading text-3xl text-gold">{formatINR(data.outstandingBalance)}</p>
       </div>
 
@@ -85,7 +85,7 @@ export default function PortalPaymentsPage() {
         <h2 className="font-heading text-xl text-gold">Your invoices</h2>
         <ul className="mt-4 divide-y divide-gold/10 border border-gold/15">
           {data.invoices.length === 0 ? (
-            <li className="px-4 py-8 text-sm text-cream/50">
+            <li className="px-4 py-8 text-sm text-ink-inverse/50">
               No invoice until your order is quoted by the boutique. Once pricing is set, invoices
               appear here.
             </li>
@@ -94,11 +94,11 @@ export default function PortalPaymentsPage() {
               <li key={inv.orderId} className="px-4 py-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="font-heading text-lg text-cream">
+                    <p className="font-heading text-lg text-ink-inverse">
                       {inv.invoiceNumber || `Order #${inv.orderNumber}`}
                     </p>
-                    <p className="mt-0.5 text-sm text-cream/70">{inv.title}</p>
-                    <p className="mt-1 font-mono text-[0.7rem] text-cream/40">
+                    <p className="mt-0.5 text-sm text-ink-inverse/70">{inv.title}</p>
+                    <p className="mt-1 font-mono text-[0.7rem] text-ink-inverse/40">
                       {inv.referenceId
                         ? inv.referenceId
                         : inv.orderNumber
@@ -115,10 +115,10 @@ export default function PortalPaymentsPage() {
                     >
                       {billLabel(inv.billStatus)}
                     </span>
-                    <p className="mt-2 text-sm text-cream/80">
+                    <p className="mt-2 text-sm text-ink-inverse/80">
                       Quoted {formatINR(inv.paymentSummary.totalQuoted)}
                     </p>
-                    <p className="text-sm text-cream/80">
+                    <p className="text-sm text-ink-inverse/80">
                       Paid {formatINR(inv.paymentSummary.totalPaid)}
                     </p>
                     <p className="text-sm text-gold">
@@ -142,7 +142,7 @@ export default function PortalPaymentsPage() {
         <h2 className="font-heading text-xl text-gold">Payment history</h2>
         <ul className="mt-4 divide-y divide-gold/10 border border-gold/15">
           {data.payments.length === 0 ? (
-            <li className="px-4 py-8 text-sm text-cream/50">No payments recorded yet.</li>
+            <li className="px-4 py-8 text-sm text-ink-inverse/50">No payments recorded yet.</li>
           ) : (
             data.payments.map((p) => (
               <li
@@ -150,8 +150,8 @@ export default function PortalPaymentsPage() {
                 className="flex flex-wrap items-center justify-between gap-2 px-4 py-3 text-sm"
               >
                 <div>
-                  <p className="text-cream">{formatINR(p.amount)}</p>
-                  <p className="text-[0.7rem] text-cream/45">
+                  <p className="text-ink-inverse">{formatINR(p.amount)}</p>
+                  <p className="text-[0.7rem] text-ink-inverse/45">
                     {p.orderTitle || p.referenceId || (p.orderNumber ? `#${p.orderNumber}` : '')} ·{' '}
                     {p.method}
                     {p.reference ? ` · ${p.reference}` : ''}
@@ -165,7 +165,7 @@ export default function PortalPaymentsPage() {
                     </Link>
                   ) : null}
                 </div>
-                <p className="text-cream/55">
+                <p className="text-ink-inverse/55">
                   {new Date(p.paidAt).toLocaleDateString('en-IN', {
                     day: 'numeric',
                     month: 'short',

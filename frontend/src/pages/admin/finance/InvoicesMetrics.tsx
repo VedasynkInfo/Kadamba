@@ -48,12 +48,7 @@ export function InvoicesMetrics({ summary }: InvoicesMetricsProps) {
       {cards.map((c) => (
         <div
           key={c.label}
-          className="rounded-xl border p-3.5 shadow-xs transition-colors"
-          style={{
-            backgroundColor: 'var(--admin-card, #141b26)',
-            borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-            color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-          }}
+          className="rounded-xl border p-3.5 shadow-xs transition-colors bg-surface-raised border-line text-ink-raised"
         >
           <div className="flex items-center justify-between opacity-70">
             <span className="text-[11px] font-semibold uppercase tracking-wider">{c.label}</span>

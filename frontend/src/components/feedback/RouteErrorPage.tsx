@@ -38,7 +38,7 @@ export function RouteErrorPage() {
         path="/error"
         robots="noindex, nofollow"
       />
-      <section className="flex min-h-[70vh] flex-col items-center justify-center gap-5 bg-cream px-6 text-center">
+      <section className="flex min-h-[70vh] flex-col items-center justify-center gap-5 bg-surface px-6 text-center">
         {status === undefined ? (
           <p className="font-heading text-xs uppercase tracking-[0.32em] text-gold">
             Kadamba&apos;s Designer Studio
@@ -46,15 +46,15 @@ export function RouteErrorPage() {
         ) : (
           <p className="font-heading text-6xl text-gold sm:text-7xl">{status}</p>
         )}
-        <h1 className="font-heading text-3xl text-black sm:text-4xl">{headline}</h1>
-        <p className="max-w-md text-black/70">{message}</p>
+        <h1 className="font-heading text-3xl text-ink sm:text-4xl">{headline}</h1>
+        <p className="max-w-md text-ink/70">{message}</p>
 
         <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
           {!missing && (
             <button
               type="button"
               onClick={() => revalidator.revalidate()}
-              className="rounded-md bg-black px-6 py-2.5 text-sm font-medium text-cream transition-colors hover:bg-black/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              className="rounded-md bg-black px-6 py-2.5 text-sm font-medium text-ink-inverse transition-colors hover:bg-black/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
             >
               Try again
             </button>
@@ -63,8 +63,8 @@ export function RouteErrorPage() {
             to="/"
             className={
               missing
-                ? 'rounded-md bg-black px-6 py-2.5 text-sm font-medium text-cream transition-colors hover:bg-black/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold'
-                : 'rounded-md border border-black/25 px-6 py-2.5 text-sm font-medium text-black transition-colors hover:border-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold'
+                ? 'rounded-md bg-black px-6 py-2.5 text-sm font-medium text-ink-inverse transition-colors hover:bg-black/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold'
+                : 'rounded-md border border-line-strong px-6 py-2.5 text-sm font-medium text-ink transition-colors hover:border-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold'
             }
           >
             Back to home
@@ -72,7 +72,7 @@ export function RouteErrorPage() {
           {missing && (
             <Link
               to="/gallery"
-              className="rounded-md border border-black/25 px-6 py-2.5 text-sm font-medium text-black transition-colors hover:border-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              className="rounded-md border border-line-strong px-6 py-2.5 text-sm font-medium text-ink transition-colors hover:border-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
             >
               View gallery
             </Link>
@@ -129,7 +129,7 @@ function ErrorDetail({ error }: { error: unknown }) {
       : JSON.stringify(error, null, 2);
 
   return (
-    <pre className="mt-6 max-h-64 w-full max-w-2xl overflow-auto rounded-md bg-black/5 p-4 text-left text-xs text-black/70">
+    <pre className="mt-6 max-h-64 w-full max-w-2xl overflow-auto rounded-md bg-surface-sunken p-4 text-left text-xs text-ink/70">
       {text}
     </pre>
   );

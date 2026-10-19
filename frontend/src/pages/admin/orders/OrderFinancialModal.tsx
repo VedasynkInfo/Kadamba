@@ -51,7 +51,7 @@ export function OrderFinancialModal({
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs text-black/55 mb-1.5">Amount (₹) *</label>
+              <label className="block text-xs text-ink/55 mb-1.5">Amount (₹) *</label>
               <Input
                 id="record-payment-amount"
                 type="number"
@@ -63,7 +63,7 @@ export function OrderFinancialModal({
               />
             </div>
             <div>
-              <label className="block text-xs text-black/55 mb-1.5">Date *</label>
+              <label className="block text-xs text-ink/55 mb-1.5">Date *</label>
               <Input
                 id="record-payment-date"
                 type="date"
@@ -73,12 +73,12 @@ export function OrderFinancialModal({
             </div>
           </div>
           <div>
-            <label className="block text-xs text-black/55 mb-1.5">Method *</label>
+            <label className="block text-xs text-ink/55 mb-1.5">Method *</label>
             <select
               id="record-payment-method"
               value={paymentMethod}
               onChange={(e) => setPaymentMethod(e.target.value as any)}
-              className="w-full rounded border border-black/15 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
+              className="w-full rounded border border-line bg-surface-raised px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
             >
               <option value="cash">Cash</option>
               <option value="upi">UPI</option>
@@ -88,7 +88,7 @@ export function OrderFinancialModal({
             </select>
           </div>
           <div>
-            <label className="block text-xs text-black/55 mb-1.5">Reference / UPI ID</label>
+            <label className="block text-xs text-ink/55 mb-1.5">Reference / UPI ID</label>
             <Input
               id="record-payment-ref"
               placeholder="Transaction ID, UPI reference…"
@@ -97,7 +97,7 @@ export function OrderFinancialModal({
             />
           </div>
           <div>
-            <label className="block text-xs text-black/55 mb-1.5">Notes</label>
+            <label className="block text-xs text-ink/55 mb-1.5">Notes</label>
             <Input
               id="record-payment-notes"
               placeholder="Optional note"
@@ -114,7 +114,7 @@ export function OrderFinancialModal({
               </span>
             )}
           </div>
-          <div className="flex gap-3 justify-end pt-2 border-t border-black/5">
+          <div className="flex gap-3 justify-end pt-2 border-t border-line">
             <Button variant="secondary" size="sm" onClick={onClose}>
               Cancel
             </Button>
@@ -126,7 +126,7 @@ export function OrderFinancialModal({
       ) : (
         <div className="space-y-4">
           <div>
-            <label className="block text-xs text-black/55 mb-1.5">Total Quoted Amount (₹)</label>
+            <label className="block text-xs text-ink/55 mb-1.5">Total Quoted Amount (₹)</label>
             <Input
               type="number"
               min="0"
@@ -134,7 +134,7 @@ export function OrderFinancialModal({
               onChange={(e) => setTotalQuoted(e.target.value)}
             />
           </div>
-          <div className="flex gap-3 justify-end pt-2 border-t border-black/5">
+          <div className="flex gap-3 justify-end pt-2 border-t border-line">
             <Button variant="secondary" size="sm" onClick={onClose}>
               Cancel
             </Button>

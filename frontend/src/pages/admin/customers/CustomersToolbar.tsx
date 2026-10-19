@@ -33,12 +33,7 @@ export function CustomersToolbar({
 }: CustomersToolbarProps) {
   return (
     <div
-      className="rounded-xl border p-3.5 shadow-xs transition-colors"
-      style={{
-        backgroundColor: 'var(--admin-card, #141b26)',
-        borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-        color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-      }}
+      className="rounded-xl border p-3.5 shadow-xs transition-colors bg-surface-raised border-line text-ink-raised"
     >
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         {/* Left side: Search & Filter controls */}
@@ -53,12 +48,7 @@ export function CustomersToolbar({
               value={query}
               onChange={(e) => onQueryChange(e.target.value)}
               placeholder="Search name, phone, email, locality..."
-              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)] transition"
-              style={{
-                backgroundColor: 'transparent',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition border-line"
             />
             {query ? (
               <button
@@ -78,12 +68,7 @@ export function CustomersToolbar({
               value={selectedSource}
               onChange={(e) => onSourceChange(e.target.value)}
               aria-label="Filter by source"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)] transition cursor-pointer"
-              style={{
-                backgroundColor: 'var(--admin-card, #141b26)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="">All Sources</option>
               {CUSTOMER_SOURCES.map((s) => (
@@ -100,12 +85,7 @@ export function CustomersToolbar({
               value={selectedPortal}
               onChange={(e) => onPortalChange(e.target.value)}
               aria-label="Filter by portal status"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)] transition cursor-pointer"
-              style={{
-                backgroundColor: 'var(--admin-card, #141b26)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="">All Portal Status</option>
               <option value="active">Active Login</option>
@@ -120,12 +100,7 @@ export function CustomersToolbar({
               value={selectedOrders}
               onChange={(e) => onOrdersChange(e.target.value)}
               aria-label="Filter by open orders"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)] transition cursor-pointer"
-              style={{
-                backgroundColor: 'var(--admin-card, #141b26)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="">All Orders</option>
               <option value="true">In Production (Active)</option>
@@ -155,11 +130,7 @@ export function CustomersToolbar({
           <button
             type="button"
             onClick={onNewCustomer}
-            className="inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 active:scale-98 whitespace-nowrap cursor-pointer"
-            style={{
-              backgroundColor: 'var(--admin-primary, #b59410)',
-              color: 'var(--admin-primary-text, #ffffff)',
-            }}
+            className="inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 active:scale-98 whitespace-nowrap cursor-pointer bg-brand text-ink-on-brand"
           >
             <span className="text-sm font-black">+</span>
             <span>Register Client</span>

@@ -60,7 +60,7 @@ function AnimatedStat({
       <p className="font-heading text-4xl text-gold md:text-5xl">
         <span ref={ref}>{reduced ? `${value}${suffix}` : `0${suffix}`}</span>
       </p>
-      <p className="mt-2 text-sm text-cream/70">{label}</p>
+      <p className="mt-2 text-sm text-ink-inverse/70">{label}</p>
     </div>
   );
 }
@@ -107,7 +107,7 @@ export function AchievementsSection() {
           <motion.li
             key={note}
             variants={reduced ? undefined : fadeUp}
-            className="border-t border-gold/25 pt-5 text-sm leading-relaxed text-cream/75"
+            className="border-t border-gold/25 pt-5 text-sm leading-relaxed text-ink-inverse/75"
           >
             {note}
           </motion.li>

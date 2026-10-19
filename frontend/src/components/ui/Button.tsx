@@ -16,13 +16,13 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    'bg-[var(--color-primary,#000000)] text-[var(--color-primary-text,#ffffff)] border border-white/10 hover:opacity-90 shadow-sm focus-visible:ring-[var(--color-accent,#b59410)]',
+    'bg-[var(--color-primary)] text-[var(--color-primary-text)] border border-white/10 hover:opacity-90 shadow-sm focus-visible:ring-brand',
   admin:
-    'bg-[var(--admin-primary,var(--color-accent,#b59410))] text-[var(--admin-primary-text,#000000)] border border-white/20 hover:brightness-105 shadow-sm font-semibold focus-visible:ring-gold',
+    'bg-brand text-ink-on-brand border border-white/20 hover:brightness-105 shadow-sm font-semibold focus-visible:ring-gold',
   secondary:
-    'bg-transparent text-inherit border border-white/15 hover:border-gold/50 hover:bg-white/[0.05] shadow-xs',
+    'bg-transparent text-inherit border border-line hover:border-gold/50 hover:bg-surface-sunken shadow-xs',
   ghost:
-    'bg-transparent text-inherit hover:bg-white/[0.08] border border-transparent',
+    'bg-transparent text-inherit hover:bg-current/[0.08] border border-transparent',
   luxury:
     'bg-black text-gold border border-gold/40 hover:border-gold hover:shadow-[0_0_20px_rgba(255,215,0,0.2)] relative overflow-hidden',
 };
@@ -56,7 +56,7 @@ export function Button({
       aria-busy={loading || undefined}
       className={cn(
         'group relative inline-flex items-center justify-center gap-2 font-medium tracking-wide',
-        'transition-all duration-200 ease-[var(--ease-luxury)]',
+        'transition-all duration-200 ease-luxury',
         'active:scale-[0.98] disabled:active:scale-100',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-offset-transparent',
         'disabled:pointer-events-none disabled:opacity-50 cursor-pointer',

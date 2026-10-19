@@ -24,21 +24,21 @@ export function OrderMeasurementsModal({
   return (
     <Modal open={open} onClose={onClose} title="Link client measurement profile">
       <div className="space-y-4">
-        <p className="text-xs text-black/65">
+        <p className="text-xs text-ink/65">
           Search or select from the client's recorded measurement profiles. If no profiles exist, you can create one in the Measurements tab.
         </p>
 
-        <div className="max-h-[220px] overflow-y-auto border border-black/10 rounded-sm divide-y divide-black/5">
+        <div className="max-h-[220px] overflow-y-auto border border-line rounded-sm divide-y divide-black/5">
           {loadingProfiles ? (
             <div className="py-8 text-center">
               <Spinner size="sm" />
             </div>
           ) : availableProfiles.length === 0 ? (
-            <div className="py-6 text-center text-xs text-black/45">
+            <div className="py-6 text-center text-xs text-ink/45">
               No profiles recorded for this customer.
               <Link
                 to="/admin/measurements"
-                className="block font-semibold text-black hover:underline mt-2 text-[10px] uppercase"
+                className="block font-semibold text-ink hover:underline mt-2 text-[10px] uppercase"
               >
                 Create fitting profile →
               </Link>
@@ -52,7 +52,7 @@ export function OrderMeasurementsModal({
                     <span className="font-semibold block">
                       {p.profileName} ({p.productTypeCode})
                     </span>
-                    <span className="text-black/55 text-[10px] block mt-0.5">
+                    <span className="text-ink/55 text-[10px] block mt-0.5">
                       Updated: {new Date(p.measuredAt).toLocaleDateString('en-IN')}
                     </span>
                   </div>
@@ -70,7 +70,7 @@ export function OrderMeasurementsModal({
           )}
         </div>
 
-        <div className="flex justify-end pt-2 border-t border-black/5">
+        <div className="flex justify-end pt-2 border-t border-line">
           <Button size="sm" onClick={onClose}>
             Done
           </Button>

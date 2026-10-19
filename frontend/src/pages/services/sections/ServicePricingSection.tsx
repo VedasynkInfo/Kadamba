@@ -25,19 +25,19 @@ export function ServicePricingSection({ service }: ServicePricingSectionProps) {
             description={`Transparent starting rates for ${service.title.toLowerCase()} at our Kurnool boutique. Final quotes follow a consultation.`}
           />
 
-          <p className="mt-8 font-heading text-4xl text-black sm:text-5xl">
+          <p className="mt-8 font-heading text-4xl text-ink sm:text-5xl">
             <span className="block text-xs font-semibold uppercase tracking-[0.22em] text-gold">
               Starting from
             </span>
             <span className="mt-2 inline-block">{service.pricing.startingFrom}</span>
           </p>
-          <p className="mt-4 max-w-xl text-base leading-relaxed text-black/65">
+          <p className="mt-4 max-w-xl text-base leading-relaxed text-ink/65">
             {service.pricing.note}
           </p>
-          <p className="mt-3 text-sm text-black/55">{service.durationNote}</p>
+          <p className="mt-3 text-sm text-ink/55">{service.durationNote}</p>
 
           <motion.ul
-            className="mt-10 divide-y divide-black/10 border-y border-black/10"
+            className="mt-10 divide-y divide-black/10 border-y border-line"
             variants={reduced ? undefined : staggerChildren}
             initial={reduced ? false : 'hidden'}
             whileInView={reduced ? undefined : 'visible'}
@@ -50,10 +50,10 @@ export function ServicePricingSection({ service }: ServicePricingSectionProps) {
                 variants={reduced ? undefined : fadeUp}
               >
                 <div>
-                  <h3 className="font-heading text-xl text-black">{tier.name}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-black/65">{tier.detail}</p>
+                  <h3 className="font-heading text-xl text-ink">{tier.name}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-ink/65">{tier.detail}</p>
                 </div>
-                <p className="shrink-0 font-heading text-lg text-black sm:text-right">
+                <p className="shrink-0 font-heading text-lg text-ink sm:text-right">
                   {tier.priceLabel}
                 </p>
               </motion.li>
@@ -62,7 +62,7 @@ export function ServicePricingSection({ service }: ServicePricingSectionProps) {
         </div>
 
         <motion.div
-          className="self-start border border-black/10 bg-black px-6 py-8 text-cream sm:px-8"
+          className="self-start border border-line bg-black px-6 py-8 text-ink-inverse sm:px-8"
           initial={reduced ? false : { opacity: 0, y: 20 }}
           whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -72,7 +72,7 @@ export function ServicePricingSection({ service }: ServicePricingSectionProps) {
           <h3 className="mt-3 font-heading text-2xl">What you receive</h3>
           <ul className="mt-6 space-y-3">
             {service.includes.map((item) => (
-              <li key={item} className="flex gap-3 text-sm leading-relaxed text-cream/85">
+              <li key={item} className="flex gap-3 text-sm leading-relaxed text-ink-inverse/85">
                 <span className="mt-2 size-1.5 shrink-0 rounded-full bg-gold" aria-hidden />
                 {item}
               </li>

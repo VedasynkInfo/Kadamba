@@ -278,16 +278,16 @@ export default function ProductsAdminPage() {
           
           {/* Categories Sidebar */}
           <div className="lg:col-span-1 space-y-6">
-            <div className="rounded-lg border border-black/10 bg-white p-5 space-y-4 shadow-[var(--shadow-soft)]">
-              <div className="flex justify-between items-center border-b border-black/5 pb-2">
-                <span className="text-xs font-semibold uppercase tracking-wider text-black/55">Categories</span>
+            <div className="rounded-lg border border-line bg-surface-raised p-5 space-y-4 shadow-soft">
+              <div className="flex justify-between items-center border-b border-line pb-2">
+                <span className="text-xs font-semibold uppercase tracking-wider text-ink/55">Categories</span>
                 <button
                   type="button"
                   onClick={() => {
                     resetCategoryForm();
                     setCategoryDrawerOpen(true);
                   }}
-                  className="text-[10px] font-semibold text-black hover:underline uppercase"
+                  className="text-[10px] font-semibold text-ink hover:underline uppercase"
                 >
                   + Add
                 </button>
@@ -299,7 +299,7 @@ export default function ProductsAdminPage() {
                   className={cn(
                     'w-full text-left px-3 py-2 text-xs rounded transition font-medium',
                     selectedCategoryId === 'All'
-                      ? 'bg-[var(--admin-primary,#b59410)] text-[var(--admin-primary-text,#ffffff)] font-semibold shadow-xs'
+                      ? 'bg-brand text-ink-on-brand font-semibold shadow-xs'
                       : 'opacity-75 hover:bg-current/[0.05]',
                   )}
                   onClick={() => setSelectedCategoryId('All')}
@@ -313,7 +313,7 @@ export default function ProductsAdminPage() {
                       className={cn(
                         'flex-1 text-left px-3 py-2 text-xs font-medium transition',
                         selectedCategoryId === (cat.id || cat._id)
-                          ? 'bg-[var(--admin-primary,#b59410)] text-[var(--admin-primary-text,#ffffff)] font-semibold rounded-l'
+                          ? 'bg-brand text-ink-on-brand font-semibold rounded-l'
                           : 'opacity-75 hover:opacity-100',
                       )}
                       onClick={() => setSelectedCategoryId(cat.id || cat._id!)}
@@ -323,7 +323,7 @@ export default function ProductsAdminPage() {
                     <button
                       type="button"
                       onClick={() => handleEditCategoryClick(cat)}
-                      className="px-2.5 py-2 text-[10px] text-black/40 hover:text-black hidden group-hover:block font-semibold uppercase"
+                      className="px-2.5 py-2 text-[10px] text-ink/40 hover:text-ink hidden group-hover:block font-semibold uppercase"
                     >
                       Edit
                     </button>
@@ -333,11 +333,11 @@ export default function ProductsAdminPage() {
             </div>
 
             {/* Quick Actions / Seeding */}
-            <div className="rounded-lg border border-black/10 bg-white p-5 space-y-3 text-xs shadow-[var(--shadow-soft)]">
-              <span className="font-semibold text-black uppercase tracking-wider text-[10px] block border-b border-black/5 pb-2">
+            <div className="rounded-lg border border-line bg-surface-raised p-5 space-y-3 text-xs shadow-soft">
+              <span className="font-semibold text-ink uppercase tracking-wider text-[10px] block border-b border-line pb-2">
                 Catalog Seeding
               </span>
-              <p className="text-black/55 leading-relaxed">
+              <p className="text-ink/55 leading-relaxed">
                 Seed the default Kurnool bridal and designer blouse catalog to automatically map template fit fields.
               </p>
               <Button
@@ -356,14 +356,14 @@ export default function ProductsAdminPage() {
           <div className="lg:col-span-3 min-w-0 space-y-6">
             
             {/* Filters bar */}
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-black/10 pb-4">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-line pb-4">
               <div className="flex flex-1 min-w-[200px] max-w-sm">
                 <Input
                   type="text"
                   placeholder="Search by code or name..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-cream/30 text-xs"
+                  className="w-full bg-surface-sunken text-xs"
                 />
               </div>
               <div className="flex items-center gap-3">
@@ -386,9 +386,9 @@ export default function ProductsAdminPage() {
                 <Spinner size="lg" label="Updating directory..." />
               </div>
             ) : productTypes.length === 0 ? (
-              <div className="text-center py-12 border border-black/10 border-dashed rounded-lg bg-cream/10 p-6 text-xs">
-                <h4 className="font-semibold text-black">No garment types found</h4>
-                <p className="text-black/45 mt-1">
+              <div className="text-center py-12 border border-line border-dashed rounded-lg bg-surface-sunken p-6 text-xs">
+                <h4 className="font-semibold text-ink">No garment types found</h4>
+                <p className="text-ink/45 mt-1">
                   Ensure the catalog migration has been executed, or create a brand new custom product type.
                 </p>
                 <Button
@@ -415,7 +415,7 @@ export default function ProductsAdminPage() {
                       render: (t) => (
                         <div>
                           <span className="font-semibold">{t.name}</span>
-                          {t.description && <span className="block text-[10px] text-black/45 mt-0.5 truncate max-w-[200px]">{t.description}</span>}
+                          {t.description && <span className="block text-[10px] text-ink/45 mt-0.5 truncate max-w-[200px]">{t.description}</span>}
                         </div>
                       ),
                     },
@@ -425,8 +425,8 @@ export default function ProductsAdminPage() {
                       header: 'Fit Template',
                       className: 'font-mono text-[10px]',
                       render: (t) => t.measurementTemplateId
-                        ? <Link to="/admin/measurements" className="bg-black/5 px-1.5 py-0.5 rounded border border-black/10 font-semibold hover:underline">📏 {t.measurementTemplateId}</Link>
-                        : <span className="text-black/35">Unmeasurable</span>,
+                        ? <Link to="/admin/measurements" className="bg-surface-sunken px-1.5 py-0.5 rounded border border-line font-semibold hover:underline">📏 {t.measurementTemplateId}</Link>
+                        : <span className="text-ink/35">Unmeasurable</span>,
                     },
                     { key: 'indicativePriceRange', header: 'Indicative Price', render: (t) => t.indicativePriceRange || '—' },
                     {
@@ -451,8 +451,8 @@ export default function ProductsAdminPage() {
 
                 {/* Pagination */}
                 {pagination.pages > 1 && (
-                  <div className="flex items-center justify-between border-t border-black/10 pt-4">
-                    <span className="text-xs text-black/50">
+                  <div className="flex items-center justify-between border-t border-line pt-4">
+                    <span className="text-xs text-ink/50">
                       Showing page {pagination.page} of {pagination.pages}
                     </span>
                     <div className="flex gap-2">
@@ -522,7 +522,7 @@ export default function ProductsAdminPage() {
             />
           </div>
 
-          <div className="flex gap-3 justify-end pt-3 border-t border-black/5">
+          <div className="flex gap-3 justify-end pt-3 border-t border-line">
             <Button
               type="button"
               variant="secondary"
@@ -643,12 +643,12 @@ export default function ProductsAdminPage() {
               checked={typeActive}
               onChange={(e) => setTypeActive(e.target.checked)}
             />
-            <label htmlFor="type-act" className="font-semibold text-black/75 cursor-pointer">
+            <label htmlFor="type-act" className="font-semibold text-ink/75 cursor-pointer">
               Garment is Active (New orders can select this type)
             </label>
           </div>
 
-          <div className="flex gap-4 pt-4 border-t border-black/10">
+          <div className="flex gap-4 pt-4 border-t border-line">
             <Button
               type="button"
               variant="secondary"

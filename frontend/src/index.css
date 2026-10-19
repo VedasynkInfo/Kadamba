@@ -1,20 +1,81 @@
 @import 'tailwindcss';
 
 /*
-  Design tokens — luxury black / gold / cream.
+  ─────────────────────────────────────────────────────────────────────────────
+  Kadamba design system — the one place a value is defined.
 
-  CRITICAL: Do NOT redefine --spacing-sm|md|lg|xl in @theme.
-  Tailwind v4 maps max-w-sm/md/lg/xl to those keys, which collapses
-  body copy into ~1–6rem columns. Use --kadamba-space-* instead.
+  Three layers, in order of authority:
+
+  1. **Palette** — raw brand colours (`--color-gold`). These are paint. They exist
+     so the brand has a name; components should almost never reach for them
+     directly, because a palette colour has no opinion about which shell it is in.
+  2. **Semantic tokens** — `--color-surface-raised`, `--color-ink`, `--color-line`.
+     This is what components use. A semantic token carries the *meaning*
+     ("the raised surface", "the primary text") and its value is set per shell:
+     light values here, and overridden under `.admin-shell` for the console.
+     That is what makes `bg-surface-raised` correct inside the dark console and on
+     the cream public site without either one knowing about the other.
+  3. **Settings-driven tokens** — the palette a studio can actually retheme from
+     Settings (`--public-*`, `--admin-*`). The semantic layer is built out of
+     these, so retheming flows through the whole app instead of patching classes.
+
+  Why the split between `@theme` and `:root`: `@theme` is Tailwind's input — those
+  entries generate utilities (`bg-surface-raised`, `text-ink`). Anything that is a
+  plain value with no utility (the spacing rhythm, measures, motion) lives in
+  `:root` so it is emitted unconditionally and cannot be tree-shaken away.
+
+  Do NOT add `--spacing-sm|md|lg|xl` (the `--spacing-*` namespace): Tailwind maps
+  named spacing onto utilities, so `max-w-lg` would then resolve to 4rem and
+  collapse body copy into a one-word column. The rhythm lives in `--space-*`
+  (6.4), which maps to nothing and therefore cannot collide.
+  ─────────────────────────────────────────────────────────────────────────────
 */
+
 @theme {
+  /* ── 1. Palette (raw) ─────────────────────────────────────────────────── */
   --color-black: #000000;
   --color-gold: #ffd700;
   --color-gold-dark: #8a6d2f;
   --color-cream: #fffdd0;
+  --color-espresso: #0c0a08;
+  --color-ember: #2a2118;
   --color-elevated: #111111;
-  --color-muted: rgba(255, 253, 208, 0.7);
 
+  /* ── 2. Semantic tokens — public (light) values ───────────────────────── */
+  /* Surfaces */
+  --color-surface: #fffdd0;
+  --color-surface-raised: var(--public-card);
+  --color-surface-sunken: var(--public-surface);
+  --color-surface-field: var(--public-card);
+  --color-surface-inverse: var(--color-espresso);
+
+  /* Text. `ink` is "the readable colour for this shell"; `ink-inverse` is the
+     readable colour for a *dark* panel (dark hero sections, the black footer).
+     `ink-raised` is text on `bg-surface-raised` specifically, which is separate
+     on purpose: a studio can choose a light card inside the dark console, and
+     then the card's text is not the page's. */
+  --color-ink: var(--public-text);
+  --color-ink-raised: var(--public-card-text);
+  --color-ink-inverse: #fffdd0;
+  --color-ink-on-brand: #000000;
+
+  /* Borders */
+  --color-line: rgba(0, 0, 0, 0.12);
+  --color-line-strong: rgba(0, 0, 0, 0.22);
+
+  /* Brand — the studio's accent, applied to actions and highlights. Soft tints
+     are expressed as opacity on this one token (`bg-brand/10`, `border-brand/25`),
+     which is why there is no second "soft" colour to drift from it. */
+  --color-brand: var(--color-accent);
+
+  /* The one status tone promoted to a role. A destructive *action* has to be
+     legible wherever it appears, so it is a semantic token with a value per
+     shell. The status palettes proper (the rose/emerald/amber utilities on
+     alerts and badges) stay a separate axis: there, the tone is data the desk
+     reads, not a decision the shell makes. */
+  --color-danger: #b91c1c;
+
+  /* ── Typography ───────────────────────────────────────────────────────── */
   --font-heading: 'Playfair Display', Georgia, serif;
   --font-body: 'Manrope', 'Inter', system-ui, sans-serif;
   --font-admin: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -24,6 +85,7 @@
   --text-h3: 1.5rem;
   --text-body: 1.0625rem;
 
+  /* ── Shape & elevation ────────────────────────────────────────────────── */
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
@@ -31,26 +93,24 @@
   --shadow-gold: 0 8px 32px rgba(255, 215, 0, 0.15);
   --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.2);
 
-  --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
-
-  /* Readable measures for section copy (classic typography) */
+  /* ── Readable measures (classic typography) ───────────────────────────── */
   --container-measure: 38rem;
   --container-measure-wide: 44rem;
+
+  /* ── Motion ───────────────────────────────────────────────────────────── */
+  --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-:root {
-  --color-black: #000000;
-  --color-gold: #ffd700;
-  --color-gold-dark: #8a6d2f;
-  --color-cream: #fffdd0;
-  --color-dark-bg: #000000;
-  --color-light-bg: #fffdd0;
-  --color-elevated: #111111;
-  --color-primary-text: #ffffff;
-  --color-secondary-text: #ffd700;
-  --color-muted: rgba(255, 253, 208, 0.7);
+/*
+  Settings-driven theme surface.
 
-  /* Dynamic Theming tokens (overridable at runtime from Settings) */
+  These are the token names the Settings → Theme editor writes at runtime
+  (`document.documentElement.style.setProperty`), so they must exist as real
+  custom properties on `:root` with usable defaults. The semantic layer above is
+  built from them, which is why changing the theme changes the whole app.
+*/
+:root {
   --color-primary: #000000;
   --color-primary-hover: #1a1a1a;
   --color-primary-text: #ffffff;
@@ -69,29 +129,98 @@
   --admin-primary: #b59410;
   --admin-primary-text: #000000;
   --admin-accent: #ffd700;
+  --admin-border: rgba(128, 128, 128, 0.2);
 
-  --font-heading: 'Playfair Display', Georgia, serif;
-  --font-body: 'Manrope', 'Inter', system-ui, sans-serif;
-  --font-admin: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-size-h1: 3rem;
-  --font-size-h2: 2.25rem;
-  --font-size-h3: 1.5rem;
-  --font-size-body: 1.0625rem;
-
-  /* Section rhythm — namespaced so they never collide with Tailwind spacing */
-  --kadamba-space-xs: 0.5rem;
-  --kadamba-space-sm: 1rem;
-  --kadamba-space-md: 2rem;
-  --kadamba-space-lg: 4rem;
-  --kadamba-space-xl: 6rem;
+  /* Value-only tokens (no utilities are generated from these) */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 2rem;
+  --space-lg: 4rem;
+  --space-xl: 6rem;
 
   --duration-fast: 150ms;
   --duration-base: 250ms;
   --duration-slow: 400ms;
-  --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
+}
 
-  --measure: 38rem;
-  --measure-wide: 44rem;
+/*
+  The console shell.
+
+  One override block, and the entire admin console inverts: every component that
+  asked for `bg-surface-raised` / `text-ink` / `border-line` gets the dark values
+  without knowing it is in the admin. This replaces the old `.admin-scope`, which
+  instead rewrote utility *classes* (`.admin-scope .text-black { … }`) and in doing
+  so made `text-black` mean "light text" inside the console — which turned every
+  light panel in the admin (`bg-cream text-black`) into light-on-cream.
+*/
+.admin-shell {
+  --color-surface: var(--admin-bg);
+  --color-surface-raised: var(--admin-card);
+  --color-surface-sunken: rgba(128, 128, 128, 0.08);
+  --color-surface-field: var(--admin-card);
+  --color-surface-inverse: var(--admin-sidebar);
+  --color-ink: var(--admin-text);
+  --color-ink-raised: var(--admin-card-text);
+  --color-ink-inverse: var(--admin-text);
+  --color-ink-on-brand: var(--admin-primary-text);
+  --color-line: var(--admin-border);
+  --color-line-strong: rgba(128, 128, 128, 0.4);
+  --color-brand: var(--admin-primary);
+  --color-danger: #fb7185;
+
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+}
+
+/*
+  The customer portal.
+
+  Dark as well, but with the studio's warm black rather than the console's
+  blue-grey: the portal is a branded experience, not an internal tool. It needed
+  its own block rather than `.admin-shell` because the two share a *temperature*
+  of decision (invert the ink, keep the surfaces dark) but not a palette.
+*/
+.portal-shell {
+  --color-surface: var(--color-espresso);
+  --color-surface-raised: rgba(0, 0, 0, 0.4);
+  --color-surface-sunken: rgba(255, 255, 255, 0.04);
+  --color-surface-field: rgba(255, 255, 255, 0.06);
+  --color-surface-inverse: var(--color-black);
+  --color-ink: #f3f4f6;
+  --color-ink-raised: #f3f4f6;
+  --color-ink-inverse: var(--color-cream);
+  --color-ink-on-brand: var(--color-black);
+  --color-line: rgba(255, 255, 255, 0.14);
+  --color-line-strong: rgba(255, 255, 255, 0.28);
+  --color-brand: var(--color-gold);
+  --color-danger: #fb7185;
+
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+}
+
+/*
+  The invoice is a document, not a screen.
+
+  A PDF has to look like the page it was printed from, so it keeps its own paper
+  palette in every shell instead of following the console into the dark. That is
+  a third deliberate palette (the public site's cream, the console's blue-grey,
+  the portal's warm black) rather than an accident of fallback order.
+*/
+.invoice-paper {
+  --color-surface: #f1ece4;
+  --color-surface-raised: #faf7f2;
+  --color-surface-sunken: #f1ece4;
+  --color-surface-field: #ffffff;
+  --color-surface-inverse: #1a1510;
+  --color-ink: #1a1510;
+  --color-ink-raised: #1a1510;
+  --color-ink-inverse: #faf7f2;
+  --color-ink-on-brand: #ffffff;
+  --color-line: rgba(26, 21, 16, 0.14);
+  --color-line-strong: rgba(26, 21, 16, 0.28);
+  --color-brand: var(--color-gold-dark);
+  --color-danger: #b91c1c;
 }
 
 *,
@@ -108,11 +237,11 @@ body {
   margin: 0;
   min-height: 100vh;
   font-family: var(--font-body);
-  font-size: var(--font-size-body);
+  font-size: var(--text-body);
   line-height: 1.65;
   letter-spacing: 0.01em;
-  background-color: var(--public-bg, var(--color-cream));
-  color: var(--public-text, var(--color-black));
+  background-color: var(--public-bg);
+  color: var(--public-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -127,20 +256,53 @@ body {
   outline-offset: 2px;
 }
 
+/*
+ * Decorative lattice patterns for the dark hero and banner sections.
+ *
+ * These are masks, not images. The SVG carries the shape as alpha and the colour
+ * comes from `currentColor`, so the pattern follows the section's text colour
+ * and a retheme moves it with the brand. Before this they were inline data-URIs
+ * with the gold hex baked into the SVG markup, where nothing could reach it —
+ * the one colour in the app that a custom theme could not touch.
+ */
+.pattern-grid {
+  background-color: currentColor;
+  mask-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 20h40M20 0v40' stroke='%23000' stroke-width='0.5'/%3E%3C/svg%3E");
+  mask-size: 40px 40px;
+}
+
+.pattern-cross {
+  background-color: currentColor;
+  mask-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 2v36M2 20h36' stroke='%23000' stroke-width='0.4'/%3E%3C/svg%3E");
+  mask-size: 40px 40px;
+}
+
+.pattern-lattice {
+  background-color: currentColor;
+  mask-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='none' stroke='%23000' stroke-width='0.6'/%3E%3C/svg%3E");
+  mask-size: 60px 60px;
+}
+
+.pattern-lattice-dot {
+  background-color: currentColor;
+  mask-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='none' stroke='%23000' stroke-width='0.6'/%3E%3Ccircle cx='30' cy='30' r='3' fill='none' stroke='%23000' stroke-width='0.5'/%3E%3C/svg%3E");
+  mask-size: 60px 60px;
+}
+
 /* Classic section copy — always full-width of parent up to a readable measure */
 .text-measure {
   width: 100%;
-  max-width: var(--measure);
+  max-width: var(--container-measure);
 }
 
 .text-measure-wide {
   width: 100%;
-  max-width: var(--measure-wide);
+  max-width: var(--container-measure-wide);
 }
 
 .text-lede {
   width: 100%;
-  max-width: var(--measure);
+  max-width: var(--container-measure);
   font-size: 1.0625rem;
   line-height: 1.7;
   letter-spacing: 0.01em;
@@ -153,6 +315,15 @@ body {
   }
 }
 
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 @keyframes fade-in-up {
   from {
     opacity: 0;
@@ -161,15 +332,6 @@ body {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
   }
 }
 
@@ -190,19 +352,18 @@ body {
   }
 }
 
-.animate-fade-in-up {
-  animation: fade-in-up var(--duration-slow) var(--ease-luxury) both;
+/*
+ * `animate-fade-in` is referenced by the row menus and the preview shells, but
+ * was never defined — those panels appeared with no entrance at all. A fade is
+ * the right one for a menu that is already where it belongs: translate would
+ * fight the fixed positioning that places it.
+ */
+.animate-fade-in {
+  animation: fade-in var(--duration-base) var(--ease-out-soft) both;
 }
 
-.animate-shimmer {
-  background: linear-gradient(
-    110deg,
-    transparent 25%,
-    rgba(255, 215, 0, 0.35) 50%,
-    transparent 75%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 2.5s linear infinite;
+.animate-fade-in-up {
+  animation: fade-in-up var(--duration-slow) var(--ease-luxury) both;
 }
 
 .animate-spin-luxury {
@@ -212,111 +373,3 @@ body {
 .animate-toast-in {
   animation: toast-in var(--duration-base) var(--ease-luxury) both;
 }
-
-.admin-scope {
-  background-color: var(--admin-bg, #0b0f17);
-  color: var(--admin-text, #f3f4f6);
-}
-
-.admin-scope label {
-  color: var(--admin-text, #f3f4f6);
-}
-
-.admin-scope .text-black {
-  color: var(--admin-text, #f3f4f6);
-}
-
-.admin-scope .text-black\/60,
-.admin-scope .text-black\/70,
-.admin-scope .text-black\/80 {
-  color: var(--admin-text, #f3f4f6);
-  opacity: 0.75;
-}
-
-.admin-scope .text-black\/40,
-.admin-scope .text-black\/45,
-.admin-scope .text-black\/50 {
-  color: var(--admin-text, #f3f4f6);
-  opacity: 0.55;
-}
-
-/* Ensure any legacy text-cream in admin inherits the theme's text color */
-.admin-scope .text-cream {
-  color: inherit;
-}
-
-.admin-scope .text-cream\/80,
-.admin-scope .text-cream\/75,
-.admin-scope .text-cream\/70 {
-  color: inherit;
-  opacity: 0.75;
-}
-
-.admin-scope .text-cream\/65,
-.admin-scope .text-cream\/60,
-.admin-scope .text-cream\/55,
-.admin-scope .text-cream\/50 {
-  color: inherit;
-  opacity: 0.55;
-}
-
-.admin-scope .text-cream\/45,
-.admin-scope .text-cream\/40,
-.admin-scope .text-cream\/35 {
-  color: inherit;
-  opacity: 0.4;
-}
-
-.admin-scope .border-black\/10,
-.admin-scope .border-black\/15,
-.admin-scope .border-black\/20 {
-  border-color: var(--admin-border, rgba(128, 128, 128, 0.2));
-}
-
-.admin-scope .bg-black\/\[0\.01\],
-.admin-scope .bg-black\/\[0\.02\],
-.admin-scope .bg-black\/5 {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-.admin-scope input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
-.admin-scope select,
-.admin-scope textarea {
-  background-color: var(--admin-card, #1f2937);
-  color: var(--admin-card-text, var(--admin-text, #f3f4f6));
-  border-color: var(--admin-border, rgba(128, 128, 128, 0.25));
-}
-
-.admin-scope input::placeholder,
-.admin-scope textarea::placeholder {
-  color: var(--admin-card-text, var(--admin-text, #f3f4f6));
-  opacity: 0.45;
-}
-
-/* Aceternity UI & 21st.dev Luxury Light-Beam & Border Highlights */
-.card-beam {
-  position: relative;
-  overflow: hidden;
-}
-
-.card-beam::before {
-  content: '';
-  position: absolute;
-  inset-inline: 0;
-  top: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(128, 128, 128, 0.3) 50%, transparent 100%);
-  pointer-events: none;
-  z-index: 10;
-}
-
-/* Tactile Micro-Press & Smooth Transitions */
-.btn-modern {
-  transition: all var(--duration-fast) var(--ease-luxury);
-}
-
-.btn-modern:active {
-  transform: scale(0.98);
-}
-
-

@@ -82,8 +82,8 @@ export default function PortalChatPage() {
     <div className="flex h-[min(72vh,38rem)] flex-col">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="font-heading text-3xl text-cream">Chat with boutique</h1>
-          <p className="mt-2 text-sm text-cream/55">Ask about fittings, fabric, or delivery.</p>
+          <h1 className="font-heading text-3xl text-ink-inverse">Chat with boutique</h1>
+          <p className="mt-2 text-sm text-ink-inverse/55">Ask about fittings, fabric, or delivery.</p>
         </div>
         <span
           className={cn(
@@ -105,7 +105,7 @@ export default function PortalChatPage() {
 
       <div className="mt-6 flex-1 space-y-3 overflow-y-auto border border-gold/15 bg-black/25 p-4">
         {messages.length === 0 ? (
-          <p className="text-sm text-cream/45">No messages yet — say hello.</p>
+          <p className="text-sm text-ink-inverse/45">No messages yet — say hello.</p>
         ) : (
           messages.map((m) => (
             <div
@@ -113,16 +113,16 @@ export default function PortalChatPage() {
               className={cn(
                 'max-w-[85%] rounded-sm px-3 py-2 text-sm',
                 m.senderRole === 'customer'
-                  ? 'ml-auto bg-gold/20 text-cream'
-                  : 'mr-auto bg-white/5 text-cream/90',
+                  ? 'ml-auto bg-gold/20 text-ink-inverse'
+                  : 'mr-auto bg-white/5 text-ink-inverse/90',
               )}
             >
-              <p className="text-[0.6rem] uppercase tracking-[0.16em] text-cream/40">
+              <p className="text-[0.6rem] uppercase tracking-[0.16em] text-ink-inverse/40">
                 {m.senderRole === 'customer' ? 'You' : 'Boutique'}
               </p>
               <p className="mt-1 whitespace-pre-wrap">{m.body}</p>
               {m.createdAt ? (
-                <p className="mt-1 text-[0.65rem] text-cream/35">
+                <p className="mt-1 text-[0.65rem] text-ink-inverse/35">
                   {new Date(m.createdAt).toLocaleString('en-IN', {
                     day: 'numeric',
                     month: 'short',
@@ -142,7 +142,7 @@ export default function PortalChatPage() {
           value={body}
           onChange={(e) => setBody(e.target.value)}
           placeholder="Write a message…"
-          className="flex-1 rounded-sm border border-gold/25 bg-black/40 px-3 py-2.5 text-sm text-cream outline-none focus:border-gold"
+          className="flex-1 rounded-sm border border-gold/25 bg-black/40 px-3 py-2.5 text-sm text-ink-inverse outline-none focus:border-gold"
           maxLength={4000}
         />
         <Button type="submit" disabled={sending || !body.trim()}>

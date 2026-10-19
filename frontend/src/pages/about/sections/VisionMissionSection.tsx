@@ -27,19 +27,19 @@ export function VisionMissionSection() {
       >
         <motion.div variants={reduced ? undefined : fadeUp}>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">Studio</p>
-          <h3 className="mt-3 font-heading text-2xl text-cream md:text-3xl">
+          <h3 className="mt-3 font-heading text-2xl text-ink-inverse md:text-3xl">
             {visionMission.vision.title}
           </h3>
-          <p className="mt-4 text-base leading-relaxed text-cream/75">
+          <p className="mt-4 text-base leading-relaxed text-ink-inverse/75">
             {visionMission.vision.body}
           </p>
         </motion.div>
         <motion.div variants={reduced ? undefined : fadeUp}>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">Studio</p>
-          <h3 className="mt-3 font-heading text-2xl text-cream md:text-3xl">
+          <h3 className="mt-3 font-heading text-2xl text-ink-inverse md:text-3xl">
             {visionMission.mission.title}
           </h3>
-          <p className="mt-4 text-base leading-relaxed text-cream/75">
+          <p className="mt-4 text-base leading-relaxed text-ink-inverse/75">
             {visionMission.mission.body}
           </p>
         </motion.div>

@@ -124,7 +124,7 @@ export function ServicesCatalogSection() {
         />
       ) : (
         <>
-          <p className="mt-4 text-sm text-black/55" aria-live="polite">
+          <p className="mt-4 text-sm text-ink/55" aria-live="polite">
             {filtered.length} {filtered.length === 1 ? 'service' : 'services'}
             {category !== 'All' ? ` in ${category}` : ''}
             {query.trim() ? ` matching “${query.trim()}”` : ''}
@@ -220,12 +220,12 @@ function ServiceCard({
             </span>
           </span>
         </div>
-        <h3 className="mt-5 font-heading text-2xl leading-snug text-black">{service.title}</h3>
-        <p className="mt-2 text-base leading-relaxed text-black/70">{service.summary}</p>
-        <p className="mt-3 font-heading text-lg text-black">
+        <h3 className="mt-5 font-heading text-2xl leading-snug text-ink">{service.title}</h3>
+        <p className="mt-2 text-base leading-relaxed text-ink/70">{service.summary}</p>
+        <p className="mt-3 font-heading text-lg text-ink">
           From <span className="text-gold">{service.pricing.startingFrom}</span>
         </p>
-        <span className="mt-3 text-sm font-medium text-black transition-colors group-hover:text-gold">
+        <span className="mt-3 text-sm font-medium text-ink transition-colors group-hover:text-gold">
           View details & pricing →
         </span>
       </button>

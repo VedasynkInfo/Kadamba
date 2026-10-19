@@ -45,14 +45,9 @@ export function ProfileDetailsCard({
 
   return (
     <div
-      className="rounded-2xl border p-6 shadow-sm transition-colors text-xs"
-      style={{
-        backgroundColor: 'var(--admin-card, #141b26)',
-        borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-        color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-      }}
+      className="rounded-2xl border p-6 shadow-sm transition-colors text-xs bg-surface-raised border-line text-ink-raised"
     >
-      <div className="border-b pb-4 mb-5" style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}>
+      <div className="border-b pb-4 mb-5 border-line">
         <h3 className="font-heading text-base font-bold tracking-wide">
           Account Identification
         </h3>
@@ -71,12 +66,7 @@ export function ProfileDetailsCard({
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)] transition"
-            style={{
-              backgroundColor: 'rgba(128, 128, 128, 0.05)',
-              borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-              color: 'inherit',
-            }}
+            className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition bg-surface-sunken border-line"
           />
         </div>
 
@@ -89,12 +79,7 @@ export function ProfileDetailsCard({
               type="email"
               disabled
               value={email}
-              className="w-full rounded-xl border py-2.5 px-3 text-xs opacity-65 cursor-not-allowed font-mono"
-              style={{
-                backgroundColor: 'rgba(128, 128, 128, 0.08)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-xl border py-2.5 px-3 text-xs opacity-65 cursor-not-allowed font-mono bg-surface-sunken border-line"
             />
             <span className="text-[10px] opacity-50 block mt-0.5">
               Verified administrative email (fixed)
@@ -109,12 +94,7 @@ export function ProfileDetailsCard({
               type="text"
               disabled
               value={role.toUpperCase()}
-              className="w-full rounded-xl border py-2.5 px-3 text-xs opacity-65 cursor-not-allowed font-semibold uppercase tracking-wider"
-              style={{
-                backgroundColor: 'rgba(128, 128, 128, 0.08)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-xl border py-2.5 px-3 text-xs opacity-65 cursor-not-allowed font-semibold uppercase tracking-wider bg-surface-sunken border-line"
             />
             <span className="text-[10px] opacity-50 block mt-0.5">
               Role permissions managed by Master Superadmin
@@ -126,11 +106,7 @@ export function ProfileDetailsCard({
           <button
             type="submit"
             disabled={saving}
-            className="rounded-xl px-5 py-2.5 text-xs font-bold shadow-xs transition hover:opacity-95 disabled:opacity-50 cursor-pointer"
-            style={{
-              backgroundColor: 'var(--admin-primary, #b59410)',
-              color: 'var(--admin-primary-text, #ffffff)',
-            }}
+            className="rounded-xl px-5 py-2.5 text-xs font-bold shadow-xs transition hover:opacity-95 disabled:opacity-50 cursor-pointer bg-brand text-ink-on-brand"
           >
             {saving ? 'Saving Changes...' : 'Save Profile Changes'}
           </button>

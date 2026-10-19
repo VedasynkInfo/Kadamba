@@ -92,18 +92,12 @@ export function MeasurementPreviewModal({
       aria-label="Measurement specification preview"
     >
       <div
-        className="w-full max-w-2xl rounded-2xl border shadow-2xl overflow-hidden transition-all text-xs"
-        style={{
-          backgroundColor: 'var(--admin-card, #141b26)',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.22))',
-          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-        }}
+        className="w-full max-w-2xl rounded-2xl border shadow-2xl overflow-hidden transition-all text-xs bg-surface-raised border-line text-ink-raised"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div
-          className="flex items-center justify-between border-b px-5 py-4"
-          style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))' }}
+          className="flex items-center justify-between border-b px-5 py-4 border-line"
         >
           <div className="flex items-center gap-3">
             <span className="text-2xl">{silhouette.icon}</span>
@@ -135,8 +129,7 @@ export function MeasurementPreviewModal({
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer"
-            style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))' }}
+            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer border-line"
             aria-label="Close modal"
           >
             ✕
@@ -147,11 +140,7 @@ export function MeasurementPreviewModal({
         <div className="p-5 space-y-4 max-h-[75vh] overflow-y-auto">
           {/* Unit Toggle & Recorded Metadata */}
           <div
-            className="flex items-center justify-between rounded-xl border p-3"
-            style={{
-              borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))',
-              backgroundColor: 'rgba(128, 128, 128, 0.04)',
-            }}
+            className="flex items-center justify-between rounded-xl border p-3 border-line bg-surface-sunken"
           >
             <div className="flex items-center gap-3">
               <span className="text-[11px] opacity-70">
@@ -168,7 +157,7 @@ export function MeasurementPreviewModal({
                 className={cn(
                   'px-2 py-0.5 rounded text-[10px] font-bold border transition cursor-pointer',
                   displayUnit === 'inches'
-                    ? 'bg-[var(--admin-primary,#b59410)] text-[var(--admin-primary-text,#ffffff)] border-transparent'
+                    ? 'bg-brand text-ink-on-brand border-transparent'
                     : 'opacity-50 border-current/20',
                 )}
               >
@@ -180,7 +169,7 @@ export function MeasurementPreviewModal({
                 className={cn(
                   'px-2 py-0.5 rounded text-[10px] font-bold border transition cursor-pointer',
                   displayUnit === 'cm'
-                    ? 'bg-[var(--admin-primary,#b59410)] text-[var(--admin-primary-text,#ffffff)] border-transparent'
+                    ? 'bg-brand text-ink-on-brand border-transparent'
                     : 'opacity-50 border-current/20',
                 )}
               >
@@ -202,7 +191,7 @@ export function MeasurementPreviewModal({
                 type="button"
                 onClick={() => onApprove(profile)}
                 disabled={isApproving}
-                className="inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-bold bg-amber-500 text-black hover:bg-amber-400 transition cursor-pointer disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-bold bg-amber-500 text-ink hover:bg-amber-400 transition cursor-pointer disabled:opacity-50"
               >
                 <span>✓</span>
                 <span>{isApproving ? 'Approving...' : 'Approve Profile'}</span>
@@ -243,17 +232,13 @@ export function MeasurementPreviewModal({
                   return (
                     <div
                       key={key}
-                      className="rounded-xl border p-2.5 transition"
-                      style={{
-                        borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))',
-                        backgroundColor: 'rgba(128, 128, 128, 0.04)',
-                      }}
+                      className="rounded-xl border p-2.5 transition border-line bg-surface-sunken"
                     >
                       <span className="text-[10px] opacity-60 uppercase block truncate">
                         {friendlyLabel}
                       </span>
                       <div className="flex items-baseline gap-1 mt-0.5">
-                        <span className="font-heading text-sm font-bold tracking-tight text-[var(--admin-primary,#b59410)]">
+                        <span className="font-heading text-sm font-bold tracking-tight text-brand">
                           {displayVal}
                         </span>
                         <span className="text-[9px] opacity-50 font-mono">{displayUnit}</span>
@@ -278,8 +263,7 @@ export function MeasurementPreviewModal({
                     href={imgUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="relative h-20 w-20 rounded-xl overflow-hidden border shadow-xs hover:opacity-90 transition block"
-                    style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
+                    className="relative h-20 w-20 rounded-xl overflow-hidden border shadow-xs hover:opacity-90 transition block border-line"
                   >
                     <OptimizedImage src={imgUrl} alt="Reference" sizes="80px" className="h-full w-full object-cover" />
                   </a>
@@ -294,11 +278,7 @@ export function MeasurementPreviewModal({
               Posture Notes & Atelier Directives
             </span>
             <div
-              className="rounded-xl border p-3 text-xs leading-relaxed"
-              style={{
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))',
-                backgroundColor: 'rgba(128, 128, 128, 0.03)',
-              }}
+              className="rounded-xl border p-3 text-xs leading-relaxed border-line bg-surface-sunken"
             >
               {profile.notes ? (
                 <p className="whitespace-pre-line">{profile.notes}</p>
@@ -311,8 +291,7 @@ export function MeasurementPreviewModal({
 
         {/* Footer Actions */}
         <div
-          className="flex items-center justify-between border-t px-5 py-3.5"
-          style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}
+          className="flex items-center justify-between border-t px-5 py-3.5 border-line"
         >
           <a
             href={whatsappDeepLink(whatsappMsg)}
@@ -328,19 +307,14 @@ export function MeasurementPreviewModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg px-3 py-1.5 text-xs font-semibold border hover:bg-current/[0.05] transition cursor-pointer"
-              style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
+              className="rounded-lg px-3 py-1.5 text-xs font-semibold border hover:bg-current/[0.05] transition cursor-pointer border-line"
             >
               Close
             </button>
             <button
               type="button"
               onClick={() => onEdit(profile)}
-              className="rounded-lg px-3.5 py-1.5 text-xs font-bold shadow-xs transition hover:opacity-90 cursor-pointer"
-              style={{
-                backgroundColor: 'var(--admin-primary, #b59410)',
-                color: 'var(--admin-primary-text, #ffffff)',
-              }}
+              className="rounded-lg px-3.5 py-1.5 text-xs font-bold shadow-xs transition hover:opacity-90 cursor-pointer bg-brand text-ink-on-brand"
             >
               ✏️ Edit Dimensions
             </button>

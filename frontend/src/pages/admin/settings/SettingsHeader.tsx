@@ -16,8 +16,7 @@ export function SettingsHeader({
       <div>
         <div className="flex items-center gap-2.5">
           <h1
-            className="font-heading text-xl font-bold tracking-tight sm:text-2xl"
-            style={{ color: 'var(--admin-text, #f3f4f6)' }}
+            className="font-heading text-xl font-bold tracking-tight sm:text-2xl text-ink"
           >
             Studio & Website Settings
           </h1>
@@ -42,8 +41,7 @@ export function SettingsHeader({
         <button
           type="button"
           onClick={onResetOpen}
-          className="rounded-lg border px-3 py-2 text-xs font-semibold opacity-70 hover:opacity-100 hover:bg-current/[0.05] transition cursor-pointer"
-          style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
+          className="rounded-lg border px-3 py-2 text-xs font-semibold opacity-70 hover:opacity-100 hover:bg-current/[0.05] transition cursor-pointer border-line"
         >
           Reset Defaults
         </button>
@@ -52,11 +50,7 @@ export function SettingsHeader({
           type="button"
           onClick={onSave}
           disabled={saving}
-          className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 active:scale-98 disabled:opacity-50 cursor-pointer"
-          style={{
-            backgroundColor: 'var(--admin-primary, #b59410)',
-            color: 'var(--admin-primary-text, #ffffff)',
-          }}
+          className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 active:scale-98 disabled:opacity-50 cursor-pointer bg-brand text-ink-on-brand"
         >
           {saving ? (
             <>

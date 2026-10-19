@@ -28,13 +28,13 @@ export function PortfolioClientStorySection({ project }: PortfolioClientStorySec
         <span className="font-heading text-5xl leading-none text-gold/80" aria-hidden>
           “
         </span>
-        <p className="mt-4 font-heading text-2xl leading-snug text-black sm:text-3xl md:text-[2.15rem]">
+        <p className="mt-4 font-heading text-2xl leading-snug text-ink sm:text-3xl md:text-[2.15rem]">
           {story.quote}
         </p>
         <footer className="mt-8">
           <cite className="not-italic">
-            <span className="block text-sm font-semibold tracking-wide text-black">{story.name}</span>
-            <span className="mt-1 block text-xs uppercase tracking-[0.25em] text-black/45">
+            <span className="block text-sm font-semibold tracking-wide text-ink">{story.name}</span>
+            <span className="mt-1 block text-xs uppercase tracking-[0.25em] text-ink/45">
               {story.occasion}
             </span>
           </cite>

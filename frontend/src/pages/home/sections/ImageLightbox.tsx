@@ -77,14 +77,14 @@ export function ImageLightbox({ open, onClose, title, image, alt }: ImageLightbo
         className="relative z-10 w-full max-w-4xl animate-fade-in-up outline-none"
       >
         <div className="mb-3 flex items-center justify-between gap-4">
-          <h2 id={titleId} className="font-heading text-xl text-cream sm:text-2xl">
+          <h2 id={titleId} className="font-heading text-xl text-ink-inverse sm:text-2xl">
             {title}
           </h2>
           <button
             type="button"
             onClick={onClose}
             className={cn(
-              'rounded-md px-3 py-1.5 text-sm text-cream/80 transition-colors',
+              'rounded-md px-3 py-1.5 text-sm text-ink-inverse/80 transition-colors',
               'hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold',
             )}
             aria-label="Close lightbox"

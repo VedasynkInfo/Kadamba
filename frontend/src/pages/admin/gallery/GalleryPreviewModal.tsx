@@ -27,26 +27,16 @@ export function GalleryPreviewModal({
       aria-modal="true"
     >
       <div
-        className="relative w-full max-w-2xl rounded-2xl border shadow-2xl overflow-hidden animate-fade-in-up"
-        style={{
-          backgroundColor: 'var(--admin-card, #141b26)',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-        }}
+        className="relative w-full max-w-2xl rounded-2xl border shadow-2xl overflow-hidden animate-fade-in-up bg-surface-raised border-line text-ink-raised"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
         <div
-          className="flex items-center justify-between border-b px-6 py-4"
-          style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))' }}
+          className="flex items-center justify-between border-b px-6 py-4 border-line"
         >
           <div className="flex items-center gap-2">
             <span
-              className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider"
-              style={{
-                backgroundColor: 'rgba(181, 148, 16, 0.15)',
-                color: 'var(--admin-primary, #b59410)',
-              }}
+              className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-brand/15 text-brand"
             >
               {item.category}
             </span>
@@ -64,8 +54,7 @@ export function GalleryPreviewModal({
           <button
             type="button"
             onClick={onClose}
-            className="h-8 w-8 rounded-lg border flex items-center justify-center text-xs opacity-70 hover:opacity-100 hover:bg-current/[0.06] transition cursor-pointer"
-            style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))' }}
+            className="h-8 w-8 rounded-lg border flex items-center justify-center text-xs opacity-70 hover:opacity-100 hover:bg-current/[0.06] transition cursor-pointer border-line"
             aria-label="Close preview"
           >
             ✕
@@ -76,8 +65,7 @@ export function GalleryPreviewModal({
         <div className="p-6 space-y-5 max-h-[75vh] overflow-y-auto">
           {/* Media Visual Stage */}
           <div
-            className="rounded-xl border overflow-hidden flex items-center justify-center bg-black/40 relative min-h-[260px] max-h-[400px]"
-            style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))' }}
+            className="rounded-xl border overflow-hidden flex items-center justify-center bg-black/40 relative min-h-[260px] max-h-[400px] border-line"
           >
             {item.mediaType === 'video' ? (
               <video
@@ -106,11 +94,7 @@ export function GalleryPreviewModal({
 
             {item.alt ? (
               <div
-                className="rounded-lg p-3 border text-xs"
-                style={{
-                  backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))',
-                }}
+                className="rounded-lg p-3 border text-xs bg-surface-sunken border-line"
               >
                 <span className="font-semibold block mb-0.5 opacity-70">Alt Description:</span>
                 <span className="opacity-90">{item.alt}</span>
@@ -119,11 +103,7 @@ export function GalleryPreviewModal({
 
             {/* Google SERP Snippet Preview */}
             <div
-              className="rounded-xl border p-4 shadow-xs"
-              style={{
-                backgroundColor: 'var(--admin-card, #111827)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-              }}
+              className="rounded-xl border p-4 shadow-xs bg-surface-raised border-line"
             >
               <p className="text-[10px] font-bold uppercase tracking-wider opacity-50 mb-2">
                 Search Snippet Preview
@@ -144,18 +124,13 @@ export function GalleryPreviewModal({
 
         {/* Modal Footer Actions */}
         <div
-          className="flex flex-wrap items-center justify-between gap-3 border-t px-6 py-4"
-          style={{
-            borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-            backgroundColor: 'var(--admin-card, #141b26)',
-          }}
+          className="flex flex-wrap items-center justify-between gap-3 border-t px-6 py-4 border-line bg-surface-raised"
         >
           <div className="flex gap-2">
             <button
               type="button"
               onClick={() => onCopyUrl(item.src)}
-              className="rounded-lg border px-3 py-1.5 text-xs font-semibold opacity-80 hover:opacity-100 hover:bg-current/[0.05] transition cursor-pointer"
-              style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))' }}
+              className="rounded-lg border px-3 py-1.5 text-xs font-semibold opacity-80 hover:opacity-100 hover:bg-current/[0.05] transition cursor-pointer border-line"
             >
               📋 Copy URL
             </button>
@@ -163,8 +138,7 @@ export function GalleryPreviewModal({
               href={item.src}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-lg border px-3 py-1.5 text-xs font-semibold opacity-80 hover:opacity-100 hover:bg-current/[0.05] transition inline-flex items-center gap-1 cursor-pointer"
-              style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))' }}
+              className="rounded-lg border px-3 py-1.5 text-xs font-semibold opacity-80 hover:opacity-100 hover:bg-current/[0.05] transition inline-flex items-center gap-1 cursor-pointer border-line"
             >
               <span>Open Media</span>
               <span>↗</span>
@@ -175,8 +149,7 @@ export function GalleryPreviewModal({
             <button
               type="button"
               onClick={() => onTogglePublished(item)}
-              className="rounded-lg border px-3 py-1.5 text-xs font-semibold opacity-80 hover:opacity-100 hover:bg-current/[0.05] transition cursor-pointer"
-              style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))' }}
+              className="rounded-lg border px-3 py-1.5 text-xs font-semibold opacity-80 hover:opacity-100 hover:bg-current/[0.05] transition cursor-pointer border-line"
             >
               {item.published ? 'Unpublish' : 'Publish'}
             </button>
@@ -186,11 +159,7 @@ export function GalleryPreviewModal({
                 onClose();
                 onEdit(item);
               }}
-              className="rounded-lg px-4 py-1.5 text-xs font-bold shadow-xs transition hover:opacity-95 cursor-pointer"
-              style={{
-                backgroundColor: 'var(--admin-primary, #b59410)',
-                color: 'var(--admin-primary-text, #ffffff)',
-              }}
+              className="rounded-lg px-4 py-1.5 text-xs font-bold shadow-xs transition hover:opacity-95 cursor-pointer bg-brand text-ink-on-brand"
             >
               Edit Media
             </button>

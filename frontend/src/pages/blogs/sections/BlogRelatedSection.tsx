@@ -23,7 +23,7 @@ export function BlogRelatedSection({ post }: BlogRelatedSectionProps) {
   if (related.length === 0) return null;
 
   return (
-    <Section tone="light" className="border-t border-black/10 py-16 md:py-24">
+    <Section tone="light" className="border-t border-line py-16 md:py-24">
       <SectionIntro
         title="Continue reading"
         description="More notes from the same corner of the studio journal."
@@ -56,14 +56,14 @@ export function BlogRelatedSection({ post }: BlogRelatedSectionProps) {
                 </div>
                 <time
                   dateTime={item.date}
-                  className="mt-4 block text-[0.65rem] uppercase tracking-[0.22em] text-black/45"
+                  className="mt-4 block text-[0.65rem] uppercase tracking-[0.22em] text-ink/45"
                 >
                   {formatBlogDate(item.date)}
                 </time>
-                <h3 className="mt-2 font-heading text-xl leading-snug group-hover:text-black/75">
+                <h3 className="mt-2 font-heading text-xl leading-snug group-hover:text-ink/75">
                   {item.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-black/65">{item.excerpt}</p>
+                <p className="mt-2 text-sm leading-relaxed text-ink/65">{item.excerpt}</p>
               </button>
             </article>
           </motion.li>

@@ -44,7 +44,7 @@ const colorMap: Record<StatusKind, Record<string, string>> = {
     intern: 'bg-orange-100 text-orange-700 border-orange-200',
   },
   priority: {
-    normal: 'text-black/50 border-transparent',
+    normal: 'text-ink/50 border-transparent',
     high: 'text-amber-600 border-transparent',
     rush: 'text-rose-600 border-transparent',
   },

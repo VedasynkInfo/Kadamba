@@ -30,7 +30,7 @@ export function PageShell({
           <Heading as={1} animated>
             {title}
           </Heading>
-          <p className="text-lede mt-4 text-black/70">{description}</p>
+          <p className="text-lede mt-4 text-ink/70">{description}</p>
         </div>
         {actions ? <div className="flex flex-wrap gap-3">{actions}</div> : null}
       </div>

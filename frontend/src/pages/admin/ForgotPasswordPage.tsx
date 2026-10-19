@@ -44,25 +44,25 @@ export default function ForgotPasswordPage() {
   return (
     <>
       <PageMeta {...staticPageMeta.admin} path="/admin/forgot-password" title="Reset Password" />
-      <div className="flex min-h-screen items-center justify-center bg-[var(--admin-bg)] px-6 py-16">
+      <div className="admin-shell flex min-h-screen items-center justify-center bg-surface px-6 py-16">
         <div className="w-full max-w-md">
           <p className="font-heading text-[0.62rem] uppercase tracking-[0.42em] text-gold/85">
             Kadamba Studio · Kurnool
           </p>
           <h1 className="mt-4 font-heading text-3xl text-gold">Reset your password</h1>
-          <p className="mt-3 text-sm leading-relaxed text-cream/60">
+          <p className="mt-3 text-sm leading-relaxed text-ink-inverse/60">
             Enter the email address on your studio account. We will send a single-use link that
             expires in 30 minutes.
           </p>
 
           {sent ? (
             <div className="mt-8 space-y-4">
-              <p className="rounded-sm border border-gold/25 bg-gold/5 p-4 text-sm text-cream/80">
+              <p className="rounded-sm border border-gold/25 bg-gold/5 p-4 text-sm text-ink-inverse/80">
                 If that email is registered, a reset link has been sent. Check your inbox and spam
                 folder.
               </p>
               {devToken ? (
-                <div className="rounded-sm border border-cream/15 p-4 text-xs text-cream/60">
+                <div className="rounded-sm border border-cream/15 p-4 text-xs text-ink-inverse/60">
                   <p className="font-semibold uppercase tracking-[0.16em] text-gold/80">
                     Development link
                   </p>
@@ -81,14 +81,14 @@ export default function ForgotPasswordPage() {
               ) : null}
               <Link
                 to="/admin/login"
-                className="inline-block text-[0.65rem] uppercase tracking-[0.22em] text-cream/45 transition hover:text-gold"
+                className="inline-block text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/45 transition hover:text-gold"
               >
                 ← Back to sign in
               </Link>
             </div>
           ) : (
             <form onSubmit={onSubmit} className="mt-8 space-y-5" noValidate>
-              <div className="[&_label]:text-cream/80">
+              <div className="[&_label]:text-ink-inverse/80">
                 <Input
                   label="Email"
                   type="email"
@@ -104,7 +104,7 @@ export default function ForgotPasswordPage() {
               </Button>
               <Link
                 to="/admin/login"
-                className="block text-center text-[0.65rem] uppercase tracking-[0.22em] text-cream/45 transition hover:text-gold"
+                className="block text-center text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/45 transition hover:text-gold"
               >
                 ← Back to sign in
               </Link>

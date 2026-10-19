@@ -95,8 +95,7 @@ export default function AuditAdminPage() {
         <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h1
-              className="font-heading text-xl font-bold tracking-tight sm:text-2xl"
-              style={{ color: 'var(--admin-text)' }}
+              className="font-heading text-xl font-bold tracking-tight sm:text-2xl text-ink"
             >
               Audit Log
             </h1>
@@ -108,8 +107,7 @@ export default function AuditAdminPage() {
             type="button"
             onClick={() => void verify()}
             disabled={verifying}
-            className="rounded-xl border px-4 py-2 text-[11px] uppercase tracking-wider transition hover:bg-white/5 disabled:opacity-50"
-            style={{ borderColor: 'var(--admin-border)' }}
+            className="rounded-xl border px-4 py-2 text-[11px] uppercase tracking-wider transition hover:bg-white/5 disabled:opacity-50 border-line"
           >
             {verifying ? 'Verifying…' : 'Verify integrity'}
           </button>
@@ -124,12 +122,7 @@ export default function AuditAdminPage() {
               setQuery(e.target.value);
             }}
             placeholder="Search summary, name or email"
-            className="rounded-xl border px-3 py-2 text-xs"
-            style={{
-              backgroundColor: 'rgba(128,128,128,0.05)',
-              borderColor: 'var(--admin-border)',
-              color: 'inherit',
-            }}
+            className="rounded-xl border px-3 py-2 text-xs bg-surface-sunken border-line"
           />
           <select
             value={action}
@@ -137,12 +130,7 @@ export default function AuditAdminPage() {
               setPage(1);
               setAction(e.target.value);
             }}
-            className="rounded-xl border px-3 py-2 text-xs"
-            style={{
-              backgroundColor: 'rgba(128,128,128,0.05)',
-              borderColor: 'var(--admin-border)',
-              color: 'inherit',
-            }}
+            className="rounded-xl border px-3 py-2 text-xs bg-surface-sunken border-line"
           >
             <option value="">All actions</option>
             {Object.entries(ACTION_LABELS).map(([key, label]) => (
@@ -157,12 +145,7 @@ export default function AuditAdminPage() {
               setPage(1);
               setOutcome(e.target.value);
             }}
-            className="rounded-xl border px-3 py-2 text-xs"
-            style={{
-              backgroundColor: 'rgba(128,128,128,0.05)',
-              borderColor: 'var(--admin-border)',
-              color: 'inherit',
-            }}
+            className="rounded-xl border px-3 py-2 text-xs bg-surface-sunken border-line"
           >
             <option value="">All outcomes</option>
             <option value="success">Success</option>
@@ -176,13 +159,9 @@ export default function AuditAdminPage() {
           </div>
         ) : (
           <div
-            className="overflow-hidden rounded-2xl border"
-            style={{
-              backgroundColor: 'var(--admin-card)',
-              borderColor: 'var(--admin-border)',
-            }}
+            className="overflow-hidden rounded-2xl border bg-surface-raised border-line"
           >
-            <ul className="divide-y" style={{ borderColor: 'var(--admin-border)' }}>
+            <ul className="divide-y border-line">
               {entries.map((entry) => (
                 <li key={entry.id} className="flex flex-col gap-1 px-4 py-3 text-xs sm:flex-row sm:items-center sm:justify-between">
                   <div className="min-w-0">
@@ -225,9 +204,8 @@ export default function AuditAdminPage() {
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               className={cn(
                 'rounded-lg border px-3 py-1.5 transition hover:bg-white/5',
-                page <= 1 && 'opacity-40',
+                page <= 1 && 'opacity-40', 'border-line'
               )}
-              style={{ borderColor: 'var(--admin-border)' }}
             >
               Previous
             </button>
@@ -240,9 +218,8 @@ export default function AuditAdminPage() {
               onClick={() => setPage((p) => Math.min(pages, p + 1))}
               className={cn(
                 'rounded-lg border px-3 py-1.5 transition hover:bg-white/5',
-                page >= pages && 'opacity-40',
+                page >= pages && 'opacity-40', 'border-line'
               )}
-              style={{ borderColor: 'var(--admin-border)' }}
             >
               Next
             </button>

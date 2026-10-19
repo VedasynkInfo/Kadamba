@@ -186,8 +186,8 @@ export default function PortalMeasurementsPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="font-heading text-3xl text-cream">Measurements</h1>
-        <p className="mt-2 text-sm text-cream/55">
+        <h1 className="font-heading text-3xl text-ink-inverse">Measurements</h1>
+        <p className="mt-2 text-sm text-ink-inverse/55">
           Choose a saved profile or garment type — fields load automatically for updates.
         </p>
       </div>
@@ -206,7 +206,7 @@ export default function PortalMeasurementsPage() {
             <button
               type="button"
               onClick={closeEditor}
-              className="text-xs uppercase tracking-[0.18em] text-cream/50 hover:text-gold"
+              className="text-xs uppercase tracking-[0.18em] text-ink-inverse/50 hover:text-gold"
             >
               ← Back to list
             </button>
@@ -215,10 +215,10 @@ export default function PortalMeasurementsPage() {
               <p className="text-[0.62rem] uppercase tracking-[0.28em] text-gold/75">
                 {selected.kind === 'profile' ? 'Update profile' : 'New measurement request'}
               </p>
-              <h2 className="mt-2 font-heading text-2xl text-cream">
+              <h2 className="mt-2 font-heading text-2xl text-ink-inverse">
                 {selected.kind === 'profile' ? selected.profile.profileName : selected.name}
               </h2>
-              <p className="mt-1 font-mono text-xs text-cream/45">
+              <p className="mt-1 font-mono text-xs text-ink-inverse/45">
                 {selected.kind === 'profile'
                   ? selected.profile.productTypeCode
                   : selected.code}
@@ -243,7 +243,7 @@ export default function PortalMeasurementsPage() {
                           'rounded-sm border px-3 py-1.5 text-[0.65rem] uppercase tracking-[0.16em]',
                           unit === u
                             ? 'border-gold bg-gold/15 text-gold'
-                            : 'border-gold/20 text-cream/50 hover:border-gold/40',
+                            : 'border-gold/20 text-ink-inverse/50 hover:border-gold/40',
                         )}
                       >
                         {u === 'in' ? 'Inches' : 'Centimetres'}
@@ -260,7 +260,7 @@ export default function PortalMeasurementsPage() {
                         {fields.map((f) =>
                           f.type === 'enum' && f.options?.length ? (
                             <label key={f.key} className="block text-sm">
-                              <span className="mb-1.5 block text-cream/60">
+                              <span className="mb-1.5 block text-ink-inverse/60">
                                 {f.label}
                                 {f.required ? ' *' : ''}
                               </span>
@@ -270,7 +270,7 @@ export default function PortalMeasurementsPage() {
                                 onChange={(e) =>
                                   setValues((prev) => ({ ...prev, [f.key]: e.target.value }))
                                 }
-                                className="w-full rounded-sm border border-gold/25 bg-black/40 px-3 py-2.5 text-cream outline-none focus:border-gold"
+                                className="w-full rounded-sm border border-gold/25 bg-black/40 px-3 py-2.5 text-ink-inverse outline-none focus:border-gold"
                               >
                                 <option value="">Select…</option>
                                 {f.options.map((o) => (
@@ -280,7 +280,7 @@ export default function PortalMeasurementsPage() {
                                 ))}
                               </select>
                               {f.helpText ? (
-                                <span className="mt-1 block text-[0.7rem] text-cream/40">
+                                <span className="mt-1 block text-[0.7rem] text-ink-inverse/40">
                                   {f.helpText}
                                 </span>
                               ) : null}
@@ -334,7 +334,7 @@ export default function PortalMeasurementsPage() {
               <h2 className="font-heading text-xl text-gold">Your profiles</h2>
               <ul className="mt-4 divide-y divide-gold/10 border border-gold/15">
                 {profiles.length === 0 ? (
-                  <li className="px-4 py-8 text-sm text-cream/50">
+                  <li className="px-4 py-8 text-sm text-ink-inverse/50">
                     No saved profiles yet — pick a garment type below to start.
                   </li>
                 ) : (
@@ -346,8 +346,8 @@ export default function PortalMeasurementsPage() {
                         className="flex w-full flex-wrap items-center justify-between gap-3 px-4 py-4 text-left transition hover:bg-white/5"
                       >
                         <div>
-                          <p className="text-cream">{m.profileName}</p>
-                          <p className="mt-0.5 font-mono text-[0.7rem] text-cream/45">
+                          <p className="text-ink-inverse">{m.profileName}</p>
+                          <p className="mt-0.5 font-mono text-[0.7rem] text-ink-inverse/45">
                             {m.productTypeCode} · {Object.keys(m.values || {}).length} fields
                           </p>
                         </div>
@@ -368,19 +368,19 @@ export default function PortalMeasurementsPage() {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search blouse, lehenga…"
-                  className="w-full max-w-xs rounded-sm border border-gold/20 bg-black/30 px-3 py-2 text-sm text-cream outline-none focus:border-gold sm:w-56"
+                  className="w-full max-w-xs rounded-sm border border-gold/20 bg-black/30 px-3 py-2 text-sm text-ink-inverse outline-none focus:border-gold sm:w-56"
                 />
               </div>
 
               {groupedTemplates.length === 0 ? (
-                <p className="mt-4 border border-gold/15 px-4 py-8 text-sm text-cream/50">
+                <p className="mt-4 border border-gold/15 px-4 py-8 text-sm text-ink-inverse/50">
                   No measurement templates available yet.
                 </p>
               ) : (
                 <div className="mt-5 space-y-8">
                   {groupedTemplates.map(([category, items]) => (
                     <div key={category}>
-                      <p className="text-[0.62rem] uppercase tracking-[0.24em] text-cream/40">
+                      <p className="text-[0.62rem] uppercase tracking-[0.24em] text-ink-inverse/40">
                         {category}
                       </p>
                       <ul className="mt-3 grid gap-2 sm:grid-cols-2">
@@ -391,9 +391,9 @@ export default function PortalMeasurementsPage() {
                               onClick={() => void openTemplate(t)}
                               className="h-full w-full border border-gold/15 bg-black/25 px-4 py-4 text-left transition hover:border-gold/40 hover:bg-white/5"
                             >
-                              <p className="font-heading text-lg text-cream">{t.name}</p>
+                              <p className="font-heading text-lg text-ink-inverse">{t.name}</p>
                               <p className="mt-1 font-mono text-[0.7rem] text-gold/70">{t.code}</p>
-                              <p className="mt-2 text-xs text-cream/45">
+                              <p className="mt-2 text-xs text-ink-inverse/45">
                                 {t.fieldCount} fields · tap to fill
                               </p>
                             </button>

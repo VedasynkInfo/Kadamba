@@ -37,12 +37,7 @@ export function StaffToolbar({
 
   return (
     <div
-      className="rounded-xl border p-3.5 shadow-xs transition-colors"
-      style={{
-        backgroundColor: 'var(--admin-card, #141b26)',
-        borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-        color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-      }}
+      className="rounded-xl border p-3.5 shadow-xs transition-colors bg-surface-raised border-line text-ink-raised"
     >
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         {/* Left side: Search & Dropdowns */}
@@ -57,12 +52,7 @@ export function StaffToolbar({
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder="Search artisan name, phone, locality..."
-              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)] transition"
-              style={{
-                backgroundColor: 'transparent',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition border-line"
             />
             {searchQuery ? (
               <button
@@ -82,12 +72,7 @@ export function StaffToolbar({
               value={statusFilter}
               onChange={(e) => onStatusChange(e.target.value)}
               aria-label="Filter by status"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)] transition cursor-pointer"
-              style={{
-                backgroundColor: 'var(--admin-card, #141b26)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="">All Statuses</option>
               <option value="active">Active Only</option>
@@ -101,12 +86,7 @@ export function StaffToolbar({
               value={employmentFilter}
               onChange={(e) => onEmploymentChange(e.target.value)}
               aria-label="Filter by employment type"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)] transition cursor-pointer"
-              style={{
-                backgroundColor: 'var(--admin-card, #141b26)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="">All Types</option>
               {EMPLOYMENT_TYPES.map((t) => (
@@ -123,12 +103,7 @@ export function StaffToolbar({
               value={specializationFilter}
               onChange={(e) => onSpecializationChange(e.target.value)}
               aria-label="Filter by craft specialization"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)] transition cursor-pointer"
-              style={{
-                backgroundColor: 'var(--admin-card, #141b26)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="">All Crafts & Skills</option>
               {SPECIALIZATIONS.map((s) => (
@@ -144,8 +119,7 @@ export function StaffToolbar({
             <button
               type="button"
               onClick={onReset}
-              className="inline-flex items-center gap-1 rounded-lg border px-2.5 py-2 text-xs font-medium opacity-70 hover:opacity-100 transition cursor-pointer"
-              style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
+              className="inline-flex items-center gap-1 rounded-lg border px-2.5 py-2 text-xs font-medium opacity-70 hover:opacity-100 transition cursor-pointer border-line"
               title="Reset all filters"
             >
               <span>↺</span>
@@ -163,11 +137,7 @@ export function StaffToolbar({
           <button
             type="button"
             onClick={onAddStaff}
-            className="inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 active:scale-98 whitespace-nowrap cursor-pointer"
-            style={{
-              backgroundColor: 'var(--admin-primary, #b59410)',
-              color: 'var(--admin-primary-text, #ffffff)',
-            }}
+            className="inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 active:scale-98 whitespace-nowrap cursor-pointer bg-brand text-ink-on-brand"
           >
             <span className="text-sm font-black">+</span>
             <span>Add Staff</span>

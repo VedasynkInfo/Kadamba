@@ -100,7 +100,7 @@ export default function PortalDashboardPage() {
     <div className="space-y-10">
       <section>
         <p className="text-[0.62rem] uppercase tracking-[0.35em] text-gold/75">Welcome</p>
-        <h1 className="mt-2 font-heading text-3xl text-cream sm:text-4xl">{data.welcomeName}</h1>
+        <h1 className="mt-2 font-heading text-3xl text-ink-inverse sm:text-4xl">{data.welcomeName}</h1>
         {data.referenceId ? (
           <p className="mt-2 font-mono text-sm text-gold/85">Ref {data.referenceId}</p>
         ) : null}
@@ -125,8 +125,8 @@ export default function PortalDashboardPage() {
           },
         ].map((item) => (
           <div key={item.label} className="border border-gold/15 bg-black/30 px-4 py-5">
-            <p className="text-[0.65rem] uppercase tracking-[0.2em] text-cream/45">{item.label}</p>
-            <p className="mt-2 font-heading text-xl text-cream sm:text-2xl">{item.value}</p>
+            <p className="text-[0.65rem] uppercase tracking-[0.2em] text-ink-inverse/45">{item.label}</p>
+            <p className="mt-2 font-heading text-xl text-ink-inverse sm:text-2xl">{item.value}</p>
           </div>
         ))}
       </section>
@@ -142,7 +142,7 @@ export default function PortalDashboardPage() {
       ) : null}
 
       {data.pendingMeasurementActions > 0 ? (
-        <p className="border border-gold/25 bg-gold/5 px-4 py-3 text-sm text-cream/85">
+        <p className="border border-gold/25 bg-gold/5 px-4 py-3 text-sm text-ink-inverse/85">
           {data.pendingMeasurementActions} measurement profile
           {data.pendingMeasurementActions === 1 ? '' : 's'} awaiting boutique approval.{' '}
           <Link to="/portal/measurements" className="underline text-gold">
@@ -154,13 +154,13 @@ export default function PortalDashboardPage() {
       <section>
         <div className="mb-4 flex items-end justify-between gap-4">
           <h2 className="font-heading text-xl text-gold">Recent orders</h2>
-          <Link to="/portal/orders" className="text-xs uppercase tracking-[0.18em] text-cream/55 hover:text-gold">
+          <Link to="/portal/orders" className="text-xs uppercase tracking-[0.18em] text-ink-inverse/55 hover:text-gold">
             View all
           </Link>
         </div>
         <ul className="divide-y divide-gold/10 border border-gold/15">
           {data.recentOrders.length === 0 ? (
-            <li className="px-4 py-8 text-sm text-cream/50">No orders yet.</li>
+            <li className="px-4 py-8 text-sm text-ink-inverse/50">No orders yet.</li>
           ) : (
             data.recentOrders.map((order) => (
               <li key={order.id}>
@@ -169,12 +169,12 @@ export default function PortalDashboardPage() {
                   className="flex flex-wrap items-center justify-between gap-2 px-4 py-4 transition hover:bg-white/5"
                 >
                   <div>
-                    <p className="text-cream">{order.title}</p>
-                    <p className="mt-0.5 font-mono text-[0.7rem] text-cream/45">
+                    <p className="text-ink-inverse">{order.title}</p>
+                    <p className="mt-0.5 font-mono text-[0.7rem] text-ink-inverse/45">
                       {order.referenceId || `#${order.orderNumber}`}
                     </p>
                     {order.statusNextHint ? (
-                      <p className="mt-1 max-w-md text-xs text-cream/50">{order.statusNextHint}</p>
+                      <p className="mt-1 max-w-md text-xs text-ink-inverse/50">{order.statusNextHint}</p>
                     ) : null}
                   </div>
                   <span className="rounded-sm border border-gold/25 px-2 py-1 text-[0.65rem] uppercase tracking-[0.14em] text-gold/90">

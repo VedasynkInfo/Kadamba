@@ -83,12 +83,7 @@ export function StaffTable({
 
   return (
     <div
-      className="rounded-xl border shadow-xs overflow-visible transition-colors"
-      style={{
-        backgroundColor: 'var(--admin-card, #141b26)',
-        borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-        color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-      }}
+      className="rounded-xl border shadow-xs overflow-visible transition-colors bg-surface-raised border-line text-ink-raised"
     >
       {loading ? (
         <div className="p-6 space-y-3">
@@ -110,11 +105,7 @@ export function StaffTable({
           <table className="w-full min-w-[950px] text-left border-collapse text-xs table-fixed">
             <thead>
               <tr
-                className="border-b text-[0.65rem] uppercase tracking-wider font-semibold opacity-75"
-                style={{
-                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-                  backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                }}
+                className="border-b text-[0.65rem] uppercase tracking-wider font-semibold opacity-75 border-line bg-surface-sunken"
               >
                 <th className="py-3 px-4 w-[240px]">Artisan / Contact</th>
                 <th className="py-3 px-4 w-[140px]">Locality & Type</th>
@@ -126,8 +117,7 @@ export function StaffTable({
               </tr>
             </thead>
             <tbody
-              className="divide-y"
-              style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.12))' }}
+              className="divide-y border-line"
             >
               {items.map((s) => {
                 const isMenuOpen = menuAnchor?.staff.id === s.id;
@@ -136,18 +126,13 @@ export function StaffTable({
                 return (
                   <tr
                     key={s.id}
-                    className="transition hover:bg-current/[0.03] group"
-                    style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.12))' }}
+                    className="transition hover:bg-current/[0.03] group border-line"
                   >
                     {/* Artisan / Contact */}
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-3">
                         <div
-                          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full font-bold text-xs shadow-xs"
-                          style={{
-                            backgroundColor: 'var(--admin-primary, #b59410)',
-                            color: 'var(--admin-primary-text, #ffffff)',
-                          }}
+                          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full font-bold text-xs shadow-xs bg-brand text-ink-on-brand"
                         >
                           {getInitials(s.fullName)}
                         </div>
@@ -191,12 +176,7 @@ export function StaffTable({
                           return (
                             <span
                               key={spec}
-                              className="rounded px-2 py-0.5 text-[10px] font-medium border"
-                              style={{
-                                backgroundColor: 'rgba(181, 148, 16, 0.12)',
-                                borderColor: 'rgba(181, 148, 16, 0.3)',
-                                color: 'var(--admin-primary, #b59410)',
-                              }}
+                              className="rounded px-2 py-0.5 text-[10px] font-medium border bg-brand/12 border-brand/30 text-brand"
                             >
                               {label}
                             </span>
@@ -259,14 +239,9 @@ export function StaffTable({
                         className={cn(
                           'inline-flex h-8 w-8 items-center justify-center rounded-lg border transition cursor-pointer',
                           isMenuOpen
-                            ? 'bg-[var(--admin-primary,#b59410)]/15 text-[var(--admin-primary,#b59410)] font-bold'
-                            : 'hover:bg-current/[0.08]',
+                            ? 'bg-brand/15 text-brand font-bold'
+                            : 'hover:bg-current/[0.08]', isMenuOpen ? 'border-brand' : 'border-line'
                         )}
-                        style={{
-                          borderColor: isMenuOpen
-                            ? 'var(--admin-primary, #b59410)'
-                            : 'var(--admin-border, rgba(128, 128, 128, 0.2))',
-                        }}
                         aria-label="Actions menu"
                         aria-expanded={isMenuOpen}
                       >
@@ -290,15 +265,11 @@ export function StaffTable({
           />
 
           <div
-            className="fixed z-50 w-52 rounded-xl border p-1 shadow-2xl animate-fade-in text-left text-xs"
+            className="fixed z-50 w-52 rounded-xl border p-1 shadow-2xl animate-fade-in text-left text-xs bg-surface-raised border-line text-ink-raised"
             style={{
               top: menuAnchor.showAbove ? undefined : `${menuAnchor.top}px`,
               bottom: menuAnchor.showAbove ? `${window.innerHeight - menuAnchor.top}px` : undefined,
               right: `${menuAnchor.right}px`,
-              backgroundColor: 'var(--admin-card, #1f2937)',
-              borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.22))',
-              color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-              boxShadow: '0 12px 32px -4px rgba(0, 0, 0, 0.35)',
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -345,8 +316,7 @@ export function StaffTable({
             ) : null}
 
             <div
-              className="my-1 border-t"
-              style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}
+              className="my-1 border-t border-line"
             />
 
             {menuAnchor.staff.status === 'active' ? (

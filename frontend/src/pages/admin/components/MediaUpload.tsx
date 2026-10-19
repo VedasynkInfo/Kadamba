@@ -124,7 +124,7 @@ export function MediaUpload({
 
   return (
     <div className="flex w-full flex-col gap-1.5">
-      <label htmlFor={inputId} className="text-sm font-medium text-black">
+      <label htmlFor={inputId} className="text-sm font-medium text-ink">
         {label}
         {required ? (
           <span className="ml-0.5 text-gold" aria-hidden>
@@ -134,7 +134,7 @@ export function MediaUpload({
       </label>
 
       {value ? (
-        <div className="overflow-hidden rounded-md border border-black/15 bg-black/[0.03]">
+        <div className="overflow-hidden rounded-md border border-line bg-black/[0.03]">
           {showVideo ? (
             <video
               src={previewSrc}
@@ -153,7 +153,7 @@ export function MediaUpload({
       ) : (
         <div
           className={cn(
-            'flex min-h-28 items-center justify-center rounded-md border border-dashed border-black/20 bg-cream px-3 py-6 text-center text-sm text-black/45',
+            'flex min-h-28 items-center justify-center rounded-md border border-dashed border-line bg-surface-sunken px-3 py-6 text-center text-sm text-ink/45',
           )}
         >
           No media selected
@@ -206,7 +206,7 @@ export function MediaUpload({
       </div>
 
       {hint && !error && !localError ? (
-        <p className="text-xs text-black/50">{hint}</p>
+        <p className="text-xs text-ink/50">{hint}</p>
       ) : null}
       {(error || localError) && (
         <p role="alert" className="text-xs text-red-700">
@@ -285,12 +285,7 @@ function LibraryPickerButton({
       {open ? (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 p-4">
           <div
-            className="max-h-[85vh] w-full max-w-3xl overflow-y-auto rounded-2xl border p-5"
-            style={{
-              backgroundColor: 'var(--admin-card)',
-              borderColor: 'var(--admin-border)',
-              color: 'var(--admin-card-text)',
-            }}
+            className="max-h-[85vh] w-full max-w-3xl overflow-y-auto rounded-2xl border p-5 bg-surface-raised border-line text-ink-raised"
           >
             <div className="flex items-start justify-between gap-4">
               <h2 className="font-heading text-base font-bold">Choose from library</h2>
@@ -308,12 +303,7 @@ function LibraryPickerButton({
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search by name or alt text"
-              className="mt-4 w-full rounded-xl border px-3 py-2 text-xs"
-              style={{
-                backgroundColor: 'rgba(128,128,128,0.05)',
-                borderColor: 'var(--admin-border)',
-                color: 'inherit',
-              }}
+              className="mt-4 w-full rounded-xl border px-3 py-2 text-xs bg-surface-sunken border-line"
             />
 
             {loadError ? (
@@ -332,8 +322,7 @@ function LibraryPickerButton({
                         onPick(asset.originalUrl);
                         setOpen(false);
                       }}
-                      className="group w-full overflow-hidden rounded-xl border transition hover:border-gold/60"
-                      style={{ borderColor: 'var(--admin-border)' }}
+                      className="group w-full overflow-hidden rounded-xl border transition hover:border-gold/60 border-line"
                     >
                       <OptimizedImage
                         src={mediaUrl(asset.originalUrl)}

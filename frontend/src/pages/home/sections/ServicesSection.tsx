@@ -78,7 +78,7 @@ export function ServicesSection() {
         title="Services"
         description={`${brand.summary} Explore bridal wear, traditional ensembles, custom tailoring, and boutique styling.`}
         actions={
-          <p className="hidden text-xs uppercase tracking-[0.2em] text-black/40 md:block" aria-hidden>
+          <p className="hidden text-xs uppercase tracking-[0.2em] text-ink/40 md:block" aria-hidden>
             Hover to explore
           </p>
         }
@@ -130,7 +130,7 @@ export function ServicesSection() {
                   src={service.image}
                   alt=""
                   className={cn(
-                    'absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-[var(--ease-luxury)]',
+                    'absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-luxury',
                     isActive ? 'scale-105' : 'scale-100',
                   )}
                   width={900}
@@ -154,10 +154,10 @@ export function ServicesSection() {
                   <span className="text-gold">
                     <ServiceIcon name={service.icon} />
                   </span>
-                  <h3 className="mt-4 font-heading text-xl text-cream lg:text-2xl">{service.title}</h3>
+                  <h3 className="mt-4 font-heading text-xl text-ink-inverse lg:text-2xl">{service.title}</h3>
                   <p
                     className={cn(
-                      'mt-2 text-sm leading-relaxed text-cream/85 transition-all duration-500',
+                      'mt-2 text-sm leading-relaxed text-ink-inverse/85 transition-all duration-500',
                       isActive
                         ? 'translate-y-0 opacity-100'
                         : 'pointer-events-none translate-y-2 opacity-0 lg:h-0 lg:overflow-hidden',
@@ -207,8 +207,8 @@ export function ServicesSection() {
                 <span className="text-gold">
                   <ServiceIcon name={service.icon} />
                 </span>
-                <h3 className="mt-3 font-heading text-xl text-cream">{service.title}</h3>
-                <p className="mt-1.5 text-sm text-cream/80">{service.description}</p>
+                <h3 className="mt-3 font-heading text-xl text-ink-inverse">{service.title}</h3>
+                <p className="mt-1.5 text-sm text-ink-inverse/80">{service.description}</p>
               </div>
             </button>
           </motion.li>

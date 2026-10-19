@@ -1,5 +1,6 @@
 import { brand } from '@/pages/home/data';
 import { studioContact, socialLinks } from '@/pages/contact/data';
+import { DEFAULT_THEME_TOKENS } from '@/theme/palettes';
 
 export { brand };
 
@@ -334,27 +335,10 @@ export const defaultWebsiteSettings: WebsiteSettings = {
       },
     ],
   },
-  theme: {
-    primary: '#000000',
-    primaryHover: '#1a1a1a',
-    primaryText: '#ffffff',
-    accent: '#b59410',
-    publicBg: '#ffffff',
-    publicText: '#171717',
-    publicCard: '#ffffff',
-    publicCardText: '#171717',
-    publicSurface: '#fafafa',
-    adminBg: '#0b0f17',
-    adminText: '#f3f4f6',
-    adminCard: '#1f2937',
-    adminCardText: '#f3f4f6',
-    adminSidebar: '#111827',
-    adminSidebarText: '#f3f4f6',
-    adminPrimary: '#b59410',
-    adminPrimaryText: '#000000',
-    adminAccent: '#ffd700',
-    fontFamily: 'Manrope, sans-serif',
-  },
+  // `palettes.ts` takes the `WebsiteSettings` type back from this module; the
+  // type-only import is erased at build time, so this value edge is one-way in
+  // the bundle and the apparent cycle is harmless.
+  theme: DEFAULT_THEME_TOKENS,
 };
 
 export const loginCopy = {

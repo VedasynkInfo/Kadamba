@@ -36,12 +36,7 @@ export function StaffRolesTab() {
     <div className="space-y-6 text-xs">
       {/* Quick Link Banner */}
       <div
-        className="rounded-2xl border p-5 shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 transition-colors"
-        style={{
-          backgroundColor: 'var(--admin-card, #141b26)',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-        }}
+        className="rounded-2xl border p-5 shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 transition-colors bg-surface-raised border-line text-ink-raised"
       >
         <div>
           <h3 className="font-heading text-sm font-bold tracking-wide">
@@ -54,11 +49,7 @@ export function StaffRolesTab() {
 
         <Link
           to="/admin/staff"
-          className="inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 whitespace-nowrap"
-          style={{
-            backgroundColor: 'var(--admin-primary, #b59410)',
-            color: 'var(--admin-primary-text, #ffffff)',
-          }}
+          className="inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 whitespace-nowrap bg-brand text-ink-on-brand"
         >
           <span>Open Staff Roster</span>
           <span>→</span>
@@ -70,12 +61,7 @@ export function StaffRolesTab() {
         {ROLES.map((r) => (
           <div
             key={r.role}
-            className="rounded-2xl border p-5 shadow-xs space-y-3 transition-colors"
-            style={{
-              backgroundColor: 'var(--admin-card, #141b26)',
-              borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-              color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-            }}
+            className="rounded-2xl border p-5 shadow-xs space-y-3 transition-colors bg-surface-raised border-line text-ink-raised"
           >
             <div className="flex items-center justify-between">
               <h4 className="font-heading text-sm font-bold">{r.role}</h4>
@@ -86,7 +72,7 @@ export function StaffRolesTab() {
 
             <p className="text-[11px] opacity-70 leading-relaxed">{r.desc}</p>
 
-            <div className="pt-2 border-t space-y-1.5" style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}>
+            <div className="pt-2 border-t space-y-1.5 border-line">
               <span className="text-[10px] uppercase font-bold tracking-wider opacity-60 block mb-1">
                 Granted Privileges:
               </span>

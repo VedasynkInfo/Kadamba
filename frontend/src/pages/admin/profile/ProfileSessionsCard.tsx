@@ -100,16 +100,10 @@ export function ProfileSessionsCard() {
 
   return (
     <div
-      className="rounded-2xl border p-6 shadow-sm text-xs"
-      style={{
-        backgroundColor: 'var(--admin-card)',
-        borderColor: 'var(--admin-border)',
-        color: 'var(--admin-card-text, var(--admin-text))',
-      }}
+      className="rounded-2xl border p-6 shadow-sm text-xs bg-surface-raised border-line text-ink-raised"
     >
       <div
-        className="border-b pb-4 mb-5 flex items-start justify-between gap-4"
-        style={{ borderColor: 'var(--admin-border)' }}
+        className="border-b pb-4 mb-5 flex items-start justify-between gap-4 border-line"
       >
         <div>
           <h3 className="font-heading text-base font-bold tracking-wide">Active Devices</h3>
@@ -121,8 +115,7 @@ export function ProfileSessionsCard() {
           type="button"
           onClick={() => void revokeAll()}
           disabled={busy === 'all'}
-          className="rounded-xl border px-3 py-1.5 text-[11px] font-semibold disabled:opacity-50"
-          style={{ borderColor: 'var(--admin-border)' }}
+          className="rounded-xl border px-3 py-1.5 text-[11px] font-semibold disabled:opacity-50 border-line"
         >
           {busy === 'all' ? 'Signing out…' : 'Sign out everywhere'}
         </button>
@@ -137,8 +130,7 @@ export function ProfileSessionsCard() {
           {sessions.map((session) => (
             <li
               key={session.id}
-              className="flex flex-col gap-2 rounded-xl border px-3 py-3 sm:flex-row sm:items-center sm:justify-between"
-              style={{ borderColor: 'var(--admin-border)' }}
+              className="flex flex-col gap-2 rounded-xl border px-3 py-3 sm:flex-row sm:items-center sm:justify-between border-line"
             >
               <div className="min-w-0">
                 <p className="font-semibold">
@@ -161,8 +153,7 @@ export function ProfileSessionsCard() {
                   type="button"
                   onClick={() => void revoke(session.familyId)}
                   disabled={busy === session.familyId}
-                  className="shrink-0 rounded-lg border px-3 py-1.5 text-[11px] transition hover:bg-white/5 disabled:opacity-50"
-                  style={{ borderColor: 'var(--admin-border)' }}
+                  className="shrink-0 rounded-lg border px-3 py-1.5 text-[11px] transition hover:bg-white/5 disabled:opacity-50 border-line"
                 >
                   {busy === session.familyId ? 'Revoking…' : 'Sign out'}
                 </button>

@@ -30,7 +30,7 @@ export function ServiceDescriptionSection({ service }: ServiceDescriptionSection
           />
           <div className="mt-8 space-y-4">
             {service.description.map((paragraph) => (
-              <p key={paragraph.slice(0, 40)} className="text-base leading-relaxed text-black/70">
+              <p key={paragraph.slice(0, 40)} className="text-base leading-relaxed text-ink/70">
                 {paragraph}
               </p>
             ))}

@@ -209,18 +209,12 @@ export function MeasurementModalForm({
       aria-label="Measurement form dialog"
     >
       <div
-        className="w-full max-w-3xl rounded-2xl border shadow-2xl overflow-hidden transition-all text-xs"
-        style={{
-          backgroundColor: 'var(--admin-card, #141b26)',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.22))',
-          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-        }}
+        className="w-full max-w-3xl rounded-2xl border shadow-2xl overflow-hidden transition-all text-xs bg-surface-raised border-line text-ink-raised"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div
-          className="flex items-center justify-between border-b px-6 py-4"
-          style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))' }}
+          className="flex items-center justify-between border-b px-6 py-4 border-line"
         >
           <div className="flex items-center gap-3">
             <span className="text-2xl">📏</span>
@@ -236,8 +230,7 @@ export function MeasurementModalForm({
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer"
-            style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))' }}
+            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer border-line"
             aria-label="Close modal"
           >
             ✕
@@ -246,11 +239,7 @@ export function MeasurementModalForm({
 
         {/* 3-Step Tabs */}
         <div
-          className="flex border-b px-6 text-xs font-semibold"
-          style={{
-            borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))',
-            backgroundColor: 'rgba(128, 128, 128, 0.04)',
-          }}
+          className="flex border-b px-6 text-xs font-semibold border-line bg-surface-sunken"
         >
           <button
             type="button"
@@ -258,7 +247,7 @@ export function MeasurementModalForm({
             className={cn(
               'py-3 px-4 border-b-2 transition cursor-pointer',
               activeTab === 'identity'
-                ? 'border-[var(--admin-primary,#b59410)] text-[var(--admin-primary,#b59410)] font-bold'
+                ? 'border-brand text-brand font-bold'
                 : 'border-transparent opacity-60 hover:opacity-100',
             )}
           >
@@ -270,7 +259,7 @@ export function MeasurementModalForm({
             className={cn(
               'py-3 px-4 border-b-2 transition cursor-pointer',
               activeTab === 'dimensions'
-                ? 'border-[var(--admin-primary,#b59410)] text-[var(--admin-primary,#b59410)] font-bold'
+                ? 'border-brand text-brand font-bold'
                 : 'border-transparent opacity-60 hover:opacity-100',
             )}
           >
@@ -282,7 +271,7 @@ export function MeasurementModalForm({
             className={cn(
               'py-3 px-4 border-b-2 transition cursor-pointer',
               activeTab === 'notes'
-                ? 'border-[var(--admin-primary,#b59410)] text-[var(--admin-primary,#b59410)] font-bold'
+                ? 'border-brand text-brand font-bold'
                 : 'border-transparent opacity-60 hover:opacity-100',
             )}
           >
@@ -329,8 +318,7 @@ export function MeasurementModalForm({
 
           {/* Dialog Footer Navigation */}
           <div
-            className="flex items-center justify-between pt-4 border-t"
-            style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}
+            className="flex items-center justify-between pt-4 border-t border-line"
           >
             <div>
               {activeTab !== 'identity' ? (
@@ -339,8 +327,7 @@ export function MeasurementModalForm({
                   onClick={() =>
                     setActiveTab(activeTab === 'notes' ? 'dimensions' : 'identity')
                   }
-                  className="rounded-xl px-4 py-2 text-xs font-semibold border hover:bg-current/[0.05] transition cursor-pointer"
-                  style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
+                  className="rounded-xl px-4 py-2 text-xs font-semibold border hover:bg-current/[0.05] transition cursor-pointer border-line"
                 >
                   ← Back
                 </button>
@@ -352,8 +339,7 @@ export function MeasurementModalForm({
                 type="button"
                 onClick={onClose}
                 disabled={submitting}
-                className="rounded-xl px-4 py-2 text-xs font-semibold border hover:bg-current/[0.05] transition cursor-pointer"
-                style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
+                className="rounded-xl px-4 py-2 text-xs font-semibold border hover:bg-current/[0.05] transition cursor-pointer border-line"
               >
                 Cancel
               </button>
@@ -364,7 +350,7 @@ export function MeasurementModalForm({
                   onClick={() =>
                     setActiveTab(activeTab === 'identity' ? 'dimensions' : 'notes')
                   }
-                  className="rounded-xl px-5 py-2 text-xs font-bold border border-[var(--admin-primary,#b59410)] hover:bg-[var(--admin-primary,#b59410)]/10 text-[var(--admin-primary,#b59410)] transition cursor-pointer"
+                  className="rounded-xl px-5 py-2 text-xs font-bold border border-brand hover:bg-brand/10 text-brand transition cursor-pointer"
                 >
                   Next Step →
                 </button>
@@ -372,11 +358,7 @@ export function MeasurementModalForm({
                 <button
                   type="submit"
                   disabled={submitting || !form.customerId}
-                  className="rounded-xl px-5 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 disabled:opacity-50 cursor-pointer"
-                  style={{
-                    backgroundColor: 'var(--admin-primary, #b59410)',
-                    color: 'var(--admin-primary-text, #ffffff)',
-                  }}
+                  className="rounded-xl px-5 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 disabled:opacity-50 cursor-pointer bg-brand text-ink-on-brand"
                 >
                   {submitting ? 'Saving Fit...' : profile ? 'Update Fit Specification' : 'Save Fit Specification'}
                 </button>

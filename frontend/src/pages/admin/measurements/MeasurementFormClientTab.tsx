@@ -63,11 +63,7 @@ export function MeasurementFormClientTab({
         </label>
         {selectedCustomer ? (
           <div
-            className="flex items-center justify-between rounded-xl border p-3"
-            style={{
-              borderColor: 'var(--admin-primary, #b59410)',
-              backgroundColor: 'rgba(181, 148, 16, 0.08)',
-            }}
+            className="flex items-center justify-between rounded-xl border p-3 border-brand bg-brand/[0.08]"
           >
             <div>
               <span className="font-bold text-xs">{selectedCustomer.name}</span>
@@ -94,12 +90,7 @@ export function MeasurementFormClientTab({
               value={customerSearch}
               onChange={(e) => handleSearchInput(e.target.value)}
               placeholder="Search client directory by name, phone, or email..."
-              className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-              style={{
-                backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
             />
             {searchingCustomers ? (
               <span className="absolute right-3 top-2.5 text-[10px] opacity-50 animate-pulse">
@@ -109,11 +100,7 @@ export function MeasurementFormClientTab({
 
             {customerResults.length > 0 ? (
               <ul
-                className="absolute z-30 top-full mt-1 w-full rounded-xl border shadow-xl max-h-48 overflow-y-auto"
-                style={{
-                  backgroundColor: 'var(--admin-card, #1e293b)',
-                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                }}
+                className="absolute z-30 top-full mt-1 w-full rounded-xl border shadow-xl max-h-48 overflow-y-auto bg-surface-raised border-line"
               >
                 {customerResults.map((c) => (
                   <li key={c.id}>
@@ -123,8 +110,7 @@ export function MeasurementFormClientTab({
                         onSelectCustomer(c);
                         setCustomerResults([]);
                       }}
-                      className="w-full text-left p-3 hover:bg-current/[0.06] border-b last:border-b-0 cursor-pointer transition flex justify-between items-center"
-                      style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.12))' }}
+                      className="w-full text-left p-3 hover:bg-current/[0.06] border-b last:border-b-0 cursor-pointer transition flex justify-between items-center border-line"
                     >
                       <div>
                         <span className="font-bold text-xs block">{c.name}</span>
@@ -151,12 +137,7 @@ export function MeasurementFormClientTab({
           <select
             value={form.productTypeCode}
             onChange={(e) => onUpdateField('productTypeCode', e.target.value)}
-            className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)] cursor-pointer"
-            style={{
-              backgroundColor: 'var(--admin-card, #141b26)',
-              borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-              color: 'inherit',
-            }}
+            className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand cursor-pointer bg-surface-raised border-line"
           >
             {productTypes.map((pt) => (
               <option key={pt.value} value={pt.value}>
@@ -179,12 +160,7 @@ export function MeasurementFormClientTab({
               onUpdateField('profileName', e.target.value);
             }}
             placeholder="e.g. Sangeet Bridal Lehenga"
-            className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-            style={{
-              backgroundColor: 'rgba(128, 128, 128, 0.05)',
-              borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-              color: 'inherit',
-            }}
+            className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
           />
           <p className="text-[10px] opacity-50">Auto-filled from client + silhouette, fully editable</p>
         </div>
@@ -199,12 +175,7 @@ export function MeasurementFormClientTab({
           <select
             value={form.unit}
             onChange={(e) => onUpdateField('unit', e.target.value)}
-            className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)] cursor-pointer"
-            style={{
-              backgroundColor: 'var(--admin-card, #141b26)',
-              borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-              color: 'inherit',
-            }}
+            className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand cursor-pointer bg-surface-raised border-line"
           >
             {MEASUREMENT_UNITS.map((u) => (
               <option key={u.value} value={u.value}>
@@ -223,12 +194,7 @@ export function MeasurementFormClientTab({
             onChange={(e) =>
               onUpdateField('status', e.target.value as MeasurementProfile['status'])
             }
-            className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)] cursor-pointer"
-            style={{
-              backgroundColor: 'var(--admin-card, #141b26)',
-              borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-              color: 'inherit',
-            }}
+            className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand cursor-pointer bg-surface-raised border-line"
           >
             {MEASUREMENT_STATUSES.map((st) => (
               <option key={st.value} value={st.value}>
@@ -246,12 +212,7 @@ export function MeasurementFormClientTab({
             type="date"
             value={form.measuredAt}
             onChange={(e) => onUpdateField('measuredAt', e.target.value)}
-            className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-            style={{
-              backgroundColor: 'rgba(128, 128, 128, 0.05)',
-              borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-              color: 'inherit',
-            }}
+            className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
           />
         </div>
       </div>

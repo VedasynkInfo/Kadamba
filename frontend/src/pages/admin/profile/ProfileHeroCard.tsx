@@ -15,21 +15,12 @@ export function ProfileHeroCard({ name, email, role }: ProfileHeroCardProps) {
 
   return (
     <div
-      className="rounded-2xl border p-6 shadow-sm transition-colors"
-      style={{
-        backgroundColor: 'var(--admin-card, #141b26)',
-        borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-        color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-      }}
+      className="rounded-2xl border p-6 shadow-sm transition-colors bg-surface-raised border-line text-ink-raised"
     >
       <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
         {/* Avatar */}
         <div
-          className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl font-heading text-2xl font-bold shadow-md"
-          style={{
-            backgroundColor: 'var(--admin-primary, #b59410)',
-            color: 'var(--admin-primary-text, #ffffff)',
-          }}
+          className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl font-heading text-2xl font-bold shadow-md bg-brand text-ink-on-brand"
         >
           {initials}
         </div>
@@ -41,12 +32,7 @@ export function ProfileHeroCard({ name, email, role }: ProfileHeroCardProps) {
               {name || 'Atelier Administrator'}
             </h2>
             <span
-              className="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider border"
-              style={{
-                backgroundColor: 'rgba(181, 148, 16, 0.15)',
-                borderColor: 'var(--admin-primary, #b59410)',
-                color: 'var(--admin-primary, #b59410)',
-              }}
+              className="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider border bg-brand/15 border-brand text-brand"
             >
               👑 {role || 'ADMIN'}
             </span>

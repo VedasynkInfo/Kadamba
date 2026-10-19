@@ -10,8 +10,7 @@ import { dashboardApi, type DashboardSummary } from '@/services/dashboard/dashbo
 import { useAdminNotifyOptional } from '@/hooks/useAdminNotifySocket';
 import { Spinner, Button, StatCard, StatusBadge, Table, type Column } from '@/components/ui';
 import { cn } from '@/utils/cn';
-
-const PIE_COLORS = ['#ffd700', '#f59e0b', '#10b981', '#6366f1', '#ec4899'];
+import { CHART_COLORS, CHART_REVENUE } from '@/theme/palettes';
 
 export default function AdminDashboardPage() {
   const [datePreset, setDatePreset] = useState<'30days' | '6months' | '12months' | 'ytd'>('12months');
@@ -104,11 +103,7 @@ export default function AdminDashboardPage() {
           </div>
 
           <div
-            className="flex rounded-lg p-1 border shadow-xs"
-            style={{
-              backgroundColor: 'var(--admin-card, #141b26)',
-              borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-            }}
+            className="flex rounded-lg p-1 border shadow-xs bg-surface-raised border-line"
           >
             {(['30days', '6months', '12months', 'ytd'] as const).map((preset) => {
               const label = preset === '30days' ? '30 Days' : preset === '6months' ? '6 Months' : preset === '12months' ? '12 Months' : 'YTD';
@@ -121,7 +116,7 @@ export default function AdminDashboardPage() {
                   className={cn(
                     'px-3 py-1 text-xs font-semibold rounded-md transition-all',
                     active
-                      ? 'bg-[var(--admin-primary,#b59410)] text-[var(--admin-primary-text,#ffffff)] shadow font-bold'
+                      ? 'bg-brand text-ink-on-brand shadow font-bold'
                       : 'opacity-70 hover:opacity-100 hover:bg-current/[0.06]'
                   )}
                 >
@@ -138,12 +133,7 @@ export default function AdminDashboardPage() {
           </div>
         ) : error ? (
           <div
-            className="flex min-h-[250px] flex-col items-center justify-center rounded-xl border p-8 text-center"
-            style={{
-              backgroundColor: 'var(--admin-card, #141b26)',
-              borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-              color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-            }}
+            className="flex min-h-[250px] flex-col items-center justify-center rounded-xl border p-8 text-center bg-surface-raised border-line text-ink-raised"
           >
             <p className="opacity-75 mb-4 text-sm">{error}</p>
             <Button variant="secondary" size="sm" onClick={() => setRetryTrigger((t) => t + 1)}>
@@ -188,16 +178,10 @@ export default function AdminDashboardPage() {
 
             {/* Quick Action Tiles */}
             <div
-              className="rounded-xl border p-5 transition-colors shadow-xs"
-              style={{
-                backgroundColor: 'var(--admin-card, #141b26)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-                color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-              }}
+              className="rounded-xl border p-5 transition-colors shadow-xs bg-surface-raised border-line text-ink-raised"
             >
               <div
-                className="flex items-center justify-between border-b pb-3 mb-4"
-                style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))' }}
+                className="flex items-center justify-between border-b pb-3 mb-4 border-line"
               >
                 <div>
                   <h3 className="text-sm font-semibold tracking-wide text-inherit">Atelier Quick Actions</h3>
@@ -217,7 +201,7 @@ export default function AdminDashboardPage() {
                   <Link
                     key={item.to}
                     to={item.to}
-                    className="flex flex-col items-center justify-center p-3 rounded-lg border border-current/10 bg-current/[0.02] text-center transition hover:border-[var(--admin-primary,#b59410)] hover:bg-current/[0.05] hover:shadow-xs text-inherit"
+                    className="flex flex-col items-center justify-center p-3 rounded-lg border border-current/10 bg-current/[0.02] text-center transition hover:border-brand hover:bg-current/[0.05] hover:shadow-xs text-inherit"
                   >
                     <span className="text-xl mb-1.5">{item.icon}</span>
                     <span className="text-xs font-semibold text-inherit">{item.label}</span>
@@ -230,12 +214,7 @@ export default function AdminDashboardPage() {
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
               {/* Monthly leads pipeline */}
               <div
-                className="rounded-xl border p-5 transition-colors shadow-xs"
-                style={{
-                  backgroundColor: 'var(--admin-card, #141b26)',
-                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-                  color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-                }}
+                className="rounded-xl border p-5 transition-colors shadow-xs bg-surface-raised border-line text-ink-raised"
               >
                 <div className="mb-2">
                   <h3 className="text-sm font-semibold tracking-wide text-inherit">Monthly Leads Pipeline</h3>
@@ -252,15 +231,15 @@ export default function AdminDashboardPage() {
                         <YAxis stroke="currentColor" opacity={0.65} fontSize={11} tickLine={false} axisLine={{ stroke: 'currentColor', opacity: 0.2 }} />
                         <Tooltip
                           contentStyle={{
-                            backgroundColor: 'var(--admin-card, #111827)',
-                            border: '1px solid var(--admin-border, rgba(128,128,128,0.25))',
+                            backgroundColor: 'var(--admin-card)',
+                            border: '1px solid var(--admin-border)',
                             borderRadius: '8px',
-                            color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
+                            color: 'var(--admin-card-text)',
                             fontSize: '12px',
                             boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
                           }}
                         />
-                        <Bar dataKey="count" name="Leads" fill="var(--admin-primary, #ffd700)" radius={[4, 4, 0, 0]} maxBarSize={36} />
+                        <Bar dataKey="count" name="Leads" fill="var(--admin-primary)" radius={[4, 4, 0, 0]} maxBarSize={36} />
                       </BarChart>
                     </ResponsiveContainer>
                   )}
@@ -269,12 +248,7 @@ export default function AdminDashboardPage() {
 
               {/* Lead channel breakdown */}
               <div
-                className="rounded-xl border p-5 transition-colors shadow-xs"
-                style={{
-                  backgroundColor: 'var(--admin-card, #141b26)',
-                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-                  color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-                }}
+                className="rounded-xl border p-5 transition-colors shadow-xs bg-surface-raised border-line text-ink-raised"
               >
                 <div className="mb-2">
                   <h3 className="text-sm font-semibold tracking-wide text-inherit">Lead Channel Breakdown</h3>
@@ -288,15 +262,15 @@ export default function AdminDashboardPage() {
                       <PieChart margin={{ bottom: -5 }}>
                         <Pie data={summary.series.leadsBySource} cx="50%" cy="50%" innerRadius={55} outerRadius={80} paddingAngle={4} dataKey="count" nameKey="source">
                           {summary.series.leadsBySource.map((_, index) => (
-                            <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} stroke="rgba(0,0,0,0.2)" />
+                            <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} stroke="rgba(0,0,0,0.2)" />
                           ))}
                         </Pie>
                         <Tooltip
                           contentStyle={{
-                            backgroundColor: 'var(--admin-card, #111827)',
-                            border: '1px solid var(--admin-border, rgba(128,128,128,0.25))',
+                            backgroundColor: 'var(--admin-card)',
+                            border: '1px solid var(--admin-border)',
                             borderRadius: '8px',
-                            color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
+                            color: 'var(--admin-card-text)',
                             fontSize: '12px',
                             boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
                           }}
@@ -310,12 +284,7 @@ export default function AdminDashboardPage() {
 
               {/* Revenue analytics */}
               <div
-                className="rounded-xl border p-5 transition-colors shadow-xs"
-                style={{
-                  backgroundColor: 'var(--admin-card, #141b26)',
-                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-                  color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-                }}
+                className="rounded-xl border p-5 transition-colors shadow-xs bg-surface-raised border-line text-ink-raised"
               >
                 <div className="mb-2">
                   <h3 className="text-sm font-semibold tracking-wide text-inherit">Revenue Analytics</h3>
@@ -332,16 +301,16 @@ export default function AdminDashboardPage() {
                         <YAxis stroke="currentColor" opacity={0.65} fontSize={11} tickLine={false} axisLine={{ stroke: 'currentColor', opacity: 0.2 }} />
                         <Tooltip
                           contentStyle={{
-                            backgroundColor: 'var(--admin-card, #111827)',
-                            border: '1px solid var(--admin-border, rgba(128,128,128,0.25))',
+                            backgroundColor: 'var(--admin-card)',
+                            border: '1px solid var(--admin-border)',
                             borderRadius: '8px',
-                            color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
+                            color: 'var(--admin-card-text)',
                             fontSize: '12px',
                             boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
                           }}
                           formatter={(value) => [`₹${Number(value ?? 0).toLocaleString('en-IN')}`, 'Revenue']}
                         />
-                        <Bar dataKey="amount" name="Revenue" fill="#10b981" radius={[4, 4, 0, 0]} maxBarSize={36} />
+                        <Bar dataKey="amount" name="Revenue" fill={CHART_REVENUE} radius={[4, 4, 0, 0]} maxBarSize={36} />
                       </BarChart>
                     </ResponsiveContainer>
                   )}
@@ -350,12 +319,7 @@ export default function AdminDashboardPage() {
 
               {/* Atelier production mix */}
               <div
-                className="rounded-xl border p-5 transition-colors shadow-xs"
-                style={{
-                  backgroundColor: 'var(--admin-card, #141b26)',
-                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-                  color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-                }}
+                className="rounded-xl border p-5 transition-colors shadow-xs bg-surface-raised border-line text-ink-raised"
               >
                 <div className="mb-2">
                   <h3 className="text-sm font-semibold tracking-wide text-inherit">Workshop Production Mix</h3>
@@ -369,15 +333,15 @@ export default function AdminDashboardPage() {
                       <PieChart margin={{ bottom: -5 }}>
                         <Pie data={summary.series.ordersByStatus} cx="50%" cy="50%" innerRadius={55} outerRadius={80} paddingAngle={4} dataKey="count" nameKey="status">
                           {summary.series.ordersByStatus.map((_, index) => (
-                            <Cell key={`ost-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} stroke="rgba(0,0,0,0.2)" />
+                            <Cell key={`ost-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} stroke="rgba(0,0,0,0.2)" />
                           ))}
                         </Pie>
                         <Tooltip
                           contentStyle={{
-                            backgroundColor: 'var(--admin-card, #111827)',
-                            border: '1px solid var(--admin-border, rgba(128,128,128,0.25))',
+                            backgroundColor: 'var(--admin-card)',
+                            border: '1px solid var(--admin-border)',
                             borderRadius: '8px',
-                            color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
+                            color: 'var(--admin-card-text)',
                             fontSize: '12px',
                             boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
                           }}
@@ -398,7 +362,7 @@ export default function AdminDashboardPage() {
                     <h3 className="text-sm font-semibold tracking-wide text-inherit">Recent Consultations</h3>
                     <p className="text-[11px] opacity-60">Latest design enquiries from bespoke clientele</p>
                   </div>
-                  <Link to="/admin/leads/list" className="text-xs font-semibold text-[var(--admin-primary,#b59410)] hover:underline">
+                  <Link to="/admin/leads/list" className="text-xs font-semibold text-brand hover:underline">
                     All Leads →
                   </Link>
                 </div>
@@ -417,18 +381,13 @@ export default function AdminDashboardPage() {
                     <h3 className="text-sm font-semibold tracking-wide text-inherit">Production Queue</h3>
                     <p className="text-[11px] opacity-60">Upcoming trials & client handovers</p>
                   </div>
-                  <Link to="/admin/orders" className="text-xs font-semibold text-[var(--admin-primary,#b59410)] hover:underline">
+                  <Link to="/admin/orders" className="text-xs font-semibold text-brand hover:underline">
                     Orders →
                   </Link>
                 </div>
 
                 <ul
-                  className="divide-y rounded-xl border overflow-hidden shadow-xs"
-                  style={{
-                    backgroundColor: 'var(--admin-card, #141b26)',
-                    borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-                    color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-                  }}
+                  className="divide-y rounded-xl border overflow-hidden shadow-xs bg-surface-raised border-line text-ink-raised"
                 >
                   {(summary.actionOrders || []).length === 0 ? (
                     <li className="px-4 py-8 text-center text-xs opacity-50">No open orders with delivery dates.</li>
@@ -436,8 +395,7 @@ export default function AdminDashboardPage() {
                     (summary.actionOrders || []).map((o) => (
                       <li
                         key={o.id}
-                        className="transition hover:bg-current/[0.04]"
-                        style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))' }}
+                        className="transition hover:bg-current/[0.04] border-line"
                       >
                         <Link to={`/admin/orders/${o.id}`} className="block px-4 py-3 text-inherit">
                           <p className="font-semibold text-inherit text-xs truncate">{o.title}</p>
@@ -445,7 +403,7 @@ export default function AdminDashboardPage() {
                             #{o.orderNumber} · {o.customerName}
                           </p>
                           {o.expectedDeliveryAt ? (
-                            <span className="mt-1.5 inline-block rounded bg-[var(--admin-primary,#b59410)]/15 px-1.5 py-0.5 text-[10px] font-medium text-[var(--admin-primary,#b59410)]">
+                            <span className="mt-1.5 inline-block rounded bg-brand/15 px-1.5 py-0.5 text-[10px] font-medium text-brand">
                               Due {new Date(o.expectedDeliveryAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
                             </span>
                           ) : null}

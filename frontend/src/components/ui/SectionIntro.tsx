@@ -44,14 +44,14 @@ export function SectionIntro({
       {...props}
     >
       <div className={cn('min-w-0 flex-1', centered && 'mx-auto')}>
-        <Heading as={as} className={cn(isDark && 'text-cream', centered && 'mx-auto')}>
+        <Heading as={as} className={cn(isDark && 'text-ink-inverse', centered && 'mx-auto')}>
           {title}
         </Heading>
         {description ? (
           <p
             className={cn(
               'text-lede mt-4',
-              isDark ? 'text-cream/75' : 'text-black/70',
+              isDark ? 'text-ink-inverse/75' : 'text-ink/70',
               centered && 'mx-auto',
             )}
           >

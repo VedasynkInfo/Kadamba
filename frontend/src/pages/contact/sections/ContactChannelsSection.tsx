@@ -56,7 +56,7 @@ export function ContactChannelsSection() {
       >
         {channels.map((channel) => (
           <motion.li key={channel.id} variants={reduced ? undefined : fadeUp}>
-            <p className="text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-black/45">
+            <p className="text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-ink/45">
               {channel.label}
             </p>
             <a
@@ -64,7 +64,7 @@ export function ContactChannelsSection() {
               {...(channel.external
                 ? { target: '_blank', rel: 'noopener noreferrer' }
                 : {})}
-              className="mt-3 block font-heading text-xl text-black transition-colors hover:text-black/70 md:text-2xl"
+              className="mt-3 block font-heading text-xl text-ink transition-colors hover:text-ink/70 md:text-2xl"
             >
               {channel.value}
             </a>
@@ -72,18 +72,18 @@ export function ContactChannelsSection() {
         ))}
       </motion.ul>
 
-      <div className="mt-14 border-t border-black/10 pt-10">
-        <p className="text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-black/45">
+      <div className="mt-14 border-t border-line pt-10">
+        <p className="text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-ink/45">
           Boutique hours
         </p>
         <ul className="mt-4 space-y-2">
           {settings.hours.map((row) => (
             <li
               key={row.day}
-              className="flex max-w-md flex-wrap items-baseline justify-between gap-x-6 gap-y-1 text-sm text-black/75"
+              className="flex max-w-md flex-wrap items-baseline justify-between gap-x-6 gap-y-1 text-sm text-ink/75"
             >
               <span>{row.day}</span>
-              <span className="font-medium text-black">{row.time}</span>
+              <span className="font-medium text-ink">{row.time}</span>
             </li>
           ))}
         </ul>

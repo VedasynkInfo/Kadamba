@@ -29,7 +29,7 @@ export function OfflineBanner() {
     <div
       role="status"
       aria-live="polite"
-      className="sticky top-0 z-[60] flex items-center justify-center gap-2 bg-amber-400 px-4 py-1.5 text-center text-xs font-medium text-black"
+      className="sticky top-0 z-[60] flex items-center justify-center gap-2 bg-amber-400 px-4 py-1.5 text-center text-xs font-medium text-ink"
     >
       <span aria-hidden="true">{online ? '↑' : '⚠'}</span>
       <span>{message}</span>

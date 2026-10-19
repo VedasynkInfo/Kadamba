@@ -41,7 +41,7 @@ export default function DesignSystemPage() {
         <Heading as={1} animated className="mt-4">
           Design System
         </Heading>
-        <p className="mt-3 max-w-2xl text-black/70">
+        <p className="mt-3 max-w-2xl text-ink/70">
           Luxury black, gold, and cream tokens with reusable UI primitives for
           Kadamba&apos;s Designer Studio — Kurnool boutique for women&apos;s traditional
           and bridal wear.
@@ -54,7 +54,7 @@ export default function DesignSystemPage() {
         </Heading>
         <div className="flex flex-wrap gap-3">
           <Button variant="primary">Primary</Button>
-          <Button variant="secondary" className="!border-black/25 !text-black hover:!border-gold">
+          <Button variant="secondary" className="border-line-strong text-ink hover:border-gold">
             Secondary
           </Button>
           <Button variant="ghost">Ghost</Button>
@@ -89,8 +89,8 @@ export default function DesignSystemPage() {
           </Card>
           <Card variant="pricing" featured>
             <CardTitle className="text-gold">Signature</CardTitle>
-            <p className="mt-4 font-heading text-3xl text-cream">₹1,49,000</p>
-            <CardDescription className="text-cream/70">Full-home design package.</CardDescription>
+            <p className="mt-4 font-heading text-3xl text-ink-inverse">₹1,49,000</p>
+            <CardDescription className="text-ink-inverse/70">Full-home design package.</CardDescription>
           </Card>
           <Card
             variant="image"
@@ -100,8 +100,8 @@ export default function DesignSystemPage() {
               </div>
             }
           >
-            <CardTitle className="text-cream">Image overlay</CardTitle>
-            <CardDescription className="text-cream/70">Hover lift on media cards.</CardDescription>
+            <CardTitle className="text-ink-inverse">Image overlay</CardTitle>
+            <CardDescription className="text-ink-inverse/70">Hover lift on media cards.</CardDescription>
           </Card>
         </div>
       </Section>

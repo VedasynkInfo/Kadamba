@@ -112,11 +112,11 @@ export default function PortalOrdersPage() {
 
   return (
     <div>
-      <h1 className="font-heading text-3xl text-cream">Your orders</h1>
-      <p className="mt-2 text-sm text-cream/55">Current and previous boutique work.</p>
+      <h1 className="font-heading text-3xl text-ink-inverse">Your orders</h1>
+      <p className="mt-2 text-sm text-ink-inverse/55">Current and previous boutique work.</p>
       <ul className="mt-8 divide-y divide-gold/10 border border-gold/15">
         {orders.length === 0 ? (
-          <li className="px-4 py-10 text-sm text-cream/50">No orders yet.</li>
+          <li className="px-4 py-10 text-sm text-ink-inverse/50">No orders yet.</li>
         ) : (
           orders.map((order) => (
             <li key={order.id}>
@@ -125,8 +125,8 @@ export default function PortalOrdersPage() {
                 className="flex flex-wrap items-center justify-between gap-3 px-4 py-5 transition hover:bg-white/5"
               >
                 <div>
-                  <p className="text-cream">{order.title}</p>
-                  <p className="mt-1 text-xs text-cream/45">
+                  <p className="text-ink-inverse">{order.title}</p>
+                  <p className="mt-1 text-xs text-ink-inverse/45">
                     {order.referenceId || `Order #${order.orderNumber}`} · Trial{' '}
                     {formatDate(order.expectedTrialAt)} · Delivery{' '}
                     {formatDate(order.expectedDeliveryAt)}
@@ -210,21 +210,21 @@ export function PortalOrderDetailPage() {
       <div>
         <Link
           to="/portal/orders"
-          className="text-xs uppercase tracking-[0.18em] text-cream/50 hover:text-gold"
+          className="text-xs uppercase tracking-[0.18em] text-ink-inverse/50 hover:text-gold"
         >
           ← Orders
         </Link>
 
-        <div className="mt-4 overflow-hidden border border-gold/20 bg-[radial-gradient(ellipse_at_top_right,_rgba(255,215,0,0.1),_transparent_50%),_#0c0a08] p-5 sm:p-7">
+        <div className="mt-4 overflow-hidden border border-gold/20 bg-[radial-gradient(ellipse_at_top_right,_rgba(255,215,0,0.1),_transparent_50%),_var(--color-espresso)] p-5 sm:p-7">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
               <p className="text-[0.62rem] uppercase tracking-[0.3em] text-gold/75">Order detail</p>
-              <h1 className="mt-2 font-heading text-3xl text-cream sm:text-4xl">{order.title}</h1>
+              <h1 className="mt-2 font-heading text-3xl text-ink-inverse sm:text-4xl">{order.title}</h1>
               <p className="mt-2 font-mono text-sm text-gold/85">
                 {order.referenceId || `Order #${order.orderNumber}`}
               </p>
               {order.createdAt ? (
-                <p className="mt-1 text-xs text-cream/40">Placed {formatDate(order.createdAt)}</p>
+                <p className="mt-1 text-xs text-ink-inverse/40">Placed {formatDate(order.createdAt)}</p>
               ) : null}
             </div>
             <span
@@ -242,7 +242,7 @@ export function PortalOrderDetailPage() {
           </div>
 
           {(order.statusNextHint || whatHappensNext[order.status]) ? (
-            <p className="mt-5 border-t border-gold/15 pt-4 text-sm text-cream/70">
+            <p className="mt-5 border-t border-gold/15 pt-4 text-sm text-ink-inverse/70">
               <span className="text-[0.65rem] uppercase tracking-[0.16em] text-gold/70">
                 What happens next
               </span>
@@ -254,7 +254,7 @@ export function PortalOrderDetailPage() {
 
           {order.status !== 'cancelled' ? (
             <div className="mt-8">
-              <div className="mb-3 flex items-center justify-between text-[0.65rem] uppercase tracking-[0.16em] text-cream/45">
+              <div className="mb-3 flex items-center justify-between text-[0.65rem] uppercase tracking-[0.16em] text-ink-inverse/45">
                 <span>Workshop progress</span>
                 <span>{Math.round(progress.pct)}%</span>
               </div>
@@ -276,8 +276,8 @@ export function PortalOrderDetailPage() {
                         current
                           ? 'border-gold bg-gold/15 text-gold'
                           : done
-                            ? 'border-gold/25 text-cream/80'
-                            : 'border-white/5 text-cream/30',
+                            ? 'border-gold/25 text-ink-inverse/80'
+                            : 'border-white/5 text-ink-inverse/30',
                       )}
                     >
                       <p className="text-[0.55rem] uppercase leading-tight tracking-[0.08em]">
@@ -294,8 +294,8 @@ export function PortalOrderDetailPage() {
 
       <div className="grid gap-4 lg:grid-cols-3">
         <div className="border border-gold/15 bg-black/30 px-4 py-4">
-          <p className="text-[0.65rem] uppercase tracking-[0.16em] text-cream/40">Trial</p>
-          <p className="mt-2 font-heading text-xl text-cream">
+          <p className="text-[0.65rem] uppercase tracking-[0.16em] text-ink-inverse/40">Trial</p>
+          <p className="mt-2 font-heading text-xl text-ink-inverse">
             {formatDate(order.expectedTrialAt)}
           </p>
           {order.actualTrialAt ? (
@@ -303,12 +303,12 @@ export function PortalOrderDetailPage() {
               Completed {formatDate(order.actualTrialAt)}
             </p>
           ) : (
-            <p className="mt-1 text-xs text-cream/40">Scheduled / expected</p>
+            <p className="mt-1 text-xs text-ink-inverse/40">Scheduled / expected</p>
           )}
         </div>
         <div className="border border-gold/15 bg-black/30 px-4 py-4">
-          <p className="text-[0.65rem] uppercase tracking-[0.16em] text-cream/40">Delivery</p>
-          <p className="mt-2 font-heading text-xl text-cream">
+          <p className="text-[0.65rem] uppercase tracking-[0.16em] text-ink-inverse/40">Delivery</p>
+          <p className="mt-2 font-heading text-xl text-ink-inverse">
             {formatDate(order.expectedDeliveryAt)}
           </p>
           {order.actualDeliveryAt ? (
@@ -316,15 +316,15 @@ export function PortalOrderDetailPage() {
               Delivered {formatDate(order.actualDeliveryAt)}
             </p>
           ) : (
-            <p className="mt-1 text-xs text-cream/40">Target date</p>
+            <p className="mt-1 text-xs text-ink-inverse/40">Target date</p>
           )}
         </div>
         <div className="border border-gold/15 bg-black/30 px-4 py-4">
-          <p className="text-[0.65rem] uppercase tracking-[0.16em] text-cream/40">Balance due</p>
+          <p className="text-[0.65rem] uppercase tracking-[0.16em] text-ink-inverse/40">Balance due</p>
           <p className="mt-2 font-heading text-xl text-gold">
             {inr(order.paymentSummary.balance)}
           </p>
-          <p className="mt-1 text-xs text-cream/40">{paidPct}% paid of quote</p>
+          <p className="mt-1 text-xs text-ink-inverse/40">{paidPct}% paid of quote</p>
         </div>
       </div>
 
@@ -337,16 +337,16 @@ export function PortalOrderDetailPage() {
               className="flex flex-wrap items-start justify-between gap-3 border border-gold/10 bg-black/30 px-4 py-3"
             >
               <div>
-                <p className="text-cream">
+                <p className="text-ink-inverse">
                   <span className="mr-2 font-mono text-gold/70">{item.qty}×</span>
                   {item.name}
                 </p>
                 {item.productTypeCode ? (
-                  <p className="mt-1 font-mono text-[0.7rem] text-cream/40">
+                  <p className="mt-1 font-mono text-[0.7rem] text-ink-inverse/40">
                     {item.productTypeCode}
                   </p>
                 ) : null}
-                {item.notes ? <p className="mt-1 text-sm text-cream/55">{item.notes}</p> : null}
+                {item.notes ? <p className="mt-1 text-sm text-ink-inverse/55">{item.notes}</p> : null}
               </div>
             </li>
           ))}
@@ -365,7 +365,7 @@ export function PortalOrderDetailPage() {
             </Link>
             <Link
               to="/portal/payments"
-              className="text-xs uppercase tracking-[0.16em] text-cream/45 hover:text-gold"
+              className="text-xs uppercase tracking-[0.16em] text-ink-inverse/45 hover:text-gold"
             >
               All invoices →
             </Link>
@@ -382,10 +382,10 @@ export function PortalOrderDetailPage() {
             { label: 'Balance', value: inr(order.paymentSummary.balance) },
           ].map((row) => (
             <div key={row.label} className="border border-gold/10 px-3 py-3">
-              <dt className="text-[0.65rem] uppercase tracking-[0.14em] text-cream/40">
+              <dt className="text-[0.65rem] uppercase tracking-[0.14em] text-ink-inverse/40">
                 {row.label}
               </dt>
-              <dd className="mt-1 text-cream">{row.value}</dd>
+              <dd className="mt-1 text-ink-inverse">{row.value}</dd>
             </div>
           ))}
         </dl>
@@ -402,9 +402,9 @@ export function PortalOrderDetailPage() {
                   i === 0 ? 'border-gold bg-gold' : 'border-gold/40 bg-black',
                 )}
               />
-              <p className="text-cream">{statusLabel[t.status] || t.status}</p>
-              {t.note ? <p className="mt-1 text-sm text-cream/55">{t.note}</p> : null}
-              <p className="mt-1 text-[0.7rem] text-cream/35">{formatDateTime(t.at)}</p>
+              <p className="text-ink-inverse">{statusLabel[t.status] || t.status}</p>
+              {t.note ? <p className="mt-1 text-sm text-ink-inverse/55">{t.note}</p> : null}
+              <p className="mt-1 text-[0.7rem] text-ink-inverse/35">{formatDateTime(t.at)}</p>
             </li>
           ))}
         </ol>
@@ -415,10 +415,10 @@ export function PortalOrderDetailPage() {
           <h2 className="font-heading text-xl text-gold">Notes for you</h2>
           <ul className="mt-4 space-y-2">
             {order.notes.map((n, i) => (
-              <li key={i} className="border border-gold/10 bg-black/30 px-4 py-3 text-sm text-cream/80">
+              <li key={i} className="border border-gold/10 bg-black/30 px-4 py-3 text-sm text-ink-inverse/80">
                 <p>{n.body}</p>
                 {n.createdAt ? (
-                  <p className="mt-2 text-[0.7rem] text-cream/35">{formatDateTime(n.createdAt)}</p>
+                  <p className="mt-2 text-[0.7rem] text-ink-inverse/35">{formatDateTime(n.createdAt)}</p>
                 ) : null}
               </li>
             ))}
@@ -435,13 +435,13 @@ export function PortalOrderDetailPage() {
         </Link>
         <Link
           to="/portal/measurements"
-          className="rounded-sm border border-gold/25 px-4 py-2.5 text-xs uppercase tracking-[0.16em] text-cream/70 transition hover:border-gold/50 hover:text-gold"
+          className="rounded-sm border border-gold/25 px-4 py-2.5 text-xs uppercase tracking-[0.16em] text-ink-inverse/70 transition hover:border-gold/50 hover:text-gold"
         >
           Measurements
         </Link>
         <Link
           to="/portal/payments"
-          className="rounded-sm border border-gold/25 px-4 py-2.5 text-xs uppercase tracking-[0.16em] text-cream/70 transition hover:border-gold/50 hover:text-gold"
+          className="rounded-sm border border-gold/25 px-4 py-2.5 text-xs uppercase tracking-[0.16em] text-ink-inverse/70 transition hover:border-gold/50 hover:text-gold"
         >
           Payments
         </Link>

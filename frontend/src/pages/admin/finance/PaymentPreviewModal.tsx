@@ -61,18 +61,12 @@ export function PaymentPreviewModal({ payment, onClose }: PaymentPreviewModalPro
       aria-label="Payment receipt preview"
     >
       <div
-        className="w-full max-w-lg rounded-2xl border shadow-2xl overflow-hidden transition-all text-xs"
-        style={{
-          backgroundColor: 'var(--admin-card, #141b26)',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.22))',
-          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-        }}
+        className="w-full max-w-lg rounded-2xl border shadow-2xl overflow-hidden transition-all text-xs bg-surface-raised border-line text-ink-raised"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div
-          className="flex items-center justify-between border-b px-5 py-4"
-          style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))' }}
+          className="flex items-center justify-between border-b px-5 py-4 border-line"
         >
           <div className="flex items-center gap-2.5">
             <span className="text-xl">??</span>
@@ -84,8 +78,7 @@ export function PaymentPreviewModal({ payment, onClose }: PaymentPreviewModalPro
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer"
-            style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))' }}
+            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer border-line"
             aria-label="Close modal"
           >
             ?
@@ -93,7 +86,7 @@ export function PaymentPreviewModal({ payment, onClose }: PaymentPreviewModalPro
         </div>
 
         {/* Hero Amount & Method */}
-        <div className="p-6 text-center border-b" style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.12))' }}>
+        <div className="p-6 text-center border-b border-line">
           <p className="text-[10px] uppercase font-bold tracking-widest opacity-60 mb-1">Amount Received</p>
           <h2 className="font-heading text-3xl font-black text-emerald-400">
             {formatINR(payment.amount)}
@@ -127,11 +120,7 @@ export function PaymentPreviewModal({ payment, onClose }: PaymentPreviewModalPro
         <div className="p-5 space-y-4">
           <div className="grid grid-cols-2 gap-3 text-xs">
             <div
-              className="rounded-xl border p-3"
-              style={{
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))',
-                backgroundColor: 'rgba(128, 128, 128, 0.04)',
-              }}
+              className="rounded-xl border p-3 border-line bg-surface-sunken"
             >
               <span className="text-[10px] uppercase tracking-wider opacity-60 block">Customer</span>
               <span className="font-bold text-sm block mt-1 truncate">
@@ -145,18 +134,14 @@ export function PaymentPreviewModal({ payment, onClose }: PaymentPreviewModalPro
             </div>
 
             <div
-              className="rounded-xl border p-3"
-              style={{
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))',
-                backgroundColor: 'rgba(128, 128, 128, 0.04)',
-              }}
+              className="rounded-xl border p-3 border-line bg-surface-sunken"
             >
               <span className="text-[10px] uppercase tracking-wider opacity-60 block">Linked Order</span>
               {order ? (
                 <>
                   <Link
                     to={`/admin/orders/${order.id}`}
-                    className="font-bold text-sm block mt-1 hover:underline text-[var(--admin-primary,#b59410)] truncate"
+                    className="font-bold text-sm block mt-1 hover:underline text-brand truncate"
                   >
                     #{order.orderNumber}
                   </Link>
@@ -172,11 +157,7 @@ export function PaymentPreviewModal({ payment, onClose }: PaymentPreviewModalPro
 
           {/* Reference & Notes */}
           <div
-            className="rounded-xl border p-3 space-y-2"
-            style={{
-              borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))',
-              backgroundColor: 'rgba(128, 128, 128, 0.04)',
-            }}
+            className="rounded-xl border p-3 space-y-2 border-line bg-surface-sunken"
           >
             <div className="flex justify-between items-center text-[11px]">
               <span className="opacity-60">Payment Reference / Txn ID:</span>
@@ -187,7 +168,7 @@ export function PaymentPreviewModal({ payment, onClose }: PaymentPreviewModalPro
               <span className="font-semibold">{payment.recordedBy || 'Admin Desk'}</span>
             </div>
             {payment.notes ? (
-              <div className="pt-2 border-t text-[11px]" style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.1))' }}>
+              <div className="pt-2 border-t text-[11px] border-line">
                 <span className="opacity-60 block text-[10px] uppercase tracking-wider mb-0.5">Notes:</span>
                 <p className="opacity-90 italic">{payment.notes}</p>
               </div>
@@ -197,11 +178,7 @@ export function PaymentPreviewModal({ payment, onClose }: PaymentPreviewModalPro
 
         {/* Footer Actions */}
         <div
-          className="flex items-center justify-between border-t px-5 py-3.5"
-          style={{
-            borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-            backgroundColor: 'rgba(128, 128, 128, 0.04)',
-          }}
+          className="flex items-center justify-between border-t px-5 py-3.5 border-line bg-surface-sunken"
         >
           {customer?.phone ? (
             <a
@@ -221,8 +198,7 @@ export function PaymentPreviewModal({ payment, onClose }: PaymentPreviewModalPro
             {order?.id ? (
               <Link
                 to={`/admin/orders/${order.id}`}
-                className="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 border text-xs font-semibold hover:bg-current/[0.05] transition"
-                style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
+                className="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 border text-xs font-semibold hover:bg-current/[0.05] transition border-line"
               >
                 <span>Order File ?</span>
               </Link>
@@ -230,8 +206,7 @@ export function PaymentPreviewModal({ payment, onClose }: PaymentPreviewModalPro
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg px-3 py-1.5 text-xs font-bold border hover:bg-current/[0.05] transition cursor-pointer"
-              style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
+              className="rounded-lg px-3 py-1.5 text-xs font-bold border hover:bg-current/[0.05] transition cursor-pointer border-line"
             >
               Close
             </button>

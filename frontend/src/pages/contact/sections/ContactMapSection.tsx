@@ -28,7 +28,7 @@ export function ContactMapSection() {
                 href={studioContact.mapLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-gold transition-colors hover:text-cream"
+                className="text-sm text-gold transition-colors hover:text-ink-inverse"
               >
                 Open in Google Maps
               </a>

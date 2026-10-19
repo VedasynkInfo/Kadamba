@@ -41,7 +41,7 @@ export function PortfolioCtaSection() {
             <Button
               variant="secondary"
               size="lg"
-              className="!text-cream"
+              className="text-ink-inverse"
               onClick={() => navigate('/contact')}
             >
               Contact the studio

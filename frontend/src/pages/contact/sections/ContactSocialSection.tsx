@@ -11,7 +11,7 @@ export function ContactSocialSection() {
   const reduced = usePrefersReducedMotion();
 
   return (
-    <Section tone="light" className="border-t border-black/8 py-16 md:py-20">
+    <Section tone="light" className="border-t border-line/8 py-16 md:py-20">
       <SectionIntro
         title="Follow the studio"
         description="Bridal looks, festive fittings, and atelier moments from Kurnool."
@@ -31,7 +31,7 @@ export function ContactSocialSection() {
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-heading text-xl text-black transition-colors hover:text-black/60 md:text-2xl"
+              className="font-heading text-xl text-ink transition-colors hover:text-ink/60 md:text-2xl"
             >
               {link.label}
             </a>

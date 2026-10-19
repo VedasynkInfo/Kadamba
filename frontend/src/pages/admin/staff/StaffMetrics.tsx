@@ -20,8 +20,8 @@ export function StaffMetrics({
       label: 'Total Artisans',
       value: totalStaff,
       subtext: 'Registered workshop profiles',
-      accent: 'text-[var(--admin-primary,#b59410)]',
-      borderAccent: 'border-l-[var(--admin-primary,#b59410)]',
+      accent: 'text-brand',
+      borderAccent: 'border-l-brand',
       icon: '👥',
     },
     {
@@ -55,12 +55,7 @@ export function StaffMetrics({
       {cards.map((c) => (
         <div
           key={c.label}
-          className={`rounded-xl border border-l-4 p-4 shadow-xs transition hover:shadow-md ${c.borderAccent}`}
-          style={{
-            backgroundColor: 'var(--admin-card, #141b26)',
-            borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-            color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-          }}
+          className={`rounded-xl border border-l-4 p-4 shadow-xs transition hover:shadow-md ${c.borderAccent} bg-surface-raised border-line text-ink-raised`}
         >
           <div className="flex items-center justify-between text-xs opacity-65">
             <span className="font-semibold uppercase tracking-wider text-[10px]">{c.label}</span>

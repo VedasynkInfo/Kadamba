@@ -28,12 +28,7 @@ export function FinanceProfitLossTab({
     <div className="space-y-6 text-xs">
       {/* Date Range Selector Toolbar */}
       <div
-        className="rounded-xl border p-4 shadow-xs transition-colors flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
-        style={{
-          backgroundColor: 'var(--admin-card, #141b26)',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-        }}
+        className="rounded-xl border p-4 shadow-xs transition-colors flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-surface-raised border-line text-ink-raised"
       >
         <div>
           <h3 className="font-heading text-base font-bold tracking-wide">
@@ -51,12 +46,7 @@ export function FinanceProfitLossTab({
               type="date"
               value={fromDate}
               onChange={(e) => onFromChange(e.target.value)}
-              className="rounded-lg border py-1.5 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-              style={{
-                backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="rounded-lg border py-1.5 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
             />
           </div>
 
@@ -66,20 +56,14 @@ export function FinanceProfitLossTab({
               type="date"
               value={toDate}
               onChange={(e) => onToChange(e.target.value)}
-              className="rounded-lg border py-1.5 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-              style={{
-                backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="rounded-lg border py-1.5 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
             />
           </div>
 
           <button
             type="button"
             onClick={onRefresh}
-            className="rounded-lg px-3 py-1.5 text-xs font-bold border hover:bg-current/[0.05] transition cursor-pointer"
-            style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
+            className="rounded-lg px-3 py-1.5 text-xs font-bold border hover:bg-current/[0.05] transition cursor-pointer border-line"
           >
             Apply
           </button>
@@ -96,11 +80,7 @@ export function FinanceProfitLossTab({
           {/* Summary Metric Cards */}
           <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-4">
             <div
-              className="rounded-xl border border-l-4 border-l-emerald-500 p-4 shadow-xs"
-              style={{
-                backgroundColor: 'var(--admin-card, #141b26)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-              }}
+              className="rounded-xl border border-l-4 border-l-emerald-500 p-4 shadow-xs bg-surface-raised border-line"
             >
               <span className="text-[10px] uppercase font-bold tracking-wider opacity-60 block">
                 Total Revenue
@@ -112,11 +92,7 @@ export function FinanceProfitLossTab({
             </div>
 
             <div
-              className="rounded-xl border border-l-4 border-l-rose-500 p-4 shadow-xs"
-              style={{
-                backgroundColor: 'var(--admin-card, #141b26)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-              }}
+              className="rounded-xl border border-l-4 border-l-rose-500 p-4 shadow-xs bg-surface-raised border-line"
             >
               <span className="text-[10px] uppercase font-bold tracking-wider opacity-60 block">
                 Direct Expenses
@@ -128,11 +104,7 @@ export function FinanceProfitLossTab({
             </div>
 
             <div
-              className="rounded-xl border border-l-4 border-l-amber-500 p-4 shadow-xs"
-              style={{
-                backgroundColor: 'var(--admin-card, #141b26)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-              }}
+              className="rounded-xl border border-l-4 border-l-amber-500 p-4 shadow-xs bg-surface-raised border-line"
             >
               <span className="text-[10px] uppercase font-bold tracking-wider opacity-60 block">
                 Artisan Salaries
@@ -146,11 +118,7 @@ export function FinanceProfitLossTab({
             <div
               className={`rounded-xl border border-l-4 p-4 shadow-xs ${
                 report.summary.netProfit >= 0 ? 'border-l-emerald-500' : 'border-l-rose-500'
-              }`}
-              style={{
-                backgroundColor: 'var(--admin-card, #141b26)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-              }}
+              } bg-surface-raised border-line`}
             >
               <span className="text-[10px] uppercase font-bold tracking-wider opacity-60 block">
                 Net P&L Result
@@ -172,17 +140,13 @@ export function FinanceProfitLossTab({
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Top Expenses in Period */}
             <div
-              className="rounded-xl border p-4 shadow-xs"
-              style={{
-                backgroundColor: 'var(--admin-card, #141b26)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-              }}
+              className="rounded-xl border p-4 shadow-xs bg-surface-raised border-line"
             >
               <h4 className="font-heading text-sm font-bold mb-3">Expenses in Period</h4>
               {report.expenses.length === 0 ? (
                 <p className="opacity-50 py-4 text-center">No expenses in this period.</p>
               ) : (
-                <ul className="divide-y space-y-2" style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.12))' }}>
+                <ul className="divide-y space-y-2 border-line">
                   {report.expenses.slice(0, 8).map((e) => (
                     <li key={e.id} className="pt-2 flex justify-between items-center text-xs">
                       <div>
@@ -198,17 +162,13 @@ export function FinanceProfitLossTab({
 
             {/* Top Salaries in Period */}
             <div
-              className="rounded-xl border p-4 shadow-xs"
-              style={{
-                backgroundColor: 'var(--admin-card, #141b26)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-              }}
+              className="rounded-xl border p-4 shadow-xs bg-surface-raised border-line"
             >
               <h4 className="font-heading text-sm font-bold mb-3">Salaries in Period</h4>
               {report.salaries.length === 0 ? (
                 <p className="opacity-50 py-4 text-center">No salaries disbursed in this period.</p>
               ) : (
-                <ul className="divide-y space-y-2" style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.12))' }}>
+                <ul className="divide-y space-y-2 border-line">
                   {report.salaries.slice(0, 8).map((s) => (
                     <li key={s.id} className="pt-2 flex justify-between items-center text-xs">
                       <div>

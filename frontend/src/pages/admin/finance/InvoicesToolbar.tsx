@@ -31,12 +31,7 @@ export function InvoicesToolbar({
 }: InvoicesToolbarProps) {
   return (
     <div
-      className="rounded-xl border p-3.5 shadow-xs transition-colors"
-      style={{
-        backgroundColor: 'var(--admin-card, #141b26)',
-        borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-        color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-      }}
+      className="rounded-xl border p-3.5 shadow-xs transition-colors bg-surface-raised border-line text-ink-raised"
     >
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         {/* Left side: Search & Filter */}
@@ -51,12 +46,7 @@ export function InvoicesToolbar({
               value={query}
               onChange={(e) => onQueryChange(e.target.value)}
               placeholder="Search invoice, client, order #, phone..."
-              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)] transition"
-              style={{
-                backgroundColor: 'transparent',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition border-line"
             />
             {query ? (
               <button
@@ -76,12 +66,7 @@ export function InvoicesToolbar({
               value={selectedStatus}
               onChange={(e) => onStatusChange(e.target.value)}
               aria-label="Filter by billing status"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)] transition cursor-pointer"
-              style={{
-                backgroundColor: 'var(--admin-card, #141b26)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
             >
               {BILL_STATUS_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -112,11 +97,7 @@ export function InvoicesToolbar({
 
           <Link
             to="/admin/payments"
-            className="inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 active:scale-98 whitespace-nowrap cursor-pointer"
-            style={{
-              backgroundColor: 'var(--admin-primary, #b59410)',
-              color: 'var(--admin-primary-text, #ffffff)',
-            }}
+            className="inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 active:scale-98 whitespace-nowrap cursor-pointer bg-brand text-ink-on-brand"
           >
             <span className="text-sm font-black">+</span>
             <span>Record Payment</span>

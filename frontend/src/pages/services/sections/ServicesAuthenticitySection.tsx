@@ -14,10 +14,7 @@ export function ServicesAuthenticitySection() {
   return (
     <Section tone="dark" className="relative overflow-hidden py-16 md:py-24">
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.06]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 2v36M2 20h36' stroke='%23FFD700' stroke-width='0.4'/%3E%3C/svg%3E")`,
-        }}
+        className="pointer-events-none absolute inset-0 opacity-[0.06] text-gold pattern-cross"
         aria-hidden
       />
 
@@ -67,8 +64,8 @@ export function ServicesAuthenticitySection() {
                     {String(index + 1).padStart(2, '0')}
                   </span>
                   <div>
-                    <h3 className="font-heading text-xl text-cream sm:text-2xl">{pillar.title}</h3>
-                    <p className="mt-2 text-base leading-relaxed text-cream/70">
+                    <h3 className="font-heading text-xl text-ink-inverse sm:text-2xl">{pillar.title}</h3>
+                    <p className="mt-2 text-base leading-relaxed text-ink-inverse/70">
                       {pillar.description}
                     </p>
                   </div>

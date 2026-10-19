@@ -48,7 +48,7 @@ export function OrderStaffModal({
           <select
             value={newStaffRole}
             onChange={(e: any) => setNewStaffRole(e.target.value)}
-            className="w-[150px] rounded-md border border-black/15 bg-cream px-3 py-2 text-sm text-black focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
+            className="w-[150px] rounded-md border border-line bg-surface-field px-3 py-2 text-sm text-ink focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
           >
             {STAFF_ROLES.map((role) => (
               <option key={role.value} value={role.value}>
@@ -61,12 +61,12 @@ export function OrderStaffModal({
           </Button>
         </div>
 
-        <div className="max-h-[200px] overflow-y-auto divide-y divide-black/5 border border-black/10 rounded-sm">
+        <div className="max-h-[200px] overflow-y-auto divide-y divide-black/5 border border-line rounded-sm">
           {assignedStaff.map((staff, idx) => (
             <div key={idx} className="flex justify-between items-center p-2.5 text-xs">
               <div>
                 <span className="font-semibold block">{staff.name}</span>
-                <span className="text-black/50 text-[10px] uppercase block mt-0.5">{staff.role}</span>
+                <span className="text-ink/50 text-[10px] uppercase block mt-0.5">{staff.role}</span>
               </div>
               <button
                 type="button"
@@ -78,11 +78,11 @@ export function OrderStaffModal({
             </div>
           ))}
           {assignedStaff.length === 0 && (
-            <p className="text-xs text-black/40 text-center py-4">No assignments added yet.</p>
+            <p className="text-xs text-ink/40 text-center py-4">No assignments added yet.</p>
           )}
         </div>
 
-        <div className="flex gap-3 justify-end pt-2 border-t border-black/5">
+        <div className="flex gap-3 justify-end pt-2 border-t border-line">
           <Button variant="secondary" size="sm" onClick={onClose}>
             Cancel
           </Button>

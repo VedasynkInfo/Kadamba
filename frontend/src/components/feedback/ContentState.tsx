@@ -19,9 +19,9 @@ const toneStyles: Record<ContentTone, { shell: string; title: string; body: stri
   },
   dark: {
     shell: 'border-cream/25',
-    title: 'text-cream',
-    body: 'text-cream/70',
-    skeleton: 'bg-cream/10',
+    title: 'text-ink-inverse',
+    body: 'text-ink-inverse/70',
+    skeleton: 'bg-current/10',
   },
 };
 

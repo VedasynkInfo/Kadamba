@@ -14,7 +14,7 @@ export function ServicesHeroSection() {
 
   return (
     <section
-      className="relative isolate w-full overflow-hidden bg-black text-cream"
+      className="relative isolate w-full overflow-hidden bg-black text-ink-inverse"
       aria-label="Services at Kadamba's Designer Studio"
     >
       <div className="relative min-h-[min(92svh,920px)] w-full md:min-h-[calc(100svh-4.25rem)]">
@@ -44,10 +44,7 @@ export function ServicesHeroSection() {
           />
           {/* Subtle ethnic lattice pattern */}
           <div
-            className="absolute inset-0 opacity-[0.07]"
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='none' stroke='%23FFD700' stroke-width='0.6'/%3E%3Ccircle cx='30' cy='30' r='3' fill='none' stroke='%23FFD700' stroke-width='0.5'/%3E%3C/svg%3E")`,
-            }}
+            className="absolute inset-0 opacity-[0.07] text-gold pattern-lattice-dot"
             aria-hidden
           />
         </motion.div>
@@ -78,11 +75,11 @@ export function ServicesHeroSection() {
               Kadamba
             </p>
 
-            <h1 className="mt-5 max-w-lg font-heading text-2xl font-medium leading-snug text-cream sm:text-3xl md:text-[2.15rem]">
+            <h1 className="mt-5 max-w-lg font-heading text-2xl font-medium leading-snug text-ink-inverse sm:text-3xl md:text-[2.15rem]">
               {servicesHero.headline}
             </h1>
 
-            <p className="text-lede mt-5 max-w-md text-cream/85">{servicesHero.copy}</p>
+            <p className="text-lede mt-5 max-w-md text-ink-inverse/85">{servicesHero.copy}</p>
 
             <div className="mt-9 flex flex-wrap gap-3">
               <Button
@@ -99,7 +96,7 @@ export function ServicesHeroSection() {
               <Button
                 variant="secondary"
                 size="lg"
-                className="!text-cream"
+                className="text-ink-inverse"
                 onClick={() => navigate('/request-service')}
               >
                 Book consultation

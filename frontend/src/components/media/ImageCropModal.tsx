@@ -65,12 +65,7 @@ export function ImageCropModal({
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 p-4">
       <div
-        className="w-full max-w-3xl overflow-hidden rounded-2xl border"
-        style={{
-          backgroundColor: 'var(--admin-card)',
-          borderColor: 'var(--admin-border)',
-          color: 'var(--admin-card-text)',
-        }}
+        className="w-full max-w-3xl overflow-hidden rounded-2xl border bg-surface-raised border-line text-ink-raised"
       >
         <div className="flex items-start justify-between gap-4 p-4 pb-0">
           <div>
@@ -98,8 +93,8 @@ export function ImageCropModal({
                 className={cn(
                   'rounded-full border px-3 py-1 text-[11px] transition',
                   active ? 'border-gold text-gold' : 'opacity-70 hover:opacity-100',
+                  active ? undefined : 'border-line',
                 )}
-                style={active ? undefined : { borderColor: 'var(--admin-border)' }}
               >
                 {preset.label}
               </button>

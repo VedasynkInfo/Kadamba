@@ -243,9 +243,9 @@ export default function OrderDetailAdminPage() {
   if (!order) {
     return (
       <div className="mx-auto max-w-7xl px-4 py-16 text-center">
-        <h3 className="font-heading text-xl text-black">Order not found</h3>
-        <p className="text-black/55 text-xs mt-2">The requested order workspace could not be resolved.</p>
-        <Link to="/admin/orders" className="text-xs font-semibold hover:underline block mt-4 text-black">
+        <h3 className="font-heading text-xl text-ink">Order not found</h3>
+        <p className="text-ink/55 text-xs mt-2">The requested order workspace could not be resolved.</p>
+        <Link to="/admin/orders" className="text-xs font-semibold hover:underline block mt-4 text-ink">
           ← Back to orders desk
         </Link>
       </div>
@@ -267,34 +267,34 @@ export default function OrderDetailAdminPage() {
           {/* Main workspace (Takes 2/3 width) */}
           <div className="lg:col-span-2 space-y-8">
             {/* Header / Info Panel */}
-            <div className="rounded-lg border border-black/10 bg-cream p-6">
+            <div className="rounded-lg border border-line bg-surface-raised p-6">
               <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
                 <div>
-                  <h3 className="font-heading text-lg text-black">{order.title}</h3>
+                  <h3 className="font-heading text-lg text-ink">{order.title}</h3>
                   <div className="flex flex-wrap items-center gap-2 mt-2">
                     <span
                       className={cn(
                         'text-[10px] uppercase font-semibold border px-2 py-0.5 rounded',
-                        order.priority === 'rush' ? 'bg-rose-50 text-rose-800 border-rose-200 shadow-sm' : 'bg-black/5 text-black/60 border-black/10',
+                        order.priority === 'rush' ? 'bg-rose-50 text-rose-800 border-rose-200 shadow-sm' : 'bg-surface-sunken text-ink/60 border-line',
                       )}
                     >
                       {order.priority} priority
                     </span>
                     {order.tags.map((tag) => (
-                      <span key={tag} className="text-[10px] bg-black/5 text-black/55 border border-black/10 px-2 py-0.5 rounded">
+                      <span key={tag} className="text-[10px] bg-surface-sunken text-ink/55 border border-line px-2 py-0.5 rounded">
                         #{tag}
                       </span>
                     ))}
                   </div>
                 </div>
                 <div className="flex flex-col items-end">
-                  <span className="text-[10px] uppercase tracking-wider text-black/45">Atelier lifecycle</span>
+                  <span className="text-[10px] uppercase tracking-wider text-ink/45">Atelier lifecycle</span>
                   {isOrderStatusTerminal(order.status) ? (
                     <>
-                      <span className="mt-1 text-xs font-semibold uppercase text-black/70">
+                      <span className="mt-1 text-xs font-semibold uppercase text-ink/70">
                         {orderStatusLabel(order.status)}
                       </span>
-                      <span className="text-[10px] text-black/45">
+                      <span className="text-[10px] text-ink/45">
                         Lifecycle complete — no further stages
                       </span>
                     </>
@@ -303,7 +303,7 @@ export default function OrderDetailAdminPage() {
                       value={order.status}
                       onChange={(e) => handleStatusChangeRequest(e.target.value as OrderStatus)}
                       aria-label="Move the order to its next stage"
-                      className="mt-1 min-w-[150px] uppercase text-xs font-semibold rounded-md border border-black/15 bg-cream px-3 py-2 text-black focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
+                      className="mt-1 min-w-[150px] uppercase text-xs font-semibold rounded-md border border-line bg-surface-field px-3 py-2 text-ink focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
                     >
                       {/* Only the moves the API will accept are offered, so an
                           impossible stage cannot be chosen and then refused. */}
@@ -320,28 +320,28 @@ export default function OrderDetailAdminPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 border-t border-black/5 pt-4 text-xs">
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 border-t border-line pt-4 text-xs">
                 <div>
-                  <span className="text-black/45 block">Expected trial</span>
-                  <span className="font-medium text-black mt-0.5 block">
+                  <span className="text-ink/45 block">Expected trial</span>
+                  <span className="font-medium text-ink mt-0.5 block">
                     {order.expectedTrialAt ? new Date(order.expectedTrialAt).toLocaleDateString('en-IN') : 'Not scheduled'}
                   </span>
                 </div>
                 <div>
-                  <span className="text-black/45 block">Expected delivery</span>
-                  <span className="font-medium text-black mt-0.5 block">
+                  <span className="text-ink/45 block">Expected delivery</span>
+                  <span className="font-medium text-ink mt-0.5 block">
                     {order.expectedDeliveryAt ? new Date(order.expectedDeliveryAt).toLocaleDateString('en-IN') : 'Not scheduled'}
                   </span>
                 </div>
                 <div>
-                  <span className="text-black/45 block">Created</span>
-                  <span className="font-medium text-black mt-0.5 block">
+                  <span className="text-ink/45 block">Created</span>
+                  <span className="font-medium text-ink mt-0.5 block">
                     {new Date(order.createdAt).toLocaleDateString('en-IN')}
                   </span>
                 </div>
                 <div>
-                  <span className="text-black/45 block">Last update</span>
-                  <span className="font-medium text-black mt-0.5 block">
+                  <span className="text-ink/45 block">Last update</span>
+                  <span className="font-medium text-ink mt-0.5 block">
                     {new Date(order.updatedAt).toLocaleDateString('en-IN')}
                   </span>
                 </div>
@@ -349,19 +349,19 @@ export default function OrderDetailAdminPage() {
             </div>
 
             {/* Line Items Details */}
-            <div className="rounded-lg border border-black/10 bg-cream p-6">
-              <h3 className="font-heading text-lg text-black mb-4 border-b border-black/5 pb-2">Workshop garments</h3>
+            <div className="rounded-lg border border-line bg-surface-raised p-6">
+              <h3 className="font-heading text-lg text-ink mb-4 border-b border-line pb-2">Workshop garments</h3>
               <div className="space-y-4">
                 {order.lineItems.map((item, index) => (
-                  <div key={index} className="flex justify-between gap-4 p-4 border border-black/15 bg-white/40 rounded-sm">
+                  <div key={index} className="flex justify-between gap-4 p-4 border border-line bg-white/40 rounded-sm">
                     <div>
-                      <span className="font-medium text-black text-sm block">
-                        {item.name} <span className="text-xs text-black/55 font-normal">({item.qty} Qty)</span>
+                      <span className="font-medium text-ink text-sm block">
+                        {item.name} <span className="text-xs text-ink/55 font-normal">({item.qty} Qty)</span>
                       </span>
-                      {item.notes && <p className="text-xs text-black/60 mt-1">{item.notes}</p>}
+                      {item.notes && <p className="text-xs text-ink/60 mt-1">{item.notes}</p>}
                     </div>
                     {item.productTypeCode && (
-                      <span className="text-[10px] uppercase font-semibold tracking-wider text-black/50 bg-black/5 px-2.5 py-1 self-start rounded-sm">
+                      <span className="text-[10px] uppercase font-semibold tracking-wider text-ink/50 bg-surface-sunken px-2.5 py-1 self-start rounded-sm">
                         {item.productTypeCode}
                       </span>
                     )}
@@ -371,23 +371,23 @@ export default function OrderDetailAdminPage() {
             </div>
 
             {/* Linked Measurements Profiles */}
-            <div className="rounded-lg border border-black/10 bg-cream p-6">
-              <div className="flex justify-between items-center mb-4 border-b border-black/5 pb-2">
-                <h3 className="font-heading text-lg text-black">Client measurements</h3>
+            <div className="rounded-lg border border-line bg-surface-raised p-6">
+              <div className="flex justify-between items-center mb-4 border-b border-line pb-2">
+                <h3 className="font-heading text-lg text-ink">Client measurements</h3>
                 <button
                   type="button"
                   onClick={() => {
                     void loadCustomerProfiles();
                     setMeasureModalOpen(true);
                   }}
-                  className="text-xs font-semibold text-black hover:underline uppercase tracking-wider"
+                  className="text-xs font-semibold text-ink hover:underline uppercase tracking-wider"
                 >
                   Link profile
                 </button>
               </div>
 
               {order.measurementProfileIds.length === 0 ? (
-                <div className="text-center py-6 text-xs text-black/45">
+                <div className="text-center py-6 text-xs text-ink/45">
                   No measurement profile linked to this order. Linking a profile ensures stitching accuracy.
                   <button
                     type="button"
@@ -395,7 +395,7 @@ export default function OrderDetailAdminPage() {
                       void loadCustomerProfiles();
                       setMeasureModalOpen(true);
                     }}
-                    className="text-xs font-semibold text-black hover:underline block mx-auto mt-2"
+                    className="text-xs font-semibold text-ink hover:underline block mx-auto mt-2"
                   >
                     Link profile now
                   </button>
@@ -403,15 +403,15 @@ export default function OrderDetailAdminPage() {
               ) : (
                 <div className="space-y-3">
                   {order.measurementProfileIds.map((pid) => (
-                    <div key={pid} className="flex justify-between items-center p-3.5 border border-black/10 bg-white/45 rounded-sm text-xs">
+                    <div key={pid} className="flex justify-between items-center p-3.5 border border-line bg-white/45 rounded-sm text-xs">
                       <div>
                         <span className="font-semibold block">Profile ID: {pid.slice(-6).toUpperCase()}</span>
-                        <span className="text-black/55 mt-0.5 block">Linked to this tailor card</span>
+                        <span className="text-ink/55 mt-0.5 block">Linked to this tailor card</span>
                       </div>
                       <div className="flex gap-3">
                         <Link
                           to="/admin/measurements"
-                          className="font-semibold text-black hover:underline uppercase text-[10px] tracking-wider"
+                          className="font-semibold text-ink hover:underline uppercase text-[10px] tracking-wider"
                         >
                           Open book
                         </Link>
@@ -430,8 +430,8 @@ export default function OrderDetailAdminPage() {
             </div>
 
             {/* Internal Notes & Customer Messaging */}
-            <div className="rounded-lg border border-black/10 bg-cream p-6">
-              <h3 className="font-heading text-lg text-black mb-4 border-b border-black/5 pb-2">Internal studio log</h3>
+            <div className="rounded-lg border border-line bg-surface-raised p-6">
+              <h3 className="font-heading text-lg text-ink mb-4 border-b border-line pb-2">Internal studio log</h3>
               
               {/* Form */}
               <form onSubmit={handleAddNote} className="space-y-3">
@@ -441,11 +441,11 @@ export default function OrderDetailAdminPage() {
                   required
                   value={noteBody}
                   onChange={(e) => setNoteBody(e.target.value)}
-                  className="bg-white"
+                  className="bg-surface-raised"
                 />
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <label className="flex items-center gap-1.5 text-xs text-black/55">
+                    <label className="flex items-center gap-1.5 text-xs text-ink/55">
                       <input
                         type="radio"
                         name="note-vis"
@@ -454,7 +454,7 @@ export default function OrderDetailAdminPage() {
                       />
                       Internal note (staff only)
                     </label>
-                    <label className="flex items-center gap-1.5 text-xs text-black/55">
+                    <label className="flex items-center gap-1.5 text-xs text-ink/55">
                       <input
                         type="radio"
                         name="note-vis"
@@ -473,15 +473,15 @@ export default function OrderDetailAdminPage() {
               {/* Feed */}
               <div className="mt-6 space-y-4">
                 {order.notes.length === 0 ? (
-                  <p className="text-xs text-black/45 text-center py-4">No internal notes posted yet.</p>
+                  <p className="text-xs text-ink/45 text-center py-4">No internal notes posted yet.</p>
                 ) : (
                   [...order.notes].reverse().map((note, idx) => (
-                    <div key={idx} className="p-3 bg-white/45 border border-black/5 rounded text-xs space-y-1.5">
-                      <div className="flex justify-between items-center text-[10px] text-black/50">
+                    <div key={idx} className="p-3 bg-white/45 border border-line rounded text-xs space-y-1.5">
+                      <div className="flex justify-between items-center text-[10px] text-ink/50">
                         <span className="font-semibold">{note.createdBy}</span>
                         <span>{new Date(note.createdAt).toLocaleString('en-IN')}</span>
                       </div>
-                      <p className="text-black/85 whitespace-pre-wrap">{note.body}</p>
+                      <p className="text-ink/85 whitespace-pre-wrap">{note.body}</p>
                       <span
                         className={cn(
                           'inline-block text-[9px] font-semibold uppercase px-1.5 py-0.5 rounded',
@@ -500,33 +500,33 @@ export default function OrderDetailAdminPage() {
           {/* Sidebar / Ops panel (Takes 1/3 width) */}
           <div className="space-y-8">
             {/* Customer Details Card */}
-            <div className="rounded-lg border border-black/10 bg-cream p-6">
-              <h3 className="font-heading text-lg text-black mb-4 border-b border-black/5 pb-2">Client profile</h3>
+            <div className="rounded-lg border border-line bg-surface-raised p-6">
+              <h3 className="font-heading text-lg text-ink mb-4 border-b border-line pb-2">Client profile</h3>
               <div className="space-y-3 text-xs">
                 <div>
-                  <span className="text-black/45 block">Name</span>
-                  <span className="font-medium text-black mt-0.5 block">{order.customerId.name}</span>
+                  <span className="text-ink/45 block">Name</span>
+                  <span className="font-medium text-ink mt-0.5 block">{order.customerId.name}</span>
                 </div>
                 <div>
-                  <span className="text-black/45 block">Phone</span>
-                  <span className="font-medium text-black mt-0.5 block">{order.customerId.phone}</span>
+                  <span className="text-ink/45 block">Phone</span>
+                  <span className="font-medium text-ink mt-0.5 block">{order.customerId.phone}</span>
                 </div>
                 {order.customerId.email && (
                   <div>
-                    <span className="text-black/45 block">Email</span>
-                    <span className="font-medium text-black mt-0.5 block">{order.customerId.email}</span>
+                    <span className="text-ink/45 block">Email</span>
+                    <span className="font-medium text-ink mt-0.5 block">{order.customerId.email}</span>
                   </div>
                 )}
                 {order.customerId.city && (
                   <div>
-                    <span className="text-black/45 block">City</span>
-                    <span className="font-medium text-black mt-0.5 block">{order.customerId.city}</span>
+                    <span className="text-ink/45 block">City</span>
+                    <span className="font-medium text-ink mt-0.5 block">{order.customerId.city}</span>
                   </div>
                 )}
                 {order.leadId && (
                   <div>
-                    <span className="text-black/45 block">Lead Link</span>
-                    <Link to={`/admin/leads/${order.leadId}`} className="font-semibold text-black hover:underline block mt-0.5">
+                    <span className="text-ink/45 block">Lead Link</span>
+                    <Link to={`/admin/leads/${order.leadId}`} className="font-semibold text-ink hover:underline block mt-0.5">
                       Open original crm lead →
                     </Link>
                   </div>
@@ -548,9 +548,9 @@ export default function OrderDetailAdminPage() {
             </div>
 
             {/* Financial Tracker */}
-            <div className="rounded-lg border border-black/10 bg-cream p-6">
-              <div className="flex gap-3 items-center mb-4 border-b border-black/5 pb-2">
-                <h3 className="font-heading text-lg text-black flex-1">Financial ledger</h3>
+            <div className="rounded-lg border border-line bg-surface-raised p-6">
+              <div className="flex gap-3 items-center mb-4 border-b border-line pb-2">
+                <h3 className="font-heading text-lg text-ink flex-1">Financial ledger</h3>
                 <button
                   type="button"
                   onClick={() => { setPaymentMode('record'); setPaymentModalOpen(true); }}
@@ -561,7 +561,7 @@ export default function OrderDetailAdminPage() {
                 <button
                   type="button"
                   onClick={() => { setPaymentMode('adjust'); setPaymentModalOpen(true); }}
-                  className="text-xs font-semibold text-black/50 hover:underline uppercase tracking-wider"
+                  className="text-xs font-semibold text-ink/50 hover:underline uppercase tracking-wider"
                 >
                   Adjust
                 </button>
@@ -575,19 +575,19 @@ export default function OrderDetailAdminPage() {
 
               <div className="space-y-3 text-xs">
                 <div className="flex justify-between">
-                  <span className="text-black/55">Total Quoted</span>
+                  <span className="text-ink/55">Total Quoted</span>
                   <span className="font-medium">₹{order.paymentSummary.totalQuoted}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-black/55">Advance Paid</span>
+                  <span className="text-ink/55">Advance Paid</span>
                   <span className="font-medium text-emerald-700">₹{order.paymentSummary.advance}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-black/55">Total Paid</span>
+                  <span className="text-ink/55">Total Paid</span>
                   <span className="font-medium text-emerald-700">₹{order.paymentSummary.totalPaid}</span>
                 </div>
-                <div className="flex justify-between border-t border-black/10 pt-2 font-semibold">
-                  <span className="text-black/85">Outstanding Balance</span>
+                <div className="flex justify-between border-t border-line pt-2 font-semibold">
+                  <span className="text-ink/85">Outstanding Balance</span>
                   <span className={cn(order.paymentSummary.balance > 0 ? 'text-rose-700' : 'text-emerald-700')}>
                     ₹{order.paymentSummary.balance}
                   </span>
@@ -596,26 +596,26 @@ export default function OrderDetailAdminPage() {
             </div>
 
             {/* Staff Assignments */}
-            <div className="rounded-lg border border-black/10 bg-cream p-6">
-              <div className="flex justify-between items-center mb-4 border-b border-black/5 pb-2">
-                <h3 className="font-heading text-lg text-black">Staff assignments</h3>
+            <div className="rounded-lg border border-line bg-surface-raised p-6">
+              <div className="flex justify-between items-center mb-4 border-b border-line pb-2">
+                <h3 className="font-heading text-lg text-ink">Staff assignments</h3>
                 <button
                   type="button"
                   onClick={() => setStaffModalOpen(true)}
-                  className="text-xs font-semibold text-black hover:underline uppercase tracking-wider"
+                  className="text-xs font-semibold text-ink hover:underline uppercase tracking-wider"
                 >
                   Manage
                 </button>
               </div>
 
               {order.assignedStaff.length === 0 ? (
-                <p className="text-xs text-black/45 text-center py-3">No staff assigned to this order.</p>
+                <p className="text-xs text-ink/45 text-center py-3">No staff assigned to this order.</p>
               ) : (
                 <div className="space-y-2">
                   {order.assignedStaff.map((staff, idx) => (
-                    <div key={idx} className="flex justify-between items-center p-2 border border-black/5 bg-white/40 rounded text-xs">
-                      <span className="font-medium text-black">{staff.name}</span>
-                      <span className="text-[10px] uppercase font-semibold text-black/50 tracking-wider">
+                    <div key={idx} className="flex justify-between items-center p-2 border border-line bg-white/40 rounded text-xs">
+                      <span className="font-medium text-ink">{staff.name}</span>
+                      <span className="text-[10px] uppercase font-semibold text-ink/50 tracking-wider">
                         {staff.role}
                       </span>
                     </div>

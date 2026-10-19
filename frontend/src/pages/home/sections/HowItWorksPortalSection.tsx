@@ -38,23 +38,23 @@ export function HowItWorksPortalSection() {
         {steps.map((step, i) => (
           <motion.li
             key={step.title}
-            className="border-t border-black/15 pt-5"
+            className="border-t border-line pt-5"
             initial={reduced ? false : { opacity: 0, y: 12 }}
             whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-40px' }}
             transition={{ duration: 0.45, delay: i * 0.06 }}
           >
-            <p className="text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-black/40">
+            <p className="text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-ink/40">
               Step {i + 1}
             </p>
-            <h3 className="mt-2 font-heading text-2xl text-black">{step.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-black/65">{step.copy}</p>
+            <h3 className="mt-2 font-heading text-2xl text-ink">{step.title}</h3>
+            <p className="mt-2 text-sm leading-relaxed text-ink/65">{step.copy}</p>
           </motion.li>
         ))}
       </ol>
-      <p className="mt-10 text-center text-sm text-black/55">
+      <p className="mt-10 text-center text-sm text-ink/55">
         Already have a Reference ID?{' '}
-        <Link to="/portal/activate" className="font-medium text-black underline underline-offset-2">
+        <Link to="/portal/activate" className="font-medium text-ink underline underline-offset-2">
           Activate portal
         </Link>
       </p>

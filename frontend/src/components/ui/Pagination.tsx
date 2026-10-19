@@ -24,7 +24,7 @@ export function Pagination({ page, totalPages, onPageChange, className }: Pagina
         disabled={page <= 1}
         onClick={() => onPageChange(page - 1)}
         aria-label="Previous page"
-        className="!text-black !border-black/20 hover:!border-gold"
+        className="text-ink border-line hover:border-gold"
       >
         Prev
       </Button>
@@ -50,7 +50,7 @@ export function Pagination({ page, totalPages, onPageChange, className }: Pagina
         disabled={page >= totalPages}
         onClick={() => onPageChange(page + 1)}
         aria-label="Next page"
-        className="!text-black !border-black/20 hover:!border-gold"
+        className="text-ink border-line hover:border-gold"
       >
         Next
       </Button>

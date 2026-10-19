@@ -28,8 +28,7 @@ export default function ProfileAdminPage() {
         {/* Compact Modern Header */}
         <div className="flex flex-col gap-1">
           <h1
-            className="font-heading text-xl font-bold tracking-tight sm:text-2xl"
-            style={{ color: 'var(--admin-text, #f3f4f6)' }}
+            className="font-heading text-xl font-bold tracking-tight sm:text-2xl text-ink"
           >
             Administrator Profile & Security
           </h1>

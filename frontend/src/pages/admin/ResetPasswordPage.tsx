@@ -62,10 +62,10 @@ export default function ResetPasswordPage() {
 
   if (!token) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[var(--admin-bg)] px-6 text-center">
+      <div className="admin-shell flex min-h-screen items-center justify-center bg-surface px-6 text-center">
         <div className="max-w-md">
           <h1 className="font-heading text-2xl text-gold">Invalid reset link</h1>
-          <p className="mt-3 text-sm text-cream/60">
+          <p className="mt-3 text-sm text-ink-inverse/60">
             This link is missing its token. Request a new one to continue.
           </p>
           <Link
@@ -82,18 +82,18 @@ export default function ResetPasswordPage() {
   return (
     <>
       <PageMeta {...staticPageMeta.admin} path="/admin/reset-password" title="Set New Password" />
-      <div className="flex min-h-screen items-center justify-center bg-[var(--admin-bg)] px-6 py-16">
+      <div className="admin-shell flex min-h-screen items-center justify-center bg-surface px-6 py-16">
         <div className="w-full max-w-md">
           <p className="font-heading text-[0.62rem] uppercase tracking-[0.42em] text-gold/85">
             Kadamba Studio · Kurnool
           </p>
           <h1 className="mt-4 font-heading text-3xl text-gold">Set a new password</h1>
-          <p className="mt-3 text-sm leading-relaxed text-cream/60">
+          <p className="mt-3 text-sm leading-relaxed text-ink-inverse/60">
             Choose a strong password. Signing in elsewhere will require the new password.
           </p>
 
           <form onSubmit={onSubmit} className="mt-8 space-y-5" noValidate>
-            <div className="[&_label]:text-cream/80">
+            <div className="[&_label]:text-ink-inverse/80">
               <Input
                 label="New password"
                 type="password"
@@ -104,7 +104,7 @@ export default function ResetPasswordPage() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <div className="[&_label]:text-cream/80">
+            <div className="[&_label]:text-ink-inverse/80">
               <Input
                 label="Confirm new password"
                 type="password"
@@ -116,7 +116,7 @@ export default function ResetPasswordPage() {
               />
             </div>
 
-            <ul className="space-y-1.5 text-xs text-cream/55">
+            <ul className="space-y-1.5 text-xs text-ink-inverse/55">
               <li className={checks.length ? 'text-emerald-400' : ''}>
                 {checks.length ? '✓' : '•'} At least 10 characters
               </li>

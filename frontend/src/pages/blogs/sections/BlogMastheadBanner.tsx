@@ -17,7 +17,7 @@ export function BlogMastheadBanner({ post }: BlogMastheadBannerProps) {
 
   return (
     <section
-      className="relative isolate w-full overflow-hidden bg-black text-cream"
+      className="relative isolate w-full overflow-hidden bg-black text-ink-inverse"
       aria-label={post.title}
     >
       <div className="relative min-h-[min(58svh,620px)] w-full md:min-h-[min(64svh,700px)]">
@@ -54,7 +54,7 @@ export function BlogMastheadBanner({ post }: BlogMastheadBannerProps) {
             }}
           >
             <nav aria-label="Breadcrumb" className="mb-5">
-              <ol className="flex flex-wrap items-center gap-2 text-[0.65rem] uppercase tracking-[0.22em] text-cream/55">
+              <ol className="flex flex-wrap items-center gap-2 text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/55">
                 <li>
                   <Link to="/blogs" className="transition-colors hover:text-gold">
                     Journal
@@ -65,7 +65,7 @@ export function BlogMastheadBanner({ post }: BlogMastheadBannerProps) {
               </ol>
             </nav>
 
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.65rem] uppercase tracking-[0.24em] text-cream/70">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.65rem] uppercase tracking-[0.24em] text-ink-inverse/70">
               <time dateTime={post.date}>{formatBlogDate(post.date)}</time>
               <span aria-hidden>·</span>
               <span>{post.readMinutes} min read</span>
@@ -73,10 +73,10 @@ export function BlogMastheadBanner({ post }: BlogMastheadBannerProps) {
               <span>{post.author}</span>
             </div>
 
-            <h1 className="mt-4 font-heading text-3xl font-medium leading-tight text-cream sm:text-4xl md:text-[2.75rem]">
+            <h1 className="mt-4 font-heading text-3xl font-medium leading-tight text-ink-inverse sm:text-4xl md:text-[2.75rem]">
               {post.title}
             </h1>
-            <p className="mt-4 max-w-2xl text-base leading-relaxed text-cream/80 md:text-lg">
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-inverse/80 md:text-lg">
               {post.excerpt}
             </p>
           </motion.div>

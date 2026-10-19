@@ -28,7 +28,7 @@ export function ValuesSection() {
           <motion.li key={item.id} variants={reduced ? undefined : fadeUp}>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">Kadamba</p>
             <h3 className="mt-3 font-heading text-2xl leading-snug">{item.title}</h3>
-            <p className="mt-3 text-base leading-relaxed text-black/70">{item.description}</p>
+            <p className="mt-3 text-base leading-relaxed text-ink/70">{item.description}</p>
           </motion.li>
         ))}
       </motion.ul>

@@ -47,14 +47,9 @@ export function ProfileSecurityCard({ onUpdatePassword }: ProfileSecurityCardPro
 
   return (
     <div
-      className="rounded-2xl border p-6 shadow-sm transition-colors text-xs"
-      style={{
-        backgroundColor: 'var(--admin-card, #141b26)',
-        borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-        color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-      }}
+      className="rounded-2xl border p-6 shadow-sm transition-colors text-xs bg-surface-raised border-line text-ink-raised"
     >
-      <div className="border-b pb-4 mb-5" style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}>
+      <div className="border-b pb-4 mb-5 border-line">
         <h3 className="font-heading text-base font-bold tracking-wide">
           Security & Access Key
         </h3>
@@ -75,12 +70,7 @@ export function ProfileSecurityCard({ onUpdatePassword }: ProfileSecurityCardPro
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
             placeholder="••••••••••••"
-            className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)] transition"
-            style={{
-              backgroundColor: 'rgba(128, 128, 128, 0.05)',
-              borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-              color: 'inherit',
-            }}
+            className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition bg-surface-sunken border-line"
           />
         </div>
 
@@ -96,12 +86,7 @@ export function ProfileSecurityCard({ onUpdatePassword }: ProfileSecurityCardPro
               value={nextPassword}
               onChange={(e) => setNextPassword(e.target.value)}
               placeholder="Minimum 8 characters"
-              className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)] transition"
-              style={{
-                backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition bg-surface-sunken border-line"
             />
           </div>
 
@@ -116,23 +101,14 @@ export function ProfileSecurityCard({ onUpdatePassword }: ProfileSecurityCardPro
               value={confirm}
               onChange={(e) => setConfirm(e.target.value)}
               placeholder="Re-enter new password"
-              className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)] transition"
-              style={{
-                backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition bg-surface-sunken border-line"
             />
           </div>
         </div>
 
         {/* Security Checklist */}
         <div
-          className="rounded-xl border p-3.5 space-y-1.5"
-          style={{
-            borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))',
-            backgroundColor: 'rgba(128, 128, 128, 0.04)',
-          }}
+          className="rounded-xl border p-3.5 space-y-1.5 border-line bg-surface-sunken"
         >
           <span className="text-[10px] uppercase font-bold tracking-wider opacity-60 block">
             Password Policy Requirements:
@@ -155,10 +131,7 @@ export function ProfileSecurityCard({ onUpdatePassword }: ProfileSecurityCardPro
           <button
             type="submit"
             disabled={saving}
-            className="rounded-xl px-5 py-2.5 text-xs font-bold border hover:bg-current/[0.05] transition disabled:opacity-50 cursor-pointer"
-            style={{
-              borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-            }}
+            className="rounded-xl px-5 py-2.5 text-xs font-bold border hover:bg-current/[0.05] transition disabled:opacity-50 cursor-pointer border-line"
           >
             {saving ? 'Updating Credentials...' : 'Update Password'}
           </button>

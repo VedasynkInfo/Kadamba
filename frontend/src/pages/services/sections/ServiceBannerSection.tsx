@@ -18,7 +18,7 @@ export function ServiceBannerSection({ service }: ServiceBannerSectionProps) {
 
   return (
     <section
-      className="relative isolate w-full overflow-hidden bg-black text-cream"
+      className="relative isolate w-full overflow-hidden bg-black text-ink-inverse"
       aria-label={`${service.title} at Kadamba's Designer Studio`}
     >
       <div className="relative min-h-[min(90svh,900px)] w-full md:min-h-[calc(100svh-4.25rem)]">
@@ -46,10 +46,7 @@ export function ServiceBannerSection({ service }: ServiceBannerSectionProps) {
             aria-hidden
           />
           <div
-            className="absolute inset-0 opacity-[0.06]"
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='none' stroke='%23FFD700' stroke-width='0.6'/%3E%3C/svg%3E")`,
-            }}
+            className="absolute inset-0 opacity-[0.06] text-gold pattern-lattice"
             aria-hidden
           />
         </motion.div>
@@ -79,11 +76,11 @@ export function ServiceBannerSection({ service }: ServiceBannerSectionProps) {
               Kadamba
             </p>
 
-            <h1 className="mt-4 font-heading text-2xl font-medium text-cream sm:text-3xl md:text-4xl">
+            <h1 className="mt-4 font-heading text-2xl font-medium text-ink-inverse sm:text-3xl md:text-4xl">
               {service.title}
             </h1>
-            <p className="text-lede mt-4 text-cream/85">{service.summary}</p>
-            <p className="mt-4 font-heading text-xl text-cream">
+            <p className="text-lede mt-4 text-ink-inverse/85">{service.summary}</p>
+            <p className="mt-4 font-heading text-xl text-ink-inverse">
               From <span className="text-gold">{service.pricing.startingFrom}</span>
             </p>
 
@@ -98,7 +95,7 @@ export function ServiceBannerSection({ service }: ServiceBannerSectionProps) {
               <Button
                 variant="secondary"
                 size="lg"
-                className="!text-cream"
+                className="text-ink-inverse"
                 onClick={() => navigate('/services')}
               >
                 All services

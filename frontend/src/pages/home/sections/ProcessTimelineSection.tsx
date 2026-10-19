@@ -35,8 +35,8 @@ export function ProcessTimelineSection() {
               <span className="inline-flex size-10 items-center justify-center rounded-full border border-gold/50 bg-black font-heading text-sm text-gold">
                 {step.step}
               </span>
-              <h3 className="mt-4 font-heading text-xl text-cream">{step.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-cream/70">{step.description}</p>
+              <h3 className="mt-4 font-heading text-xl text-ink-inverse">{step.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-ink-inverse/70">{step.description}</p>
             </motion.li>
           ))}
         </motion.ol>

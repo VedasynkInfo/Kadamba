@@ -63,7 +63,7 @@ export function GalleryHeroSection() {
   return (
     <section
       ref={rootRef}
-      className="relative isolate w-full overflow-hidden bg-black text-cream"
+      className="relative isolate w-full overflow-hidden bg-black text-ink-inverse"
       aria-label="Gallery lookbook — Kadamba's Designer Studio"
     >
       <div className="relative min-h-[min(90svh,900px)] w-full md:min-h-[calc(100svh-4.25rem)]">
@@ -123,10 +123,10 @@ export function GalleryHeroSection() {
               delay: reduced ? 0 : 0.55,
             }}
           >
-            <h1 className="font-heading text-2xl font-medium text-cream sm:text-3xl md:text-4xl">
+            <h1 className="font-heading text-2xl font-medium text-ink-inverse sm:text-3xl md:text-4xl">
               {galleryHero.headline}
             </h1>
-            <p className="text-lede mt-4 text-cream/80">{galleryHero.copy}</p>
+            <p className="text-lede mt-4 text-ink-inverse/80">{galleryHero.copy}</p>
             <div className="mt-9 flex justify-center">
               <Button
                 variant="primary"

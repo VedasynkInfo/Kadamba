@@ -45,19 +45,19 @@ export default function PortalLoginPage() {
   return (
     <>
       <PageMeta title="Portal Login" description="Sign in to your Kadamba customer portal." path="/portal/login" />
-      <div className="grid min-h-screen bg-[#0c0a08] lg:grid-cols-[1.05fr_0.95fr]">
+      <div className="portal-shell grid min-h-screen bg-surface lg:grid-cols-[1.05fr_0.95fr]">
         <div
           className="relative hidden overflow-hidden lg:block"
           style={{
             backgroundImage:
-              'linear-gradient(120deg, rgba(12,10,8,0.55), rgba(12,10,8,0.85)), url(/media/placeholders/bridal.jpg)',
+              'linear-gradient(120deg, color-mix(in srgb, var(--color-espresso) 55%, transparent), color-mix(in srgb, var(--color-espresso) 85%, transparent)), url(/media/placeholders/bridal.jpg)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
         >
           <div className="absolute inset-x-0 bottom-0 p-10">
             <p className="font-heading text-3xl text-gold">{brand.name}</p>
-            <p className="mt-2 max-w-sm text-sm text-cream/70">{brand.tagline}</p>
+            <p className="mt-2 max-w-sm text-sm text-ink-inverse/70">{brand.tagline}</p>
           </div>
         </div>
 
@@ -68,8 +68,8 @@ export default function PortalLoginPage() {
             className="mx-auto w-full max-w-md"
           >
             <p className="text-[0.62rem] uppercase tracking-[0.4em] text-gold/80">Customer portal</p>
-            <h1 className="mt-3 font-heading text-3xl text-cream">Sign in</h1>
-            <p className="mt-2 text-sm text-cream/60">
+            <h1 className="mt-3 font-heading text-3xl text-ink-inverse">Sign in</h1>
+            <p className="mt-2 text-sm text-ink-inverse/60">
               After your order is confirmed, activate with your Reference ID, then sign in here.
             </p>
 
@@ -96,15 +96,15 @@ export default function PortalLoginPage() {
               </Button>
             </form>
 
-            <p className="mt-6 text-sm text-cream/55">
+            <p className="mt-6 text-sm text-ink-inverse/55">
               First time?{' '}
               <Link to="/portal/activate" className="text-gold hover:underline">
                 Activate with Reference ID
               </Link>
             </p>
-            <p className="mt-3 text-sm text-cream/45">
+            <p className="mt-3 text-sm text-ink-inverse/45">
               Need help ordering?{' '}
-              <Link to="/request-service" className="text-cream/80 hover:underline">
+              <Link to="/request-service" className="text-ink-inverse/80 hover:underline">
                 Enquire without login
               </Link>
             </p>

@@ -120,8 +120,7 @@ export default function SettingsAdminPage() {
 
         {/* Tab Navigation */}
         <div
-          className="flex border-b text-xs font-semibold overflow-x-auto"
-          style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))' }}
+          className="flex border-b text-xs font-semibold overflow-x-auto border-line"
         >
           {TABS.map((t) => {
             const isActive = tab === t.id;
@@ -133,7 +132,7 @@ export default function SettingsAdminPage() {
                 className={cn(
                   'flex items-center gap-2 py-3 px-4 border-b-2 whitespace-nowrap transition cursor-pointer',
                   isActive
-                    ? 'border-[var(--admin-primary,#b59410)] text-[var(--admin-primary,#b59410)] font-bold'
+                    ? 'border-brand text-brand font-bold'
                     : 'border-transparent opacity-65 hover:opacity-100',
                 )}
               >

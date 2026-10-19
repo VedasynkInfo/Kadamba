@@ -296,23 +296,23 @@ export function RequestFormSection() {
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
         >
           <p className="font-heading text-sm uppercase tracking-[0.28em] text-gold">Kadamba</p>
-          <h2 className="mt-4 font-heading text-3xl text-black md:text-4xl">{formCopy.successTitle}</h2>
-          <p className="text-lede mt-4 text-black/75">{formCopy.successBody}</p>
+          <h2 className="mt-4 font-heading text-3xl text-ink md:text-4xl">{formCopy.successTitle}</h2>
+          <p className="text-lede mt-4 text-ink/75">{formCopy.successBody}</p>
           {submittedOrderNumber ? (
-            <p className="mt-4 text-sm text-black/70">
+            <p className="mt-4 text-sm text-ink/70">
               Your enquiry is registered as{' '}
               <span className="font-heading text-gold">Order #{submittedOrderNumber}</span>. The
               boutique will confirm and share a Reference ID when ready.
             </p>
           ) : null}
-          <p className="mt-6 rounded-sm border border-black/10 bg-black/[0.03] px-4 py-3 text-sm text-black/70">
+          <p className="mt-6 rounded-sm border border-line bg-black/[0.03] px-4 py-3 text-sm text-ink/70">
             After confirmation you&apos;ll receive a <strong>Reference ID</strong> to{' '}
-            <a href="/portal/activate" className="underline decoration-gold/50 underline-offset-2 hover:text-black">
+            <a href="/portal/activate" className="underline decoration-gold/50 underline-offset-2 hover:text-ink">
               activate your customer portal
             </a>{' '}
             — track orders, measurements, and chat with the boutique.
           </p>
-          <p className="mt-8 text-sm text-black/60">{formCopy.successWhatsApp}</p>
+          <p className="mt-8 text-sm text-ink/60">{formCopy.successWhatsApp}</p>
           <div className="mt-4 flex flex-wrap justify-center gap-3">
             <Button
               variant="primary"
@@ -362,7 +362,7 @@ export function RequestFormSection() {
                   Please message the studio on{' '}
                   <a
                     href={whatsappHref()}
-                    className="underline decoration-gold/50 underline-offset-2 hover:text-black"
+                    className="underline decoration-gold/50 underline-offset-2 hover:text-ink"
                   >
                     WhatsApp
                   </a>{' '}
@@ -377,7 +377,7 @@ export function RequestFormSection() {
   }
 
   return (
-    <Section id="request-form" tone="light" className="scroll-mt-24 border-t border-black/8 py-16 md:py-24">
+    <Section id="request-form" tone="light" className="scroll-mt-24 border-t border-line/8 py-16 md:py-24">
       <div className="mx-auto max-w-2xl">
         <motion.div
           initial={reduced ? false : 'hidden'}
@@ -396,10 +396,10 @@ export function RequestFormSection() {
                 key={s.id}
                 className={
                   i === stepIndex
-                    ? 'text-sm font-medium text-black'
+                    ? 'text-sm font-medium text-ink'
                     : i < stepIndex
-                      ? 'text-sm text-black/55'
-                      : 'text-sm text-black/35'
+                      ? 'text-sm text-ink/55'
+                      : 'text-sm text-ink/35'
                 }
               >
                 <span className="font-heading text-gold">{String(i + 1).padStart(2, '0')}</span>
@@ -550,9 +550,9 @@ export function RequestFormSection() {
                     onChange={(e) => update('message', e.target.value)}
                   />
                   <div>
-                    <label htmlFor={fileInputId} className="text-sm font-medium text-black">
+                    <label htmlFor={fileInputId} className="text-sm font-medium text-ink">
                       Inspiration images
-                      <span className="ml-1 font-normal text-black/50">
+                      <span className="ml-1 font-normal text-ink/50">
                         (optional, up to {formCopy.maxImages})
                       </span>
                     </label>
@@ -561,7 +561,7 @@ export function RequestFormSection() {
                       type="file"
                       accept="image/*"
                       multiple
-                      className="mt-2 block w-full text-sm text-black/70 file:mr-3 file:rounded-md file:border-0 file:bg-gold file:px-3 file:py-2 file:text-sm file:font-medium file:text-black"
+                      className="mt-2 block w-full text-sm text-ink/70 file:mr-3 file:rounded-md file:border-0 file:bg-gold file:px-3 file:py-2 file:text-sm file:font-medium file:text-ink"
                       onChange={onPickImages}
                     />
                     {errors.images ? (
@@ -581,7 +581,7 @@ export function RequestFormSection() {
                             />
                             <button
                               type="button"
-                              className="absolute right-1.5 top-1.5 rounded bg-black/70 px-2 py-0.5 text-xs text-cream"
+                              className="absolute right-1.5 top-1.5 rounded bg-black/70 px-2 py-0.5 text-xs text-ink-inverse"
                               onClick={() => removeImage(img.id)}
                             >
                               Remove
@@ -595,7 +595,7 @@ export function RequestFormSection() {
               ) : null}
 
               {stepId === 'review' ? (
-                <dl className="space-y-4 border-y border-black/10 py-6 text-sm text-black/80">
+                <dl className="space-y-4 border-y border-line py-6 text-sm text-ink/80">
                   <ReviewRow label="Name" value={form.name} />
                   <ReviewRow label="Phone" value={form.phone} />
                   <ReviewRow label="Email" value={form.email} />
@@ -638,7 +638,7 @@ export function RequestFormSection() {
           </div>
         </form>
 
-        <p className="mt-12 text-center text-xs uppercase tracking-[0.22em] text-black/45">
+        <p className="mt-12 text-center text-xs uppercase tracking-[0.22em] text-ink/45">
           {formCopy.trustLine}
         </p>
       </div>
@@ -649,8 +649,8 @@ export function RequestFormSection() {
 function ReviewRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="grid gap-1 sm:grid-cols-[8rem_1fr] sm:gap-4">
-      <dt className="font-medium text-black">{label}</dt>
-      <dd className="whitespace-pre-wrap text-black/75">{value}</dd>
+      <dt className="font-medium text-ink">{label}</dt>
+      <dd className="whitespace-pre-wrap text-ink/75">{value}</dd>
     </div>
   );
 }

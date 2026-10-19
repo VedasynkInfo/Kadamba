@@ -302,9 +302,9 @@ export default function CustomerDetailAdminPage() {
   if (!customer) {
     return (
       <div className="mx-auto max-w-7xl px-4 py-16 text-center">
-        <h3 className="font-heading text-xl text-black">Client not found</h3>
-        <p className="text-black/55 text-xs mt-2">The requested client profile workspace could not be resolved.</p>
-        <Link to="/admin/customers" className="text-xs font-semibold hover:underline block mt-4 text-black">
+        <h3 className="font-heading text-xl text-ink">Client not found</h3>
+        <p className="text-ink/55 text-xs mt-2">The requested client profile workspace could not be resolved.</p>
+        <Link to="/admin/customers" className="text-xs font-semibold hover:underline block mt-4 text-ink">
           ← Back to customers directory
         </Link>
       </div>
@@ -326,18 +326,18 @@ export default function CustomerDetailAdminPage() {
 
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 md:px-10">
         {/* Header client info bar */}
-        <div className="rounded-lg border border-black/10 bg-cream p-6 mb-8 flex flex-wrap items-center justify-between gap-6">
+        <div className="rounded-lg border border-line bg-surface-raised p-6 mb-8 flex flex-wrap items-center justify-between gap-6">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <h2 className="font-heading text-2xl text-black">{customer.name}</h2>
+              <h2 className="font-heading text-2xl text-ink">{customer.name}</h2>
               {customer.tags?.map((t) => (
-                <span key={t} className="text-[9px] bg-gold/15 text-black border border-gold/30 px-2 py-0.5 rounded-sm uppercase tracking-wider font-semibold">
+                <span key={t} className="text-[9px] bg-gold/15 text-ink border border-gold/30 px-2 py-0.5 rounded-sm uppercase tracking-wider font-semibold">
                   {t}
                 </span>
               ))}
             </div>
-            <div className="flex flex-wrap items-center gap-4 text-xs text-black/60">
-              <a href={`tel:${customer.phone}`} className="hover:underline font-semibold text-black flex items-center gap-1">
+            <div className="flex flex-wrap items-center gap-4 text-xs text-ink/60">
+              <a href={`tel:${customer.phone}`} className="hover:underline font-semibold text-ink flex items-center gap-1">
                 📞 {customer.phone}
               </a>
               <a
@@ -348,8 +348,8 @@ export default function CustomerDetailAdminPage() {
               >
                 💬 WhatsApp
               </a>
-              {customer.email && <span className="text-black/45">· {customer.email}</span>}
-              {customer.address?.locality && <span className="text-black/45">· {customer.address.locality}</span>}
+              {customer.email && <span className="text-ink/45">· {customer.email}</span>}
+              {customer.address?.locality && <span className="text-ink/45">· {customer.address.locality}</span>}
             </div>
           </div>
 
@@ -364,7 +364,7 @@ export default function CustomerDetailAdminPage() {
         </div>
 
         {/* Tab Selector */}
-        <div className="flex border-b border-black/10 mb-8 overflow-x-auto">
+        <div className="flex border-b border-line mb-8 overflow-x-auto">
           {[
             { id: 'overview', label: 'Identity & Address' },
             { id: 'orders', label: `Order History (${customer.summary?.orderCount || 0})` },
@@ -377,8 +377,8 @@ export default function CustomerDetailAdminPage() {
               className={cn(
                 'px-6 py-3.5 text-xs font-semibold uppercase tracking-wider border-b-2 transition-all whitespace-nowrap',
                 activeTab === tab.id
-                  ? 'border-black text-black font-bold'
-                  : 'border-transparent text-black/45 hover:text-black hover:border-black/20',
+                  ? 'border-line text-ink font-bold'
+                  : 'border-transparent text-ink/45 hover:text-ink hover:border-line',
               )}
             >
               {tab.label}
@@ -395,9 +395,9 @@ export default function CustomerDetailAdminPage() {
             )}
 
             {activeTab === 'orders' && (
-              <div className="rounded-lg border border-black/10 bg-cream p-6 space-y-6">
-                <div className="flex justify-between items-center border-b border-black/5 pb-2">
-                  <h3 className="font-heading text-lg text-black">Customer order book</h3>
+              <div className="rounded-lg border border-line bg-surface-raised p-6 space-y-6">
+                <div className="flex justify-between items-center border-b border-line pb-2">
+                  <h3 className="font-heading text-lg text-ink">Customer order book</h3>
                   <Link to="/admin/orders">
                     <Button size="sm" variant="ghost">Place new order →</Button>
                   </Link>
@@ -406,12 +406,12 @@ export default function CustomerDetailAdminPage() {
                 {loadingOrders ? (
                   <div className="py-8 text-center"><Spinner size="sm" /></div>
                 ) : orders.length === 0 ? (
-                  <p className="text-xs text-black/45 text-center py-6">No orders registered for this customer yet.</p>
+                  <p className="text-xs text-ink/45 text-center py-6">No orders registered for this customer yet.</p>
                 ) : (
-                  <div className="overflow-x-auto border border-black/10 rounded overflow-hidden">
+                  <div className="overflow-x-auto border border-line rounded overflow-hidden">
                     <table className="w-full text-left border-collapse text-xs">
                       <thead>
-                        <tr className="border-b border-black/10 bg-black/5 text-[0.65rem] uppercase font-semibold text-black/50">
+                        <tr className="border-b border-line bg-surface-sunken text-[0.65rem] uppercase font-semibold text-ink/50">
                           <th className="p-3">Ref ID</th>
                           <th className="p-3">Order Description</th>
                           <th className="p-3">Status</th>
@@ -426,13 +426,13 @@ export default function CustomerDetailAdminPage() {
                             <td className="p-3 font-mono font-bold">
                               {order.referenceId || `Enq #${order.orderNumber}`}
                             </td>
-                            <td className="p-3 font-medium text-black max-w-[150px] truncate">{order.title}</td>
+                            <td className="p-3 font-medium text-ink max-w-[150px] truncate">{order.title}</td>
                             <td className="p-3">
-                              <span className="inline-block text-[9px] uppercase px-1.5 py-0.5 rounded bg-black/5 border border-black/10">
+                              <span className="inline-block text-[9px] uppercase px-1.5 py-0.5 rounded bg-surface-sunken border border-line">
                                 {order.status.replace('_', ' ')}
                               </span>
                             </td>
-                            <td className="p-3 text-black/60">
+                            <td className="p-3 text-ink/60">
                               {order.expectedDeliveryAt ? new Date(order.expectedDeliveryAt).toLocaleDateString('en-IN') : '—'}
                             </td>
                             <td className="p-3 text-right font-medium">
@@ -457,9 +457,9 @@ export default function CustomerDetailAdminPage() {
             )}
 
             {activeTab === 'measurements' && (
-              <div className="rounded-lg border border-black/10 bg-cream p-6 space-y-6">
-                <div className="flex justify-between items-center border-b border-black/5 pb-2">
-                  <h3 className="font-heading text-lg text-black">Linked fit cards</h3>
+              <div className="rounded-lg border border-line bg-surface-raised p-6 space-y-6">
+                <div className="flex justify-between items-center border-b border-line pb-2">
+                  <h3 className="font-heading text-lg text-ink">Linked fit cards</h3>
                   <Link to="/admin/measurements">
                     <Button size="sm" variant="ghost">New fit profile →</Button>
                   </Link>
@@ -468,25 +468,25 @@ export default function CustomerDetailAdminPage() {
                 {loadingMeasurements ? (
                   <div className="py-8 text-center"><Spinner size="sm" /></div>
                 ) : measurements.length === 0 ? (
-                  <p className="text-xs text-black/45 text-center py-6">No measurement profile records recorded yet.</p>
+                  <p className="text-xs text-ink/45 text-center py-6">No measurement profile records recorded yet.</p>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {measurements.map((m) => (
-                      <div key={m.id || m._id} className="p-4 border border-black/15 bg-white/40 rounded space-y-3 text-xs">
+                      <div key={m.id || m._id} className="p-4 border border-line bg-white/40 rounded space-y-3 text-xs">
                         <div className="flex justify-between items-start">
                           <div>
-                            <span className="font-bold text-black text-sm block">{m.profileName}</span>
-                            <span className="text-[10px] text-black/50 block mt-0.5 uppercase tracking-wider font-semibold">
+                            <span className="font-bold text-ink text-sm block">{m.profileName}</span>
+                            <span className="text-[10px] text-ink/50 block mt-0.5 uppercase tracking-wider font-semibold">
                               {m.productTypeCode}
                             </span>
                           </div>
-                          <span className="text-[9px] uppercase px-1.5 py-0.5 rounded border border-black/10 font-bold bg-black/5">
+                          <span className="text-[9px] uppercase px-1.5 py-0.5 rounded border border-line font-bold bg-surface-sunken">
                             {m.status}
                           </span>
                         </div>
-                        <div className="flex justify-between text-[10px] text-black/50 pt-2 border-t border-black/5">
+                        <div className="flex justify-between text-[10px] text-ink/50 pt-2 border-t border-line">
                           <span>Measured: {new Date(m.measuredAt || m.createdAt).toLocaleDateString('en-IN')}</span>
-                          <Link to="/admin/measurements" className="font-bold text-black hover:underline">
+                          <Link to="/admin/measurements" className="font-bold text-ink hover:underline">
                             Open fitting →
                           </Link>
                         </div>
@@ -498,8 +498,8 @@ export default function CustomerDetailAdminPage() {
             )}
 
             {activeTab === 'journal' && (
-              <div className="rounded-lg border border-black/10 bg-cream p-6 space-y-6">
-                <h3 className="font-heading text-lg text-black border-b border-black/5 pb-2">Timeline journal notes</h3>
+              <div className="rounded-lg border border-line bg-surface-raised p-6 space-y-6">
+                <h3 className="font-heading text-lg text-ink border-b border-line pb-2">Timeline journal notes</h3>
                 
                 {/* Pinned Reminders */}
                 {pinnedNotes.length > 0 && (
@@ -509,9 +509,9 @@ export default function CustomerDetailAdminPage() {
                     </span>
                     <div className="space-y-3.5">
                       {pinnedNotes.map((note, idx) => (
-                        <div key={idx} className="border-b border-black/5 pb-2 last:border-b-0 last:pb-0">
-                          <p className="text-black/85 font-medium whitespace-pre-wrap">{note.body}</p>
-                          <span className="text-[9px] text-black/45 block mt-1">
+                        <div key={idx} className="border-b border-line pb-2 last:border-b-0 last:pb-0">
+                          <p className="text-ink/85 font-medium whitespace-pre-wrap">{note.body}</p>
+                          <span className="text-[9px] text-ink/45 block mt-1">
                             By {note.createdBy} on {new Date(note.createdAt).toLocaleString('en-IN')}
                           </span>
                         </div>
@@ -528,10 +528,10 @@ export default function CustomerDetailAdminPage() {
                     required
                     value={noteBody}
                     onChange={(e) => setNoteBody(e.target.value)}
-                    className="bg-white"
+                    className="bg-surface-raised"
                   />
                   <div className="flex justify-between items-center">
-                    <label className="flex items-center gap-1.5 text-black/60 cursor-pointer">
+                    <label className="flex items-center gap-1.5 text-ink/60 cursor-pointer">
                       <input
                         type="checkbox"
                         checked={notePinned}
@@ -548,15 +548,15 @@ export default function CustomerDetailAdminPage() {
                 {/* Normal Notes feed */}
                 <div className="space-y-4">
                   {normalNotes.length === 0 && pinnedNotes.length === 0 ? (
-                    <p className="text-xs text-black/45 text-center py-4">No journal notes logged yet.</p>
+                    <p className="text-xs text-ink/45 text-center py-4">No journal notes logged yet.</p>
                   ) : (
                     [...normalNotes].reverse().map((note, idx) => (
-                      <div key={idx} className="p-3 bg-white/40 border border-black/5 rounded text-xs space-y-1.5">
-                        <div className="flex justify-between items-center text-[10px] text-black/40">
+                      <div key={idx} className="p-3 bg-white/40 border border-line rounded text-xs space-y-1.5">
+                        <div className="flex justify-between items-center text-[10px] text-ink/40">
                           <span className="font-semibold">{note.createdBy}</span>
                           <span>{new Date(note.createdAt).toLocaleString('en-IN')}</span>
                         </div>
-                        <p className="text-black/80 whitespace-pre-wrap">{note.body}</p>
+                        <p className="text-ink/80 whitespace-pre-wrap">{note.body}</p>
                       </div>
                     ))
                   )}
@@ -568,33 +568,33 @@ export default function CustomerDetailAdminPage() {
           {/* Right sidebar column (takes 1/3 width) */}
           <div className="space-y-8 text-xs">
             {/* Quick Summary Counts */}
-            <div className="rounded-lg border border-black/10 bg-cream p-6 space-y-4">
-              <h3 className="font-heading text-lg text-black border-b border-black/5 pb-2">Atelier ledger</h3>
+            <div className="rounded-lg border border-line bg-surface-raised p-6 space-y-4">
+              <h3 className="font-heading text-lg text-ink border-b border-line pb-2">Atelier ledger</h3>
               <div className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-black/55">Active Tailoring Orders</span>
-                  <span className="font-semibold text-black">{customer.summary?.activeOrderCount || 0} active</span>
+                  <span className="text-ink/55">Active Tailoring Orders</span>
+                  <span className="font-semibold text-ink">{customer.summary?.activeOrderCount || 0} active</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-black/55">Total Orders Placed</span>
-                  <span className="font-semibold text-black">{customer.summary?.orderCount || 0} jobs</span>
+                  <span className="text-ink/55">Total Orders Placed</span>
+                  <span className="font-semibold text-ink">{customer.summary?.orderCount || 0} jobs</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-black/55">Measurement Profiles</span>
-                  <span className="font-semibold text-black">{customer.summary?.measurementCount || 0} fit cards</span>
+                  <span className="text-ink/55">Measurement Profiles</span>
+                  <span className="font-semibold text-ink">{customer.summary?.measurementCount || 0} fit cards</span>
                 </div>
-                <div className="flex justify-between border-t border-black/10 pt-3">
-                  <span className="text-black/85 font-semibold">Total Revenue Spent</span>
+                <div className="flex justify-between border-t border-line pt-3">
+                  <span className="text-ink/85 font-semibold">Total Revenue Spent</span>
                   <span className="font-bold text-emerald-800">₹{customer.summary?.totalSpent || 0}</span>
                 </div>
               </div>
             </div>
 
             {/* Portal Link status */}
-            <div className="rounded-lg border border-black/10 bg-cream p-6 space-y-3">
-              <h3 className="font-heading text-lg text-black border-b border-black/5 pb-2">Client portal status</h3>
+            <div className="rounded-lg border border-line bg-surface-raised p-6 space-y-3">
+              <h3 className="font-heading text-lg text-ink border-b border-line pb-2">Client portal status</h3>
               <div>
-                <span className="text-black/45 block">Invitation Status</span>
+                <span className="text-ink/45 block">Invitation Status</span>
                 <span
                   className={cn(
                     'inline-flex items-center rounded-sm px-2 py-0.5 text-[9px] font-bold border uppercase tracking-wider mt-1.5',
@@ -609,31 +609,31 @@ export default function CustomerDetailAdminPage() {
               </div>
               {customer.portalUserId ? (
                 <div>
-                  <span className="text-black/45 block">Portal User ID</span>
-                  <span className="font-mono text-[10px] text-black mt-1 block">{customer.portalUserId}</span>
+                  <span className="text-ink/45 block">Portal User ID</span>
+                  <span className="font-mono text-[10px] text-ink mt-1 block">{customer.portalUserId}</span>
                 </div>
               ) : (
-                <p className="text-[10px] text-black/50 leading-relaxed mt-2 bg-black/5 p-2 rounded">
+                <p className="text-[10px] text-ink/50 leading-relaxed mt-2 bg-surface-sunken p-2 rounded">
                   Portal access enables the customer to track their orders, view measurements, and receive status reminders. Linked on checkout.
                 </p>
               )}
             </div>
 
-            <div className="rounded-lg border border-black/10 bg-cream p-6 space-y-3">
-              <h3 className="font-heading text-lg text-black border-b border-black/5 pb-2">Portal chat</h3>
+            <div className="rounded-lg border border-line bg-surface-raised p-6 space-y-3">
+              <h3 className="font-heading text-lg text-ink border-b border-line pb-2">Portal chat</h3>
               {loadingChat ? (
                 <Spinner size="sm" label="Loading chat" />
               ) : (
                 <div className="max-h-48 space-y-2 overflow-y-auto text-xs">
                   {portalChat.length === 0 ? (
-                    <p className="text-black/45">No portal messages yet.</p>
+                    <p className="text-ink/45">No portal messages yet.</p>
                   ) : (
                     portalChat.map((m) => (
-                      <div key={m.id} className="rounded border border-black/10 bg-white/60 px-2 py-1.5">
-                        <p className="text-[9px] uppercase tracking-wider text-black/40">
+                      <div key={m.id} className="rounded border border-line bg-white/60 px-2 py-1.5">
+                        <p className="text-[9px] uppercase tracking-wider text-ink/40">
                           {m.senderRole === 'customer' ? 'Customer' : 'Studio'}
                         </p>
-                        <p className="mt-0.5 text-black/80 whitespace-pre-wrap">{m.body}</p>
+                        <p className="mt-0.5 text-ink/80 whitespace-pre-wrap">{m.body}</p>
                       </div>
                     ))
                   )}

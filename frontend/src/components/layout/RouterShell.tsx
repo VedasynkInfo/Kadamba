@@ -34,7 +34,7 @@ export function RouterShell() {
 /** Shown while a route's lazy chunk downloads. */
 export function RouteFallback() {
   return (
-    <div className="flex min-h-[50vh] items-center justify-center bg-cream">
+    <div className="flex min-h-[50vh] items-center justify-center bg-surface">
       <Spinner size="lg" label="Loading page" />
     </div>
   );

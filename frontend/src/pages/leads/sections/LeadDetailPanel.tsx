@@ -63,7 +63,7 @@ export function LeadDetailPanel({
       <button
         type="button"
         onClick={() => navigate('/admin/leads/list')}
-        className="text-xs uppercase tracking-[0.22em] text-black/45 transition hover:text-black"
+        className="text-xs uppercase tracking-[0.22em] text-ink/45 transition hover:text-ink"
       >
         ← All leads
       </button>
@@ -77,8 +77,8 @@ export function LeadDetailPanel({
         <div>
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <h1 className="font-heading text-4xl text-black md:text-5xl">{lead.name}</h1>
-              <p className="mt-2 text-sm text-black/55">
+              <h1 className="font-heading text-4xl text-ink md:text-5xl">{lead.name}</h1>
+              <p className="mt-2 text-sm text-ink/55">
                 {lead.source} · Created {formatLeadDate(lead.createdAt)}
               </p>
             </div>
@@ -123,9 +123,9 @@ export function LeadDetailPanel({
                   : '—',
               ],
             ].map(([label, value]) => (
-              <div key={label} className="border-t border-black/10 pt-3">
-                <dt className="text-[0.65rem] uppercase tracking-[0.2em] text-black/40">{label}</dt>
-                <dd className="mt-1 text-base text-black/85">{value}</dd>
+              <div key={label} className="border-t border-line pt-3">
+                <dt className="text-[0.65rem] uppercase tracking-[0.2em] text-ink/40">{label}</dt>
+                <dd className="mt-1 text-base text-ink/85">{value}</dd>
               </div>
             ))}
           </dl>
@@ -157,9 +157,9 @@ export function LeadDetailPanel({
             </div>
           ) : null}
 
-          <div className="mt-8 border-t border-black/10 pt-6">
-            <p className="text-[0.65rem] uppercase tracking-[0.2em] text-black/40">Message</p>
-            <p className="mt-3 text-base leading-relaxed text-black/75">{lead.message}</p>
+          <div className="mt-8 border-t border-line pt-6">
+            <p className="text-[0.65rem] uppercase tracking-[0.2em] text-ink/40">Message</p>
+            <p className="mt-3 text-base leading-relaxed text-ink/75">{lead.message}</p>
           </div>
 
           <div className="mt-10 grid gap-4 sm:grid-cols-2">
@@ -184,7 +184,7 @@ export function LeadDetailPanel({
               <Button
                 type="button"
                 onClick={onConvertToOrder}
-                className="w-full bg-gold text-black hover:bg-gold/90 font-semibold cursor-pointer py-3"
+                className="w-full bg-gold text-ink hover:bg-gold/90 font-semibold cursor-pointer py-3"
               >
                 Convert to workshop order
               </Button>
@@ -193,28 +193,28 @@ export function LeadDetailPanel({
         </div>
 
         <div className="space-y-10">
-          <section className="rounded-lg border border-black/10 bg-black/[0.01] p-5">
+          <section className="rounded-lg border border-line bg-black/[0.01] p-5">
             <div className="flex items-center justify-between">
-              <h2 className="font-heading text-xl text-black">Follow-Up Schedule</h2>
+              <h2 className="font-heading text-xl text-ink">Follow-Up Schedule</h2>
               <span className="text-xs font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
                 {lead.followUps?.filter((f) => f.status === 'pending').length || 0} Pending
               </span>
             </div>
 
             {/* Schedule new follow up */}
-            <div className="mt-4 space-y-3 rounded border border-black/10 bg-white p-3">
-              <p className="text-xs font-bold uppercase tracking-wider text-black/60">Schedule Follow-Up Touchpoint</p>
+            <div className="mt-4 space-y-3 rounded border border-line bg-surface-raised p-3">
+              <p className="text-xs font-bold uppercase tracking-wider text-ink/60">Schedule Follow-Up Touchpoint</p>
               <div className="grid gap-3 sm:grid-cols-2">
                 <input
                   type="datetime-local"
                   value={followUpDate}
                   onChange={(e) => setFollowUpDate(e.target.value)}
-                  className="rounded border border-black/15 px-3 py-1.5 text-xs text-black"
+                  className="rounded border border-line px-3 py-1.5 text-xs text-ink"
                 />
                 <select
                   value={followUpType}
                   onChange={(e) => setFollowUpType(e.target.value as any)}
-                  className="rounded border border-black/15 px-3 py-1.5 text-xs text-black"
+                  className="rounded border border-line px-3 py-1.5 text-xs text-ink"
                 >
                   <option value="call">Phone Call</option>
                   <option value="whatsapp">WhatsApp Touchpoint</option>
@@ -227,7 +227,7 @@ export function LeadDetailPanel({
                 value={followUpNotes}
                 onChange={(e) => setFollowUpNotes(e.target.value)}
                 placeholder="Follow-up notes (e.g. Call to discuss wedding trousseau budget)"
-                className="w-full rounded border border-black/15 px-3 py-1.5 text-xs text-black"
+                className="w-full rounded border border-line px-3 py-1.5 text-xs text-ink"
               />
               <Button
                 type="button"
@@ -252,7 +252,7 @@ export function LeadDetailPanel({
             {/* List existing follow ups */}
             <div className="mt-4 space-y-2">
               {(lead.followUps || []).length === 0 ? (
-                <p className="text-xs text-black/45 py-2">No follow-ups scheduled yet.</p>
+                <p className="text-xs text-ink/45 py-2">No follow-ups scheduled yet.</p>
               ) : (
                 [...(lead.followUps || [])].reverse().map((fu) => (
                   <div
@@ -260,8 +260,8 @@ export function LeadDetailPanel({
                     className={cn(
                       'flex items-center justify-between gap-3 rounded border p-3 text-xs',
                       fu.status === 'completed'
-                        ? 'border-black/5 bg-black/[0.02] text-black/50'
-                        : 'border-amber-200 bg-amber-50/50 text-black',
+                        ? 'border-line bg-black/[0.02] text-ink/50'
+                        : 'border-amber-200 bg-amber-50/50 text-ink',
                     )}
                   >
                     <div>
@@ -284,14 +284,14 @@ export function LeadDetailPanel({
                           </span>
                         )}
                       </div>
-                      {fu.notes && <p className="mt-1 text-black/70">{fu.notes}</p>}
+                      {fu.notes && <p className="mt-1 text-ink/70">{fu.notes}</p>}
                     </div>
 
                     {fu.status === 'pending' && onCompleteFollowUp && (
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="border border-black/15 text-xs shrink-0"
+                        className="border border-line text-xs shrink-0"
                         onClick={() => onCompleteFollowUp(fu.id)}
                       >
                         Mark Done
@@ -304,7 +304,7 @@ export function LeadDetailPanel({
           </section>
 
           <section>
-            <h2 className="font-heading text-2xl text-black">Notes</h2>
+            <h2 className="font-heading text-2xl text-ink">Notes</h2>
             <form onSubmit={submitNote} className="mt-4 space-y-3">
               <Textarea
                 id="lead-note"
@@ -320,21 +320,21 @@ export function LeadDetailPanel({
             </form>
             <ul className="mt-6 list-none space-y-4">
               {[...lead.notes].reverse().map((item) => (
-                <li key={item.id} className="border-t border-black/10 pt-4">
-                  <p className="text-sm leading-relaxed text-black/80">{item.body}</p>
-                  <p className="mt-2 text-[0.65rem] uppercase tracking-[0.18em] text-black/40">
+                <li key={item.id} className="border-t border-line pt-4">
+                  <p className="text-sm leading-relaxed text-ink/80">{item.body}</p>
+                  <p className="mt-2 text-[0.65rem] uppercase tracking-[0.18em] text-ink/40">
                     {item.author} · {formatLeadDate(item.createdAt)}
                   </p>
                 </li>
               ))}
               {lead.notes.length === 0 ? (
-                <li className="text-sm text-black/45">No notes yet.</li>
+                <li className="text-sm text-ink/45">No notes yet.</li>
               ) : null}
             </ul>
           </section>
 
           <section>
-            <h2 className="font-heading text-2xl text-black">Timeline</h2>
+            <h2 className="font-heading text-2xl text-ink">Timeline</h2>
             <ol className="relative mt-6 list-none border-l border-gold/40 pl-6">
               {timeline.map((event) => (
                 <li key={event.id} className="relative pb-8 last:pb-0">
@@ -342,11 +342,11 @@ export function LeadDetailPanel({
                     className="absolute -left-[1.55rem] top-1 size-2.5 rounded-full bg-gold"
                     aria-hidden
                   />
-                  <p className="font-heading text-lg text-black">{event.label}</p>
+                  <p className="font-heading text-lg text-ink">{event.label}</p>
                   {event.detail ? (
-                    <p className="mt-1 text-sm text-black/60">{event.detail}</p>
+                    <p className="mt-1 text-sm text-ink/60">{event.detail}</p>
                   ) : null}
-                  <p className="mt-2 text-[0.65rem] uppercase tracking-[0.18em] text-black/40">
+                  <p className="mt-2 text-[0.65rem] uppercase tracking-[0.18em] text-ink/40">
                     {formatLeadDate(event.createdAt)}
                   </p>
                 </li>

@@ -26,9 +26,9 @@ export function ConfirmDialog({
   if (!open) return null;
 
   const variants = {
-    danger: 'bg-cream border-rose-200 text-black',
-    warning: 'bg-cream border-amber-200 text-black',
-    info: 'bg-cream border-black/15 text-black',
+    danger: 'bg-surface-sunken border-rose-200 text-ink',
+    warning: 'bg-surface-sunken border-amber-200 text-ink',
+    info: 'bg-surface-sunken border-line text-ink',
   };
 
   return (
@@ -44,17 +44,17 @@ export function ConfirmDialog({
         aria-labelledby="confirm-title"
         aria-describedby="confirm-description"
       >
-        <h2 id="confirm-title" className="font-heading text-lg text-black">
+        <h2 id="confirm-title" className="font-heading text-lg text-ink">
           {title}
         </h2>
-        <p id="confirm-description" className="mt-2 text-sm text-black/70">
+        <p id="confirm-description" className="mt-2 text-sm text-ink/70">
           {description}
         </p>
         <div className="mt-6 flex justify-end gap-3">
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-sm border border-black/15 px-4 py-2 text-sm font-medium transition hover:bg-black/5"
+            className="rounded-sm border border-line px-4 py-2 text-sm font-medium transition hover:bg-surface-sunken"
             disabled={isLoading}
           >
             {cancelLabel}
@@ -68,7 +68,7 @@ export function ConfirmDialog({
               'rounded-sm border px-4 py-2 text-sm font-medium transition',
               variant === 'danger'
                 ? 'border-rose-700 bg-rose-700 text-white hover:bg-rose-800'
-                : 'border-black bg-black text-white hover:bg-black/90',
+                : 'border-line bg-black text-white hover:bg-black/90',
             )}
             disabled={isLoading}
           >

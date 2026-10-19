@@ -37,8 +37,8 @@ export function Navbar() {
     <>
       <header
         className={cn(
-          'sticky top-0 z-40 border-b bg-black text-cream transition-shadow duration-300',
-          scrolled ? 'border-gold/30 shadow-[var(--shadow-soft)]' : 'border-transparent',
+          'sticky top-0 z-40 border-b bg-black text-ink-inverse transition-shadow duration-300',
+          scrolled ? 'border-gold/30 shadow-soft' : 'border-transparent',
         )}
       >
         <nav
@@ -70,7 +70,7 @@ export function Navbar() {
                   className={({ isActive }) =>
                     cn(
                       'transition-colors duration-200',
-                      isActive ? 'text-gold' : 'text-cream/80 hover:text-gold',
+                      isActive ? 'text-gold' : 'text-ink-inverse/80 hover:text-gold',
                     )
                   }
                 >
@@ -83,7 +83,7 @@ export function Navbar() {
           <Button
             variant="ghost"
             size="sm"
-            className="!text-cream hover:!bg-white/10 lg:hidden"
+            className="text-ink-inverse hover:bg-white/10 lg:hidden"
             onClick={() => setMenuOpen(true)}
             aria-label="Open menu"
           >
@@ -102,7 +102,7 @@ export function Navbar() {
                 className={({ isActive }) =>
                   cn(
                     'block rounded-md px-3 py-2.5 text-sm transition-colors',
-                    isActive ? 'bg-gold/10 text-gold' : 'text-cream/80 hover:text-gold',
+                    isActive ? 'bg-gold/10 text-gold' : 'text-ink-inverse/80 hover:text-gold',
                   )
                 }
               >

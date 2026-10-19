@@ -163,8 +163,7 @@ export default function PaymentsAdminPage() {
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1
-              className="font-heading text-xl font-bold tracking-tight sm:text-2xl"
-              style={{ color: 'var(--admin-text, #f3f4f6)' }}
+              className="font-heading text-xl font-bold tracking-tight sm:text-2xl text-ink"
             >
               Payments Desk
             </h1>
@@ -178,8 +177,7 @@ export default function PaymentsAdminPage() {
               type="button"
               onClick={() => void load()}
               disabled={loading}
-              className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold transition hover:bg-current/[0.05] active:scale-98 cursor-pointer"
-              style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
+              className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold transition hover:bg-current/[0.05] active:scale-98 cursor-pointer border-line"
             >
               <span className={loading ? 'animate-spin' : ''}>??</span>
               <span>Sync Receipts</span>

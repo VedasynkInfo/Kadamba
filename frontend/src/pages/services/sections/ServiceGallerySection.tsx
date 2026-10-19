@@ -56,7 +56,7 @@ export function ServiceGallerySection({ service }: ServiceGallerySectionProps) {
                 className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-90"
                 aria-hidden
               />
-              <span className="absolute inset-x-0 bottom-0 p-4 font-heading text-lg text-cream">
+              <span className="absolute inset-x-0 bottom-0 p-4 font-heading text-lg text-ink-inverse">
                 {item.title}
               </span>
             </button>

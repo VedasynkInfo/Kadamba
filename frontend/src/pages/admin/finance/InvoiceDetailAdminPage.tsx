@@ -45,7 +45,7 @@ export default function InvoiceDetailAdminPage() {
         <button
           type="button"
           onClick={() => navigate('/admin/invoices')}
-          className="text-xs uppercase tracking-[0.2em] text-black/45 transition hover:text-black"
+          className="text-xs uppercase tracking-[0.2em] text-ink/45 transition hover:text-ink"
         >
           ← All invoices
         </button>
@@ -53,7 +53,7 @@ export default function InvoiceDetailAdminPage() {
           {invoice ? (
             <Link
               to={`/admin/orders/${invoice.order.id}`}
-              className="inline-flex items-center border border-black/15 px-3 py-2 text-xs uppercase tracking-[0.14em] text-black/65 hover:border-gold hover:text-black"
+              className="inline-flex items-center border border-line px-3 py-2 text-xs uppercase tracking-[0.14em] text-ink/65 hover:border-gold hover:text-ink"
             >
               Open order
             </Link>
@@ -76,7 +76,7 @@ export default function InvoiceDetailAdminPage() {
             <Spinner label="Loading invoice" />
           </div>
         ) : error || !invoice ? (
-          <p className="py-16 text-center text-black/50">{error || 'Invoice not found'}</p>
+          <p className="py-16 text-center text-ink/50">{error || 'Invoice not found'}</p>
         ) : (
           <InvoiceDocument invoice={invoice} />
         )}

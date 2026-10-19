@@ -24,7 +24,7 @@ export function PortfolioStorySection({ project }: PortfolioStorySectionProps) {
         <SectionIntro title="The story" description={project.summary} />
         <div className="mt-10 max-w-2xl space-y-5">
           {project.story.map((paragraph) => (
-            <p key={paragraph.slice(0, 24)} className="text-base leading-relaxed text-black/75 md:text-lg">
+            <p key={paragraph.slice(0, 24)} className="text-base leading-relaxed text-ink/75 md:text-lg">
               {paragraph}
             </p>
           ))}
@@ -34,7 +34,7 @@ export function PortfolioStorySection({ project }: PortfolioStorySectionProps) {
             {project.tags.map((tag) => (
               <li
                 key={tag}
-                className="border border-black/12 px-3 py-1.5 text-[0.65rem] uppercase tracking-[0.2em] text-black/55"
+                className="border border-line/12 px-3 py-1.5 text-[0.65rem] uppercase tracking-[0.2em] text-ink/55"
               >
                 {tag}
               </li>

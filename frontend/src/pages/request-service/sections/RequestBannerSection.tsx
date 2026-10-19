@@ -17,7 +17,7 @@ export function RequestBannerSection() {
 
   return (
     <section
-      className="relative isolate w-full overflow-hidden bg-[#0c0a08] text-cream"
+      className="relative isolate w-full overflow-hidden bg-surface-inverse text-ink-inverse"
       aria-label="Request a consultation at Kadamba's Designer Studio"
     >
       <div className="grid min-h-[min(52svh,520px)] w-full md:min-h-[min(56svh,560px)] md:grid-cols-2">
@@ -40,7 +40,7 @@ export function RequestBannerSection() {
             transition={{ duration: reduced ? 0 : 1.4, ease: [0.22, 1, 0.36, 1] }}
           />
           <div
-            className="absolute inset-0 bg-gradient-to-t from-[#0c0a08]/70 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:via-transparent md:to-[#0c0a08]/90"
+            className="absolute inset-0 bg-gradient-to-t from-surface-inverse/70 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:via-transparent md:to-surface-inverse/90"
             aria-hidden
           />
         </motion.div>
@@ -71,7 +71,7 @@ export function RequestBannerSection() {
           </motion.p>
 
           <motion.h1
-            className="relative mt-5 max-w-md font-heading text-3xl font-medium leading-snug text-cream sm:text-4xl md:text-[2.35rem]"
+            className="relative mt-5 max-w-md font-heading text-3xl font-medium leading-snug text-ink-inverse sm:text-4xl md:text-[2.35rem]"
             initial={reduced ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: reduced ? 0 : 0.28 }}
@@ -80,7 +80,7 @@ export function RequestBannerSection() {
           </motion.h1>
 
           <motion.p
-            className="relative mt-4 max-w-sm text-sm leading-relaxed text-cream/80 sm:text-base"
+            className="relative mt-4 max-w-sm text-sm leading-relaxed text-ink-inverse/80 sm:text-base"
             initial={reduced ? false : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: reduced ? 0 : 0.36 }}

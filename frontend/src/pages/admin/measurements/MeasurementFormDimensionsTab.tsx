@@ -30,10 +30,10 @@ export function MeasurementFormDimensionsTab({
   function renderFieldInput(def: MeasurementFieldDef) {
     const val = form.values?.[def.key];
     const baseInputClass =
-      'w-full rounded-lg border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)] transition';
+      'w-full rounded-lg border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition';
     const inputStyle = {
       backgroundColor: 'rgba(128, 128, 128, 0.05)',
-      borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
+      borderColor: 'var(--admin-border)',
       color: 'inherit',
     };
 
@@ -63,7 +63,7 @@ export function MeasurementFormDimensionsTab({
               type="checkbox"
               checked={val === true}
               onChange={(e) => onDimensionChange(def.key, e.target.checked)}
-              className="h-4 w-4 rounded accent-[var(--admin-primary,#b59410)] cursor-pointer"
+              className="h-4 w-4 rounded accent-brand cursor-pointer"
             />
             <span>{def.label}</span>
           </label>
@@ -74,12 +74,7 @@ export function MeasurementFormDimensionsTab({
             id={def.key}
             value={typeof val === 'string' ? val : ''}
             onChange={(e) => onDimensionChange(def.key, e.target.value)}
-            className={baseInputClass}
-            style={{
-              backgroundColor: 'var(--admin-card, #141b26)',
-              borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-              color: 'inherit',
-            }}
+            className={`${baseInputClass} bg-surface-raised border-line`}
           >
             <option value="">— Select Option —</option>
             {(def.options ?? []).map((opt) => (
@@ -107,8 +102,7 @@ export function MeasurementFormDimensionsTab({
   return (
     <div className="space-y-6">
       <div
-        className="flex items-center justify-between border-b pb-3"
-        style={{ borderColor: 'var(--admin-border, rgba(128,128,128,0.15))' }}
+        className="flex items-center justify-between border-b pb-3 border-line"
       >
         <div>
           <span className="text-xs font-bold tracking-wide">
@@ -118,7 +112,7 @@ export function MeasurementFormDimensionsTab({
             All dimensions recorded in {form.unit}. Maintain uniform tape tightness.
           </span>
         </div>
-        <span className="text-[10px] px-2 py-0.5 rounded font-mono font-bold bg-[var(--admin-primary,#b59410)]/15 text-[var(--admin-primary,#b59410)]">
+        <span className="text-[10px] px-2 py-0.5 rounded font-mono font-bold bg-brand/15 text-brand">
           {Object.keys(form.values).length} values logged
         </span>
       </div>
@@ -127,13 +121,9 @@ export function MeasurementFormDimensionsTab({
         Object.entries(groupedFields).map(([groupName, fields]) => (
           <fieldset
             key={groupName}
-            className="rounded-xl border p-4 space-y-3.5 transition"
-            style={{
-              borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))',
-              backgroundColor: 'rgba(128, 128, 128, 0.03)',
-            }}
+            className="rounded-xl border p-4 space-y-3.5 transition border-line bg-surface-sunken"
           >
-            <legend className="px-2 font-heading text-xs font-bold uppercase tracking-[0.14em] text-[var(--admin-primary,#b59410)]">
+            <legend className="px-2 font-heading text-xs font-bold uppercase tracking-[0.14em] text-brand">
               {groupName}
             </legend>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
@@ -163,11 +153,7 @@ export function MeasurementFormDimensionsTab({
         ))
       ) : (
         <div
-          className="rounded-xl border p-5 text-center space-y-2"
-          style={{
-            borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))',
-            backgroundColor: 'rgba(128, 128, 128, 0.03)',
-          }}
+          className="rounded-xl border p-5 text-center space-y-2 border-line bg-surface-sunken"
         >
           <p className="text-xs font-semibold">No custom template fields attached to this silhouette.</p>
           <p className="text-[11px] opacity-60">

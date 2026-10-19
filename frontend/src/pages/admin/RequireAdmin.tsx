@@ -25,9 +25,9 @@ export function RequireAdmin({ children }: { children: ReactNode }) {
 
   if (user.role !== 'admin' && user.role !== 'staff') {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[#0a0a0a] px-6 text-center text-cream">
+      <div className="admin-shell flex min-h-screen flex-col items-center justify-center gap-4 bg-surface px-6 text-center text-ink-inverse">
         <p className="font-heading text-2xl text-gold">Access limited</p>
-        <p className="max-w-sm text-sm text-cream/70">
+        <p className="max-w-sm text-sm text-ink-inverse/70">
           This console is for studio administrators only.
         </p>
         <a href="/" className="text-xs uppercase tracking-[0.2em] text-gold/80 hover:text-gold">
@@ -43,7 +43,7 @@ export function RequireAdmin({ children }: { children: ReactNode }) {
 /** Lightweight placeholder while the session is restored from the cookie. */
 export function AdminGateFallback() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a]">
+    <div className="admin-shell flex min-h-screen items-center justify-center bg-surface">
       <Spinner />
     </div>
   );

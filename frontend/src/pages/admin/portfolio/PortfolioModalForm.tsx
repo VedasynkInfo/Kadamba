@@ -57,18 +57,12 @@ export function PortfolioModalForm({
       aria-modal="true"
     >
       <div
-        className="relative w-full max-w-2xl rounded-2xl border shadow-2xl overflow-hidden animate-fade-in-up flex flex-col max-h-[90vh]"
-        style={{
-          backgroundColor: 'var(--admin-card, #141b26)',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-        }}
+        className="relative w-full max-w-2xl rounded-2xl border shadow-2xl overflow-hidden animate-fade-in-up flex flex-col max-h-[90vh] bg-surface-raised border-line text-ink-raised"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div
-          className="flex items-center justify-between border-b px-6 py-4"
-          style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))' }}
+          className="flex items-center justify-between border-b px-6 py-4 border-line"
         >
           <div>
             <h2 className="font-heading text-lg font-bold text-inherit">
@@ -82,8 +76,7 @@ export function PortfolioModalForm({
           <button
             type="button"
             onClick={onClose}
-            className="h-8 w-8 rounded-lg border flex items-center justify-center text-xs opacity-70 hover:opacity-100 hover:bg-current/[0.06] transition cursor-pointer"
-            style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))' }}
+            className="h-8 w-8 rounded-lg border flex items-center justify-center text-xs opacity-70 hover:opacity-100 hover:bg-current/[0.06] transition cursor-pointer border-line"
             aria-label="Close dialog"
           >
             ✕
@@ -92,8 +85,7 @@ export function PortfolioModalForm({
 
         {/* Tabs */}
         <div
-          className="flex border-b px-6 pt-2 gap-4 text-xs font-semibold"
-          style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}
+          className="flex border-b px-6 pt-2 gap-4 text-xs font-semibold border-line"
         >
           <button
             type="button"
@@ -101,7 +93,7 @@ export function PortfolioModalForm({
             className={cn(
               'pb-2.5 transition border-b-2 cursor-pointer',
               activeTab === 'info'
-                ? 'border-[var(--admin-primary,#b59410)] text-[var(--admin-primary,#b59410)]'
+                ? 'border-brand text-brand'
                 : 'border-transparent opacity-60 hover:opacity-100',
             )}
           >
@@ -114,7 +106,7 @@ export function PortfolioModalForm({
             className={cn(
               'pb-2.5 transition border-b-2 cursor-pointer',
               activeTab === 'story'
-                ? 'border-[var(--admin-primary,#b59410)] text-[var(--admin-primary,#b59410)]'
+                ? 'border-brand text-brand'
                 : 'border-transparent opacity-60 hover:opacity-100',
             )}
           >
@@ -127,7 +119,7 @@ export function PortfolioModalForm({
             className={cn(
               'pb-2.5 transition border-b-2 cursor-pointer',
               activeTab === 'seo'
-                ? 'border-[var(--admin-primary,#b59410)] text-[var(--admin-primary,#b59410)]'
+                ? 'border-brand text-brand'
                 : 'border-transparent opacity-60 hover:opacity-100',
             )}
           >
@@ -276,8 +268,7 @@ export function PortfolioModalForm({
 
         {/* Footer */}
         <div
-          className="flex items-center justify-between gap-3 border-t px-6 py-4"
-          style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))' }}
+          className="flex items-center justify-between gap-3 border-t px-6 py-4 border-line"
         >
           <div className="text-xs opacity-50">
             {form.title ? `Project: "${form.title}"` : 'Fill required fields (*)'}

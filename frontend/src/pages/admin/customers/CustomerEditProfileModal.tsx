@@ -40,7 +40,7 @@ export function CustomerEditProfileModal({
     <Modal open={open} onClose={onClose} title="Edit Client Profile">
       <form onSubmit={onSave} className="space-y-4 text-xs pb-4">
         <div>
-          <label className="block text-black/55 mb-1.5 font-semibold">Client Name *</label>
+          <label className="block text-ink/55 mb-1.5 font-semibold">Client Name *</label>
           <Input
             type="text"
             required
@@ -51,7 +51,7 @@ export function CustomerEditProfileModal({
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-black/55 mb-1.5 font-semibold">Primary Phone *</label>
+            <label className="block text-ink/55 mb-1.5 font-semibold">Primary Phone *</label>
             <Input
               type="tel"
               required
@@ -60,7 +60,7 @@ export function CustomerEditProfileModal({
             />
           </div>
           <div>
-            <label className="block text-black/55 mb-1.5 font-semibold">WhatsApp number</label>
+            <label className="block text-ink/55 mb-1.5 font-semibold">WhatsApp number</label>
             <Input
               type="tel"
               value={form.whatsapp}
@@ -71,7 +71,7 @@ export function CustomerEditProfileModal({
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-black/55 mb-1.5 font-semibold">Email address</label>
+            <label className="block text-ink/55 mb-1.5 font-semibold">Email address</label>
             <Input
               type="email"
               value={form.email}
@@ -79,11 +79,11 @@ export function CustomerEditProfileModal({
             />
           </div>
           <div>
-            <label className="block text-black/55 mb-1.5 font-semibold">Client source</label>
+            <label className="block text-ink/55 mb-1.5 font-semibold">Client source</label>
             <select
               value={form.source}
               onChange={(e) => setForm((f) => ({ ...f, source: e.target.value }))}
-              className="w-full rounded-md border border-black/15 bg-cream px-3 py-2 text-sm text-black focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
+              className="w-full rounded-md border border-line bg-surface-field px-3 py-2 text-sm text-ink focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
             >
               <option value="walk-in">Walk-in / Phone</option>
               <option value="instagram">Instagram</option>
@@ -95,7 +95,7 @@ export function CustomerEditProfileModal({
         </div>
 
         <div>
-          <label className="block text-black/55 mb-1.5 font-semibold">Address line 1</label>
+          <label className="block text-ink/55 mb-1.5 font-semibold">Address line 1</label>
           <Input
             type="text"
             value={form.line1}
@@ -103,7 +103,7 @@ export function CustomerEditProfileModal({
           />
         </div>
         <div>
-          <label className="block text-black/55 mb-1.5 font-semibold">Address line 2</label>
+          <label className="block text-ink/55 mb-1.5 font-semibold">Address line 2</label>
           <Input
             type="text"
             value={form.line2}
@@ -112,7 +112,7 @@ export function CustomerEditProfileModal({
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-black/55 mb-1.5 font-semibold">Landmark</label>
+            <label className="block text-ink/55 mb-1.5 font-semibold">Landmark</label>
             <Input
               type="text"
               value={form.landmark}
@@ -120,7 +120,7 @@ export function CustomerEditProfileModal({
             />
           </div>
           <div>
-            <label className="block text-black/55 mb-1.5 font-semibold">Locality / Area</label>
+            <label className="block text-ink/55 mb-1.5 font-semibold">Locality / Area</label>
             <Input
               type="text"
               value={form.locality}
@@ -130,7 +130,7 @@ export function CustomerEditProfileModal({
         </div>
         <div className="grid grid-cols-3 gap-3">
           <div>
-            <label className="block text-black/55 mb-1.5 font-semibold">City</label>
+            <label className="block text-ink/55 mb-1.5 font-semibold">City</label>
             <Input
               type="text"
               value={form.city}
@@ -138,7 +138,7 @@ export function CustomerEditProfileModal({
             />
           </div>
           <div>
-            <label className="block text-black/55 mb-1.5 font-semibold">State</label>
+            <label className="block text-ink/55 mb-1.5 font-semibold">State</label>
             <Input
               type="text"
               value={form.state}
@@ -146,7 +146,7 @@ export function CustomerEditProfileModal({
             />
           </div>
           <div>
-            <label className="block text-black/55 mb-1.5 font-semibold">Pincode</label>
+            <label className="block text-ink/55 mb-1.5 font-semibold">Pincode</label>
             <Input
               type="text"
               value={form.pincode}
@@ -157,24 +157,24 @@ export function CustomerEditProfileModal({
 
         <div className="grid grid-cols-3 gap-3 pt-2">
           <div>
-            <label className="block text-black/55 mb-1.5 font-semibold">Fit Unit</label>
+            <label className="block text-ink/55 mb-1.5 font-semibold">Fit Unit</label>
             <select
               value={form.preferredUnit}
               onChange={(e: any) =>
                 setForm((f) => ({ ...f, preferredUnit: e.target.value as 'in' | 'cm' }))
               }
-              className="w-full rounded-md border border-black/15 bg-cream px-3 py-2 text-sm text-black focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
+              className="w-full rounded-md border border-line bg-surface-field px-3 py-2 text-sm text-ink focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
             >
               <option value="in">Inches (in)</option>
               <option value="cm">Centimeters (cm)</option>
             </select>
           </div>
           <div>
-            <label className="block text-black/55 mb-1.5 font-semibold">Portal status</label>
+            <label className="block text-ink/55 mb-1.5 font-semibold">Portal status</label>
             <select
               value={form.portalStatus}
               onChange={(e) => setForm((f) => ({ ...f, portalStatus: e.target.value }))}
-              className="w-full rounded-md border border-black/15 bg-cream px-3 py-2 text-sm text-black focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
+              className="w-full rounded-md border border-line bg-surface-field px-3 py-2 text-sm text-ink focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
             >
               <option value="none">None</option>
               <option value="invited">Invited</option>
@@ -183,7 +183,7 @@ export function CustomerEditProfileModal({
             </select>
           </div>
           <div className="col-span-1">
-            <label className="block text-black/55 mb-1.5 font-semibold">Client tags</label>
+            <label className="block text-ink/55 mb-1.5 font-semibold">Client tags</label>
             <Input
               type="text"
               value={form.tags}
@@ -194,7 +194,7 @@ export function CustomerEditProfileModal({
         </div>
 
         <div>
-          <label className="block text-black/55 mb-1.5 font-semibold">Profile Notes summary</label>
+          <label className="block text-ink/55 mb-1.5 font-semibold">Profile Notes summary</label>
           <Input
             type="text"
             value={form.notes}
@@ -202,7 +202,7 @@ export function CustomerEditProfileModal({
           />
         </div>
 
-        <div className="flex gap-3 justify-end pt-3 border-t border-black/5">
+        <div className="flex gap-3 justify-end pt-3 border-t border-line">
           <Button variant="secondary" size="sm" onClick={onClose}>
             Cancel
           </Button>

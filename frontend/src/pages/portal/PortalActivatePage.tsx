@@ -73,17 +73,17 @@ export default function PortalActivatePage() {
   return (
     <>
       <PageMeta title="Activate Portal" description="Activate your Kadamba customer account with your Reference ID." path="/portal/activate" />
-      <div className="flex min-h-screen items-center justify-center bg-[#0c0a08] px-4 py-16">
+      <div className="portal-shell flex min-h-screen items-center justify-center bg-surface px-4 py-16">
         <motion.div
           initial={reduced ? false : { opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-md border border-gold/20 bg-black/50 p-8 backdrop-blur"
         >
           <p className="text-[0.62rem] uppercase tracking-[0.4em] text-gold/80">Activate account</p>
-          <h1 className="mt-3 font-heading text-3xl text-cream">
+          <h1 className="mt-3 font-heading text-3xl text-ink-inverse">
             {step === 'verify' ? 'Reference ID' : 'Set password'}
           </h1>
-          <p className="mt-2 text-sm text-cream/60">
+          <p className="mt-2 text-sm text-ink-inverse/60">
             {step === 'verify'
               ? 'Enter the Reference ID from your confirmation email, plus your registered email or mobile.'
               : `Hi ${customerName} — choose a password to open your portal.`}
@@ -98,7 +98,7 @@ export default function PortalActivatePage() {
                 placeholder="KDS-2026-0001"
                 required
               />
-              <p className="text-[0.7rem] text-cream/40">{refHint}</p>
+              <p className="text-[0.7rem] text-ink-inverse/40">{refHint}</p>
               <Input
                 label="Email or mobile"
                 value={emailOrMobile}
@@ -128,7 +128,7 @@ export default function PortalActivatePage() {
                 required
                 autoComplete="new-password"
               />
-              <p className="text-[0.7rem] text-cream/40">
+              <p className="text-[0.7rem] text-ink-inverse/40">
                 At least 8 characters, with a letter and a number.
               </p>
               {error ? <p className="text-sm text-rose-300">{error}</p> : null}
@@ -138,7 +138,7 @@ export default function PortalActivatePage() {
             </form>
           )}
 
-          <p className="mt-6 text-sm text-cream/55">
+          <p className="mt-6 text-sm text-ink-inverse/55">
             Already activated?{' '}
             <Link to="/portal/login" className="text-gold hover:underline">
               Sign in

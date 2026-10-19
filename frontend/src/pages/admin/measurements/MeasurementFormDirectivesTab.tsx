@@ -22,8 +22,7 @@ export function MeasurementFormDirectivesTab({
           {(form.referenceImages ?? []).map((url, idx) => (
             <div
               key={idx}
-              className="relative h-20 w-20 rounded-xl overflow-hidden border shadow-xs group"
-              style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
+              className="relative h-20 w-20 rounded-xl overflow-hidden border shadow-xs group border-line"
             >
               <OptimizedImage src={url} alt="Fitting Reference" sizes="80px" className="h-full w-full object-cover" />
               <button
@@ -66,12 +65,7 @@ export function MeasurementFormDirectivesTab({
           value={form.notes}
           onChange={(e) => onUpdateField('notes', e.target.value)}
           placeholder="e.g. Sloping left shoulder, deep back illusion net preference, padded bust cups with princess seam, 2-inch hem allowance..."
-          className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-          style={{
-            backgroundColor: 'rgba(128, 128, 128, 0.05)',
-            borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-            color: 'inherit',
-          }}
+          className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
         />
       </div>
 
@@ -85,12 +79,7 @@ export function MeasurementFormDirectivesTab({
           value={form.measuredBy}
           onChange={(e) => onUpdateField('measuredBy', e.target.value)}
           placeholder="e.g. Master Tailor Desk"
-          className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-          style={{
-            backgroundColor: 'rgba(128, 128, 128, 0.05)',
-            borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-            color: 'inherit',
-          }}
+          className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
         />
       </div>
     </div>

@@ -53,14 +53,9 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
     <div className="space-y-6 text-xs">
       {/* SMTP Transport Server Settings */}
       <div
-        className="rounded-2xl border p-5 shadow-xs space-y-4 transition-colors"
-        style={{
-          backgroundColor: 'var(--admin-card, #141b26)',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-        }}
+        className="rounded-2xl border p-5 shadow-xs space-y-4 transition-colors bg-surface-raised border-line text-ink-raised"
       >
-        <div className="border-b pb-3" style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}>
+        <div className="border-b pb-3 border-line">
           <h3 className="font-heading text-sm font-bold tracking-wide">SMTP Email Relay</h3>
           <p className="text-[10px] opacity-60 mt-0.5">
             Transport service used to deliver client consultations, invoice links, and tailor notifications
@@ -82,12 +77,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
                 }))
               }
               placeholder="smtp.gmail.com or smtp.sendgrid.net"
-              className="w-full rounded-xl border py-2 px-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-              style={{
-                backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-xl border py-2 px-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
             />
           </div>
 
@@ -105,12 +95,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
                 }))
               }
               placeholder="587"
-              className="w-full rounded-xl border py-2 px-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-              style={{
-                backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-xl border py-2 px-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
             />
           </div>
         </div>
@@ -130,12 +115,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
                 }))
               }
               placeholder="apikey or concierge@kadamba.com"
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-              style={{
-                backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
             />
           </div>
 
@@ -154,17 +134,12 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
                 }))
               }
               placeholder={cfg.passSet ? '••••••••••••' : 'Enter app password'}
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-              style={{
-                backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t" style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-line">
           <div className="space-y-1">
             <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">
               From Sender Name
@@ -179,12 +154,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
                 }))
               }
               placeholder="Kadamba's Designer Studio"
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-              style={{
-                backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
             />
           </div>
 
@@ -202,12 +172,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
                 }))
               }
               placeholder="notifications@kadambadesigner.com"
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-              style={{
-                backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
             />
           </div>
 
@@ -225,36 +190,25 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
                 }))
               }
               placeholder="owner@kadambadesigner.com"
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-              style={{
-                backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
             />
           </div>
         </div>
 
         {/* Live Test Mail Dispatcher */}
-        <div className="pt-3 border-t flex flex-col sm:flex-row items-center gap-3" style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}>
+        <div className="pt-3 border-t flex flex-col sm:flex-row items-center gap-3 border-line">
           <input
             type="email"
             value={testTo}
             onChange={(e) => setTestTo(e.target.value)}
             placeholder="Send verification test email to..."
-            className="flex-1 rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-            style={{
-              backgroundColor: 'rgba(128, 128, 128, 0.05)',
-              borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-              color: 'inherit',
-            }}
+            className="flex-1 rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
           />
           <button
             type="button"
             onClick={handleSendTest}
             disabled={testingEmail}
-            className="rounded-xl px-4 py-2 text-xs font-bold border hover:bg-current/[0.05] transition disabled:opacity-50 cursor-pointer"
-            style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
+            className="rounded-xl px-4 py-2 text-xs font-bold border hover:bg-current/[0.05] transition disabled:opacity-50 cursor-pointer border-line"
           >
             {testingEmail ? 'Sending Test...' : 'Send Test Email ↗'}
           </button>
@@ -263,14 +217,9 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
 
       {/* Transactional Notification Templates */}
       <div
-        className="rounded-2xl border p-5 shadow-xs space-y-4 transition-colors"
-        style={{
-          backgroundColor: 'var(--admin-card, #141b26)',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-        }}
+        className="rounded-2xl border p-5 shadow-xs space-y-4 transition-colors bg-surface-raised border-line text-ink-raised"
       >
-        <div className="border-b pb-3" style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}>
+        <div className="border-b pb-3 border-line">
           <h3 className="font-heading text-sm font-bold tracking-wide">Transactional Notification Templates</h3>
           <p className="text-[10px] opacity-60 mt-0.5">Customize client copy sent during the order lifecycle</p>
         </div>
@@ -282,18 +231,10 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
               <div
                 key={t.key}
                 onClick={() => setEditingTemplateKey(isEditing ? null : t.key)}
-                className="rounded-xl border p-3.5 cursor-pointer transition hover:border-[var(--admin-primary,#b59410)]"
-                style={{
-                  borderColor: isEditing
-                    ? 'var(--admin-primary, #b59410)'
-                    : 'var(--admin-border, rgba(128, 128, 128, 0.15))',
-                  backgroundColor: isEditing
-                    ? 'rgba(181, 148, 16, 0.06)'
-                    : 'rgba(128, 128, 128, 0.04)',
-                }}
+                className={`rounded-xl border p-3.5 cursor-pointer transition hover:border-brand ${isEditing ? 'border-brand bg-brand/[0.06]' : 'border-line bg-surface-sunken'}`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-[10px] uppercase font-bold text-[var(--admin-primary,#b59410)]">
+                  <span className="font-mono text-[10px] uppercase font-bold text-brand">
                     {t.key.replace(/_/g, ' ')}
                   </span>
                   <span className="text-[11px] opacity-60">{isEditing ? 'Close ▲' : 'Edit ▼'}</span>
@@ -307,11 +248,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
         {/* Active Template Editor */}
         {currentTemplate ? (
           <div
-            className="rounded-xl border p-4 space-y-3 mt-2"
-            style={{
-              backgroundColor: 'rgba(0, 0, 0, 0.2)',
-              borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))',
-            }}
+            className="rounded-xl border p-4 space-y-3 mt-2 bg-black/20 border-line"
           >
             <div className="space-y-1">
               <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">
@@ -329,12 +266,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
                     emailConfig: { ...cfg, templates: updated },
                   }));
                 }}
-                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-                style={{
-                  backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                  color: 'inherit',
-                }}
+                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
               />
             </div>
 
@@ -357,12 +289,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
                   }));
                 }}
                 placeholder="Template text. Supported placeholders: {{referenceId}}, {{clientName}}, {{totalAmount}}"
-                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-                style={{
-                  backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                  color: 'inherit',
-                }}
+                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
               />
             </div>
           </div>

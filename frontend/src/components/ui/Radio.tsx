@@ -33,13 +33,13 @@ export function RadioGroup({
 }: RadioGroupProps) {
   return (
     <fieldset className={cn('flex flex-col gap-2', className)}>
-      {label ? <legend className="mb-1 text-sm font-medium text-black">{label}</legend> : null}
+      {label ? <legend className="mb-1 text-sm font-medium text-ink">{label}</legend> : null}
       <div className="flex flex-col gap-2" role="radiogroup" aria-label={label}>
         {options.map((opt) => (
           <label
             key={opt.value}
             className={cn(
-              'inline-flex cursor-pointer items-center gap-2.5 text-sm text-black',
+              'inline-flex cursor-pointer items-center gap-2.5 text-sm text-ink',
               opt.disabled && 'cursor-not-allowed opacity-50',
             )}
           >
@@ -54,8 +54,8 @@ export function RadioGroup({
               }
               onChange={() => onChange?.(opt.value)}
               className={cn(
-                'size-4 appearance-none rounded-full border border-black/25 bg-cream',
-                'checked:border-gold checked:bg-gold checked:shadow-[inset_0_0_0_3px_#fffdd0]',
+                'size-4 appearance-none rounded-full border border-line-strong bg-surface-field',
+                'checked:border-gold checked:bg-gold checked:shadow-[inset_0_0_0_3px_var(--color-surface-field)]',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40',
               )}
             />

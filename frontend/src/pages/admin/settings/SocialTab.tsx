@@ -28,14 +28,9 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
     <div className="space-y-6 text-xs">
       {/* Primary Brand Channels */}
       <div
-        className="rounded-2xl border p-5 shadow-xs space-y-4 transition-colors"
-        style={{
-          backgroundColor: 'var(--admin-card, #141b26)',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-        }}
+        className="rounded-2xl border p-5 shadow-xs space-y-4 transition-colors bg-surface-raised border-line text-ink-raised"
       >
-        <div className="border-b pb-3" style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}>
+        <div className="border-b pb-3 border-line">
           <h3 className="font-heading text-sm font-bold tracking-wide">Official Atelier Channels</h3>
           <p className="text-[10px] opacity-60 mt-0.5">
             Key social handles displayed in the public header, lookbook hero, and footer
@@ -53,20 +48,14 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
                 value={named.instagram}
                 onChange={(e) => updateNamed('instagram', e.target.value)}
                 placeholder="https://www.instagram.com/kadambasdesignerstudio"
-                className="flex-1 rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-                style={{
-                  backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                  color: 'inherit',
-                }}
+                className="flex-1 rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
               />
               {named.instagram ? (
                 <a
                   href={named.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-current/[0.05] transition"
-                  style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
+                  className="rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-current/[0.05] transition border-line"
                 >
                   Test ↗
                 </a>
@@ -84,20 +73,14 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
                 value={named.facebook}
                 onChange={(e) => updateNamed('facebook', e.target.value)}
                 placeholder="https://www.facebook.com/kadambasstudio"
-                className="flex-1 rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-                style={{
-                  backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                  color: 'inherit',
-                }}
+                className="flex-1 rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
               />
               {named.facebook ? (
                 <a
                   href={named.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-current/[0.05] transition"
-                  style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
+                  className="rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-current/[0.05] transition border-line"
                 >
                   Test ↗
                 </a>
@@ -115,20 +98,14 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
                 value={named.youtube}
                 onChange={(e) => updateNamed('youtube', e.target.value)}
                 placeholder="https://www.youtube.com/@kadambasdesignerstudio"
-                className="flex-1 rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-                style={{
-                  backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                  color: 'inherit',
-                }}
+                className="flex-1 rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
               />
               {named.youtube ? (
                 <a
                   href={named.youtube}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-current/[0.05] transition"
-                  style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
+                  className="rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-current/[0.05] transition border-line"
                 >
                   Test ↗
                 </a>
@@ -146,20 +123,14 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
                 value={named.googleBusiness}
                 onChange={(e) => updateNamed('googleBusiness', e.target.value)}
                 placeholder="https://maps.google.com/?cid=..."
-                className="flex-1 rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-                style={{
-                  backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                  color: 'inherit',
-                }}
+                className="flex-1 rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
               />
               {named.googleBusiness ? (
                 <a
                   href={named.googleBusiness}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-current/[0.05] transition"
-                  style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
+                  className="rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-current/[0.05] transition border-line"
                 >
                   Test ↗
                 </a>
@@ -171,14 +142,9 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
 
       {/* Additional Custom Social Links */}
       <div
-        className="rounded-2xl border p-5 shadow-xs space-y-3 transition-colors"
-        style={{
-          backgroundColor: 'var(--admin-card, #141b26)',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-        }}
+        className="rounded-2xl border p-5 shadow-xs space-y-3 transition-colors bg-surface-raised border-line text-ink-raised"
       >
-        <div className="flex items-center justify-between border-b pb-3" style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}>
+        <div className="flex items-center justify-between border-b pb-3 border-line">
           <div>
             <h3 className="font-heading text-sm font-bold tracking-wide">Additional Media Links</h3>
             <p className="text-[10px] opacity-60 mt-0.5">Pinterest boards, LinkedIn, threads, or boutique portfolio links</p>
@@ -191,7 +157,7 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
                 social: [...f.social, { label: 'Pinterest', href: 'https://pinterest.com/' }],
               }))
             }
-            className="text-xs font-semibold text-[var(--admin-primary,#b59410)] hover:underline cursor-pointer"
+            className="text-xs font-semibold text-brand hover:underline cursor-pointer"
           >
             + Add Platform
           </button>
@@ -209,12 +175,7 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
                   patchForm((f) => ({ ...f, social: next }));
                 }}
                 placeholder="Platform Name"
-                className="w-36 rounded-xl border py-1.5 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-                style={{
-                  backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                  color: 'inherit',
-                }}
+                className="w-36 rounded-xl border py-1.5 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
               />
               <input
                 type="url"
@@ -225,12 +186,7 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
                   patchForm((f) => ({ ...f, social: next }));
                 }}
                 placeholder="https://..."
-                className="flex-1 rounded-xl border py-1.5 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-                style={{
-                  backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                  color: 'inherit',
-                }}
+                className="flex-1 rounded-xl border py-1.5 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
               />
               <button
                 type="button"

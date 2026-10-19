@@ -44,18 +44,18 @@ export function TagsInput({
 
   return (
     <div className="flex w-full flex-col gap-1.5">
-      {label ? <span className="text-sm font-medium text-black">{label}</span> : null}
-      <div className="flex w-full flex-wrap items-start gap-2 rounded-md border border-black/15 bg-cream p-2.5">
+      {label ? <span className="text-sm font-medium text-ink">{label}</span> : null}
+      <div className="flex w-full flex-wrap items-start gap-2 rounded-md border border-line bg-surface-sunken p-2.5">
         {tags.map((tag) => (
           <span
             key={tag}
-            className="inline-flex items-center rounded-sm bg-gold/20 px-2 py-1 text-xs font-medium text-black"
+            className="inline-flex items-center rounded-sm bg-gold/20 px-2 py-1 text-xs font-medium text-ink"
           >
             {tag}
             <button
               type="button"
               onClick={() => removeTag(tag)}
-              className="ml-1.5 text-black/40 hover:text-black"
+              className="ml-1.5 text-ink/40 hover:text-ink"
               aria-label={`Remove ${tag}`}
             >
               ×
@@ -68,7 +68,7 @@ export function TagsInput({
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
-          className="min-w-0 flex-1 bg-transparent text-sm text-black outline-none placeholder:text-black/40"
+          className="min-w-0 flex-1 bg-transparent text-sm text-ink outline-none placeholder:text-ink/40"
         />
       </div>
     </div>

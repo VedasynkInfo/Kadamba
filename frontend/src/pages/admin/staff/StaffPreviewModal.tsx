@@ -60,26 +60,16 @@ export function StaffPreviewModal({ staff, onClose, onEdit }: StaffPreviewModalP
       aria-label="Staff profile snapshot"
     >
       <div
-        className="w-full max-w-xl rounded-2xl border shadow-2xl overflow-hidden transition-all text-xs"
-        style={{
-          backgroundColor: 'var(--admin-card, #141b26)',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.22))',
-          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-        }}
+        className="w-full max-w-xl rounded-2xl border shadow-2xl overflow-hidden transition-all text-xs bg-surface-raised border-line text-ink-raised"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div
-          className="flex items-center justify-between border-b px-5 py-4"
-          style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))' }}
+          className="flex items-center justify-between border-b px-5 py-4 border-line"
         >
           <div className="flex items-center gap-3">
             <div
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-bold text-sm shadow-xs"
-              style={{
-                backgroundColor: 'var(--admin-primary, #b59410)',
-                color: 'var(--admin-primary-text, #ffffff)',
-              }}
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-bold text-sm shadow-xs bg-brand text-ink-on-brand"
             >
               {initials}
             </div>
@@ -106,8 +96,7 @@ export function StaffPreviewModal({ staff, onClose, onEdit }: StaffPreviewModalP
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer"
-            style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))' }}
+            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer border-line"
             aria-label="Close modal"
           >
             ✕
@@ -127,12 +116,7 @@ export function StaffPreviewModal({ staff, onClose, onEdit }: StaffPreviewModalP
                 return (
                   <span
                     key={spec}
-                    className="rounded-lg px-2.5 py-1 text-xs font-semibold border"
-                    style={{
-                      backgroundColor: 'rgba(181, 148, 16, 0.12)',
-                      borderColor: 'rgba(181, 148, 16, 0.3)',
-                      color: 'var(--admin-primary, #b59410)',
-                    }}
+                    className="rounded-lg px-2.5 py-1 text-xs font-semibold border bg-brand/12 border-brand/30 text-brand"
                   >
                     ✨ {label}
                   </span>
@@ -145,11 +129,7 @@ export function StaffPreviewModal({ staff, onClose, onEdit }: StaffPreviewModalP
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             {/* Employment & Background */}
             <div
-              className="rounded-xl border p-3.5 space-y-2.5"
-              style={{
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))',
-                backgroundColor: 'rgba(128, 128, 128, 0.04)',
-              }}
+              className="rounded-xl border p-3.5 space-y-2.5 border-line bg-surface-sunken"
             >
               <h4 className="font-bold text-[11px] uppercase tracking-wider opacity-70">
                 Employment Profile
@@ -176,11 +156,7 @@ export function StaffPreviewModal({ staff, onClose, onEdit }: StaffPreviewModalP
 
             {/* Compensation & Emergency Contact */}
             <div
-              className="rounded-xl border p-3.5 space-y-2.5"
-              style={{
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))',
-                backgroundColor: 'rgba(128, 128, 128, 0.04)',
-              }}
+              className="rounded-xl border p-3.5 space-y-2.5 border-line bg-surface-sunken"
             >
               <h4 className="font-bold text-[11px] uppercase tracking-wider opacity-70">
                 Compensation & Safety
@@ -203,7 +179,7 @@ export function StaffPreviewModal({ staff, onClose, onEdit }: StaffPreviewModalP
                 </span>
               </div>
               {staff.address ? (
-                <div className="pt-1 border-t text-[10px]" style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.1))' }}>
+                <div className="pt-1 border-t text-[10px] border-line">
                   <span className="opacity-50 block">Full Address:</span>
                   <span className="opacity-80 block truncate">{staff.address}</span>
                 </div>
@@ -214,11 +190,7 @@ export function StaffPreviewModal({ staff, onClose, onEdit }: StaffPreviewModalP
           {/* Previous Workplaces */}
           {staff.previousWorkplaces && staff.previousWorkplaces.length > 0 ? (
             <div
-              className="rounded-xl border p-3"
-              style={{
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))',
-                backgroundColor: 'rgba(128, 128, 128, 0.04)',
-              }}
+              className="rounded-xl border p-3 border-line bg-surface-sunken"
             >
               <span className="text-[10px] uppercase font-bold tracking-wider opacity-60 block mb-1">
                 Previous Studios / Boutiques
@@ -230,11 +202,7 @@ export function StaffPreviewModal({ staff, onClose, onEdit }: StaffPreviewModalP
 
         {/* Footer */}
         <div
-          className="flex items-center justify-between border-t px-5 py-3.5"
-          style={{
-            borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-            backgroundColor: 'rgba(128, 128, 128, 0.04)',
-          }}
+          className="flex items-center justify-between border-t px-5 py-3.5 border-line bg-surface-sunken"
         >
           {staff.phone ? (
             <a
@@ -260,16 +228,14 @@ export function StaffPreviewModal({ staff, onClose, onEdit }: StaffPreviewModalP
                 onClose();
                 onEdit(staff);
               }}
-              className="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 border text-xs font-semibold hover:bg-current/[0.05] transition cursor-pointer"
-              style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
+              className="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 border text-xs font-semibold hover:bg-current/[0.05] transition cursor-pointer border-line"
             >
               <span>✏️ Edit Profile</span>
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg px-3 py-1.5 text-xs font-bold border hover:bg-current/[0.05] transition cursor-pointer"
-              style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
+              className="rounded-lg px-3 py-1.5 text-xs font-bold border hover:bg-current/[0.05] transition cursor-pointer border-line"
             >
               Close
             </button>

@@ -123,18 +123,12 @@ export function PaymentRecordModal({
       aria-label="Record payment"
     >
       <div
-        className="w-full max-w-lg rounded-2xl border shadow-2xl overflow-hidden transition-all text-xs"
-        style={{
-          backgroundColor: 'var(--admin-card, #141b26)',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.22))',
-          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-        }}
+        className="w-full max-w-lg rounded-2xl border shadow-2xl overflow-hidden transition-all text-xs bg-surface-raised border-line text-ink-raised"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div
-          className="flex items-center justify-between border-b px-5 py-4"
-          style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))' }}
+          className="flex items-center justify-between border-b px-5 py-4 border-line"
         >
           <div className="flex items-center gap-2.5">
             <span className="text-xl">??</span>
@@ -146,8 +140,7 @@ export function PaymentRecordModal({
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer"
-            style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))' }}
+            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer border-line"
             aria-label="Close modal"
           >
             ?
@@ -168,11 +161,7 @@ export function PaymentRecordModal({
             </label>
             {selectedOrder ? (
               <div
-                className="flex items-center justify-between rounded-xl border p-3"
-                style={{
-                  borderColor: 'var(--admin-primary, #b59410)',
-                  backgroundColor: 'rgba(181, 148, 16, 0.08)',
-                }}
+                className="flex items-center justify-between rounded-xl border p-3 border-brand bg-brand/[0.08]"
               >
                 <div>
                   <span className="font-bold text-xs">
@@ -208,12 +197,7 @@ export function PaymentRecordModal({
                   value={orderQuery}
                   onChange={(e) => setOrderQuery(e.target.value)}
                   placeholder="Search by order #, client name, or phone..."
-                  className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-                  style={{
-                    backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                    borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                    color: 'inherit',
-                  }}
+                  className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
                 />
                 {searchingOrders ? (
                   <span className="absolute right-3 top-2.5 text-[10px] opacity-50 animate-pulse">
@@ -223,11 +207,7 @@ export function PaymentRecordModal({
 
                 {orderResults.length > 0 ? (
                   <div
-                    className="absolute z-20 top-full mt-1 w-full rounded-xl border shadow-xl max-h-48 overflow-y-auto"
-                    style={{
-                      backgroundColor: 'var(--admin-card, #1e293b)',
-                      borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                    }}
+                    className="absolute z-20 top-full mt-1 w-full rounded-xl border shadow-xl max-h-48 overflow-y-auto bg-surface-raised border-line"
                   >
                     {orderResults.map((ord) => (
                       <button
@@ -241,8 +221,7 @@ export function PaymentRecordModal({
                             setAmount(String(ord.paymentSummary.balance));
                           }
                         }}
-                        className="w-full text-left p-2.5 hover:bg-current/[0.06] border-b last:border-b-0 cursor-pointer transition"
-                        style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.12))' }}
+                        className="w-full text-left p-2.5 hover:bg-current/[0.06] border-b last:border-b-0 cursor-pointer transition border-line"
                       >
                         <div className="font-bold text-xs">
                           #{ord.orderNumber} — {ord.customerId?.name || 'Client'} ({ord.customerId?.phone || ''})
@@ -273,11 +252,7 @@ export function PaymentRecordModal({
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="e.g. 5000"
-                className="w-full rounded-xl border py-2 px-3 text-xs font-bold text-emerald-400 focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-                style={{
-                  backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                }}
+                className="w-full rounded-xl border py-2 px-3 text-xs font-bold text-emerald-400 focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
               />
             </div>
 
@@ -288,12 +263,7 @@ export function PaymentRecordModal({
               <select
                 value={method}
                 onChange={(e) => setMethod(e.target.value as any)}
-                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)] cursor-pointer"
-                style={{
-                  backgroundColor: 'var(--admin-card, #141b26)',
-                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                  color: 'inherit',
-                }}
+                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand cursor-pointer bg-surface-raised border-line"
               >
                 <option value="upi">UPI / QR Code</option>
                 <option value="cash">Cash Counter</option>
@@ -315,12 +285,7 @@ export function PaymentRecordModal({
                 required
                 value={paidAt}
                 onChange={(e) => setPaidAt(e.target.value)}
-                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-                style={{
-                  backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                  color: 'inherit',
-                }}
+                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
               />
             </div>
 
@@ -333,12 +298,7 @@ export function PaymentRecordModal({
                 value={reference}
                 onChange={(e) => setReference(e.target.value)}
                 placeholder="e.g. UPI-9982371 or Chq #12"
-                className="w-full rounded-xl border py-2 px-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-                style={{
-                  backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                  color: 'inherit',
-                }}
+                className="w-full rounded-xl border py-2 px-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
               />
             </div>
           </div>
@@ -353,12 +313,7 @@ export function PaymentRecordModal({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="e.g. 50% advance for wedding lehenga"
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
-              style={{
-                backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-                color: 'inherit',
-              }}
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
             />
           </div>
 
@@ -368,7 +323,7 @@ export function PaymentRecordModal({
               type="checkbox"
               checked={bypassBalanceCheck}
               onChange={(e) => setBypassBalanceCheck(e.target.checked)}
-              className="rounded text-[var(--admin-primary,#b59410)] focus:ring-0"
+              className="rounded text-brand focus:ring-0"
             />
             <span className="text-[11px] opacity-70">
               Allow payment exceeding current outstanding balance
@@ -377,26 +332,20 @@ export function PaymentRecordModal({
 
           {/* Form Actions */}
           <div
-            className="flex items-center justify-end gap-3 pt-3 border-t"
-            style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}
+            className="flex items-center justify-end gap-3 pt-3 border-t border-line"
           >
             <button
               type="button"
               onClick={onClose}
               disabled={submitting}
-              className="rounded-xl px-4 py-2 text-xs font-semibold border hover:bg-current/[0.05] transition cursor-pointer"
-              style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
+              className="rounded-xl px-4 py-2 text-xs font-semibold border hover:bg-current/[0.05] transition cursor-pointer border-line"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting || !selectedOrder}
-              className="rounded-xl px-5 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 disabled:opacity-50 cursor-pointer"
-              style={{
-                backgroundColor: 'var(--admin-primary, #b59410)',
-                color: 'var(--admin-primary-text, #ffffff)',
-              }}
+              className="rounded-xl px-5 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 disabled:opacity-50 cursor-pointer bg-brand text-ink-on-brand"
             >
               {submitting ? 'Recording...' : 'Record Payment'}
             </button>

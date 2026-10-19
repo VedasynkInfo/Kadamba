@@ -65,7 +65,7 @@ export function HeroSection() {
 
   return (
     <section
-      className="relative isolate w-full overflow-hidden bg-black text-cream"
+      className="relative isolate w-full overflow-hidden bg-black text-ink-inverse"
       aria-roledescription="carousel"
       aria-label="Kadamba featured banners"
       tabIndex={0}
@@ -119,7 +119,7 @@ export function HeroSection() {
               <AnimatePresence mode="wait">
                 <motion.h1
                   key={`${slide.id}-headline`}
-                  className="w-full font-heading text-2xl font-medium text-cream sm:text-3xl md:text-4xl"
+                  className="w-full font-heading text-2xl font-medium text-ink-inverse sm:text-3xl md:text-4xl"
                   initial={reduced ? false : { opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={reduced ? undefined : { opacity: 0, y: -10 }}
@@ -134,7 +134,7 @@ export function HeroSection() {
               <AnimatePresence mode="wait">
                 <motion.p
                   key={`${slide.id}-copy`}
-                  className="text-lede w-full text-cream/85"
+                  className="text-lede w-full text-ink-inverse/85"
                   initial={reduced ? false : { opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={reduced ? undefined : { opacity: 0 }}
@@ -152,7 +152,7 @@ export function HeroSection() {
               <Button
                 variant="secondary"
                 size="lg"
-                className="!text-cream"
+                className="text-ink-inverse"
                 onClick={() => {
                   window.open(whatsappHref(), '_blank', 'noopener,noreferrer');
                 }}
@@ -176,7 +176,7 @@ export function HeroSection() {
                   className={cn(
                     'relative h-1.5 overflow-hidden rounded-full transition-all duration-300',
                     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-black',
-                    i === index ? 'w-10 bg-gold/30' : 'w-2.5 bg-cream/35 hover:bg-cream/55',
+                    i === index ? 'w-10 bg-gold/30' : 'w-2.5 bg-ink-inverse/35 hover:bg-ink-inverse/55',
                   )}
                 >
                   {i === index && !reduced && !paused ? (
@@ -199,7 +199,7 @@ export function HeroSection() {
                 type="button"
                 onClick={prev}
                 aria-label="Previous banner"
-                className="flex size-11 items-center justify-center border border-gold/40 text-cream transition-colors hover:border-gold hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                className="flex size-11 items-center justify-center border border-gold/40 text-ink-inverse transition-colors hover:border-gold hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
               >
                 <Chevron direction="left" />
               </button>
@@ -207,7 +207,7 @@ export function HeroSection() {
                 type="button"
                 onClick={next}
                 aria-label="Next banner"
-                className="flex size-11 items-center justify-center border border-gold/40 text-cream transition-colors hover:border-gold hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                className="flex size-11 items-center justify-center border border-gold/40 text-ink-inverse transition-colors hover:border-gold hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
               >
                 <Chevron direction="right" />
               </button>

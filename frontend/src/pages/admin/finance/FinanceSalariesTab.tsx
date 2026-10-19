@@ -43,12 +43,7 @@ export function FinanceSalariesTab({ salaries, onAddSalary }: FinanceSalariesTab
     <div className="space-y-4">
       {/* Action Toolbar */}
       <div
-        className="rounded-xl border p-3.5 shadow-xs transition-colors flex items-center justify-between gap-3"
-        style={{
-          backgroundColor: 'var(--admin-card, #141b26)',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-        }}
+        className="rounded-xl border p-3.5 shadow-xs transition-colors flex items-center justify-between gap-3 bg-surface-raised border-line text-ink-raised"
       >
         <div>
           <h3 className="font-heading text-sm font-bold tracking-wide">Artisan Payroll Ledger</h3>
@@ -64,11 +59,7 @@ export function FinanceSalariesTab({ salaries, onAddSalary }: FinanceSalariesTab
           <button
             type="button"
             onClick={onAddSalary}
-            className="inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 active:scale-98 cursor-pointer"
-            style={{
-              backgroundColor: 'var(--admin-primary, #b59410)',
-              color: 'var(--admin-primary-text, #ffffff)',
-            }}
+            className="inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 active:scale-98 cursor-pointer bg-brand text-ink-on-brand"
           >
             <span className="text-sm font-black">+</span>
             <span>Record Salary</span>
@@ -78,12 +69,7 @@ export function FinanceSalariesTab({ salaries, onAddSalary }: FinanceSalariesTab
 
       {/* Table */}
       <div
-        className="rounded-xl border shadow-xs overflow-visible transition-colors"
-        style={{
-          backgroundColor: 'var(--admin-card, #141b26)',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-        }}
+        className="rounded-xl border shadow-xs overflow-visible transition-colors bg-surface-raised border-line text-ink-raised"
       >
         {salaries.length === 0 ? (
           <div className="p-8">
@@ -99,11 +85,7 @@ export function FinanceSalariesTab({ salaries, onAddSalary }: FinanceSalariesTab
             <table className="w-full min-w-[850px] text-left border-collapse text-xs table-fixed">
               <thead>
                 <tr
-                  className="border-b text-[0.65rem] uppercase tracking-wider font-semibold opacity-75"
-                  style={{
-                    borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-                    backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                  }}
+                  className="border-b text-[0.65rem] uppercase tracking-wider font-semibold opacity-75 border-line bg-surface-sunken"
                 >
                   <th className="py-3 px-4 min-w-[200px]">Artisan / Staff</th>
                   <th className="py-3 px-4 w-[160px]">Pay Period</th>
@@ -113,8 +95,7 @@ export function FinanceSalariesTab({ salaries, onAddSalary }: FinanceSalariesTab
                 </tr>
               </thead>
               <tbody
-                className="divide-y"
-                style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.12))' }}
+                className="divide-y border-line"
               >
                 {salaries.map((sal) => {
                   const staffObj = typeof sal.staffId === 'object' ? sal.staffId : null;
@@ -124,8 +105,7 @@ export function FinanceSalariesTab({ salaries, onAddSalary }: FinanceSalariesTab
                   return (
                     <tr
                       key={sal.id}
-                      className="transition hover:bg-current/[0.03]"
-                      style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.12))' }}
+                      className="transition hover:bg-current/[0.03] border-line"
                     >
                       <td className="py-3 px-4">
                         <span className="font-semibold block truncate">{staffName}</span>

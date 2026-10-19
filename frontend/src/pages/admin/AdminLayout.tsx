@@ -75,7 +75,7 @@ function AdminNavLinks({ collapsed, mobile }: { collapsed?: boolean; mobile?: bo
             end={item.end}
             title={item.label}
             style={({ isActive }) => ({
-              color: isActive ? 'var(--color-accent, #ffd700)' : 'var(--admin-sidebar-text, #f3f4f6)',
+              color: isActive ? 'var(--color-accent)' : 'var(--admin-sidebar-text)',
               backgroundColor: isActive ? 'rgba(255, 215, 0, 0.12)' : undefined,
             })}
             className={({ isActive }) =>
@@ -133,22 +133,18 @@ export function AdminLayout() {
       <AdminContentProvider>
         <AdminNotifyProvider>
           <LeadsProvider>
+            {/* `.admin-shell` here re-points every semantic token at the
+                console's palette (index.css) for the whole chrome — sidebar,
+                header and page alike. The colours come from those tokens, never
+                from inline styles. */}
             <div
-              className="flex min-h-screen font-admin"
-              style={{
-                backgroundColor: 'var(--admin-bg, #0b0f17)',
-                color: 'var(--admin-text, #f3f4f6)',
-              }}
+              className="admin-shell flex min-h-screen font-admin bg-surface text-ink"
             >
               <aside
                 className={cn(
                   'hidden shrink-0 flex-col border-r border-white/10 transition-[width] duration-300 md:flex',
-                  collapsed ? 'w-[4.25rem]' : 'w-60',
+                  collapsed ? 'w-[4.25rem]' : 'w-60', 'bg-surface-inverse text-ink-inverse'
                 )}
-                style={{
-                  backgroundColor: 'var(--admin-sidebar, #111827)',
-                  color: 'var(--admin-sidebar-text, #f3f4f6)',
-                }}
               >
                 <div className={cn('px-4 py-6', collapsed && 'px-2 text-center')}>
                   {!collapsed ? (
@@ -220,11 +216,7 @@ export function AdminLayout() {
 
               <div className="flex min-w-0 flex-1 flex-col">
                 <header
-                  className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3 md:hidden"
-                  style={{
-                    backgroundColor: 'var(--admin-sidebar, #111827)',
-                    color: 'var(--admin-sidebar-text, #f3f4f6)',
-                  }}
+                  className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3 md:hidden bg-surface-inverse text-ink-inverse"
                 >
                   <p className="font-heading text-lg text-gold">{brand.shortName}</p>
                   <Button
@@ -239,22 +231,12 @@ export function AdminLayout() {
                   </Button>
                 </header>
                 <nav
-                  className="flex gap-1 overflow-x-auto border-b border-white/10 px-2 py-2 md:hidden"
-                  style={{
-                    backgroundColor: 'var(--admin-sidebar, #111827)',
-                    color: 'var(--admin-sidebar-text, #f3f4f6)',
-                  }}
+                  className="flex gap-1 overflow-x-auto border-b border-white/10 px-2 py-2 md:hidden bg-surface-inverse text-ink-inverse"
                   aria-label="Admin mobile"
                 >
                   <AdminNavLinks mobile />
                 </nav>
-                <div
-                  className="flex-1 transition-colors min-h-screen admin-scope"
-                  style={{
-                    backgroundColor: 'var(--admin-bg, #0b0f17)',
-                    color: 'var(--admin-text, #f3f4f6)',
-                  }}
-                >
+                <div className="flex-1 transition-colors min-h-screen">
                   <Outlet />
                 </div>
               </div>

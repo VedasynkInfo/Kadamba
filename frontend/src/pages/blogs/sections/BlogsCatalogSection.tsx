@@ -128,17 +128,17 @@ function BlogPostPreview({ post, onOpen }: { post: BlogPost; onOpen: () => void 
             height={500}
           />
         </div>
-        <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.65rem] uppercase tracking-[0.22em] text-black/45">
-          <span className="text-black/60">{post.category}</span>
+        <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.65rem] uppercase tracking-[0.22em] text-ink/45">
+          <span className="text-ink/60">{post.category}</span>
           <span aria-hidden>·</span>
           <time dateTime={post.date}>{formatBlogDate(post.date)}</time>
           <span aria-hidden>·</span>
           <span>{post.readMinutes} min</span>
         </div>
-        <h3 className="mt-2 font-heading text-xl leading-snug text-black group-hover:text-black/75">
+        <h3 className="mt-2 font-heading text-xl leading-snug text-ink group-hover:text-ink/75">
           {post.title}
         </h3>
-        <p className="mt-2 text-sm leading-relaxed text-black/65">{post.excerpt}</p>
+        <p className="mt-2 text-sm leading-relaxed text-ink/65">{post.excerpt}</p>
       </button>
     </article>
   );

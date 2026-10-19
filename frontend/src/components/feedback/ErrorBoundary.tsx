@@ -36,18 +36,18 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     if (this.props.fallback) return this.props.fallback;
 
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-5 bg-cream px-6 text-center">
+      <div className="flex min-h-screen flex-col items-center justify-center gap-5 bg-surface px-6 text-center">
         <p className="font-heading text-xs uppercase tracking-[0.32em] text-gold">
           Kadamba&apos;s Designer Studio
         </p>
-        <h1 className="font-heading text-3xl text-black sm:text-4xl">Something went wrong</h1>
-        <p className="max-w-md text-black/70">
+        <h1 className="font-heading text-3xl text-ink sm:text-4xl">Something went wrong</h1>
+        <p className="max-w-md text-ink/70">
           An unexpected error interrupted the page. Please return home and try again.
         </p>
         <button
           type="button"
           onClick={this.handleReload}
-          className="rounded-md bg-black px-6 py-2.5 text-sm font-medium text-cream transition-colors hover:bg-black/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+          className="rounded-md bg-black px-6 py-2.5 text-sm font-medium text-ink-inverse transition-colors hover:bg-black/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
         >
           Back to home
         </button>

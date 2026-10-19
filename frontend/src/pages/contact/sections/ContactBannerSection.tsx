@@ -21,7 +21,7 @@ export function ContactBannerSection() {
 
   return (
     <section
-      className="relative isolate w-full overflow-hidden bg-black text-cream"
+      className="relative isolate w-full overflow-hidden bg-black text-ink-inverse"
       aria-label="Contact Kadamba's Designer Studio"
     >
       <div className="relative min-h-[min(90svh,900px)] w-full md:min-h-[calc(100svh-4.25rem)]">
@@ -80,7 +80,7 @@ export function ContactBannerSection() {
           />
 
           <motion.h1
-            className="mt-7 max-w-xl font-heading text-2xl font-medium leading-snug text-cream sm:text-3xl md:text-4xl"
+            className="mt-7 max-w-xl font-heading text-2xl font-medium leading-snug text-ink-inverse sm:text-3xl md:text-4xl"
             initial={reduced ? false : { opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: reduced ? 0 : 0.42 }}
@@ -89,7 +89,7 @@ export function ContactBannerSection() {
           </motion.h1>
 
           <motion.p
-            className="text-lede mt-5 max-w-md text-cream/85"
+            className="text-lede mt-5 max-w-md text-ink-inverse/85"
             initial={reduced ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: reduced ? 0 : 0.5 }}
@@ -109,7 +109,7 @@ export function ContactBannerSection() {
             <Button
               variant="secondary"
               size="lg"
-              className="!text-cream"
+              className="text-ink-inverse"
               onClick={() => {
                 window.open(whatsappHref(), '_blank', 'noopener,noreferrer');
               }}

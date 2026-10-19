@@ -55,8 +55,8 @@ export function LeadsTableSection({
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h2 className="font-heading text-3xl text-black md:text-4xl">{title}</h2>
-            <p className="text-lede mt-3 text-black/65">{description}</p>
+            <h2 className="font-heading text-3xl text-ink md:text-4xl">{title}</h2>
+            <p className="text-lede mt-3 text-ink/65">{description}</p>
           </div>
           <Button variant="luxury" size="md" onClick={exportCsv}>
             Export CSV ({filtered.length})
@@ -97,7 +97,7 @@ export function LeadsTableSection({
         {/* Desktop table */}
         <div className="mt-10 hidden overflow-x-auto md:block">
           <table className="w-full min-w-[720px] border-collapse text-left text-sm">
-              <tr className="border-b border-black/15 text-[0.65rem] uppercase tracking-[0.2em] text-black/45">
+              <tr className="border-b border-line text-[0.65rem] uppercase tracking-[0.2em] text-ink/45">
                 <th className="py-3 pr-4 font-medium">Lead</th>
                 <th className="py-3 pr-4 font-medium">Quality / Score</th>
                 <th className="py-3 pr-4 font-medium">Service</th>
@@ -111,11 +111,11 @@ export function LeadsTableSection({
               {filtered.map((lead) => (
                 <tr
                   key={lead.id}
-                  className="border-b border-black/8 transition hover:bg-black/[0.02]"
+                  className="border-b border-line/8 transition hover:bg-black/[0.02]"
                 >
                   <td className="py-4 pr-4">
-                    <p className="font-heading text-lg text-black">{lead.name}</p>
-                    <p className="mt-0.5 text-xs text-black/50">
+                    <p className="font-heading text-lg text-ink">{lead.name}</p>
+                    <p className="mt-0.5 text-xs text-ink/50">
                       {lead.phone} · {lead.city}
                     </p>
                   </td>
@@ -134,16 +134,16 @@ export function LeadsTableSection({
                         {lead.quality === 'hot' ? '🔥' : lead.quality === 'warm' ? '⚡' : '❄️'}
                         {lead.quality || 'warm'}
                       </span>
-                      <span className="text-xs font-semibold text-black/60">
+                      <span className="text-xs font-semibold text-ink/60">
                         {lead.score ?? 50}/100
                       </span>
                     </div>
                   </td>
-                  <td className="py-4 pr-4 text-black/75">
+                  <td className="py-4 pr-4 text-ink/75">
                     {lead.service}
-                    <span className="mt-0.5 block text-xs text-black/45">{lead.source}</span>
+                    <span className="mt-0.5 block text-xs text-ink/45">{lead.source}</span>
                   </td>
-                  <td className="py-4 pr-4 text-sm text-black/75">
+                  <td className="py-4 pr-4 text-sm text-ink/75">
                     {lead.orderNumber ? (
                       <button
                         type="button"
@@ -155,13 +155,13 @@ export function LeadsTableSection({
                       >
                         #{lead.orderNumber}
                         {lead.referenceId ? (
-                          <span className="mt-0.5 block text-xs text-black/45">{lead.referenceId}</span>
+                          <span className="mt-0.5 block text-xs text-ink/45">{lead.referenceId}</span>
                         ) : (
-                          <span className="mt-0.5 block text-xs text-black/45">Enquiry</span>
+                          <span className="mt-0.5 block text-xs text-ink/45">Enquiry</span>
                         )}
                       </button>
                     ) : (
-                      <span className="text-black/35">—</span>
+                      <span className="text-ink/35">—</span>
                     )}
                   </td>
                   <td className="py-4 pr-4">
@@ -174,14 +174,14 @@ export function LeadsTableSection({
                       {lead.status}
                     </span>
                   </td>
-                  <td className="py-4 pr-4 text-black/70">{lead.assignee}</td>
-                  <td className="py-4 pr-4 text-xs text-black/60">
+                  <td className="py-4 pr-4 text-ink/70">{lead.assignee}</td>
+                  <td className="py-4 pr-4 text-xs text-ink/60">
                     {lead.nextFollowUpDate ? (
                       <span className="inline-flex items-center gap-1 text-amber-800 font-medium bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
                         📅 {new Date(lead.nextFollowUpDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
                       </span>
                     ) : (
-                      <span className="text-black/40">—</span>
+                      <span className="text-ink/40">—</span>
                     )}
                   </td>
                   <td className="py-4 text-right">
@@ -198,7 +198,7 @@ export function LeadsTableSection({
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="border border-black/15"
+                        className="border border-line"
                         onClick={() => navigate(`/admin/leads/${lead.id}`)}
                       >
                         Open
@@ -218,12 +218,12 @@ export function LeadsTableSection({
               <button
                 type="button"
                 onClick={() => navigate(`/admin/leads/${lead.id}`)}
-                className="w-full border-t border-black/12 pt-4 text-left"
+                className="w-full border-t border-line/12 pt-4 text-left"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="font-heading text-xl">{lead.name}</p>
-                    <p className="mt-1 text-sm text-black/60">{lead.service}</p>
+                    <p className="mt-1 text-sm text-ink/60">{lead.service}</p>
                   </div>
                   <span
                     className={cn(
@@ -234,7 +234,7 @@ export function LeadsTableSection({
                     {lead.status}
                   </span>
                 </div>
-                <p className="mt-2 text-xs text-black/45">
+                <p className="mt-2 text-xs text-ink/45">
                   {lead.orderNumber ? `Order #${lead.orderNumber} · ` : ''}
                   {lead.assignee} · {formatLeadDate(lead.updatedAt)}
                 </p>
@@ -253,7 +253,7 @@ export function LeadsTableSection({
         </ul>
 
         {filtered.length === 0 ? (
-          <p className="mt-12 text-center text-black/55">No leads match these filters.</p>
+          <p className="mt-12 text-center text-ink/55">No leads match these filters.</p>
         ) : null}
       </div>
     </section>

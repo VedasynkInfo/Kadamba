@@ -1,6 +1,14 @@
 import type { HTMLAttributes, ReactNode } from 'react';
 import { cn } from '@/utils/cn';
 
+/**
+ * `admin` is accepted for compatibility and behaves exactly like `default`: the
+ * surface a card sits on is decided by the *shell* (`index.css` re-points the
+ * semantic tokens under `.admin-shell`), not by the card. Passing the variant can
+ * no longer produce a card that disagrees with the background it is on — which
+ * is what the old inline `var(--admin-card)` branches did the moment a card
+ * was rendered outside the shell it was written for.
+ */
 export type CardVariant = 'default' | 'image' | 'pricing' | 'service' | 'admin';
 
 export interface CardProps extends HTMLAttributes<HTMLElement> {
@@ -14,8 +22,9 @@ export interface CardProps extends HTMLAttributes<HTMLElement> {
 }
 
 /**
- * Modern Aceternity & 21st.dev inspired Card with top-edge light beam,
- * dynamic public/admin tokens, and luxury hover transitions.
+ * Modern Aceternity & 21st.dev inspired Card with top-edge light beam and luxury
+ * hover transitions. Colours come from the semantic tokens, so one card works on
+ * the cream public site, in the dark console and in the portal.
  */
 export function Card({
   variant = 'default',
@@ -27,13 +36,11 @@ export function Card({
   style,
   ...props
 }: CardProps) {
-  const isAdmin = variant === 'admin';
-
   if (variant === 'image') {
     return (
       <Comp
         className={cn(
-          'group relative overflow-hidden rounded-xl bg-black text-cream shadow-md transition-all duration-300',
+          'group relative overflow-hidden rounded-xl bg-surface-inverse text-ink-inverse shadow-md transition-all duration-300',
           'focus-within:ring-2 focus-within:ring-gold',
           className,
         )}
@@ -42,7 +49,7 @@ export function Card({
       >
         <div className="aspect-[4/3] w-full overflow-hidden bg-elevated">{media}</div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 p-5 transition-transform duration-300 ease-[var(--ease-luxury)] group-hover:-translate-y-1">
+        <div className="absolute inset-x-0 bottom-0 p-5 transition-transform duration-300 ease-luxury group-hover:-translate-y-1">
           {children}
         </div>
       </Comp>
@@ -55,15 +62,11 @@ export function Card({
         className={cn(
           'group relative flex flex-col overflow-hidden rounded-xl border p-6 transition-all duration-300',
           featured
-            ? 'border-gold shadow-[0_8px_30px_rgba(255,215,0,0.18)]'
-            : 'border-white/10 hover:border-gold/40 hover:shadow-lg',
+            ? 'border-gold bg-surface-inverse text-ink-inverse shadow-gold'
+            : 'border-line bg-surface-raised text-ink hover:border-gold/40 hover:shadow-lg',
           className,
         )}
-        style={{
-          backgroundColor: featured ? '#000000' : 'var(--public-card, #ffffff)',
-          color: featured ? 'var(--color-cream, #fffdd0)' : 'var(--public-card-text, #171717)',
-          ...style,
-        }}
+        style={style}
         {...props}
       >
         <span
@@ -84,16 +87,11 @@ export function Card({
     return (
       <Comp
         className={cn(
-          'group relative overflow-hidden rounded-xl border p-6 transition-all duration-300',
+          'group relative overflow-hidden rounded-xl border border-line bg-surface-raised p-6 text-ink transition-all duration-300',
           'hover:border-gold/50 hover:shadow-lg hover:-translate-y-0.5',
           className,
         )}
-        style={{
-          backgroundColor: 'var(--public-card, #ffffff)',
-          borderColor: 'rgba(0, 0, 0, 0.08)',
-          color: 'var(--public-card-text, #171717)',
-          ...style,
-        }}
+        style={style}
         {...props}
       >
         <span
@@ -109,16 +107,11 @@ export function Card({
   return (
     <Comp
       className={cn(
-        'group relative overflow-hidden rounded-xl border p-6 transition-all duration-200',
-        isAdmin ? 'shadow-sm hover:border-white/20' : 'hover:shadow-md',
+        'group relative overflow-hidden rounded-xl border border-line bg-surface-raised p-6 text-ink transition-all duration-200',
+        'hover:shadow-md',
         className,
       )}
-      style={{
-        backgroundColor: isAdmin ? 'var(--admin-card, #1f2937)' : 'var(--public-card, #ffffff)',
-        borderColor: isAdmin ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)',
-        color: isAdmin ? 'var(--admin-card-text, #f3f4f6)' : 'var(--public-card-text, #171717)',
-        ...style,
-      }}
+      style={style}
       {...props}
     >
       <span
@@ -131,9 +124,7 @@ export function Card({
 }
 
 export function CardTitle({ children, className }: { children: ReactNode; className?: string }) {
-  return (
-    <h3 className={cn('font-heading text-xl text-inherit', className)}>{children}</h3>
-  );
+  return <h3 className={cn('font-heading text-xl text-inherit', className)}>{children}</h3>;
 }
 
 export function CardDescription({

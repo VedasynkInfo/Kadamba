@@ -50,7 +50,7 @@ export function PortfolioHeroSection() {
   return (
     <section
       ref={rootRef}
-      className="relative isolate w-full overflow-hidden bg-black text-cream"
+      className="relative isolate w-full overflow-hidden bg-black text-ink-inverse"
       aria-label="Portfolio of Kadamba's Designer Studio"
     >
       <div className="relative min-h-[min(94svh,960px)] w-full md:min-h-[calc(100svh-4.25rem)]">
@@ -94,7 +94,7 @@ export function PortfolioHeroSection() {
 
             <p
               data-reveal
-              className="mt-8 font-heading text-6xl leading-none tracking-[0.08em] text-cream sm:text-7xl md:text-8xl lg:text-[7.5rem]"
+              className="mt-8 font-heading text-6xl leading-none tracking-[0.08em] text-ink-inverse sm:text-7xl md:text-8xl lg:text-[7.5rem]"
             >
               {portfolioHero.brandName}
             </p>
@@ -107,12 +107,12 @@ export function PortfolioHeroSection() {
 
             <h1
               data-reveal
-              className="mt-7 font-heading text-xl font-medium leading-snug text-cream/95 sm:text-2xl md:text-[1.85rem]"
+              className="mt-7 font-heading text-xl font-medium leading-snug text-ink-inverse/95 sm:text-2xl md:text-[1.85rem]"
             >
               {portfolioHero.headline}
             </h1>
 
-            <p data-reveal className="text-lede mx-auto mt-5 max-w-md text-cream/80">
+            <p data-reveal className="text-lede mx-auto mt-5 max-w-md text-ink-inverse/80">
               {portfolioHero.copy}
             </p>
 
@@ -131,7 +131,7 @@ export function PortfolioHeroSection() {
               <Button
                 variant="secondary"
                 size="lg"
-                className="!text-cream"
+                className="text-ink-inverse"
                 onClick={() => navigate('/request-service')}
               >
                 Start a project

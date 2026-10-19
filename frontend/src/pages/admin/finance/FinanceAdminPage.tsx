@@ -115,8 +115,7 @@ export default function FinanceAdminPage() {
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1
-              className="font-heading text-xl font-bold tracking-tight sm:text-2xl"
-              style={{ color: 'var(--admin-text, #f3f4f6)' }}
+              className="font-heading text-xl font-bold tracking-tight sm:text-2xl text-ink"
             >
               Finance & Accounts Hub
             </h1>
@@ -130,8 +129,7 @@ export default function FinanceAdminPage() {
               type="button"
               onClick={() => void loadData()}
               disabled={loading}
-              className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold transition hover:bg-current/[0.05] active:scale-98 cursor-pointer"
-              style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
+              className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold transition hover:bg-current/[0.05] active:scale-98 cursor-pointer border-line"
             >
               <span className={loading ? 'animate-spin' : ''}>🔄</span>
               <span>Sync Ledgers</span>
@@ -144,8 +142,7 @@ export default function FinanceAdminPage() {
 
         {/* Modern Tab Bar */}
         <div
-          className="flex border-b text-xs font-semibold overflow-x-auto"
-          style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))' }}
+          className="flex border-b text-xs font-semibold overflow-x-auto border-line"
         >
           {TABS.map((tab) => {
             const isActive = activeTab === tab.key;
@@ -157,7 +154,7 @@ export default function FinanceAdminPage() {
                 className={cn(
                   'flex items-center gap-2 py-3 px-4 border-b-2 whitespace-nowrap transition cursor-pointer',
                   isActive
-                    ? 'border-[var(--admin-primary,#b59410)] text-[var(--admin-primary,#b59410)] font-bold'
+                    ? 'border-brand text-brand font-bold'
                     : 'border-transparent opacity-65 hover:opacity-100',
                 )}
               >

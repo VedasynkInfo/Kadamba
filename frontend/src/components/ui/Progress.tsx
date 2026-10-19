@@ -17,7 +17,7 @@ export function Progress({ value, max = 100, label, className }: ProgressProps) 
   return (
     <div className={cn('w-full', className)}>
       {label ? (
-        <div className="mb-1.5 flex justify-between text-xs text-black/70">
+        <div className="mb-1.5 flex justify-between text-xs text-ink/70">
           <span>{label}</span>
           <span>{percent}%</span>
         </div>
@@ -28,10 +28,10 @@ export function Progress({ value, max = 100, label, className }: ProgressProps) 
         aria-valuemin={0}
         aria-valuemax={max}
         aria-label={label ?? 'Progress'}
-        className="h-2 w-full overflow-hidden rounded-full bg-black/10"
+        className="h-2 w-full overflow-hidden rounded-full bg-line"
       >
         <div
-          className="h-full rounded-full bg-gold transition-[width] duration-300 ease-[var(--ease-luxury)]"
+          className="h-full rounded-full bg-gold transition-[width] duration-300 ease-luxury"
           style={{ width: `${percent}%` }}
         />
       </div>

@@ -9,6 +9,9 @@
  * Allowed:
  *   - src/index.css and other .css files (tokens live here)
  *   - src/theme/designTokens.ts (the palette definition itself)
+ *   - src/theme/palettes.ts (studio-selectable palette data: theme defaults,
+ *     presets and chart series — values the API stores and the theme editor
+ *     writes into CSS custom properties)
  *   - an explicit `// token-lint-disable-next-line` comment
  *
  * Unit tests are not scanned: a test that asserts a theme token round-trips
@@ -33,6 +36,7 @@ const baselineFile = join(root, 'scripts/.token-baseline.json');
 
 const ALLOWLIST = new Set([
   join(frontendSrc, 'theme/designTokens.ts'),
+  join(frontendSrc, 'theme/palettes.ts'),
 ]);
 
 const HEX = /#[0-9a-fA-F]{3,8}\b/g;

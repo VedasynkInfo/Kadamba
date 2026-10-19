@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from 'react';
 import { usePublicSettings } from '@/hooks/useCmsContent';
+import { DEFAULT_THEME_TOKENS } from '@/theme/palettes';
 import type { WebsiteSettings } from '@/pages/admin/data';
 
 interface ThemeContextType {
@@ -17,27 +18,7 @@ interface ThemeContextType {
   updateThemeTokens: (theme: WebsiteSettings['theme'], logoUrl?: string, logoDarkUrl?: string) => void;
 }
 
-const defaultThemeTokens: WebsiteSettings['theme'] = {
-  primary: '#000000',
-  primaryHover: '#1a1a1a',
-  primaryText: '#ffffff',
-  accent: '#b59410',
-  publicBg: '#ffffff',
-  publicText: '#171717',
-  publicCard: '#ffffff',
-  publicCardText: '#171717',
-  publicSurface: '#fafafa',
-  adminBg: '#0b0f17',
-  adminText: '#f3f4f6',
-  adminCard: '#1f2937',
-  adminCardText: '#f3f4f6',
-  adminSidebar: '#111827',
-  adminSidebarText: '#f3f4f6',
-  adminPrimary: '#b59410',
-  adminPrimaryText: '#000000',
-  adminAccent: '#ffd700',
-  fontFamily: 'Manrope, sans-serif',
-};
+const defaultThemeTokens = DEFAULT_THEME_TOKENS;
 
 const ThemeContext = createContext<ThemeContextType>({
   theme: defaultThemeTokens,

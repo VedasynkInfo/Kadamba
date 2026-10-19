@@ -29,7 +29,7 @@ export function Footer() {
   const logo = settings.logoDarkUrl || settings.logoUrl;
 
   return (
-    <footer className="mt-auto border-t border-gold/20 bg-black py-12 text-cream">
+    <footer className="mt-auto border-t border-gold/20 bg-black py-12 text-ink-inverse">
       <Container>
         <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
           <div>
@@ -44,10 +44,10 @@ export function Footer() {
             <p className="font-heading text-2xl text-gold">
               {settings.studioName || brand.name}
             </p>
-            <p className="mt-3 text-measure text-sm leading-relaxed text-cream/70">
+            <p className="mt-3 text-measure text-sm leading-relaxed text-ink-inverse/70">
               {settings.tagline || brand.summary}
             </p>
-            <div className="mt-5 space-y-1 text-sm text-cream/65">
+            <div className="mt-5 space-y-1 text-sm text-ink-inverse/65">
               {settings.addressLines.map((line) => (
                 <p key={line}>{line}</p>
               ))}
@@ -87,7 +87,7 @@ export function Footer() {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-cream/70 transition-colors hover:text-gold"
+                    className="text-ink-inverse/70 transition-colors hover:text-gold"
                   >
                     {link.label}
                   </a>
@@ -102,7 +102,7 @@ export function Footer() {
                 <li key={link.to}>
                   <NavLink
                     to={link.to}
-                    className="text-cream/70 transition-colors hover:text-gold"
+                    className="text-ink-inverse/70 transition-colors hover:text-gold"
                   >
                     {link.label}
                   </NavLink>
@@ -111,7 +111,7 @@ export function Footer() {
             </ul>
           </nav>
         </div>
-        <p className="mt-10 border-t border-gold/10 pt-6 text-xs text-cream/50">
+        <p className="mt-10 border-t border-gold/10 pt-6 text-xs text-ink-inverse/50">
           &copy; {new Date().getFullYear()} {settings.studioName || brand.name}. All rights
           reserved.
         </p>

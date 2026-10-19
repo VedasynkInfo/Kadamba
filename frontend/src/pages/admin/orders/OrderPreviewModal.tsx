@@ -59,26 +59,16 @@ export function OrderPreviewModal({ order, onClose, onStatusChange }: OrderPrevi
       aria-modal="true"
     >
       <div
-        className="relative w-full max-w-xl rounded-2xl border shadow-2xl overflow-hidden animate-fade-in-up text-xs"
-        style={{
-          backgroundColor: 'var(--admin-card, #141b26)',
-          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
-          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-        }}
+        className="relative w-full max-w-xl rounded-2xl border shadow-2xl overflow-hidden animate-fade-in-up text-xs bg-surface-raised border-line text-ink-raised"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div
-          className="flex items-center justify-between border-b px-6 py-4"
-          style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))' }}
+          className="flex items-center justify-between border-b px-6 py-4 border-line"
         >
           <div className="flex items-center gap-2.5">
             <span
-              className="font-mono text-xs font-bold px-2 py-0.5 rounded border"
-              style={{
-                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))',
-                backgroundColor: 'rgba(128, 128, 128, 0.08)',
-              }}
+              className="font-mono text-xs font-bold px-2 py-0.5 rounded border border-line bg-surface-sunken"
             >
               #{order.orderNumber}
             </span>
@@ -101,8 +91,7 @@ export function OrderPreviewModal({ order, onClose, onStatusChange }: OrderPrevi
           <button
             type="button"
             onClick={onClose}
-            className="h-8 w-8 rounded-lg border flex items-center justify-center text-xs opacity-70 hover:opacity-100 hover:bg-current/[0.06] transition cursor-pointer"
-            style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))' }}
+            className="h-8 w-8 rounded-lg border flex items-center justify-center text-xs opacity-70 hover:opacity-100 hover:bg-current/[0.06] transition cursor-pointer border-line"
             aria-label="Close dialog"
           >
             ✕
@@ -129,11 +118,7 @@ export function OrderPreviewModal({ order, onClose, onStatusChange }: OrderPrevi
 
           {/* Target Dates Grid */}
           <div
-            className="grid grid-cols-2 gap-3 rounded-xl p-3.5 border"
-            style={{
-              backgroundColor: 'rgba(128, 128, 128, 0.05)',
-              borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))',
-            }}
+            className="grid grid-cols-2 gap-3 rounded-xl p-3.5 border bg-surface-sunken border-line"
           >
             <div>
               <span className="opacity-50 block text-[10px] uppercase font-semibold">Fitting & Trial</span>
@@ -151,15 +136,13 @@ export function OrderPreviewModal({ order, onClose, onStatusChange }: OrderPrevi
           <div className="space-y-2">
             <h4 className="text-xs font-semibold opacity-75 uppercase tracking-wider">Garments & Items</h4>
             <div
-              className="rounded-xl border divide-y overflow-hidden text-xs"
-              style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}
+              className="rounded-xl border divide-y overflow-hidden text-xs border-line"
             >
               {order.lineItems?.length ? (
                 order.lineItems.map((item, idx) => (
                   <div
                     key={idx}
-                    className="p-3 flex items-center justify-between"
-                    style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.12))' }}
+                    className="p-3 flex items-center justify-between border-line"
                   >
                     <div>
                       <span className="font-semibold block">{item.name || `Garment #${idx + 1}`}</span>
@@ -178,19 +161,14 @@ export function OrderPreviewModal({ order, onClose, onStatusChange }: OrderPrevi
 
           {/* Financials Breakdown */}
           <div
-            className="rounded-xl p-4 border space-y-2"
-            style={{
-              backgroundColor: 'rgba(128, 128, 128, 0.05)',
-              borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-            }}
+            className="rounded-xl p-4 border space-y-2 bg-surface-sunken border-line"
           >
             <div className="flex items-center justify-between">
               <span className="font-semibold text-xs">Payment Collection Progress</span>
               <span className="font-mono text-xs font-bold">{paidPercent}% Paid</span>
             </div>
             <div
-              className="h-2 w-full rounded-full overflow-hidden"
-              style={{ backgroundColor: 'rgba(128, 128, 128, 0.2)' }}
+              className="h-2 w-full rounded-full overflow-hidden bg-line"
             >
               <div
                 className={cn(
@@ -245,16 +223,14 @@ export function OrderPreviewModal({ order, onClose, onStatusChange }: OrderPrevi
 
         {/* Footer Actions */}
         <div
-          className="flex flex-wrap items-center justify-between gap-3 border-t px-6 py-4"
-          style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))' }}
+          className="flex flex-wrap items-center justify-between gap-3 border-t px-6 py-4 border-line"
         >
           {waHref ? (
             <a
               href={waHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-lg border px-3.5 py-1.5 font-bold text-emerald-500 hover:bg-emerald-500/10 transition cursor-pointer"
-              style={{ borderColor: 'rgba(16, 185, 129, 0.3)' }}
+              className="inline-flex items-center gap-1.5 rounded-lg border px-3.5 py-1.5 font-bold text-emerald-500 hover:bg-emerald-500/10 transition cursor-pointer border-emerald-500/30"
             >
               <span>💬 WhatsApp Client</span>
             </a>
@@ -266,18 +242,13 @@ export function OrderPreviewModal({ order, onClose, onStatusChange }: OrderPrevi
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg border px-3 py-1.5 text-xs font-semibold opacity-80 hover:opacity-100 hover:bg-current/[0.05] transition cursor-pointer"
-              style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))' }}
+              className="rounded-lg border px-3 py-1.5 text-xs font-semibold opacity-80 hover:opacity-100 hover:bg-current/[0.05] transition cursor-pointer border-line"
             >
               Close
             </button>
             <Link
               to={`/admin/orders/${order.id}`}
-              className="inline-flex items-center gap-1 rounded-lg px-4 py-1.5 font-bold shadow-xs transition hover:opacity-95"
-              style={{
-                backgroundColor: 'var(--admin-primary, #b59410)',
-                color: 'var(--admin-primary-text, #ffffff)',
-              }}
+              className="inline-flex items-center gap-1 rounded-lg px-4 py-1.5 font-bold shadow-xs transition hover:opacity-95 bg-brand text-ink-on-brand"
             >
               <span>Open Atelier Workspace</span>
               <span>→</span>

@@ -40,7 +40,7 @@ export function PortfolioBannerSection({ project }: PortfolioBannerSectionProps)
   return (
     <section
       ref={rootRef}
-      className="relative isolate w-full overflow-hidden bg-black text-cream"
+      className="relative isolate w-full overflow-hidden bg-black text-ink-inverse"
       aria-label={`${project.title} — Kadamba portfolio`}
     >
       <div className="relative min-h-[min(90svh,900px)] w-full md:min-h-[calc(100svh-4.25rem)]">
@@ -62,7 +62,7 @@ export function PortfolioBannerSection({ project }: PortfolioBannerSectionProps)
 
         {/* Watermark brand — subtle, behind copy */}
         <p
-          className="pointer-events-none absolute inset-x-0 top-[18%] text-center font-heading text-[12vw] leading-none tracking-[0.12em] text-cream/[0.06] select-none md:top-[14%] md:text-[9vw]"
+          className="pointer-events-none absolute inset-x-0 top-[18%] text-center font-heading text-[12vw] leading-none tracking-[0.12em] text-ink-inverse/[0.06] select-none md:top-[14%] md:text-[9vw]"
           aria-hidden
         >
           {brand.shortName}
@@ -74,17 +74,17 @@ export function PortfolioBannerSection({ project }: PortfolioBannerSectionProps)
               <div className="max-w-3xl">
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[0.65rem] uppercase tracking-[0.28em] text-gold/90">
                   <span>{project.category}</span>
-                  <span className="text-cream/30" aria-hidden>
+                  <span className="text-ink-inverse/30" aria-hidden>
                     /
                   </span>
-                  <span className="text-cream/70">
+                  <span className="text-ink-inverse/70">
                     {project.year} · {project.location}
                   </span>
                 </div>
-                <h1 className="mt-4 font-heading text-3xl font-medium leading-tight text-cream sm:text-4xl md:text-5xl lg:text-[3.25rem]">
+                <h1 className="mt-4 font-heading text-3xl font-medium leading-tight text-ink-inverse sm:text-4xl md:text-5xl lg:text-[3.25rem]">
                   {project.title}
                 </h1>
-                <p className="text-lede mt-4 max-w-xl text-cream/80">{project.summary}</p>
+                <p className="text-lede mt-4 max-w-xl text-ink-inverse/80">{project.summary}</p>
               </div>
 
               <div className="flex shrink-0 flex-wrap gap-3">
@@ -94,7 +94,7 @@ export function PortfolioBannerSection({ project }: PortfolioBannerSectionProps)
                 <Button
                   variant="secondary"
                   size="lg"
-                  className="!text-cream"
+                  className="text-ink-inverse"
                   onClick={() => navigate('/portfolio')}
                 >
                   All projects

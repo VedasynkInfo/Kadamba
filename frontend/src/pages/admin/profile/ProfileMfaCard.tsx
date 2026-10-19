@@ -136,14 +136,13 @@ export function ProfileMfaCard() {
   const cardStyle = {
     backgroundColor: 'var(--admin-card)',
     borderColor: 'var(--admin-border)',
-    color: 'var(--admin-card-text, var(--admin-text))',
+    color: 'var(--admin-card-text)',
   };
 
   return (
     <div className="rounded-2xl border p-6 shadow-sm text-xs" style={cardStyle}>
       <div
-        className="border-b pb-4 mb-5"
-        style={{ borderColor: 'var(--admin-border)' }}
+        className="border-b pb-4 mb-5 border-line"
       >
         <div className="flex items-start justify-between gap-4">
           <div>
@@ -180,8 +179,7 @@ export function ProfileMfaCard() {
             {backupCodes.map((backupCode) => (
               <span
                 key={backupCode}
-                className="rounded-lg border px-2 py-1.5 text-center"
-                style={{ borderColor: 'var(--admin-border)' }}
+                className="rounded-lg border px-2 py-1.5 text-center border-line"
               >
                 {backupCode}
               </span>
@@ -190,8 +188,7 @@ export function ProfileMfaCard() {
           <button
             type="button"
             onClick={() => setBackupCodes(null)}
-            className="rounded-xl border px-4 py-2 text-xs font-semibold"
-            style={{ borderColor: 'var(--admin-border)' }}
+            className="rounded-xl border px-4 py-2 text-xs font-semibold border-line"
           >
             I have saved them
           </button>
@@ -205,8 +202,7 @@ export function ProfileMfaCard() {
           </ol>
           <div className="space-y-2">
             <p className="text-[10px] uppercase tracking-wider opacity-60">Setup key</p>
-            <code className="block break-all rounded-lg border px-3 py-2 font-mono text-[11px]"
-              style={{ borderColor: 'var(--admin-border)' }}>
+            <code className="block break-all rounded-lg border px-3 py-2 font-mono text-[11px] border-line">
               {enrolment.secret}
             </code>
             <code className="block break-all text-[10px] opacity-45">{enrolment.otpauthUri}</code>
@@ -216,19 +212,14 @@ export function ProfileMfaCard() {
             onChange={(e) => setCode(e.target.value)}
             inputMode="numeric"
             placeholder="123456"
-            className="w-full rounded-xl border px-3 py-2.5 text-xs"
-            style={{
-              backgroundColor: 'rgba(128,128,128,0.05)',
-              borderColor: 'var(--admin-border)',
-              color: 'inherit',
-            }}
+            className="w-full rounded-xl border px-3 py-2.5 text-xs bg-surface-sunken border-line"
           />
           <div className="flex gap-2">
             <button
               type="button"
               onClick={() => void confirmEnrolment()}
               disabled={busy || code.trim().length < 6}
-              className="rounded-xl bg-gold px-4 py-2 text-xs font-bold text-black disabled:opacity-50"
+              className="rounded-xl bg-gold px-4 py-2 text-xs font-bold text-ink disabled:opacity-50"
             >
               {busy ? 'Verifying…' : 'Enable 2FA'}
             </button>
@@ -238,8 +229,7 @@ export function ProfileMfaCard() {
                 setEnrolment(null);
                 setCode('');
               }}
-              className="rounded-xl border px-4 py-2 text-xs"
-              style={{ borderColor: 'var(--admin-border)' }}
+              className="rounded-xl border px-4 py-2 text-xs border-line"
             >
               Cancel
             </button>
@@ -257,24 +247,14 @@ export function ProfileMfaCard() {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
             autoComplete="current-password"
-            className="w-full rounded-xl border px-3 py-2.5 text-xs"
-            style={{
-              backgroundColor: 'rgba(128,128,128,0.05)',
-              borderColor: 'var(--admin-border)',
-              color: 'inherit',
-            }}
+            className="w-full rounded-xl border px-3 py-2.5 text-xs bg-surface-sunken border-line"
           />
           <input
             value={code}
             onChange={(e) => setCode(e.target.value)}
             inputMode="numeric"
             placeholder="123456"
-            className="w-full rounded-xl border px-3 py-2.5 text-xs"
-            style={{
-              backgroundColor: 'rgba(128,128,128,0.05)',
-              borderColor: 'var(--admin-border)',
-              color: 'inherit',
-            }}
+            className="w-full rounded-xl border px-3 py-2.5 text-xs bg-surface-sunken border-line"
           />
           <div className="flex gap-2">
             <button
@@ -292,8 +272,7 @@ export function ProfileMfaCard() {
                 setPassword('');
                 setCode('');
               }}
-              className="rounded-xl border px-4 py-2 text-xs"
-              style={{ borderColor: 'var(--admin-border)' }}
+              className="rounded-xl border px-4 py-2 text-xs border-line"
             >
               Cancel
             </button>
@@ -309,8 +288,7 @@ export function ProfileMfaCard() {
             <button
               type="button"
               onClick={() => setDisabling(true)}
-              className="rounded-xl border px-4 py-2 text-xs font-semibold"
-              style={{ borderColor: 'var(--admin-border)' }}
+              className="rounded-xl border px-4 py-2 text-xs font-semibold border-line"
             >
               Disable 2FA
             </button>
@@ -320,8 +298,7 @@ export function ProfileMfaCard() {
                 setPassword('');
                 setRegenerating(true);
               }}
-              className="rounded-xl border px-4 py-2 text-xs"
-              style={{ borderColor: 'var(--admin-border)' }}
+              className="rounded-xl border px-4 py-2 text-xs border-line"
             >
               Regenerate recovery codes
             </button>
@@ -334,19 +311,13 @@ export function ProfileMfaCard() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password to confirm"
                 autoComplete="current-password"
-                className="w-full rounded-xl border px-3 py-2.5 text-xs"
-                style={{
-                  backgroundColor: 'rgba(128,128,128,0.05)',
-                  borderColor: 'var(--admin-border)',
-                  color: 'inherit',
-                }}
+                className="w-full rounded-xl border px-3 py-2.5 text-xs bg-surface-sunken border-line"
               />
               <button
                 type="button"
                 onClick={() => void regenerate()}
                 disabled={busy || !password}
-                className="rounded-xl border px-4 py-2 text-xs font-semibold disabled:opacity-50"
-                style={{ borderColor: 'var(--admin-border)' }}
+                className="rounded-xl border px-4 py-2 text-xs font-semibold disabled:opacity-50 border-line"
               >
                 {busy ? 'Generating…' : 'Generate new codes'}
               </button>
@@ -362,7 +333,7 @@ export function ProfileMfaCard() {
             type="button"
             onClick={() => void startEnrolment()}
             disabled={busy}
-            className="rounded-xl bg-gold px-4 py-2 text-xs font-bold text-black disabled:opacity-50"
+            className="rounded-xl bg-gold px-4 py-2 text-xs font-bold text-ink disabled:opacity-50"
           >
             {busy ? 'Preparing…' : 'Set up two-factor authentication'}
           </button>

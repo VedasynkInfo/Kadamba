@@ -132,8 +132,8 @@ export default function PortalRequestsPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="font-heading text-3xl text-cream">Browse & request</h1>
-        <p className="mt-2 max-w-xl text-sm text-cream/55">
+        <h1 className="font-heading text-3xl text-ink-inverse">Browse & request</h1>
+        <p className="mt-2 max-w-xl text-sm text-ink-inverse/55">
           Choose a garment from {brand.shortName}&apos;s catalog — we&apos;ll open a linked enquiry
           for your next fitting in {brand.location}.
         </p>
@@ -148,7 +148,7 @@ export default function PortalRequestsPage() {
             initial={reduced ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             exit={reduced ? undefined : { opacity: 0, y: -10 }}
-            className="relative overflow-hidden border border-gold/25 bg-[radial-gradient(ellipse_at_top_left,_rgba(255,215,0,0.08),_transparent_55%),_#0c0a08]"
+            className="relative overflow-hidden border border-gold/25 bg-[radial-gradient(ellipse_at_top_left,_rgba(255,215,0,0.08),_transparent_55%),_var(--color-espresso)]"
           >
             <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
 
@@ -156,7 +156,7 @@ export default function PortalRequestsPage() {
               <button
                 type="button"
                 onClick={backToList}
-                className="text-xs uppercase tracking-[0.18em] text-cream/50 hover:text-gold"
+                className="text-xs uppercase tracking-[0.18em] text-ink-inverse/50 hover:text-gold"
               >
                 ← All garments
               </button>
@@ -164,8 +164,8 @@ export default function PortalRequestsPage() {
               {doneId ? (
                 <div className="mt-8 space-y-4 text-center sm:py-10">
                   <p className="text-[0.62rem] uppercase tracking-[0.35em] text-gold/80">Received</p>
-                  <h2 className="font-heading text-3xl text-cream">We have your request</h2>
-                  <p className="mx-auto max-w-md text-sm text-cream/60">
+                  <h2 className="font-heading text-3xl text-ink-inverse">We have your request</h2>
+                  <p className="mx-auto max-w-md text-sm text-ink-inverse/60">
                     The boutique will follow up about <span className="text-gold">{selected.name}</span>.
                     {doneOrderNumber ? (
                       <>
@@ -196,17 +196,17 @@ export default function PortalRequestsPage() {
                 <>
                   <div className="mt-6 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
                     <div className="space-y-3 border border-gold/15 bg-black/30 p-5">
-                      <p className="text-[0.62rem] uppercase tracking-[0.24em] text-cream/40">
+                      <p className="text-[0.62rem] uppercase tracking-[0.24em] text-ink-inverse/40">
                         {selected.categoryName || 'Garment'}
                       </p>
-                      <h2 className="font-heading text-3xl text-cream">{selected.name}</h2>
+                      <h2 className="font-heading text-3xl text-ink-inverse">{selected.name}</h2>
                       <p className="font-mono text-xs text-gold/75">{selected.code}</p>
                       {selected.publicDescription ? (
-                        <p className="text-sm leading-relaxed text-cream/60">
+                        <p className="text-sm leading-relaxed text-ink-inverse/60">
                           {selected.publicDescription}
                         </p>
                       ) : (
-                        <p className="text-sm text-cream/50">
+                        <p className="text-sm text-ink-inverse/50">
                           Custom tailoring with measurements, trials, and finishing at the studio.
                         </p>
                       )}
@@ -295,7 +295,7 @@ export default function PortalRequestsPage() {
             className="grid gap-3 sm:grid-cols-2"
           >
             {catalog.length === 0 ? (
-              <li className="col-span-full border border-gold/15 px-4 py-8 text-sm text-cream/50">
+              <li className="col-span-full border border-gold/15 px-4 py-8 text-sm text-ink-inverse/50">
                 No published products yet. Message the boutique from Chat instead.
               </li>
             ) : (
@@ -311,19 +311,19 @@ export default function PortalRequestsPage() {
                     onClick={() => selectItem(item)}
                     className="group h-full w-full border border-gold/15 bg-black/25 px-4 py-5 text-left transition hover:border-gold/45 hover:bg-white/[0.04]"
                   >
-                    <p className="text-[0.65rem] uppercase tracking-[0.16em] text-cream/40">
+                    <p className="text-[0.65rem] uppercase tracking-[0.16em] text-ink-inverse/40">
                       {item.categoryName || item.categoryCode || 'Garment'}
                     </p>
-                    <p className="mt-1 font-heading text-xl text-cream group-hover:text-gold">
+                    <p className="mt-1 font-heading text-xl text-ink-inverse group-hover:text-gold">
                       {item.name}
                     </p>
                     <p className="mt-1 font-mono text-[0.7rem] text-gold/70">{item.code}</p>
                     {item.publicDescription ? (
-                      <p className="mt-2 line-clamp-2 text-sm text-cream/55">
+                      <p className="mt-2 line-clamp-2 text-sm text-ink-inverse/55">
                         {item.publicDescription}
                       </p>
                     ) : null}
-                    <p className="mt-4 text-[0.65rem] uppercase tracking-[0.18em] text-cream/40 group-hover:text-gold/80">
+                    <p className="mt-4 text-[0.65rem] uppercase tracking-[0.18em] text-ink-inverse/40 group-hover:text-gold/80">
                       Request this →
                     </p>
                   </button>

@@ -76,7 +76,7 @@ export function MarqueeSection() {
                 width={640}
                 height={416}
               />
-              <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-3 py-3 font-heading text-sm text-cream opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
+              <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-3 py-3 font-heading text-sm text-ink-inverse opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
                 {item.title}
               </span>
             </button>

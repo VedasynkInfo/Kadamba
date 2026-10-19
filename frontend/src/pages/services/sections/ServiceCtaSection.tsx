@@ -51,7 +51,7 @@ export function ServiceCtaSection({ service }: ServiceCtaSectionProps) {
             <Button
               variant="secondary"
               size="lg"
-              className="!text-cream"
+              className="text-ink-inverse"
               onClick={() => window.open(whatsappHref(), '_blank', 'noopener,noreferrer')}
             >
               WhatsApp the studio

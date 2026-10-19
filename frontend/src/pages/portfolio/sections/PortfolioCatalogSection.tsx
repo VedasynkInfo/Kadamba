@@ -45,7 +45,7 @@ export function PortfolioCatalogSection() {
                 variant={category === item ? 'primary' : 'ghost'}
                 className={cn(
                   'min-h-10 border',
-                  category === item ? 'border-transparent' : 'border-black/15 text-black',
+                  category === item ? 'border-transparent' : 'border-line text-ink',
                 )}
                 onClick={() => setCategory(item)}
                 aria-pressed={category === item}
@@ -141,7 +141,7 @@ function ProjectTile({
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-cream',
       )}
     >
-      <div className="relative aspect-[3/4] overflow-hidden bg-black/5">
+      <div className="relative aspect-[3/4] overflow-hidden bg-surface-sunken">
         <OptimizedImage
           sizes="(min-width: 1200px) 368px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
           src={project.coverImage}
@@ -158,11 +158,11 @@ function ProjectTile({
           {project.category}
         </span>
       </div>
-      <p className="mt-4 text-[0.65rem] uppercase tracking-[0.22em] text-black/45">
+      <p className="mt-4 text-[0.65rem] uppercase tracking-[0.22em] text-ink/45">
         {project.year} · {project.location}
       </p>
-      <h3 className="mt-2 font-heading text-2xl leading-snug text-black">{project.title}</h3>
-      <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-black/65">{project.summary}</p>
+      <h3 className="mt-2 font-heading text-2xl leading-snug text-ink">{project.title}</h3>
+      <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-ink/65">{project.summary}</p>
     </button>
   );
 }

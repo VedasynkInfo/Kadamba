@@ -182,8 +182,7 @@ export default function MediaLibraryPage() {
         <header className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <h1
-              className="font-heading text-xl font-bold tracking-tight sm:text-2xl"
-              style={{ color: 'var(--admin-text)' }}
+              className="font-heading text-xl font-bold tracking-tight sm:text-2xl text-ink"
             >
               Media Library
             </h1>
@@ -199,22 +198,12 @@ export default function MediaLibraryPage() {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search name, alt text or hash"
-              className="w-full rounded-xl border px-3 py-2 text-xs sm:w-56"
-              style={{
-                backgroundColor: 'rgba(128,128,128,0.05)',
-                borderColor: 'var(--admin-border)',
-                color: 'inherit',
-              }}
+              className="w-full rounded-xl border px-3 py-2 text-xs sm:w-56 bg-surface-sunken border-line"
             />
             <select
               value={folder}
               onChange={(event) => setFolder(event.target.value)}
-              className="rounded-xl border px-3 py-2 text-xs"
-              style={{
-                backgroundColor: 'rgba(128,128,128,0.05)',
-                borderColor: 'var(--admin-border)',
-                color: 'inherit',
-              }}
+              className="rounded-xl border px-3 py-2 text-xs bg-surface-sunken border-line"
             >
               <option value="">All folders</option>
               {folders.map((name) => (
@@ -226,20 +215,14 @@ export default function MediaLibraryPage() {
             <select
               value={kind}
               onChange={(event) => setKind(event.target.value as '' | 'image' | 'video')}
-              className="rounded-xl border px-3 py-2 text-xs"
-              style={{
-                backgroundColor: 'rgba(128,128,128,0.05)',
-                borderColor: 'var(--admin-border)',
-                color: 'inherit',
-              }}
+              className="rounded-xl border px-3 py-2 text-xs bg-surface-sunken border-line"
             >
               <option value="">Images &amp; video</option>
               <option value="image">Images</option>
               <option value="video">Video</option>
             </select>
             <label
-              className="flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-[11px]"
-              style={{ borderColor: 'var(--admin-border)' }}
+              className="flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-[11px] border-line"
             >
               <input
                 type="checkbox"
@@ -258,8 +241,7 @@ export default function MediaLibraryPage() {
           </div>
         ) : items.length === 0 ? (
           <div
-            className="rounded-2xl border px-6 py-16 text-center text-xs opacity-60"
-            style={{ backgroundColor: 'var(--admin-card)', borderColor: 'var(--admin-border)' }}
+            className="rounded-2xl border px-6 py-16 text-center text-xs opacity-60 bg-surface-raised border-line"
           >
             No media matches these filters.
           </div>
@@ -272,11 +254,7 @@ export default function MediaLibraryPage() {
                   <button
                     type="button"
                     onClick={() => openDetail(asset)}
-                    className="group w-full overflow-hidden rounded-2xl border text-left transition hover:border-gold/50"
-                    style={{
-                      backgroundColor: 'var(--admin-card)',
-                      borderColor: 'var(--admin-border)',
-                    }}
+                    className="group w-full overflow-hidden rounded-2xl border text-left transition hover:border-gold/50 bg-surface-raised border-line"
                   >
                     <div className="relative aspect-[4/3] w-full overflow-hidden bg-black/20">
                       {asset.kind === 'video' ? (
@@ -297,7 +275,7 @@ export default function MediaLibraryPage() {
                         </span>
                       ) : null}
                       {usageCount === 0 ? (
-                        <span className="absolute right-2 top-2 rounded-full bg-amber-500/85 px-2 py-0.5 text-[10px] font-semibold uppercase text-black">
+                        <span className="absolute right-2 top-2 rounded-full bg-amber-500/85 px-2 py-0.5 text-[10px] font-semibold uppercase text-ink">
                           Unused
                         </span>
                       ) : null}
@@ -332,8 +310,7 @@ export default function MediaLibraryPage() {
               type="button"
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page <= 1}
-              className="rounded-lg border px-3 py-1.5 disabled:opacity-40"
-              style={{ borderColor: 'var(--admin-border)' }}
+              className="rounded-lg border px-3 py-1.5 disabled:opacity-40 border-line"
             >
               Previous
             </button>
@@ -344,8 +321,7 @@ export default function MediaLibraryPage() {
               type="button"
               onClick={() => setPage((p) => Math.min(pages, p + 1))}
               disabled={page >= pages}
-              className="rounded-lg border px-3 py-1.5 disabled:opacity-40"
-              style={{ borderColor: 'var(--admin-border)' }}
+              className="rounded-lg border px-3 py-1.5 disabled:opacity-40 border-line"
             >
               Next
             </button>
@@ -356,12 +332,7 @@ export default function MediaLibraryPage() {
       {selected ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
           <div
-            className="max-h-[88vh] w-full max-w-3xl overflow-y-auto rounded-2xl border p-6"
-            style={{
-              backgroundColor: 'var(--admin-card)',
-              borderColor: 'var(--admin-border)',
-              color: 'var(--admin-card-text)',
-            }}
+            className="max-h-[88vh] w-full max-w-3xl overflow-y-auto rounded-2xl border p-6 bg-surface-raised border-line text-ink-raised"
           >
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -382,8 +353,7 @@ export default function MediaLibraryPage() {
 
             <div className="mt-5 grid gap-5 sm:grid-cols-2">
               <div
-                className="overflow-hidden rounded-xl border bg-black/20"
-                style={{ borderColor: 'var(--admin-border)' }}
+                className="overflow-hidden rounded-xl border bg-black/20 border-line"
               >
                 {selected.kind === 'video' ? (
                   <video
@@ -446,12 +416,7 @@ export default function MediaLibraryPage() {
                 rows={2}
                 maxLength={300}
                 placeholder="Describe the image for screen readers and search engines."
-                className="mt-2 w-full rounded-xl border px-3 py-2 text-xs"
-                style={{
-                  backgroundColor: 'rgba(128,128,128,0.05)',
-                  borderColor: 'var(--admin-border)',
-                  color: 'inherit',
-                }}
+                className="mt-2 w-full rounded-xl border px-3 py-2 text-xs bg-surface-sunken border-line"
               />
             </div>
 
@@ -497,8 +462,7 @@ export default function MediaLibraryPage() {
                 <button
                   type="button"
                   onClick={() => void copyUrl(selected)}
-                  className="rounded-xl border px-3 py-2 text-[11px]"
-                  style={{ borderColor: 'var(--admin-border)' }}
+                  className="rounded-xl border px-3 py-2 text-[11px] border-line"
                 >
                   Copy URL
                 </button>
@@ -506,8 +470,7 @@ export default function MediaLibraryPage() {
                   href={selected.originalUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-xl border px-3 py-2 text-[11px]"
-                  style={{ borderColor: 'var(--admin-border)' }}
+                  className="rounded-xl border px-3 py-2 text-[11px] border-line"
                 >
                   Open original
                 </a>
@@ -520,8 +483,7 @@ export default function MediaLibraryPage() {
                       type="button"
                       onClick={() => void regenerate()}
                       disabled={busyId === selected._id || selected.kind === 'video'}
-                      className="rounded-xl border px-3 py-2 text-[11px] disabled:opacity-50"
-                      style={{ borderColor: 'var(--admin-border)' }}
+                      className="rounded-xl border px-3 py-2 text-[11px] disabled:opacity-50 border-line"
                     >
                       Rebuild variants
                     </button>
@@ -529,7 +491,7 @@ export default function MediaLibraryPage() {
                       type="button"
                       onClick={() => void saveAlt()}
                       disabled={busyId === selected._id}
-                      className="rounded-xl bg-gold px-3 py-2 text-[11px] font-bold text-black disabled:opacity-50"
+                      className="rounded-xl bg-gold px-3 py-2 text-[11px] font-bold text-ink disabled:opacity-50"
                     >
                       {busyId === selected._id ? 'Saving…' : 'Save alt text'}
                     </button>

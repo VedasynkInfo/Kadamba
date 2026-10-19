@@ -101,12 +101,7 @@ export function MeasurementsTable({
 
   return (
     <div
-      className="rounded-xl border shadow-xs overflow-visible transition-colors"
-      style={{
-        backgroundColor: 'var(--admin-card, #141b26)',
-        borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-        color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-      }}
+      className="rounded-xl border shadow-xs overflow-visible transition-colors bg-surface-raised border-line text-ink-raised"
     >
       {loading ? (
         <div className="p-6 space-y-3">
@@ -128,11 +123,7 @@ export function MeasurementsTable({
           <table className="w-full min-w-[950px] text-left border-collapse text-xs table-fixed">
             <thead>
               <tr
-                className="border-b text-[0.65rem] uppercase tracking-wider font-semibold opacity-75"
-                style={{
-                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-                  backgroundColor: 'rgba(128, 128, 128, 0.05)',
-                }}
+                className="border-b text-[0.65rem] uppercase tracking-wider font-semibold opacity-75 border-line bg-surface-sunken"
               >
                 <th className="py-3 px-4 w-[240px]">Client / Contact</th>
                 <th className="py-3 px-4 min-w-[220px]">Silhouette & Fit Name</th>
@@ -143,8 +134,7 @@ export function MeasurementsTable({
               </tr>
             </thead>
             <tbody
-              className="divide-y"
-              style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.12))' }}
+              className="divide-y border-line"
             >
               {items.map((p) => {
                 const isMenuOpen = menuAnchor?.profile.id === p.id;
@@ -156,18 +146,13 @@ export function MeasurementsTable({
                 return (
                   <tr
                     key={p.id}
-                    className="transition hover:bg-current/[0.03] group"
-                    style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.12))' }}
+                    className="transition hover:bg-current/[0.03] group border-line"
                   >
                     {/* Client & Phone */}
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-3">
                         <div
-                          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full font-bold text-xs shadow-xs"
-                          style={{
-                            backgroundColor: 'var(--admin-primary, #b59410)',
-                            color: 'var(--admin-primary-text, #ffffff)',
-                          }}
+                          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full font-bold text-xs shadow-xs bg-brand text-ink-on-brand"
                         >
                           {getInitials(p.customerName)}
                         </div>
@@ -192,12 +177,7 @@ export function MeasurementsTable({
                         <span className="font-semibold block truncate">{p.profileName}</span>
                         <div className="flex items-center gap-1.5 mt-1">
                           <span
-                            className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold border"
-                            style={{
-                              backgroundColor: 'rgba(181, 148, 16, 0.12)',
-                              borderColor: 'rgba(181, 148, 16, 0.3)',
-                              color: 'var(--admin-primary, #b59410)',
-                            }}
+                            className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold border bg-brand/12 border-brand/30 text-brand"
                           >
                             {silhouette.icon} {silhouette.name}
                           </span>
@@ -271,14 +251,9 @@ export function MeasurementsTable({
                           className={cn(
                             'inline-flex h-7 w-7 items-center justify-center rounded-lg border transition cursor-pointer',
                             isMenuOpen
-                              ? 'bg-[var(--admin-primary,#b59410)]/15 text-[var(--admin-primary,#b59410)] font-bold'
-                              : 'hover:bg-current/[0.08]',
+                              ? 'bg-brand/15 text-brand font-bold'
+                              : 'hover:bg-current/[0.08]', isMenuOpen ? 'border-brand' : 'border-line'
                           )}
-                          style={{
-                            borderColor: isMenuOpen
-                              ? 'var(--admin-primary, #b59410)'
-                              : 'var(--admin-border, rgba(128, 128, 128, 0.2))',
-                          }}
                           aria-label="Actions menu"
                           aria-expanded={isMenuOpen}
                         >
@@ -303,15 +278,11 @@ export function MeasurementsTable({
           />
 
           <div
-            className="fixed z-50 w-52 rounded-xl border p-1 shadow-2xl animate-fade-in text-left text-xs"
+            className="fixed z-50 w-52 rounded-xl border p-1 shadow-2xl animate-fade-in text-left text-xs bg-surface-raised border-line text-ink-raised"
             style={{
               top: menuAnchor.showAbove ? undefined : `${menuAnchor.top}px`,
               bottom: menuAnchor.showAbove ? `${window.innerHeight - menuAnchor.top}px` : undefined,
               right: `${menuAnchor.right}px`,
-              backgroundColor: 'var(--admin-card, #1f2937)',
-              borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.22))',
-              color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-              boxShadow: '0 12px 32px -4px rgba(0, 0, 0, 0.35)',
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -370,8 +341,7 @@ export function MeasurementsTable({
             </button>
 
             <div
-              className="my-1 border-t"
-              style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}
+              className="my-1 border-t border-line"
             />
 
             <button

@@ -41,7 +41,7 @@ export function TeamSection() {
               {member.role}
             </p>
             <h3 className="mt-2 font-heading text-2xl leading-snug">{member.name}</h3>
-            <p className="mt-3 text-base leading-relaxed text-black/70">{member.bio}</p>
+            <p className="mt-3 text-base leading-relaxed text-ink/70">{member.bio}</p>
           </motion.li>
         ))}
       </motion.ul>

@@ -23,7 +23,7 @@ export function StudioStorySection() {
           <SectionIntro title={studioStory.title} description={studioStory.lede} />
           <div className="mt-8 space-y-4">
             {studioStory.paragraphs.map((paragraph) => (
-              <p key={paragraph.slice(0, 32)} className="text-base leading-relaxed text-black/70">
+              <p key={paragraph.slice(0, 32)} className="text-base leading-relaxed text-ink/70">
                 {paragraph}
               </p>
             ))}

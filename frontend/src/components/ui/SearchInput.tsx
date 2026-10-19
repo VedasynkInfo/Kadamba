@@ -15,7 +15,7 @@ export function SearchInput({
 
   return (
     <div className={cn('relative min-w-[200px] flex-1 max-w-xs', containerClassName)}>
-      <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-black/30 text-sm">
+      <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink/30 text-sm">
         ⌕
       </span>
       <input
@@ -23,8 +23,8 @@ export function SearchInput({
         type="text"
         placeholder={placeholder}
         className={cn(
-          'w-full rounded-md border border-black/15 bg-cream py-2.5 pl-8 pr-3 text-sm text-black',
-          'placeholder:text-black/40',
+          'w-full rounded-md border border-line bg-surface-field py-2.5 pl-8 pr-3 text-sm text-ink',
+          'placeholder:text-ink/40',
           'focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30',
           className,
         )}

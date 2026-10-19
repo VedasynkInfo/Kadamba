@@ -29,12 +29,7 @@ export function AdminHorizonBanner({
 
   return (
     <header
-      className="border-b transition-colors duration-200"
-      style={{
-        backgroundColor: 'var(--admin-card, #111827)',
-        borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
-        color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
-      }}
+      className="border-b transition-colors duration-200 bg-surface-raised border-line text-ink-raised"
       aria-label={`${brand.shortName} admin — ${title}`}
     >
       <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 md:px-8">
@@ -46,8 +41,7 @@ export function AdminHorizonBanner({
             </p>
           </div>
           <h1
-            className="mt-1 font-heading text-xl font-bold tracking-tight sm:text-2xl"
-            style={{ color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))' }}
+            className="mt-1 font-heading text-xl font-bold tracking-tight sm:text-2xl text-ink-raised"
           >
             {title}
           </h1>

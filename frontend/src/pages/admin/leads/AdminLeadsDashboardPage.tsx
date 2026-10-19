@@ -89,7 +89,7 @@ export default function AdminLeadsDashboardPage() {
         <div className="space-y-2">
           <div className="flex items-center justify-between px-1">
             <h3 className="text-sm font-bold tracking-tight text-inherit">Recently Active Enquiries</h3>
-            <a href="/admin/leads/list" className="text-xs font-semibold text-[var(--admin-primary,#b59410)] hover:underline">
+            <a href="/admin/leads/list" className="text-xs font-semibold text-brand hover:underline">
               View All Pipeline ({leads.length}) →
             </a>
           </div>

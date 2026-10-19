@@ -81,7 +81,7 @@ export function LatestBlogsSection() {
                 </div>
                 <time
                   dateTime={post.date}
-                  className="mt-4 block text-xs uppercase tracking-widest text-black/45"
+                  className="mt-4 block text-xs uppercase tracking-widest text-ink/45"
                 >
                   {new Date(post.date).toLocaleDateString('en-IN', {
                     year: 'numeric',
@@ -89,10 +89,10 @@ export function LatestBlogsSection() {
                     day: 'numeric',
                   })}
                 </time>
-                <h3 className="mt-2 font-heading text-xl leading-snug group-hover:text-black/80">
+                <h3 className="mt-2 font-heading text-xl leading-snug group-hover:text-ink/80">
                   {post.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-black/65">{post.excerpt}</p>
+                <p className="mt-2 text-sm leading-relaxed text-ink/65">{post.excerpt}</p>
               </button>
             </article>
           </motion.li>

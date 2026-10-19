@@ -43,10 +43,10 @@ export function GalleryMasonrySection() {
           <p className="font-heading text-xs uppercase tracking-[0.28em] text-gold">
             Browse by occasion
           </p>
-          <h2 className="mt-3 font-heading text-3xl text-cream md:text-4xl">
+          <h2 className="mt-3 font-heading text-3xl text-ink-inverse md:text-4xl">
             Bridal, traditional & atelier details
           </h2>
-          <p className="mt-3 text-cream/70">
+          <p className="mt-3 text-ink-inverse/70">
             Filter the lookbook — every frame reflects custom tailoring from our Kurnool boutique.
           </p>
         </div>
@@ -63,7 +63,7 @@ export function GalleryMasonrySection() {
               variant={filter === category ? 'primary' : 'secondary'}
               className={cn(
                 'min-h-10',
-                filter !== category && '!text-cream hover:!border-gold hover:!text-gold',
+                filter !== category && 'text-ink-inverse hover:border-gold hover:text-gold',
               )}
               onClick={() => setFilter(category)}
               aria-pressed={filter === category}
@@ -75,7 +75,7 @@ export function GalleryMasonrySection() {
       </div>
 
       {!loading ? (
-        <p className="mt-6 text-sm text-cream/50" aria-live="polite">
+        <p className="mt-6 text-sm text-ink-inverse/50" aria-live="polite">
           {filtered.length} {filtered.length === 1 ? 'piece' : 'pieces'}
         </p>
       ) : null}
@@ -96,7 +96,7 @@ export function GalleryMasonrySection() {
           }
           action={
             published.length > 0 ? (
-              <Button size="sm" variant="secondary" className="!text-cream" onClick={() => setFilter('All')}>
+              <Button size="sm" variant="secondary" className="text-ink-inverse" onClick={() => setFilter('All')}>
                 Show everything
               </Button>
             ) : undefined
@@ -165,7 +165,7 @@ function MasonryTile({
               sizes="(min-width: 1200px) 368px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
               src={item.poster ?? item.src}
               alt={item.alt}
-              className="h-full w-full object-cover transition-transform duration-700 ease-[var(--ease-luxury)] group-hover:scale-105"
+              className="h-full w-full object-cover transition-transform duration-700 ease-luxury group-hover:scale-105"
               width={item.width}
               height={item.height}
             />
@@ -185,7 +185,7 @@ function MasonryTile({
             sizes="(min-width: 1200px) 368px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             src={item.src}
             alt={item.alt}
-            className="h-full w-full object-cover transition-transform duration-700 ease-[var(--ease-luxury)] group-hover:scale-105"
+            className="h-full w-full object-cover transition-transform duration-700 ease-luxury group-hover:scale-105"
             width={item.width}
             height={item.height}
           />
@@ -196,7 +196,7 @@ function MasonryTile({
           aria-hidden
         />
         <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
-          <p className="font-heading text-lg text-cream sm:text-xl">{item.title}</p>
+          <p className="font-heading text-lg text-ink-inverse sm:text-xl">{item.title}</p>
           <p className="mt-1 text-[0.65rem] uppercase tracking-[0.2em] text-gold">
             {item.category}
           </p>

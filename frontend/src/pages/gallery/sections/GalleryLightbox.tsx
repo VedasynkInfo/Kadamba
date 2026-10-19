@@ -80,7 +80,7 @@ export function GalleryLightbox({
                 </p>
                 <h2
                   id={titleId}
-                  className="mt-1 font-heading text-xl text-cream sm:text-2xl md:text-3xl"
+                  className="mt-1 font-heading text-xl text-ink-inverse sm:text-2xl md:text-3xl"
                 >
                   {item.title}
                 </h2>
@@ -90,7 +90,7 @@ export function GalleryLightbox({
                 type="button"
                 onClick={onClose}
                 className={cn(
-                  'shrink-0 border border-cream/20 px-3 py-1.5 text-sm text-cream/80',
+                  'shrink-0 border border-cream/20 px-3 py-1.5 text-sm text-ink-inverse/80',
                   'transition-colors hover:border-gold hover:text-gold',
                   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold',
                 )}
@@ -130,7 +130,7 @@ export function GalleryLightbox({
             </div>
 
             <div className="mt-4 flex items-center justify-between gap-3">
-              <p className="text-sm text-cream/55">
+              <p className="text-sm text-ink-inverse/55">
                 {activeIndex !== null ? activeIndex + 1 : 0} / {items.length}
                 <span className="ml-3 hidden sm:inline">Use ← → to browse</span>
               </p>
@@ -174,7 +174,7 @@ function NavButton({
       type="button"
       onClick={onClick}
       aria-label={label}
-      className="flex size-11 items-center justify-center border border-gold/35 text-cream transition-colors hover:border-gold hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+      className="flex size-11 items-center justify-center border border-gold/35 text-ink-inverse transition-colors hover:border-gold hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
     >
       <svg className="size-4" viewBox="0 0 24 24" fill="none" aria-hidden>
         <path

@@ -17,13 +17,13 @@ export function BlogArticleSection({ post }: BlogArticleSectionProps) {
   return (
     <Section tone="light" className="py-14 md:py-20">
       <motion.article
-        className="mx-auto max-w-[var(--measure-wide)]"
+        className="mx-auto text-measure-wide"
         initial={reduced ? false : 'hidden'}
         whileInView={reduced ? undefined : 'visible'}
         viewport={{ once: true, amount: 0.15 }}
         variants={reduced ? undefined : fadeUp}
       >
-        <div className="space-y-6 text-[1.0625rem] leading-[1.8] text-black/80">
+        <div className="space-y-6 text-[1.0625rem] leading-[1.8] text-ink/80">
           {post.content.map((paragraph, index) => (
             <p key={`${post.id}-p-${index}`}>{paragraph}</p>
           ))}
@@ -34,7 +34,7 @@ export function BlogArticleSection({ post }: BlogArticleSectionProps) {
             {post.tags.map((tag) => (
               <li
                 key={tag}
-                className="border border-black/15 px-3 py-1 text-[0.65rem] uppercase tracking-[0.18em] text-black/55"
+                className="border border-line px-3 py-1 text-[0.65rem] uppercase tracking-[0.18em] text-ink/55"
               >
                 {tag}
               </li>

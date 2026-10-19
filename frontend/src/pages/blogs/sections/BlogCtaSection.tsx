@@ -45,7 +45,7 @@ export function BlogCtaSection({ post }: BlogCtaSectionProps) {
             <Button
               variant="secondary"
               size="lg"
-              className="!text-cream"
+              className="text-ink-inverse"
               onClick={() => navigate('/blogs')}
             >
               Back to journal

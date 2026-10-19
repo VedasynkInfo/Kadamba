@@ -93,19 +93,19 @@ export const leadsBanner = {
 export function statusTone(status: LeadStatus): string {
   switch (status) {
     case 'New':
-      return 'border-gold/50 bg-gold/15 text-black';
+      return 'border-gold/50 bg-gold/15 text-ink';
     case 'Contacted':
-      return 'border-black/20 bg-black/[0.04] text-black';
+      return 'border-line bg-black/[0.04] text-ink';
     case 'Qualified':
-      return 'border-black/30 bg-black text-cream';
+      return 'border-line-strong bg-black text-ink-inverse';
     case 'Appointment':
-      return 'border-gold bg-gold text-black';
+      return 'border-gold bg-gold text-ink';
     case 'Completed':
-      return 'border-black/15 bg-cream text-black/70';
+      return 'border-line bg-surface-sunken text-ink/70';
     case 'Rejected':
-      return 'border-black/20 bg-transparent text-black/45';
+      return 'border-line bg-transparent text-ink/45';
     default:
-      return 'border-black/15 text-black';
+      return 'border-line text-ink';
   }
 }
 

@@ -305,7 +305,7 @@
 | 7.1 | Collapsible nav groups + `layoutId` spring | ✅ |
 | 7.2 | `⌘K` command palette (cmdk) across all entities | ✅ |
 | 7.3 | Motion language (row stagger, count-up, spring modals, tab indicators) | ✅ |
-| 7.4 | **Order Kanban pipeline** (dnd-kit, optimistic + audit) | ⬜ |
+| 7.4 | **Order Kanban pipeline** (dnd-kit, optimistic + audit) | ✅ |
 | 7.5 | Data table upgrade (sticky, bulk actions, virtualised, saved filters) | ⬜ |
 | 7.6 | Real dashboard (metrics, sparklines, needs-action queue) | ⬜ |
 | 7.7 | react-hook-form + zod; multi-step New Order wizard | ⬜ |
@@ -345,6 +345,14 @@
 - **A failed write now reports itself.** `meta.surfaceErrors` was an opt-in that no call site ever set, so a mutation that failed and a form that forgot to catch it was a silent failure. Mutations report by default; a desk that has already said something opts out with `surfaceErrors: false`. The bridge's de-duplication window means a form's toast and the bridge's toast are one toast, not two.
 - **A conflict is not a failure, it is a race.** A 409 (or an invalid order transition) gets its own message — "someone else changed this" — and a *Refresh* action that invalidates the cache, instead of "something went wrong", which sends the user looking for a fault that is not theirs.
 - The error boundary now offers **Try again** as well as *Back to home*: a transient fault may not happen twice, and re-rendering in place is cheaper than losing the desk. The error's own text is there behind a *Technical detail* disclosure for whoever is going to look.
+
+**7.4 — the production board**
+- The board is the order desk's natural shape: a list answers "what is open", a board answers "what is stuck". It lives at `/admin/orders/board`, with a link from the desk.
+- **The state machine decides what a drag means.** The board reads the same shared transition map the API enforces, so a card can only be dropped where the server would accept it — and a refusal is explained ("an order at Quality Finishing cannot go straight to Trial & Fitting") rather than silently ignored.
+- **The move is optimistic and reversible.** The card lands in the new column immediately, because a board that lags behind the server feels broken, and the cache is rolled back if the write is refused.
+- **Cancelling, pausing and reworking ask for a reason**, because the audit trail should say *why*, not just *that*. The reason travels with the transition and lands in the audit row the API writes.
+- Every move is a status change, and every status change is written to the audit log by the API: dragging a card is a recorded act, not a visual trick.
+- dnd-kit gives each card a transform while it is held, so the card follows the pointer without the board re-rendering on every move.
 
 
 ---

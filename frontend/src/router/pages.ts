@@ -38,6 +38,7 @@ export const AdminLeadsDashboardPage = lazy(() => import('@/pages/admin/leads/Ad
 export const AdminLeadsListPage = lazy(() => import('@/pages/admin/leads/AdminLeadsListPage'));
 export const AdminLeadDetailPage = lazy(() => import('@/pages/admin/leads/AdminLeadDetailPage'));
 export const OrdersAdminPage = lazy(() => import('@/pages/admin/orders/OrdersAdminPage'));
+export const OrderBoardPage = lazy(() => import('@/pages/admin/orders/OrderBoardPage'));
 export const OrderDetailAdminPage = lazy(() => import('@/pages/admin/orders/OrderDetailAdminPage'));
 export const CustomersAdminPage = lazy(() => import('@/pages/admin/customers/CustomersAdminPage'));
 export const CustomerDetailAdminPage = lazy(

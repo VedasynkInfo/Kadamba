@@ -1,4 +1,5 @@
 ﻿import { Icon } from '@/components/icons';
+import { Link } from 'react-router-dom';
 import { ORDER_PRIORITIES, ORDER_STATUS_CONFIG } from './types';
 
 interface OrdersToolbarProps {
@@ -111,6 +112,14 @@ export function OrdersToolbar({
           <span className="text-xs opacity-60 whitespace-nowrap">
             Showing <strong className="opacity-100 font-semibold">{filteredCount}</strong> of {totalCount}
           </span>
+
+          <Link
+            to="/admin/orders/board"
+            className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold transition hover:bg-current/[0.05] whitespace-nowrap cursor-pointer border-line"
+          >
+            <Icon name="grid" size={14} />
+            <span>Board</span>
+          </Link>
 
           <button
             type="button"

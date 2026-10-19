@@ -9,6 +9,8 @@ export interface ModalProps {
   open: boolean;
   onClose: () => void;
   title: string;
+  /** A sentence under the title, read out as the dialog's description. */
+  description?: string;
   children: ReactNode;
   footer?: ReactNode;
   /** Larger dialog for richer content. */
@@ -37,6 +39,7 @@ export function Modal({
   open,
   onClose,
   title,
+  description,
   children,
   footer,
   size = 'md',
@@ -59,6 +62,10 @@ export function Modal({
           <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4">
             <Dialog.Content
               aria-modal="true"
+              // Without a description there is nothing to point at, and Radix
+              // would warn about a missing `aria-describedby` on every dialog
+              // that does not have one.
+              aria-describedby={description ? undefined : undefined}
               // Radix fires this just before it moves focus into the dialog, so
               // the active element here is still the opener we must return to.
               onOpenAutoFocus={() => {
@@ -76,9 +83,16 @@ export function Modal({
               )}
             >
               <div className="mb-4 flex items-start justify-between gap-4">
-                <Dialog.Title className="font-heading text-xl font-bold text-inherit">
-                  {title}
-                </Dialog.Title>
+                <div>
+                  <Dialog.Title className="font-heading text-xl font-bold text-inherit">
+                    {title}
+                  </Dialog.Title>
+                  {description ? (
+                    <Dialog.Description className="mt-1 text-xs opacity-70">
+                      {description}
+                    </Dialog.Description>
+                  ) : null}
+                </div>
                 <Dialog.Close asChild>
                   <Button
                     variant="ghost"

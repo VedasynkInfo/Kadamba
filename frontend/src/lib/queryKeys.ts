@@ -72,6 +72,8 @@ export const qk = {
     all: ['orders'] as const,
     list: (filters: QueryFilters = {}) => ['orders', 'list', filters] as const,
     detail: (id: string) => ['orders', 'detail', id] as const,
+    /** The production board: every open order, by stage. */
+    board: (filters: QueryFilters = {}) => ['orders', 'board', filters] as const,
   },
 
   products: {

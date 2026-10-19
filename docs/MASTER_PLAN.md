@@ -163,7 +163,7 @@
 | 5.1 | Delete seed-data swallowing → real error states | ✅ |
 | 5.1 | Error-code adoption on the backend (`code` on every error) | ✅ |
 | 5.2 | Zod schemas shared via contract (server + client) | ✅ |
-| 5.3 | React Router v7 data router (loaders/actions/errorElement) | ⬜ |
+| 5.3 | React Router v7 data router (loaders/actions/errorElement) | ✅ (loaders + errorElement + scroll restoration; actions intentionally not adopted — see notes) |
 | 5.4 | Typed order state machine (shared transitions) | ⬜ (transitions defined ✅) |
 | 5.5 | Socket events → query cache invalidation | ⬜ |
 | 5.6 | Offline mutation retry queue + offline banner | ⬜ |
@@ -178,7 +178,7 @@
 - **Settings defaults are configuration, not demo data.** `mergeWebsiteSettings` deep-merges the API document onto the studio's own defaults so an unconfigured section renders sensibly instead of crashing on `settings.media.bannerPresets[0]`. Its input type is a *shallow-per-section* partial (`WebsiteSettingsInput`), which is what the API actually sends.
 - **Tests:** the frontend had no unit runner. Added Vitest + jsdom + Testing Library (`npm test`, currently 36 tests) covering `apiError`, the query-key hierarchy (including the published-vs-draft separation), `mergeWebsiteSettings`, and the loading → data → error behaviour of the CMS query hook. The token ratchet now skips `*.test.ts(x)`: a test asserting `{ accent: '#123456' }` round-trips is checking plumbing, not shipping a colour.
 - **Remaining for 5.1:** ~30 admin desks still own hand-rolled `useEffect` fetches; they need the same query treatment (Phase 7 rewrites most of those components anyway, so the two phases meet there).
-- **Routing smell found while testing:** `router.use('/admin', createSlugAvailableRouter())` applies its `content:write` gate to *any* unmatched `/api/admin/*` path, so a staff user without `content:write` gets `403` instead of `404` for an unknown admin URL. Existing routes all mount before it, so nothing is shadowed today — but the gate should be attached per-route. Folding this into 5.3.
+- **Routing smell found while testing, and fixed in 5.3:** `router.use('/admin', createSlugAvailableRouter())` applied its `content:write` gate to *any* unmatched `/api/admin/*` path, so a staff user without `content:write` got `403` instead of `404` for an unknown admin URL — a permission error where the truth was "no such endpoint". The gate is now attached per route, and `errorContract.test.ts` locks it with a 404 assertion.
 
 **5.2 — one schema for both ends**
 - `shared/schemas.ts` is the payload half of the contract (`shared/enums.ts` is the vocabulary half): the success/error envelopes, pagination, the four CMS records, the settings document, the lead record, the four CMS write payloads and the public enquiry payload. `scripts/sync-shared.mjs` now copies a *file list* (`enums.ts`, `schemas.ts`) and `--check` fails if either drifts. Only `zod` and `./enums` are imported, because the copy must compile under both the backend's CommonJS `rootDir: ./src` build and Vite.
@@ -189,6 +189,14 @@
 - **Bug found and fixed:** `extractFieldErrors` only looked for `message`, but express-validator names its field detail `msg` — so *every* validation failure had been arriving in the UI with no field detail at all. Both are now read, and `validateBody` emits `message`.
 - `leadRequestSchema` carries the two business rules the enquiry route used to hold inline (a dialable phone number, no preferred date in the past), so the form and the server can enforce the same rule from one definition.
 - **Not yet migrated:** orders, customers, measurements, product catalog and the portal still validate with `express-validator` alone and still use `data.data!` in their services; their entity schemas are the next slice of the same pattern.
+
+**5.3 — a data router**
+- `createBrowserRouter` replaces `<BrowserRouter><Routes>`, configured once at module scope in `@/router` (`App.tsx` is now only providers → `RouterProvider`). The page inventory moved to `@/router/pages` — a route table is configuration, and holding it in the same file as 51 lazy components made the module look like a component module (52 fast-refresh warnings, all gone).
+- **`errorElement` on the root and on each layout.** A page or loader that throws renders a designed page instead of React Router's developer overlay — and because the copy sits on `MainLayout`/`AdminLayout`/`PortalLayout`, the error renders *inside* the shell, keeping the navbar and a way out. `RouteErrorPage` distinguishes 404 / 5xx / thrown-render-error instead of flattening all three into "something went wrong", offers "Try again" (`useRevalidator`) where retrying can help, and prints the raw error in development only.
+- **`ScrollRestoration`** (in `RouterShell`) fixes a bug that had been there since the SPA was built: nothing handled scroll on navigation, so following a link from halfway down the gallery landed you halfway down the service page, and back/forward lost your place in a long list. Only a data router can do both halves.
+- **Loaders overlap the fetch with the chunk download.** Each public content route prefetches through `queryClient.ensureQueryData` using the *same descriptor object* its component's `useQuery` reads, so the request starts during navigation instead of after mount, and the hook finds it already in the cache (asserted by a test: one request, not two). Two decisions keep this safe: the prefetch disables `retry` (a loader blocks navigation, so the query layer's retry policy would hold the visitor on the *previous* page for seconds while a slow API times out) and swallows failure (the page's own `ContentError` is a better home for a failed collection than a route error screen that discards the navbar). Admin routes deliberately do not prefetch: the access token lives in memory, so a loader running before the refresh-cookie exchange would fire an anonymous 401.
+- **Actions are intentionally not adopted.** React Router actions exist to post a form and let the router revalidate. Every write here goes through a TanStack Query mutation so it can be optimistic, invalidate both cache families and report through the shared error bridge; routing the same writes through actions would put two owners on one piece of server state. Recorded as a decision rather than an omission.
+- **Not-found inside the console and the portal.** `/admin/<unknown>` used to match the `admin` layout and render its chrome around an empty outlet; both subtrees now have a `*` child rendering the branded 404.
 
 ---
 

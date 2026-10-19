@@ -2,7 +2,8 @@ import type { ReactNode } from 'react';
 import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { usePublicGallery } from '@/hooks/useCmsContent';
+import { usePublicGallery, prefetchPublicGallery } from '@/hooks/useCmsContent';
+import { queryClient } from '@/lib/queryClient';
 import { galleryApi } from '@/services/gallery/galleryService';
 import type { PaginatedData } from '@/types';
 import type { GalleryItem } from '@/pages/gallery/data';
@@ -82,5 +83,40 @@ describe('usePublicGallery', () => {
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.items).toEqual([]);
+  });
+});
+
+/**
+ * The route loaders prefetch through the application's single query client, so
+ * these tests use that client rather than the isolated one above.
+ */
+function singletonWrapper({ children }: { children: ReactNode }) {
+  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+}
+
+describe('route prefetch', () => {
+  beforeEach(() => {
+    listMock.mockReset();
+    queryClient.clear();
+  });
+
+  it('leaves the gallery hook nothing to fetch, so loader and page share one entry', async () => {
+    listMock.mockResolvedValue(page([{ id: 'g1', title: 'Zari' } as GalleryItem]));
+
+    await prefetchPublicGallery();
+
+    const { result } = renderHook(() => usePublicGallery(), { wrapper: singletonWrapper });
+    await waitFor(() => expect(result.current.items).toHaveLength(1));
+
+    // One request: the hook read what the loader warmed instead of starting its
+    // own. This is what fails if the loader and the hook ever drift onto
+    // different query keys or list params.
+    expect(listMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('resolves when the API is down, so a failed prefetch cannot strand a route', async () => {
+    listMock.mockRejectedValue(new Error('offline'));
+
+    await expect(prefetchPublicGallery()).resolves.toBeNull();
   });
 });

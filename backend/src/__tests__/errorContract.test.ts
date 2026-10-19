@@ -111,6 +111,28 @@ describe('404 — not found', () => {
 
     expectErrorEnvelope(res, 404, 'NOT_FOUND');
   });
+
+  it('reports an unknown console URL as NOT_FOUND, not as a permission failure', async () => {
+    // The slug-availability helper is mounted under /api/admin, and it used to
+    // gate *every* unmatched path there with its own `router.use`. A staff member
+    // without `content:write` therefore got 403 for a URL that simply does not
+    // exist — a permission error where the truth was "no such endpoint". The
+    // gate is per route now, so the path falls through to the not-found handler.
+    const staff = await User.create({
+      name: 'Desk Staff Two',
+      email: 'staff-no-content@test.local',
+      password: 'staff-password-123',
+      role: 'staff',
+      status: 'active',
+      permissions: [],
+    });
+
+    const res = await request(app)
+      .get('/api/admin/not-a-real-endpoint')
+      .set('Authorization', `Bearer ${signAccessToken(staff, 'contract-test-family')}`);
+
+    expectErrorEnvelope(res, 404, 'NOT_FOUND');
+  });
 });
 
 describe('400 — bad request', () => {

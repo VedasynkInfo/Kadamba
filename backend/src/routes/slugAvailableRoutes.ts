@@ -1,4 +1,4 @@
-import { Router, type Request, type Response } from 'express';
+import { Router, type Request, type RequestHandler, type Response } from 'express';
 import { query } from 'express-validator';
 import mongoose from 'mongoose';
 import { Blog } from '../models/Blog';
@@ -69,13 +69,26 @@ const checks = [
  */
 export function createSlugAvailableRouter(): Router {
   const router = Router();
-  // A helper for the CMS editors — reachable by anyone who can write content.
-  router.use(authenticate, authorize('admin', 'staff'), requirePermission('content:write'));
 
-  router.get('/blogs/slug-available', checks, validateRequest, makeSlugHandler(Blog));
-  router.get('/services/slug-available', checks, validateRequest, makeSlugHandler(Service));
-  router.get('/portfolio/slug-available', checks, validateRequest, makeSlugHandler(Portfolio));
-  router.get('/gallery/slug-available', checks, validateRequest, makeSlugHandler(GalleryItem));
+  /**
+   * A helper for the CMS editors — reachable by anyone who can write content.
+   *
+   * The gate is attached per route, not with `router.use`. Mounted under
+   * `/api/admin`, a blanket `use` would run for *every* unmatched admin path
+   * (a typo, a removed endpoint) and answer 403 to a staff member who lacks
+   * `content:write` — hiding a genuine 404 behind a permission error. Per route,
+   * an unknown admin URL falls through to the real not-found handler.
+   */
+  const gate: RequestHandler[] = [
+    authenticate,
+    authorize('admin', 'staff'),
+    requirePermission('content:write'),
+  ];
+
+  router.get('/blogs/slug-available', ...gate, checks, validateRequest, makeSlugHandler(Blog));
+  router.get('/services/slug-available', ...gate, checks, validateRequest, makeSlugHandler(Service));
+  router.get('/portfolio/slug-available', ...gate, checks, validateRequest, makeSlugHandler(Portfolio));
+  router.get('/gallery/slug-available', ...gate, checks, validateRequest, makeSlugHandler(GalleryItem));
 
   return router;
 }

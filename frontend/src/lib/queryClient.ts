@@ -56,7 +56,13 @@ export function createQueryClient() {
       onError: (error, _variables, _context, mutation) => {
         const appError = toAppError(error);
         if (isAuthError(appError)) return;
-        if (mutation.meta?.surfaceErrors !== true) return;
+        // A write that failed must be reported. The form that owns it may add
+        // field errors, but the failure itself belongs to the app — so writes
+        // report by default, and a desk that has already said something opts
+        // out with `meta.surfaceErrors: false`. (Identical failures inside the
+        // bridge's de-duplication window collapse, so a form that shows its own
+        // toast and the bridge's toast are one toast, not two.)
+        if (mutation.meta?.surfaceErrors === false) return;
         reportQueryError({ error: appError, queryKey: ['mutation', mutation.mutationId] });
       },
     }),
@@ -83,7 +89,11 @@ export function createQueryClient() {
 declare module '@tanstack/react-query' {
   interface Register {
     mutationMeta: {
-      /** When true, a failed mutation is also reported through the global handler. */
+      /**
+       * When true, a failed mutation is also reported through the global
+       * handler. Defaults to true: a write that fails is always reported
+       * somewhere, and a desk that has already reported it says so.
+       */
       surfaceErrors?: boolean;
     };
   }

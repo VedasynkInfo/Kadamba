@@ -309,7 +309,7 @@
 | 7.5 | Data table upgrade (sticky, bulk actions, virtualised, saved filters) | ⬜ |
 | 7.6 | Real dashboard (metrics, sparklines, needs-action queue) | ⬜ |
 | 7.7 | react-hook-form + zod; multi-step New Order wizard | ⬜ |
-| 7.8 | Sonner toasts, conflict alerts, error boundary | ⬜ |
+| 7.8 | Sonner toasts, conflict alerts, error boundary | ✅ |
 | 7.9 | AA+ contrast + keyboard audit | ⬜ |
 | 7.10 | Virtualisation + `React.memo` + per-desk chunks | ⬜ |
 
@@ -338,6 +338,13 @@
 - **The tab strips were ten hand-written underlines.** Each drew its own `border-b-2`, so switching tabs looked like a page reload rather than a move. `ui/TabStrip` draws the indicator with a framer-motion `layoutId` that slides from one tab to the next, and every strip in the console uses it now: settings, finance, the order wizard, the measurement wizard, the staff wizard and the content forms.
 - A dialog arrives with weight (`animate-spring-in`) instead of sliding in from nowhere.
 - **The reduced-motion story is now complete.** The JavaScript half was already there (`usePrefersReducedMotion`); the CSS half was missing, so the stylesheet animations ran regardless of the preference. There is now a `prefers-reduced-motion` block in `index.css` that turns the entrance animations off.
+
+**7.8 — toasts, conflicts, and the error boundary**
+- **The toast renderer changed; the toast API did not.** The viewport is Sonner now — stacking, swipe-to-dismiss, a promise API, action buttons — but every call site still says `toast({ title, description, tone })`, because changing a toast library is not a reason to edit eighty files. The colours are the ones the old viewport used (`bg-black` with a gold title), which is deliberate: a toast sits on top of whatever shell is behind it, and `ink-inverse` on black reads in all three.
+- `toast.promise(save(), { loading, success, error })` is new: a write that takes a moment says *saving* while it happens and *saved* when it does, in one call.
+- **A failed write now reports itself.** `meta.surfaceErrors` was an opt-in that no call site ever set, so a mutation that failed and a form that forgot to catch it was a silent failure. Mutations report by default; a desk that has already said something opts out with `surfaceErrors: false`. The bridge's de-duplication window means a form's toast and the bridge's toast are one toast, not two.
+- **A conflict is not a failure, it is a race.** A 409 (or an invalid order transition) gets its own message — "someone else changed this" — and a *Refresh* action that invalidates the cache, instead of "something went wrong", which sends the user looking for a fault that is not theirs.
+- The error boundary now offers **Try again** as well as *Back to home*: a transient fault may not happen twice, and re-rendering in place is cheaper than losing the desk. The error's own text is there behind a *Technical detail* disclosure for whoever is going to look.
 
 
 ---

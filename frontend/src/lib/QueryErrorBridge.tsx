@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useToast } from '@/components/ui';
-import { setQueryErrorHandler } from './queryClient';
+import { queryClient, setQueryErrorHandler } from './queryClient';
 
 /**
  * Connects the query layer's global error channel to the toast viewport.
@@ -9,10 +9,10 @@ import { setQueryErrorHandler } from './queryClient';
  * why the global handler is registered imperatively rather than passed in when
  * the `QueryClient` is constructed — the client is created before React exists.
  *
- * Only queries and explicitly opted-in mutations reach here; writes are normally
- * reported by the form that owns them.
+ * Queries and mutations both reach here: a failed read has no natural owner, and
+ * a failed write belongs to the app even when the form that triggered it also
+ * says something.
  */
-
 /**
  * One outage is one event.
  *
@@ -41,6 +41,27 @@ export function QueryErrorBridge() {
         for (const [k, at] of seen.current) {
           if (now - at >= DEDUPE_WINDOW_MS) seen.current.delete(k);
         }
+      }
+
+      // A conflict is not a failure, it is a race: someone else changed the
+      // record while this desk was working on it. It gets its own message and
+      // its own way out, because "something went wrong" would send the user
+      // looking for a fault that is not theirs.
+      if (error.code === 'CONFLICT' || error.code === 'INVALID_TRANSITION') {
+        toast({
+          title: 'Someone else changed this',
+          description:
+            'This record was updated while you were working on it. Refresh to see the current version.',
+          tone: 'error',
+          duration: 10_000,
+          action: {
+            label: 'Refresh',
+            onClick: () => {
+              void queryClient.invalidateQueries();
+            },
+          },
+        });
+        return;
       }
 
       toast({

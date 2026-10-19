@@ -231,11 +231,69 @@
 | 6.2 | Normalise 3 conflicting `--admin-card` fallbacks | ⬜ |
 | 6.3 | `clsx` + `tailwind-merge` in `cn()`; remove `!important` overrides | ⬜ |
 | 6.4 | Rename spacing scale → `--space-*` (kill Tailwind footgun) | ⬜ |
-| 6.5 | Radix-backed primitives + missing components (DropdownMenu, Tooltip, Command, DataTable…) | ⬜ |
-| 6.6 | Remove 658 inline `style={{}}` colour blocks | ⬜ |
-| 6.7 | Motion tokens from CSS vars | ⬜ |
+| 6.5 | Radix-backed primitives + missing components (DropdownMenu, Tooltip, Command, DataTable…) | ✅ |
+| 6.6 | Remove the inline `style={{}}` colour blocks | ✅ |
+| 6.7 | Motion tokens from CSS vars | ✅ |
 
 **Gate:** hex literals in TSX → 0 (ratchet); inline style <20; `.admin-scope` gone; all primitives keyboard-accessible.
+
+- Hex literals: **0** across `frontend/src` (was 927 on the ratchet), with the baseline locked at 0 so the next one fails.
+- `.admin-scope`: gone.
+- Primitives: Radix Dialog / DropdownMenu / Tooltip / Popover / Tabs, `cmdk` Command, and a hand-built `DataTable`; sortable headers are buttons, selection is native checkboxes, dialogs trap and restore focus.
+- Inline styles: **689 → 1** block that sets a colour property, and the survivor references `var(--color-espresso)` rather than a value — see 6.6.
+
+**6.1 — one place a value is defined**
+- `src/index.css` is now the single source, in three layers: raw palette (`--color-gold`), the semantic layer (`--color-surface-raised`, `--color-ink`), and the settings-driven names a studio can retheme (`--public-*`, `--admin-*`). The semantic layer is built *out of* the settings layer, so retheming flows through the whole app instead of patching class names.
+- `theme/designTokens.ts` keeps only what JavaScript needs — durations, easing curves, breakpoints — and `theme/__tests__/designTokens.test.ts` pins them to the CSS custom properties, so changing a duration on one side fails the suite. That test reads the stylesheet from disk, which is why `tsconfig.app.json` now lists `node` in `types`.
+- `theme/palettes.ts` holds the theme *data* (the default theme, four presets, the chart ramps) and is the single entry on the token linter's allowlist: preset data is colour by definition, and putting it in a component was what forced 114 literals into `ThemeTab`.
+- `@theme` versus `:root` is a deliberate split, not a leftover: `@theme` holds what must generate a utility, `:root` holds plain values (the spacing rhythm, motion) that must be emitted unconditionally and cannot be tree-shaken.
+
+**6.2 — a semantic layer the shells re-point**
+- The vocabulary is surfaces (`surface`, `surface-raised`, `surface-sunken`, `surface-field`, `surface-inverse`), text (`ink`, `ink-raised`, `ink-inverse`, `ink-on-brand`), `line`/`line-strong`, `brand`, and `danger`. A component names the *surface* it is painting; the shell decides what that surface is worth. `bg-surface-raised` is correct on the cream public site, in the blue-grey console and in the warm-black portal without any of them knowing about the others.
+- **`.admin-scope` was a bug, not a style.** It rewrote utility *classes* — `.admin-scope .text-black { color: var(--admin-text) }` — so `text-black` meant "light text" inside the console, and all 43 `bg-cream` panels in the admin rendered light-on-cream. Deleting the block is the fix; nothing lost a feature.
+- Four palettes now exist, three of them named: the public site's cream (the `@theme` defaults), `.admin-shell`, `.portal-shell` (the studio's warm black, a branded experience rather than an internal tool), and `.invoice-paper`. The invoice needed its own block because a PDF has to look like the page it was printed from even when previewed inside the dark console.
+- **A shell must re-point *every* token.** The test that asserts shell completeness caught `.invoice-paper` inheriting the console's `--color-surface`, `--color-ink` and `--color-danger`, which would have printed a dark invoice. Incomplete shells are now a failing test rather than a screenshot nobody looks at.
+- The 436 dead `var(--x, #hex)` fallbacks are gone. Every one of those variables is declared, so the fallback could never apply — it was 436 hex literals pretending to be safety. The exception is the theme editor, where a field really can be empty and the fallback really can fire: `t.adminBg || '#0b0f17'` became `t.adminBg || 'var(--admin-bg)'` (the live value, so an unset field previews what the console is actually using), and each `ColorField`'s fallback now reads `DEFAULT_THEME_TOKENS.<field>` — which is what "normalise the three conflicting `--admin-card` fallbacks" meant: the literals in the editor were a *third* set of defaults, different from both `:root` and the presets.
+- `--color-ink-raised` exists because the studio can retheme the text on a panel separately from the text on the page; all four shipped presets happen to set them equal, but 142 sites read the card-text variable, and collapsing the two would have been a settings field that silently stopped working.
+- **Mapped, not mechanically renamed.** `bg-cream` was doing five jobs — page, panel, form field, inset well, and a decorative tint on a dark panel — so each of the 56 occurrences was classified by hand into `surface`, `surface-raised`, `surface-field`, `surface-sunken`, `bg-ink-inverse/…` or `bg-current/10`.
+- **Deliberately not migrated:** the `white/*` utilities and the status palettes (`rose`/`emerald`/`amber`/`blue`, ~330 usages across alerts, badges, stat cards and config tables). Status tone is a separate axis — it is *data* a desk reads, not a decision a shell makes — and folding it into the surface vocabulary would have been a second, quietly different meaning for the same tokens. It is Phase 7 work. The one exception is `--color-danger`, for a destructive *action*, which has to be legible wherever the action appears.
+- The settings contract stayed live: public background/text/card, admin background/text/card/card-text/border/primary/sidebar. Four settings were already inert *before* this phase (`adminAccent`, `adminSidebarText`, `primaryHover`, `publicSurface` — no CSS read them); they are still inert, recorded here so it is not mistaken for something the consolidation broke.
+
+**6.3 — last-wins instead of `!important`**
+- `cn()` is `twMerge(clsx(…))`, so a caller's class now beats the variant's by position rather than by force. The six surviving `hover:!border-gold`-style overrides were deleted with it: a `!important` in a codebase with a merge helper is a workaround for a problem that no longer exists.
+
+**6.4 — the spacing footgun, defused**
+- The rhythm is `--space-xs|sm|md|lg|xl`, deliberately *not* `--spacing-*`: Tailwind maps that namespace onto utilities, so `max-w-lg` would have resolved to 4rem and collapsed body copy into a one-word column. Value-only names cannot collide with a utility.
+
+**6.5 — the primitives, and what Radix actually bought**
+- `Modal` and `Drawer` are now Radix Dialog. Deleted: the hand-rolled Escape listener, the `body.style.overflow` scroll lock, the `querySelectorAll` Tab-cycling loop, the backdrop target check and the hand-written `role`/`aria-modal`/`aria-labelledby`. Radix supplies the focus trap, Escape, scroll lock, the ARIA wiring, and `aria-hidden` on the rest of the page. Focus *restore* stays ours, because Radix returns focus to a `Dialog.Trigger` and this controlled `open` prop has none.
+- `Tabs` moved to Radix behind an unchanged API, which is where the roving-focus arrow keys came from — the old markup was a row of buttons that only Tab could reach. It renders no panels (call sites use it as a filter strip), so its `aria-controls` points at an id that does not exist; a real caveat, recorded rather than papered over, and one that disappears when the admin's tab strips get real panels.
+- New primitives: `DropdownMenu`, `Tooltip`, `Popover` (Radix), `Command` (`cmdk`, for Phase 7's `⌘K`) and `DataTable`.
+- **`DataTable` is hand-built, on purpose.** A desk shows tens of rows: `@tanstack/react-table` would add a dependency and a second table model for features at this size. Sorting (controlled or internal), selection with a select-all and an indeterminate header, a sticky header, empty and loading states. Sortable headers are real `<button>`s inside `<th aria-sort>` and selection uses native checkboxes, so the whole widget is operable from the keyboard.
+- `Checkbox` and `Radio` stay native `<input>` elements. They are already keyboard-accessible and carry native form semantics; reimplementing them as styled Radix buttons would have been a downgrade dressed as a migration.
+- **Portals escape the shell class**, which is a real trap: Radix renders into `document.body`, which sits outside the `.admin-shell` div, so a dialog opened in the console would have resolved `bg-surface-raised` against the light root values and come out white. `ui/PortalShell` re-applies the active shell class inside the portal as a `display: contents` wrapper — box-less, so the shell's own background cannot paint over the panel, only its custom properties are inherited. Phase 7's `CommandDialog` will need the same treatment.
+
+**6.6 — the inline colour styles**
+- **689 → 1**, and the one that remains is the portal's login backdrop, which carries `var(--color-espresso)` and not a value: the gradient now *references* the palette, which is the point of the exercise.
+- This could not be a find-and-replace, because an inline colour was the old app's way of saying several different things. Three shapes needed a decision:
+  - The row-action menus keep their geometry inline (`top`/`bottom`/`right`) — a position computed at runtime is not a design decision — and their `boxShadow` was *deleted* rather than translated, because `shadow-2xl` was already on the element and the inline shadow existed only to override it.
+  - A colour that meant "the accent, tinted" became opacity on the accent (`bg-brand/12`, `border-brand/25`) rather than a second literal, so the tint moves when the studio moves the accent.
+  - The status accents on the preview modals and the totals bars became the same Tailwind status utilities the rest of the app already used (`bg-emerald-500/[0.08]`, `border-emerald-500/30`), which keeps the deferred status axis in one place instead of two.
+- Four decorative gold SVG patterns were the exception that proved the rule: they were inline `backgroundImage` data-URIs with the hex *inside the SVG markup*, where no theme could reach them. They are now mask utilities (`pattern-grid`, `pattern-cross`, `pattern-lattice`, `pattern-lattice-dot`) in `index.css` that paint `currentColor`, so the pattern follows `text-gold` like everything else.
+- The theme editor is the other legitimate owner of an inline colour, and it does not put one in a style property: the preview transports the studio's chosen colours as custom properties and the classes name the surface (`bg-[var(--pv-card)]`). A colour the user is *choosing* is not a hard-coded colour.
+
+**Found while consolidating** — each of these was already broken before this phase, and each was invisible until the tokens were made honest:
+- The console chrome (sidebar and mobile header) sat *outside* `.admin-shell` — the class was on the page container — so `bg-surface-inverse`/`text-ink-inverse` on the sidebar resolved against the *public* palette. The class now sits on the layout root.
+- Radix portals to `document.body`, outside every shell (see 6.5): `ui/PortalShell` exists for exactly this.
+- The `<select>` chevron was a data-URI with a black stroke baked into the SVG, so it was invisible in the dark console. It is a real inline SVG now, inheriting `currentColor`.
+- `animate-fade-in` was referenced by 30-odd panels and defined nowhere, so none of them animated; it is defined now.
+- `.card-beam`, `.btn-modern` and the `shimmer` keyframes were declared and used by nothing.
+- 436 `var(--x, #hex)` fallbacks could never fire, because every one of those variables is declared (see 6.2).
+- Three theme *settings* were already inert before this phase (`adminAccent`, `adminSidebarText`, `primaryHover` — no CSS read them). They are still inert; wiring them is Phase 7 work, recorded so that the consolidation is not blamed for them.
+
+**6.7 — motion from the stylesheet**
+- `--duration-fast|base|slow`, `--ease-luxury` and `--ease-out-soft` live in `index.css`; `designTokens.ts` holds the same numbers where JavaScript needs them and the drift test keeps the two honest. The arbitrary-value form `ease-[var(--ease-luxury)]` is now the generated utility `ease-luxury`.
+- Three hand-written classes went with the rewrite (`card-beam`, `btn-modern` and the `shimmer` keyframes): nothing referenced them in the old tree either, and unused CSS inside a design system is the same problem as an unused token.
 
 ---
 

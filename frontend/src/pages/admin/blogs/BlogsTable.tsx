@@ -1,0 +1,359 @@
+﻿import { useState, useEffect } from 'react';
+import type { BlogPost } from '@/pages/blogs/data';
+import { EmptyState } from '../components/EmptyState';
+import { Skeleton } from '../components/Skeleton';
+import { cn } from '@/utils/cn';
+
+const SKELETON_ROWS = 6;
+
+interface BlogsTableProps {
+  items: BlogPost[];
+  loading: boolean;
+  hasActiveFilters: boolean;
+  onResetFilters: () => void;
+  onAddBlog: () => void;
+  onPreview: (item: BlogPost) => void;
+  onEdit: (item: BlogPost) => void;
+  onTogglePublished: (item: BlogPost) => void;
+  onCopyUrl: (slug: string) => void;
+  onDelete: (item: BlogPost) => void;
+}
+
+export function BlogsTable({
+  items,
+  loading,
+  hasActiveFilters,
+  onResetFilters,
+  onAddBlog,
+  onPreview,
+  onEdit,
+  onTogglePublished,
+  onCopyUrl,
+  onDelete,
+}: BlogsTableProps) {
+  const [menuAnchor, setMenuAnchor] = useState<{
+    item: BlogPost;
+    top: number;
+    right: number;
+    showAbove: boolean;
+  } | null>(null);
+
+  useEffect(() => {
+    if (!menuAnchor) return;
+    const handleClose = () => setMenuAnchor(null);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenuAnchor(null);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('scroll', handleClose, true);
+    window.addEventListener('resize', handleClose);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('scroll', handleClose, true);
+      window.removeEventListener('resize', handleClose);
+    };
+  }, [menuAnchor]);
+
+  function handleOpenMenu(e: React.MouseEvent<HTMLButtonElement>, item: BlogPost) {
+    e.stopPropagation();
+    if (menuAnchor?.item.id === item.id) {
+      setMenuAnchor(null);
+      return;
+    }
+    const rect = e.currentTarget.getBoundingClientRect();
+    const menuHeight = 220;
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const showAbove = spaceBelow < menuHeight && rect.top > menuHeight;
+
+    setMenuAnchor({
+      item,
+      top: showAbove ? rect.top - 6 : rect.bottom + 6,
+      right: window.innerWidth - rect.right,
+      showAbove,
+    });
+  }
+
+  return (
+    <div
+      className="rounded-xl border shadow-xs overflow-visible transition-colors"
+      style={{
+        backgroundColor: 'var(--admin-card, #141b26)',
+        borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
+        color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
+      }}
+    >
+      {loading ? (
+        <div className="p-6 space-y-3">
+          {Array.from({ length: SKELETON_ROWS }).map((_, i) => (
+            <Skeleton key={i} variant="table" />
+          ))}
+        </div>
+      ) : items.length === 0 ? (
+        <div className="p-8">
+          <EmptyState
+            title="No blog articles found"
+            description={
+              hasActiveFilters
+                ? 'No journal articles match your filter criteria. Try adjusting your search query.'
+                : 'Publish editorial bridal stories, styling tutorials, and atelier insights.'
+            }
+            actionLabel={hasActiveFilters ? 'Clear Filters' : '+ Add First Article'}
+            onAction={hasActiveFilters ? onResetFilters : onAddBlog}
+          />
+        </div>
+      ) : (
+        <div className="overflow-x-auto overflow-y-hidden">
+          <table className="w-full min-w-[850px] text-left border-collapse text-xs table-fixed">
+            <thead>
+              <tr
+                className="border-b text-[0.65rem] uppercase tracking-wider font-semibold opacity-75"
+                style={{
+                  borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
+                  backgroundColor: 'rgba(128, 128, 128, 0.05)',
+                }}
+              >
+                <th className="py-3 px-4 w-[72px]">Cover</th>
+                <th className="py-3 px-4 min-w-[200px]">Article & Slug</th>
+                <th className="py-3 px-4 w-[130px]">Category</th>
+                <th className="py-3 px-4 w-[110px]">Read Time</th>
+                <th className="py-3 px-4 w-[100px]">Featured</th>
+                <th className="py-3 px-4 w-[110px]">Status</th>
+                <th className="py-3 px-4 w-[70px] text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody
+              className="divide-y"
+              style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.12))' }}
+            >
+              {items.map((item) => {
+                const isMenuOpen = menuAnchor?.item.id === item.id;
+
+                return (
+                  <tr
+                    key={item.id}
+                    className="transition hover:bg-current/[0.03] group"
+                    style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.12))' }}
+                  >
+                    {/* Cover Thumbnail */}
+                    <td className="py-2.5 px-4">
+                      <button
+                        type="button"
+                        onClick={() => onPreview(item)}
+                        className="relative block h-12 w-12 rounded-lg border overflow-hidden shadow-2xs group/thumb transition-transform active:scale-95 cursor-pointer"
+                        style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
+                        title="Click to preview article"
+                      >
+                        {item.coverImage ? (
+                          <img
+                            src={item.coverImage}
+                            alt={item.title}
+                            className="h-full w-full object-cover transition-transform duration-300 group-hover/thumb:scale-110"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="h-full w-full flex items-center justify-center bg-current/5 text-lg">
+                            📰
+                          </div>
+                        )}
+                      </button>
+                    </td>
+
+                    {/* Title & Slug */}
+                    <td className="py-2.5 px-4">
+                      <div>
+                        <button
+                          type="button"
+                          onClick={() => onPreview(item)}
+                          className="font-semibold text-inherit text-left hover:underline text-xs sm:text-sm truncate max-w-[240px] block cursor-pointer"
+                        >
+                          {item.title}
+                        </button>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          <span className="font-mono text-[10px] opacity-60 truncate max-w-[200px]">
+                            /{item.slug}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+
+                    {/* Category */}
+                    <td className="py-2.5 px-4 whitespace-nowrap">
+                      <span
+                        className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold border"
+                        style={{
+                          backgroundColor: 'rgba(181, 148, 16, 0.12)',
+                          color: 'var(--admin-primary, #b59410)',
+                          borderColor: 'rgba(181, 148, 16, 0.25)',
+                        }}
+                      >
+                        {item.category}
+                      </span>
+                    </td>
+
+                    {/* Read Time */}
+                    <td className="py-2.5 px-4 whitespace-nowrap">
+                      <span className="text-xs opacity-75">
+                        ⏱️ {item.readMinutes || 3} mins
+                      </span>
+                    </td>
+
+                    {/* Featured Flag */}
+                    <td className="py-2.5 px-4 whitespace-nowrap">
+                      {item.featured ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-500/15 text-amber-500 border border-amber-500/30">
+                          ⭐ Featured
+                        </span>
+                      ) : (
+                        <span className="text-xs opacity-40">—</span>
+                      )}
+                    </td>
+
+                    {/* Status Toggle Badge */}
+                    <td className="py-2.5 px-4 whitespace-nowrap">
+                      <button
+                        type="button"
+                        onClick={() => onTogglePublished(item)}
+                        className={cn(
+                          'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border transition hover:opacity-85 cursor-pointer',
+                          item.published
+                            ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/25'
+                            : 'bg-current/[0.06] opacity-70 border-current/15',
+                        )}
+                        title="Click to toggle publish status"
+                      >
+                        <span
+                          className={cn(
+                            'h-1.5 w-1.5 rounded-full',
+                            item.published ? 'bg-emerald-500 animate-pulse' : 'bg-current opacity-40',
+                          )}
+                        />
+                        <span>{item.published ? 'Published' : 'Draft'}</span>
+                      </button>
+                    </td>
+
+                    {/* Row Actions (Three-Dot Menu) */}
+                    <td className="py-2.5 px-4 text-right whitespace-nowrap w-[70px]">
+                      <button
+                        type="button"
+                        onClick={(e) => handleOpenMenu(e, item)}
+                        className={cn(
+                          'inline-flex h-8 w-8 items-center justify-center rounded-lg border transition cursor-pointer',
+                          isMenuOpen
+                            ? 'bg-[var(--admin-primary,#b59410)]/15 text-[var(--admin-primary,#b59410)] font-bold'
+                            : 'hover:bg-current/[0.08]',
+                        )}
+                        style={{
+                          borderColor: isMenuOpen
+                            ? 'var(--admin-primary, #b59410)'
+                            : 'var(--admin-border, rgba(128, 128, 128, 0.2))',
+                        }}
+                        aria-label="Actions menu"
+                        aria-expanded={isMenuOpen}
+                      >
+                        <span className="text-base leading-none font-bold">⋮</span>
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Floating Action Dropdown Menu */}
+      {menuAnchor ? (
+        <>
+          <div
+            className="fixed inset-0 z-40 bg-transparent"
+            onClick={() => setMenuAnchor(null)}
+          />
+
+          <div
+            className="fixed z-50 w-48 rounded-xl border p-1 shadow-2xl animate-fade-in text-left text-xs"
+            style={{
+              top: menuAnchor.showAbove ? undefined : `${menuAnchor.top}px`,
+              bottom: menuAnchor.showAbove ? `${window.innerHeight - menuAnchor.top}px` : undefined,
+              right: `${menuAnchor.right}px`,
+              backgroundColor: 'var(--admin-card, #1f2937)',
+              borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.22))',
+              color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
+              boxShadow: '0 12px 32px -4px rgba(0, 0, 0, 0.35)',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => {
+                const itm = menuAnchor.item;
+                setMenuAnchor(null);
+                onPreview(itm);
+              }}
+              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
+            >
+              <span className="text-sm">👁️</span>
+              <span>Quick Preview</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                const itm = menuAnchor.item;
+                setMenuAnchor(null);
+                onEdit(itm);
+              }}
+              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
+            >
+              <span className="text-sm">✏️</span>
+              <span>Edit Article</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                const itm = menuAnchor.item;
+                setMenuAnchor(null);
+                onTogglePublished(itm);
+              }}
+              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
+            >
+              <span className="text-sm">{menuAnchor.item.published ? '📦' : '🚀'}</span>
+              <span>{menuAnchor.item.published ? 'Unpublish to Draft' : 'Publish Live'}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                const slug = menuAnchor.item.slug;
+                setMenuAnchor(null);
+                onCopyUrl(slug);
+              }}
+              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
+            >
+              <span className="text-sm">📋</span>
+              <span>Copy Article Link</span>
+            </button>
+
+            <div
+              className="my-1 border-t"
+              style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}
+            />
+
+            <button
+              type="button"
+              onClick={() => {
+                const itm = menuAnchor.item;
+                setMenuAnchor(null);
+                onDelete(itm);
+              }}
+              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-semibold text-rose-500 transition hover:bg-rose-500/10 cursor-pointer"
+            >
+              <span className="text-sm">🗑️</span>
+              <span>Delete Article</span>
+            </button>
+          </div>
+        </>
+      ) : null}
+    </div>
+  );
+}

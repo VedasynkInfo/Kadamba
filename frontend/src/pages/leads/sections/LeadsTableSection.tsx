@@ -97,17 +97,16 @@ export function LeadsTableSection({
         {/* Desktop table */}
         <div className="mt-10 hidden overflow-x-auto md:block">
           <table className="w-full min-w-[720px] border-collapse text-left text-sm">
-            <thead>
               <tr className="border-b border-black/15 text-[0.65rem] uppercase tracking-[0.2em] text-black/45">
                 <th className="py-3 pr-4 font-medium">Lead</th>
+                <th className="py-3 pr-4 font-medium">Quality / Score</th>
                 <th className="py-3 pr-4 font-medium">Service</th>
                 <th className="py-3 pr-4 font-medium">Order</th>
                 <th className="py-3 pr-4 font-medium">Status</th>
                 <th className="py-3 pr-4 font-medium">Desk</th>
-                <th className="py-3 pr-4 font-medium">Updated</th>
+                <th className="py-3 pr-4 font-medium">Follow-Up</th>
                 <th className="py-3 font-medium"> </th>
               </tr>
-            </thead>
             <tbody>
               {filtered.map((lead) => (
                 <tr
@@ -119,6 +118,26 @@ export function LeadsTableSection({
                     <p className="mt-0.5 text-xs text-black/50">
                       {lead.phone} · {lead.city}
                     </p>
+                  </td>
+                  <td className="py-4 pr-4">
+                    <div className="flex items-center gap-1.5">
+                      <span
+                        className={cn(
+                          'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[0.68rem] font-bold uppercase tracking-wider',
+                          lead.quality === 'hot'
+                            ? 'bg-rose-100 text-rose-800 border border-rose-200'
+                            : lead.quality === 'warm'
+                            ? 'bg-amber-100 text-amber-800 border border-amber-200'
+                            : 'bg-slate-100 text-slate-700 border border-slate-200',
+                        )}
+                      >
+                        {lead.quality === 'hot' ? '🔥' : lead.quality === 'warm' ? '⚡' : '❄️'}
+                        {lead.quality || 'warm'}
+                      </span>
+                      <span className="text-xs font-semibold text-black/60">
+                        {lead.score ?? 50}/100
+                      </span>
+                    </div>
                   </td>
                   <td className="py-4 pr-4 text-black/75">
                     {lead.service}
@@ -156,8 +175,14 @@ export function LeadsTableSection({
                     </span>
                   </td>
                   <td className="py-4 pr-4 text-black/70">{lead.assignee}</td>
-                  <td className="py-4 pr-4 text-xs text-black/50">
-                    {formatLeadDate(lead.updatedAt)}
+                  <td className="py-4 pr-4 text-xs text-black/60">
+                    {lead.nextFollowUpDate ? (
+                      <span className="inline-flex items-center gap-1 text-amber-800 font-medium bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                        📅 {new Date(lead.nextFollowUpDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
+                      </span>
+                    ) : (
+                      <span className="text-black/40">—</span>
+                    )}
                   </td>
                   <td className="py-4 text-right">
                     <div className="flex flex-wrap items-center justify-end gap-2">

@@ -3,11 +3,16 @@ import { useParams, Link } from 'react-router-dom';
 import { ordersApi, type Order, type OrderStaff } from '@/services/orders/orderService';
 import { measurementApi, type MeasurementProfile } from '@/services/measurements/measurementsService';
 import { financeApi } from '@/services/finance/financeService';
-import { Button, Input, Spinner, Modal } from '@/components/ui';
+import { Button, Input, Spinner, useToast } from '@/components/ui';
 import { AdminHorizonBanner } from '../components/AdminHorizonBanner';
 import { adminBanners } from '../data';
 import { cn } from '@/utils/cn';
 import { whatsappDeepLink } from '@/utils/whatsapp';
+import { OrderFinancialModal } from './OrderFinancialModal';
+import { OrderStaffModal } from './OrderStaffModal';
+import { OrderStatusModal } from './OrderStatusModal';
+import { OrderMeasurementsModal } from './OrderMeasurementsModal';
+import { OrderTimelineSection } from './OrderTimelineSection';
 
 const ORDER_STATUS_FLOW = [
   'enquiry',
@@ -21,15 +26,8 @@ const ORDER_STATUS_FLOW = [
   'delivery',
 ];
 
-const STAFF_ROLES = [
-  { value: 'designer', label: 'Designer' },
-  { value: 'cutter', label: 'Cutter' },
-  { value: 'stitcher', label: 'Stitcher' },
-  { value: 'maggam', label: 'Maggam / Embroidery' },
-  { value: 'finishing', label: 'Finishing / Pico' },
-] as const;
-
 export default function OrderDetailAdminPage() {
+  const { toast } = useToast();
   const { id } = useParams<{ id: string }>();
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
@@ -129,7 +127,7 @@ export default function OrderDetailAdminPage() {
       setOrder(updated);
       setStatusModalOpen(false);
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to transition status');
+      toast({ title: err.response?.data?.message || 'Failed to transition status', tone: 'error' });
     } finally {
       setTransitioning(false);
     }
@@ -144,7 +142,7 @@ export default function OrderDetailAdminPage() {
       setOrder(updated);
       setNoteBody('');
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to add note');
+      toast({ title: err.response?.data?.message || 'Failed to add note', tone: 'error' });
     } finally {
       setAddingNote(false);
     }
@@ -168,7 +166,7 @@ export default function OrderDetailAdminPage() {
       setOrder(updated);
       setStaffModalOpen(false);
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to assign staff');
+      toast({ title: err.response?.data?.message || 'Failed to assign staff', tone: 'error' });
     } finally {
       setSavingStaff(false);
     }
@@ -181,7 +179,7 @@ export default function OrderDetailAdminPage() {
       if (paymentMode === 'record') {
         // Record a real payment transaction
         if (!paymentAmount || Number(paymentAmount) <= 0) {
-          alert('Enter a valid payment amount');
+          toast({ title: 'Enter a valid payment amount', tone: 'error' });
           setSavingPayment(false);
           return;
         }
@@ -214,7 +212,7 @@ export default function OrderDetailAdminPage() {
       setPaymentNotes('');
       setPaymentDate(new Date().toISOString().slice(0, 10));
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to update financials');
+      toast({ title: err.response?.data?.message || 'Failed to update financials', tone: 'error' });
     } finally {
       setSavingPayment(false);
     }
@@ -232,7 +230,7 @@ export default function OrderDetailAdminPage() {
       const updated = await ordersApi.linkMeasurements(id, updatedList);
       setOrder(updated);
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to link profile');
+      toast({ title: err.response?.data?.message || 'Failed to link profile', tone: 'error' });
     } finally {
       setLinkingProfile(false);
     }
@@ -620,281 +618,69 @@ export default function OrderDetailAdminPage() {
             </div>
 
             {/* Workshop Production Timeline */}
-            <div className="rounded-lg border border-black/10 bg-cream p-6">
-              <h3 className="font-heading text-lg text-black mb-4 border-b border-black/5 pb-2">Production timeline</h3>
-              <div className="relative pl-4 border-l border-black/10 space-y-6 text-xs">
-                {order.timeline.map((event, idx) => (
-                  <div key={idx} className="relative">
-                    <span className="absolute -left-[20px] top-1.5 w-2.5 h-2.5 bg-black rounded-full border-2 border-cream" />
-                    <div className="flex justify-between gap-2 text-[10px] text-black/45">
-                      <span className="font-semibold uppercase tracking-wider text-black/60">
-                        {event.status.replace('_', ' ')}
-                      </span>
-                      <span>
-                        {new Date(event.at).toLocaleDateString('en-IN', {
-                          day: '2-digit',
-                          month: 'short',
-                        })}
-                      </span>
-                    </div>
-                    {event.note && <p className="text-black/85 mt-1">{event.note}</p>}
-                    <span className="text-[9px] text-black/35 block mt-0.5">By {event.actorId}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <OrderTimelineSection timeline={order.timeline} />
           </div>
         </div>
       </div>
 
       {/* Transition note Modal */}
-      <Modal
+      <OrderStatusModal
         open={statusModalOpen}
         onClose={() => setStatusModalOpen(false)}
-        title="Reason for lifecycle transition"
-      >
-        <div className="space-y-4">
-          <p className="text-xs text-black/65">
-            You are moving this order status to <span className="font-semibold uppercase">{nextStatus.replace('_', ' ')}</span>.
-            Please record a brief reason or notes below for audit records.
-          </p>
-          <Input
-            type="text"
-            placeholder="e.g. fabric delayed, fitting rescheduled, client requested cancel"
-            required
-            value={transitionNote}
-            onChange={(e) => setTransitionNote(e.target.value)}
-          />
-          <div className="flex gap-3 justify-end pt-2 border-t border-black/5">
-            <Button variant="secondary" size="sm" onClick={() => setStatusModalOpen(false)}>
-              Abort
-            </Button>
-            <Button
-              size="sm"
-              disabled={transitioning || !transitionNote.trim()}
-              onClick={() => executeStatusTransition(nextStatus, transitionNote.trim())}
-            >
-              {transitioning ? 'Saving...' : 'Transition'}
-            </Button>
-          </div>
-        </div>
-      </Modal>
+        nextStatus={nextStatus}
+        transitionNote={transitionNote}
+        setTransitionNote={setTransitionNote}
+        transitioning={transitioning}
+        onTransition={executeStatusTransition}
+      />
 
       {/* Staff assignment Modal */}
-      <Modal
+      <OrderStaffModal
         open={staffModalOpen}
         onClose={() => setStaffModalOpen(false)}
-        title="Assign staff members"
-      >
-        <div className="space-y-4">
-          <div className="flex gap-2">
-            <Input
-              type="text"
-              placeholder="Staff worker name"
-              value={newStaffName}
-              onChange={(e) => setNewStaffName(e.target.value)}
-              className="flex-1"
-            />
-            <select
-              value={newStaffRole}
-              onChange={(e: any) => setNewStaffRole(e.target.value)}
-              className="w-[150px] rounded-md border border-black/15 bg-cream px-3 py-2 text-sm text-black focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
-            >
-              {STAFF_ROLES.map((role) => (
-                <option key={role.value} value={role.value}>
-                  {role.label}
-                </option>
-              ))}
-            </select>
-            <Button type="button" size="sm" onClick={handleAddStaffMember}>
-              Add
-            </Button>
-          </div>
-
-          <div className="max-h-[200px] overflow-y-auto divide-y divide-black/5 border border-black/10 rounded-sm">
-            {assignedStaff.map((staff, idx) => (
-              <div key={idx} className="flex justify-between items-center p-2.5 text-xs">
-                <div>
-                  <span className="font-semibold block">{staff.name}</span>
-                  <span className="text-black/50 text-[10px] uppercase block mt-0.5">{staff.role}</span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => handleRemoveStaffMember(idx)}
-                  className="text-[10px] font-semibold text-rose-700 hover:text-rose-900 uppercase"
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-            {assignedStaff.length === 0 && (
-              <p className="text-xs text-black/40 text-center py-4">No assignments added yet.</p>
-            )}
-          </div>
-
-          <div className="flex gap-3 justify-end pt-2 border-t border-black/5">
-            <Button variant="secondary" size="sm" onClick={() => setStaffModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button size="sm" disabled={savingStaff} onClick={handleSaveStaff}>
-              {savingStaff ? 'Saving...' : 'Save Assignments'}
-            </Button>
-          </div>
-        </div>
-      </Modal>
+        assignedStaff={assignedStaff}
+        newStaffName={newStaffName}
+        setNewStaffName={setNewStaffName}
+        newStaffRole={newStaffRole}
+        setNewStaffRole={setNewStaffRole}
+        onAddStaffMember={handleAddStaffMember}
+        onRemoveStaffMember={handleRemoveStaffMember}
+        onSaveStaff={handleSaveStaff}
+        savingStaff={savingStaff}
+      />
 
       {/* Financials Modal */}
-      <Modal
+      <OrderFinancialModal
         open={paymentModalOpen}
         onClose={() => setPaymentModalOpen(false)}
-        title={paymentMode === 'record' ? 'Record Payment' : 'Adjust Quoted Amount'}
-      >
-        {paymentMode === 'record' ? (
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-xs text-black/55 mb-1.5">Amount (₹) *</label>
-                <Input
-                  id="record-payment-amount"
-                  type="number"
-                  min="0.01"
-                  step="0.01"
-                  placeholder="e.g. 5000"
-                  value={paymentAmount}
-                  onChange={(e) => setPaymentAmount(e.target.value)}
-                />
-              </div>
-              <div>
-                <label className="block text-xs text-black/55 mb-1.5">Date *</label>
-                <Input
-                  id="record-payment-date"
-                  type="date"
-                  value={paymentDate}
-                  onChange={(e) => setPaymentDate(e.target.value)}
-                />
-              </div>
-            </div>
-            <div>
-              <label className="block text-xs text-black/55 mb-1.5">Method *</label>
-              <select
-                id="record-payment-method"
-                value={paymentMethod}
-                onChange={(e) => setPaymentMethod(e.target.value as any)}
-                className="w-full rounded border border-black/15 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
-              >
-                <option value="cash">Cash</option>
-                <option value="upi">UPI</option>
-                <option value="bank">Bank Transfer</option>
-                <option value="card">Card</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-xs text-black/55 mb-1.5">Reference / UPI ID</label>
-              <Input
-                id="record-payment-ref"
-                placeholder="Transaction ID, UPI reference…"
-                value={paymentReference}
-                onChange={(e) => setPaymentReference(e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-black/55 mb-1.5">Notes</label>
-              <Input
-                id="record-payment-notes"
-                placeholder="Optional note"
-                value={paymentNotes}
-                onChange={(e) => setPaymentNotes(e.target.value)}
-              />
-            </div>
-            <div className="rounded bg-amber-50 border border-amber-200 p-3 text-xs text-amber-800">
-              Current balance: <strong>₹{order?.paymentSummary.balance ?? 0}</strong>
-              {paymentAmount && Number(paymentAmount) > 0 && (
-                <span className="ml-2">→ After payment: <strong>₹{Math.max(0, (order?.paymentSummary.balance ?? 0) - Number(paymentAmount))}</strong></span>
-              )}
-            </div>
-            <div className="flex gap-3 justify-end pt-2 border-t border-black/5">
-              <Button variant="secondary" size="sm" onClick={() => setPaymentModalOpen(false)}>Cancel</Button>
-              <Button size="sm" disabled={savingPayment} onClick={handleSavePayments}>
-                {savingPayment ? 'Recording…' : 'Record Payment'}
-              </Button>
-            </div>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            <div>
-              <label className="block text-xs text-black/55 mb-1.5">Total Quoted Amount (₹)</label>
-              <Input
-                type="number"
-                min="0"
-                value={totalQuoted}
-                onChange={(e) => setTotalQuoted(e.target.value)}
-              />
-            </div>
-            <div className="flex gap-3 justify-end pt-2 border-t border-black/5">
-              <Button variant="secondary" size="sm" onClick={() => setPaymentModalOpen(false)}>Cancel</Button>
-              <Button size="sm" disabled={savingPayment} onClick={handleSavePayments}>
-                {savingPayment ? 'Saving...' : 'Save'}
-              </Button>
-            </div>
-          </div>
-        )}
-      </Modal>
+        paymentMode={paymentMode}
+        paymentAmount={paymentAmount}
+        setPaymentAmount={setPaymentAmount}
+        paymentDate={paymentDate}
+        setPaymentDate={setPaymentDate}
+        paymentMethod={paymentMethod}
+        setPaymentMethod={setPaymentMethod}
+        paymentReference={paymentReference}
+        setPaymentReference={setPaymentReference}
+        paymentNotes={paymentNotes}
+        setPaymentNotes={setPaymentNotes}
+        totalQuoted={totalQuoted}
+        setTotalQuoted={setTotalQuoted}
+        currentBalance={order?.paymentSummary.balance ?? 0}
+        savingPayment={savingPayment}
+        onSave={handleSavePayments}
+      />
 
       {/* Measurements Link Modal */}
-      <Modal
+      <OrderMeasurementsModal
         open={measureModalOpen}
         onClose={() => setMeasureModalOpen(false)}
-        title="Link client measurement profile"
-      >
-        <div className="space-y-4">
-          <p className="text-xs text-black/65">
-            Search or select from the client's recorded measurement profiles. If no profiles exist, you can create one in the Measurements tab.
-          </p>
-
-          <div className="max-h-[220px] overflow-y-auto border border-black/10 rounded-sm divide-y divide-black/5">
-            {loadingProfiles ? (
-              <div className="py-8 text-center"><Spinner size="sm" /></div>
-            ) : availableProfiles.length === 0 ? (
-              <div className="py-6 text-center text-xs text-black/45">
-                No profiles recorded for this customer.
-                <Link
-                  to="/admin/measurements"
-                  className="block font-semibold text-black hover:underline mt-2 text-[10px] uppercase"
-                >
-                  Create fitting profile →
-                </Link>
-              </div>
-            ) : (
-              availableProfiles.map((p) => {
-                const isLinked = order.measurementProfileIds?.includes(p.id) || false;
-                return (
-                  <div key={p.id} className="flex justify-between items-center p-3 text-xs">
-                    <div>
-                      <span className="font-semibold block">{p.profileName} ({p.productTypeCode})</span>
-                      <span className="text-black/55 text-[10px] block mt-0.5">Updated: {new Date(p.measuredAt).toLocaleDateString('en-IN')}</span>
-                    </div>
-                    <Button
-                      size="sm"
-                      variant={isLinked ? 'secondary' : 'primary'}
-                      disabled={linkingProfile}
-                      onClick={() => handleLinkProfile(p.id)}
-                    >
-                      {isLinked ? 'Unlink' : 'Link'}
-                    </Button>
-                  </div>
-                );
-              })
-            )}
-          </div>
-
-          <div className="flex justify-end pt-2 border-t border-black/5">
-            <Button size="sm" onClick={() => setMeasureModalOpen(false)}>
-              Done
-            </Button>
-          </div>
-        </div>
-      </Modal>
+        availableProfiles={availableProfiles}
+        linkedProfileIds={order.measurementProfileIds || []}
+        loadingProfiles={loadingProfiles}
+        linkingProfile={linkingProfile}
+        onLinkProfile={handleLinkProfile}
+      />
     </>
   );
 }

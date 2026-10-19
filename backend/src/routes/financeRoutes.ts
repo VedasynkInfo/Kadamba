@@ -15,7 +15,7 @@ import {
   getRevenueByProductHandler,
   getProfitLossHandler,
 } from '../controllers/financeController';
-import { authenticate, authorize } from '../middleware/auth';
+import { authenticate, authorize, requirePermission } from '../middleware/auth';
 import { validateRequest } from '../middleware/validate';
 
 const router = Router();
@@ -24,7 +24,8 @@ const router = Router();
 router.get(
   '/summary',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('finance:read'),
   [
     query('from').optional().isISO8601().withMessage('From date must be ISO8601 format'),
     query('to').optional().isISO8601().withMessage('To date must be ISO8601 format'),
@@ -36,7 +37,8 @@ router.get(
 router.get(
   '/revenue-by-product',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('finance:read'),
   [
     query('from').optional().isISO8601().withMessage('From date must be ISO8601 format'),
     query('to').optional().isISO8601().withMessage('To date must be ISO8601 format'),
@@ -48,7 +50,8 @@ router.get(
 router.get(
   '/profit-loss',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('finance:read'),
   [
     query('from').optional().isISO8601().withMessage('From date must be ISO8601 format'),
     query('to').optional().isISO8601().withMessage('To date must be ISO8601 format'),
@@ -61,7 +64,8 @@ router.get(
 router.get(
   '/invoices',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('finance:read'),
   [
     query('paymentStatus').optional().isIn(['All', 'unpaid', 'partial', 'paid', 'unquoted']),
     query('status').optional().trim(),
@@ -75,7 +79,8 @@ router.get(
 router.get(
   '/invoices/:id',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('finance:read'),
   [param('id').isMongoId().withMessage('Invalid invoice / order ID')],
   validateRequest,
   getInvoiceHandler,
@@ -85,7 +90,8 @@ router.get(
 router.get(
   '/payments',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('finance:read'),
   [
     query('orderId').optional().isMongoId().withMessage('Invalid Order ID'),
     query('from').optional().isISO8601(),
@@ -100,7 +106,8 @@ router.get(
 router.post(
   '/payments',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('finance:write'),
   [
     body('orderId').isMongoId().withMessage('Valid order ID is required'),
     body('amount').isFloat({ min: 0.01 }).withMessage('Payment amount must be greater than 0'),
@@ -118,7 +125,8 @@ router.post(
 router.get(
   '/expenses',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('finance:read'),
   [
     query('category').optional().isIn(['fabric', 'embroidery materials', 'rent', 'utilities', 'marketing', 'misc']),
     query('from').optional().isISO8601(),
@@ -132,7 +140,8 @@ router.get(
 router.post(
   '/expenses',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('finance:write'),
   [
     body('title').trim().notEmpty().withMessage('Expense title is required'),
     body('category').isIn(['fabric', 'embroidery materials', 'rent', 'utilities', 'marketing', 'misc']).withMessage('Invalid category'),
@@ -148,7 +157,8 @@ router.post(
 router.put(
   '/expenses/:id',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('finance:write'),
   [
     param('id').isMongoId().withMessage('Invalid Expense ID'),
     body('title').optional().trim().notEmpty().withMessage('Expense title cannot be empty'),
@@ -163,7 +173,8 @@ router.put(
 router.delete(
   '/expenses/:id',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('finance:write'),
   [param('id').isMongoId().withMessage('Invalid Expense ID')],
   validateRequest,
   deleteExpenseHandler,
@@ -173,7 +184,8 @@ router.delete(
 router.get(
   '/salaries',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('finance:read'),
   [
     query('staffId').optional().isMongoId().withMessage('Invalid Staff ID'),
     query('year').optional().isInt(),
@@ -186,7 +198,8 @@ router.get(
 router.post(
   '/salaries',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('finance:write'),
   [
     body('staffId').isMongoId().withMessage('Valid staff ID is required'),
     body('year').isInt({ min: 2000 }).withMessage('Valid year is required'),

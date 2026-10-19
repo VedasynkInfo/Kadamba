@@ -2,9 +2,6 @@ import request from 'supertest';
 import { describe, expect, it } from 'vitest';
 import { createApp } from '../app';
 import { registerAdminAndGetToken } from './helpers/auth';
-import { ProductCategory } from '../models/ProductCategory';
-import { ProductType } from '../models/ProductType';
-
 const app = createApp();
 
 describe('Product Catalog API', () => {

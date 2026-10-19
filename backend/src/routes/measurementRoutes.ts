@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { authenticate, authorize } from '../middleware/auth';
+import { authenticate, authorize, requirePermission } from '../middleware/auth';
 import {
   listTemplatesHandler,
   getTemplateHandler,
@@ -17,24 +17,42 @@ import {
   seedDataHandler,
 } from '../controllers/measurementController';
 
-// ── Templates router — mounted at /measurement-templates ──
+// ---- Templates router — mounted at /measurement-templates ----
 export const templatesRouter = Router();
-templatesRouter.use(authenticate, authorize('admin'));
-templatesRouter.get('/', listTemplatesHandler);
-templatesRouter.get('/:code', getTemplateHandler);
-templatesRouter.post('/', createTemplateHandler);
-templatesRouter.put('/:code', updateTemplateHandler);
-templatesRouter.patch('/:code/archive', archiveTemplateHandler);
-templatesRouter.post('/seed', seedTemplatesHandler);
+templatesRouter.use(authenticate, authorize('admin', 'staff'));
 
-// ── Profiles router — mounted at /measurements ──
+templatesRouter.get('/', requirePermission('measurements:read'), listTemplatesHandler);
+templatesRouter.get('/:code', requirePermission('measurements:read'), getTemplateHandler);
+templatesRouter.post('/', requirePermission('measurements:write'), createTemplateHandler);
+templatesRouter.put('/:code', requirePermission('measurements:write'), updateTemplateHandler);
+templatesRouter.patch(
+  '/:code/archive',
+  requirePermission('measurements:write'),
+  archiveTemplateHandler,
+);
+templatesRouter.post('/seed', requirePermission('measurements:write'), seedTemplatesHandler);
+
+// ---- Profiles router — mounted at /measurements ----
 export const profilesRouter = Router();
-profilesRouter.use(authenticate, authorize('admin'));
-profilesRouter.get('/', listProfilesHandler);
-profilesRouter.post('/', createProfileHandler);
-profilesRouter.post('/seed', seedDataHandler);
-profilesRouter.get('/:id/history', getProfileHistoryHandler);
-profilesRouter.post('/:id/duplicate', duplicateProfileHandler);
-profilesRouter.patch('/:id/archive', archiveProfileHandler);
-profilesRouter.put('/:id', updateProfileHandler);
-profilesRouter.get('/:id', getProfileHandler);
+profilesRouter.use(authenticate, authorize('admin', 'staff'));
+
+profilesRouter.get('/', requirePermission('measurements:read'), listProfilesHandler);
+profilesRouter.post('/', requirePermission('measurements:write'), createProfileHandler);
+profilesRouter.post('/seed', requirePermission('measurements:write'), seedDataHandler);
+profilesRouter.get(
+  '/:id/history',
+  requirePermission('measurements:read'),
+  getProfileHistoryHandler,
+);
+profilesRouter.post(
+  '/:id/duplicate',
+  requirePermission('measurements:write'),
+  duplicateProfileHandler,
+);
+profilesRouter.patch(
+  '/:id/archive',
+  requirePermission('measurements:write'),
+  archiveProfileHandler,
+);
+profilesRouter.put('/:id', requirePermission('measurements:write'), updateProfileHandler);
+profilesRouter.get('/:id', requirePermission('measurements:read'), getProfileHandler);

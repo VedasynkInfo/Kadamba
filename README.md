@@ -51,8 +51,8 @@ npm install
 npm run dev
 ```
 
-API: `http://localhost:5000`  
-Health: `http://localhost:5000/api/health`
+API: `http://localhost:4000`  
+Health: `http://localhost:4000/api/health`
 
 ### 3. Frontend
 

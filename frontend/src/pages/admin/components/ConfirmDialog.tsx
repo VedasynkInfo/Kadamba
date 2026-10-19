@@ -68,7 +68,7 @@ export function ConfirmDialog({
               'rounded-sm border px-4 py-2 text-sm font-medium transition',
               variant === 'danger'
                 ? 'border-rose-700 bg-rose-700 text-white hover:bg-rose-800'
-                : 'border-black bg-black text-cream hover:bg-black/90',
+                : 'border-black bg-black text-white hover:bg-black/90',
             )}
             disabled={isLoading}
           >

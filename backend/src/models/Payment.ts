@@ -1,6 +1,9 @@
 import mongoose, { Document, Schema } from 'mongoose';
+import { PAYMENT_METHODS } from '../shared/enums';
+import type { PaymentMethod } from '../shared/enums';
 
-export type PaymentMethod = 'cash' | 'upi' | 'bank' | 'card' | 'other';
+export { PAYMENT_METHODS };
+export type { PaymentMethod };
 
 export interface IPayment extends Document {
   orderId: mongoose.Types.ObjectId;

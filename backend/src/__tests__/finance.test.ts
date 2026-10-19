@@ -5,9 +5,6 @@ import { registerAdminAndGetToken } from './helpers/auth';
 import { Customer } from '../models/Customer';
 import { Order } from '../models/Order';
 import { Staff } from '../models/Staff';
-import { Expense } from '../models/Expense';
-import { Payment } from '../models/Payment';
-import { SalaryPayment } from '../models/SalaryPayment';
 
 const app = createApp();
 
@@ -114,7 +111,6 @@ describe('Finance API', () => {
 
     expect(expRes.status).toBe(201);
     expect(expRes.body.data.title).toBe('Atelier Shop Rent July');
-    const expenseId = expRes.body.data.id;
 
     // List Expenses
     const listExp = await request(app)

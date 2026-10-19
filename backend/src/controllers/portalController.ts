@@ -22,11 +22,29 @@ import {
 } from '../services/portalService';
 import { asyncHandler } from '../utils/asyncHandler';
 import { ApiError } from '../utils/ApiError';
+import { refreshSession } from '../services/authService';
+import { revokeSession } from '../services/tokenService';
+import {
+  clearPortalRefreshCookie,
+  portalRefreshCookieName,
+  setPortalRefreshCookie,
+} from '../utils/cookies';
 
 function customerIdFromReq(req: Request): string {
   const id = req.user?.customerId;
   if (!id) throw new ApiError(403, 'Customer portal access required');
   return id;
+}
+
+function portalSessionContext(req: Request) {
+  return { userAgent: req.header('user-agent'), ip: req.ip };
+}
+
+function readPortalRefreshToken(req: Request): string | undefined {
+  const cookieValue = req.cookies?.[portalRefreshCookieName()];
+  if (typeof cookieValue === 'string' && cookieValue) return cookieValue;
+  const bodyValue = (req.body as { refreshToken?: string } | undefined)?.refreshToken;
+  return typeof bodyValue === 'string' && bodyValue ? bodyValue : undefined;
 }
 
 export const verifyActivateHandler = asyncHandler(async (req: Request, res: Response) => {
@@ -52,16 +70,52 @@ export const setPasswordHandler = asyncHandler(async (req: Request, res: Respons
     password: password || '',
     confirmPassword: confirmPassword || '',
   });
-  res.status(200).json({ success: true, message: 'Portal activated', data });
+  setPortalRefreshCookie(res, data.refreshToken);
+  res.status(200).json({
+    success: true,
+    message: 'Portal activated',
+    data: { user: data.user, token: data.token, expiresIn: data.expiresIn },
+  });
 });
 
 export const portalLoginHandler = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body as { email?: string; password?: string };
-  const data = await loginPortal({
-    email: (email || '').trim(),
-    password: password || '',
+  const data = await loginPortal(
+    {
+      email: (email || '').trim(),
+      password: password || '',
+    },
+    portalSessionContext(req),
+  );
+  setPortalRefreshCookie(res, data.refreshToken);
+  res.status(200).json({
+    success: true,
+    message: 'Signed in',
+    data: { user: data.user, token: data.token, expiresIn: data.expiresIn },
   });
-  res.status(200).json({ success: true, message: 'Signed in', data });
+});
+
+/** Rotate the portal refresh cookie. */
+export const portalRefreshHandler = asyncHandler(async (req: Request, res: Response) => {
+  const presented = readPortalRefreshToken(req);
+  try {
+    const result = await refreshSession(presented ?? '', portalSessionContext(req));
+    setPortalRefreshCookie(res, result.refreshToken);
+    res.status(200).json({
+      success: true,
+      message: 'Session refreshed',
+      data: { user: result.user, token: result.token, expiresIn: result.expiresIn },
+    });
+  } catch (error) {
+    clearPortalRefreshCookie(res);
+    throw error;
+  }
+});
+
+export const portalLogoutHandler = asyncHandler(async (req: Request, res: Response) => {
+  await revokeSession(readPortalRefreshToken(req) ?? '', 'logout');
+  clearPortalRefreshCookie(res);
+  res.status(200).json({ success: true, message: 'Signed out' });
 });
 
 export const portalDashboardHandler = asyncHandler(async (req: Request, res: Response) => {

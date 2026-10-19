@@ -186,7 +186,6 @@ describe('Customer Portal API', () => {
   });
 
   it('blocks re-activation of an already activated Reference ID', async () => {
-    const adminToken = await registerAdminAndGetToken(app);
     const customer = await Customer.create({
       name: 'Sneha Rao',
       phone: '9123456780',

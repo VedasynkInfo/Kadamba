@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import { customerApi, type Customer } from '@/services/customers/customerService';
-import api from '@/services/api/client';
+import api, { getAdminToken } from '@/services/api/client';
 import type { ApiResponse } from '@/types';
-import { Button, Input, Spinner, Modal } from '@/components/ui';
+import { Button, Input, Spinner, useToast } from '@/components/ui';
 import { AdminHorizonBanner } from '../components/AdminHorizonBanner';
 import { adminBanners } from '../data';
 import { cn } from '@/utils/cn';
+import { CustomerEditProfileModal, type CustomerEditFormState } from './CustomerEditProfileModal';
+import { CustomerOverviewTab } from './CustomerOverviewTab';
 
 type AdminPortalMessage = {
   id: string;
@@ -30,6 +32,7 @@ function adminSocketUrl() {
 }
 
 export default function CustomerDetailAdminPage() {
+  const { toast } = useToast();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [customer, setCustomer] = useState<Customer | null>(null);
@@ -54,25 +57,25 @@ export default function CustomerDetailAdminPage() {
   const [savingEdit, setSavingEdit] = useState(false);
   const [archiving, setArchiving] = useState(false);
 
-  // Edit fields
-  const [editName, setEditName] = useState('');
-  const [editPhone, setEditPhone] = useState('');
-  const [editEmail, setEditEmail] = useState('');
-  const [editWhatsapp, setEditWhatsapp] = useState('');
-  const [editSource, setEditSource] = useState('walk-in');
-  const [editTags, setEditTags] = useState('');
-  const [editNotes, setEditNotes] = useState('');
-  
-  // Edit Address fields
-  const [editLine1, setEditLine1] = useState('');
-  const [editLine2, setEditLine2] = useState('');
-  const [editLandmark, setEditLandmark] = useState('');
-  const [editLocality, setEditLocality] = useState('');
-  const [editCity, setEditCity] = useState('');
-  const [editState, setEditState] = useState('');
-  const [editPincode, setEditPincode] = useState('');
-  const [editPreferredUnit, setEditPreferredUnit] = useState<'in' | 'cm'>('in');
-  const [editPortalStatus, setEditPortalStatus] = useState('none');
+  // Edit form state
+  const [editForm, setEditForm] = useState<CustomerEditFormState>({
+    name: '',
+    phone: '',
+    email: '',
+    whatsapp: '',
+    source: 'walk-in',
+    tags: '',
+    notes: '',
+    line1: '',
+    line2: '',
+    landmark: '',
+    locality: '',
+    city: '',
+    state: '',
+    pincode: '',
+    preferredUnit: 'in',
+    portalStatus: 'none',
+  });
 
   const [portalChat, setPortalChat] = useState<AdminPortalMessage[]>([]);
   const [chatBody, setChatBody] = useState('');
@@ -115,22 +118,24 @@ export default function CustomerDetailAdminPage() {
       setCustomer(data);
       
       // Seed edit form states
-      setEditName(data.name || '');
-      setEditPhone(data.phone || '');
-      setEditEmail(data.email || '');
-      setEditWhatsapp(data.whatsapp || '');
-      setEditSource(data.source || 'walk-in');
-      setEditTags(data.tags?.join(', ') || '');
-      setEditNotes(data.notes || '');
-      setEditLine1(data.address?.line1 || '');
-      setEditLine2(data.address?.line2 || '');
-      setEditLandmark(data.address?.landmark || '');
-      setEditLocality(data.address?.locality || '');
-      setEditCity(data.address?.city || 'Kurnool');
-      setEditState(data.address?.state || 'Andhra Pradesh');
-      setEditPincode(data.address?.pincode || '');
-      setEditPreferredUnit((data.preferredUnit as any) || 'in');
-      setEditPortalStatus(data.portalStatus || 'none');
+      setEditForm({
+        name: data.name || '',
+        phone: data.phone || '',
+        email: data.email || '',
+        whatsapp: data.whatsapp || '',
+        source: data.source || 'walk-in',
+        tags: data.tags?.join(', ') || '',
+        notes: data.notes || '',
+        line1: data.address?.line1 || '',
+        line2: data.address?.line2 || '',
+        landmark: data.address?.landmark || '',
+        locality: data.address?.locality || '',
+        city: data.address?.city || 'Kurnool',
+        state: data.address?.state || 'Andhra Pradesh',
+        pincode: data.address?.pincode || '',
+        preferredUnit: (data.preferredUnit as any) || 'in',
+        portalStatus: data.portalStatus || 'none',
+      });
     } catch (err) {
       console.error('Failed to get customer record', err);
     } finally {
@@ -175,7 +180,7 @@ export default function CustomerDetailAdminPage() {
 
   useEffect(() => {
     if (!id) return;
-    const token = localStorage.getItem('kadamba_token');
+    const token = getAdminToken();
     if (!token) return;
 
     const socket = io(adminSocketUrl(), {
@@ -214,7 +219,7 @@ export default function CustomerDetailAdminPage() {
       setNoteBody('');
       setNotePinned(false);
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to record CRM note.');
+      toast({ title: err.response?.data?.message || 'Failed to record CRM note.', tone: 'error' });
     } finally {
       setPostingNote(false);
     }
@@ -225,29 +230,29 @@ export default function CustomerDetailAdminPage() {
     if (!id) return;
     setSavingEdit(true);
     try {
-      const tags = editTags
+      const tags = editForm.tags
         .split(',')
         .map((t) => t.trim())
         .filter(Boolean);
 
       const updated = await customerApi.update(id, {
-        name: editName,
-        phone: editPhone,
-        email: editEmail || undefined,
-        whatsapp: editWhatsapp || undefined,
-        source: editSource,
+        name: editForm.name,
+        phone: editForm.phone,
+        email: editForm.email || undefined,
+        whatsapp: editForm.whatsapp || undefined,
+        source: editForm.source,
         tags,
-        notes: editNotes || undefined,
-        preferredUnit: editPreferredUnit,
-        portalStatus: editPortalStatus,
+        notes: editForm.notes || undefined,
+        preferredUnit: editForm.preferredUnit,
+        portalStatus: editForm.portalStatus,
         address: {
-          line1: editLine1 || undefined,
-          line2: editLine2 || undefined,
-          landmark: editLandmark || undefined,
-          locality: editLocality || undefined,
-          city: editCity || undefined,
-          state: editState || undefined,
-          pincode: editPincode || undefined,
+          line1: editForm.line1 || undefined,
+          line2: editForm.line2 || undefined,
+          landmark: editForm.landmark || undefined,
+          locality: editForm.locality || undefined,
+          city: editForm.city || undefined,
+          state: editForm.state || undefined,
+          pincode: editForm.pincode || undefined,
         },
       });
 
@@ -266,7 +271,7 @@ export default function CustomerDetailAdminPage() {
 
       setEditModalOpen(false);
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to update client profile details.');
+      toast({ title: err.response?.data?.message || 'Failed to update client profile details.', tone: 'error' });
     } finally {
       setSavingEdit(false);
     }
@@ -280,7 +285,7 @@ export default function CustomerDetailAdminPage() {
       await customerApi.update(id, { archive: true });
       navigate('/admin/customers');
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to archive customer record.');
+      toast({ title: err.response?.data?.message || 'Failed to archive customer record.', tone: 'error' });
     } finally {
       setArchiving(false);
     }
@@ -338,7 +343,7 @@ export default function CustomerDetailAdminPage() {
               <a
                 href={`https://wa.me/91${customer.phone.replace(/[^0-9]/g, '')}`}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="hover:underline text-emerald-800 font-semibold flex items-center gap-1"
               >
                 💬 WhatsApp
@@ -386,76 +391,7 @@ export default function CustomerDetailAdminPage() {
           {/* Main workspace column (takes 2/3 width) */}
           <div className="lg:col-span-2 space-y-8">
             {activeTab === 'overview' && (
-              <div className="space-y-6">
-                {/* Client Profile details */}
-                <div className="rounded-lg border border-black/10 bg-cream p-6 space-y-6 text-xs">
-                  <h3 className="font-heading text-lg text-black border-b border-black/5 pb-2">Client profile overview</h3>
-                  
-                  <div className="grid grid-cols-2 gap-6 sm:grid-cols-3">
-                    <div>
-                      <span className="text-black/45 block mb-1">Full name</span>
-                      <span className="font-medium text-black text-sm block">{customer.name}</span>
-                    </div>
-                    <div>
-                      <span className="text-black/45 block mb-1">Primary phone</span>
-                      <span className="font-medium text-black text-sm block">{customer.phone}</span>
-                    </div>
-                    <div>
-                      <span className="text-black/45 block mb-1">WhatsApp number</span>
-                      <span className="font-medium text-black text-sm block">{customer.whatsapp || customer.phone}</span>
-                    </div>
-                    <div>
-                      <span className="text-black/45 block mb-1">Email address</span>
-                      <span className="font-medium text-black text-sm block">{customer.email || 'None recorded'}</span>
-                    </div>
-                    <div>
-                      <span className="text-black/45 block mb-1">Client source</span>
-                      <span className="font-medium text-black text-sm block capitalize">{customer.source}</span>
-                    </div>
-                    <div>
-                      <span className="text-black/45 block mb-1">Preferred Unit</span>
-                      <span className="font-medium text-black text-sm block uppercase">{customer.preferredUnit || 'in'}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Address details */}
-                <div className="rounded-lg border border-black/10 bg-cream p-6 space-y-4 text-xs">
-                  <h3 className="font-heading text-lg text-black border-b border-black/5 pb-2">Locality & address</h3>
-                  
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <div>
-                      <span className="text-black/45 block">Address lines</span>
-                      <span className="font-medium text-black mt-1 block">
-                        {customer.address?.line1 || 'No address lines recorded'}
-                        {customer.address?.line2 && <span className="block mt-0.5">{customer.address.line2}</span>}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-black/45 block">Landmark</span>
-                      <span className="font-medium text-black mt-1 block">{customer.address?.landmark || '—'}</span>
-                    </div>
-                    <div>
-                      <span className="text-black/45 block">Locality area</span>
-                      <span className="font-medium text-black mt-1 block">{customer.address?.locality || '—'}</span>
-                    </div>
-                    <div>
-                      <span className="text-black/45 block">City / Pincode</span>
-                      <span className="font-medium text-black mt-1 block">
-                        {customer.address?.city || 'Kurnool'} - {customer.address?.pincode || '—'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* General Remark */}
-                {customer.notes && (
-                  <div className="rounded-lg border border-black/10 bg-cream p-6 space-y-2 text-xs">
-                    <h3 className="font-heading text-lg text-black border-b border-black/5 pb-2">Relationship summaries</h3>
-                    <p className="text-black/75 leading-relaxed text-sm italic">"{customer.notes}"</p>
-                  </div>
-                )}
-              </div>
+              <CustomerOverviewTab customer={customer} />
             )}
 
             {activeTab === 'orders' && (
@@ -719,183 +655,14 @@ export default function CustomerDetailAdminPage() {
       </div>
 
       {/* Edit Customer Profile details modal */}
-      <Modal
+      <CustomerEditProfileModal
         open={editModalOpen}
         onClose={() => setEditModalOpen(false)}
-        title="Edit Client Profile"
-      >
-        <form onSubmit={handleSaveEdit} className="space-y-4 text-xs pb-4">
-          <div>
-            <label className="block text-black/55 mb-1.5 font-semibold">Client Name *</label>
-            <Input
-              type="text"
-              required
-              value={editName}
-              onChange={(e) => setEditName(e.target.value)}
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-black/55 mb-1.5 font-semibold">Primary Phone *</label>
-              <Input
-                type="tel"
-                required
-                value={editPhone}
-                onChange={(e) => setEditPhone(e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="block text-black/55 mb-1.5 font-semibold">WhatsApp number</label>
-              <Input
-                type="tel"
-                value={editWhatsapp}
-                onChange={(e) => setEditWhatsapp(e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-black/55 mb-1.5 font-semibold">Email address</label>
-              <Input
-                type="email"
-                value={editEmail}
-                onChange={(e) => setEditEmail(e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="block text-black/55 mb-1.5 font-semibold">Client source</label>
-              <select
-                value={editSource}
-                onChange={(e) => setEditSource(e.target.value)}
-                className="w-full rounded-md border border-black/15 bg-cream px-3 py-2 text-sm text-black focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
-              >
-                <option value="walk-in">Walk-in / Phone</option>
-                <option value="instagram">Instagram</option>
-                <option value="google">Google Maps</option>
-                <option value="referral">Referral</option>
-                <option value="website">Website</option>
-              </select>
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-black/55 mb-1.5 font-semibold">Address line 1</label>
-            <Input
-              type="text"
-              value={editLine1}
-              onChange={(e) => setEditLine1(e.target.value)}
-            />
-          </div>
-          <div>
-            <label className="block text-black/55 mb-1.5 font-semibold">Address line 2</label>
-            <Input
-              type="text"
-              value={editLine2}
-              onChange={(e) => setEditLine2(e.target.value)}
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-black/55 mb-1.5 font-semibold">Landmark</label>
-              <Input
-                type="text"
-                value={editLandmark}
-                onChange={(e) => setEditLandmark(e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="block text-black/55 mb-1.5 font-semibold">Locality / Area</label>
-              <Input
-                type="text"
-                value={editLocality}
-                onChange={(e) => setEditLocality(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-3 gap-3">
-            <div>
-              <label className="block text-black/55 mb-1.5 font-semibold">City</label>
-              <Input
-                type="text"
-                value={editCity}
-                onChange={(e) => setEditCity(e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="block text-black/55 mb-1.5 font-semibold">State</label>
-              <Input
-                type="text"
-                value={editState}
-                onChange={(e) => setEditState(e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="block text-black/55 mb-1.5 font-semibold">Pincode</label>
-              <Input
-                type="text"
-                value={editPincode}
-                onChange={(e) => setEditPincode(e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-3 gap-3 pt-2">
-            <div>
-              <label className="block text-black/55 mb-1.5 font-semibold">Fit Unit</label>
-              <select
-                value={editPreferredUnit}
-                onChange={(e: any) => setEditPreferredUnit(e.target.value)}
-                className="w-full rounded-md border border-black/15 bg-cream px-3 py-2 text-sm text-black focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
-              >
-                <option value="in">Inches (in)</option>
-                <option value="cm">Centimeters (cm)</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-black/55 mb-1.5 font-semibold">Portal status</label>
-              <select
-                value={editPortalStatus}
-                onChange={(e) => setEditPortalStatus(e.target.value)}
-                className="w-full rounded-md border border-black/15 bg-cream px-3 py-2 text-sm text-black focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
-              >
-                <option value="none">None</option>
-                <option value="invited">Invited</option>
-                <option value="active">Active</option>
-                <option value="locked">Locked</option>
-              </select>
-            </div>
-            <div className="col-span-1">
-              <label className="block text-black/55 mb-1.5 font-semibold">Client tags</label>
-              <Input
-                type="text"
-                value={editTags}
-                onChange={(e) => setEditTags(e.target.value)}
-                placeholder="bridal, VIP, etc."
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-black/55 mb-1.5 font-semibold">Profile Notes summary</label>
-            <Input
-              type="text"
-              value={editNotes}
-              onChange={(e) => setEditNotes(e.target.value)}
-            />
-          </div>
-
-          <div className="flex gap-3 justify-end pt-3 border-t border-black/5">
-            <Button variant="secondary" size="sm" onClick={() => setEditModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button type="submit" size="sm" disabled={savingEdit}>
-              {savingEdit ? 'Saving...' : 'Save Changes'}
-            </Button>
-          </div>
-        </form>
-      </Modal>
+        form={editForm}
+        setForm={setEditForm}
+        onSave={handleSaveEdit}
+        saving={savingEdit}
+      />
     </>
   );
 }

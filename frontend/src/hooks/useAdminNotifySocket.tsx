@@ -10,8 +10,10 @@ import {
 } from 'react';
 import { io, type Socket } from 'socket.io-client';
 import { useToast } from '@/components/ui/Toast';
+import { getAdminToken } from '@/services/api/client';
 import { dashboardApi, type AdminBadges } from '@/services/dashboard/dashboardService';
 import { socketOrigin } from './socketOrigin';
+import { useAuth } from './useAuth';
 
 type SoftRefreshKind = 'leads' | 'orders' | 'measurements' | 'payments' | 'dashboard';
 
@@ -33,6 +35,7 @@ const emptyBadges: AdminBadges = { leads: 0, measurements: 0, chat: 0 };
  */
 export function AdminNotifyProvider({ children }: { children: ReactNode }) {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [connected, setConnected] = useState(false);
   const [badges, setBadges] = useState<AdminBadges>(emptyBadges);
   const listeners = useRef(new Set<(kinds: SoftRefreshKind[]) => void>());
@@ -57,8 +60,10 @@ export function AdminNotifyProvider({ children }: { children: ReactNode }) {
   }, [refreshBadges]);
 
   useEffect(() => {
-    const token = localStorage.getItem('kadamba_token');
-    if (!token || token === 'demo-admin-token') return;
+    // Connect only once an access token exists (auth restore may still be running).
+    if (!user) return;
+    const token = getAdminToken();
+    if (!token) return;
 
     const socket: Socket = io(socketOrigin(), {
       path: '/socket.io',
@@ -141,7 +146,7 @@ export function AdminNotifyProvider({ children }: { children: ReactNode }) {
       socket.disconnect();
       setConnected(false);
     };
-  }, [bumpSoft, refreshBadges]);
+  }, [bumpSoft, refreshBadges, user]);
 
   const onSoftRefresh = useCallback((fn: (kinds: SoftRefreshKind[]) => void) => {
     listeners.current.add(fn);

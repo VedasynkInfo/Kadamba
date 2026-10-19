@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
-import { Order, IOrder, OrderStatus, OrderPriority, IOrderLineItem, IOrderStaff, IOrderNote } from '../models/Order';
+import { Order, OrderStatus, OrderPriority, IOrderLineItem, IOrderStaff, IOrderNote } from '../models/Order';
 import { Customer } from '../models/Customer';
 import { Lead } from '../models/Lead';
+import { getNextSequence } from '../models/Counter';
 import { ApiError } from '../utils/ApiError';
 import { buildPaginationMeta, parsePagination } from '../utils/pagination';
 import { searchRegex } from '../utils/query';
@@ -158,9 +159,10 @@ export async function createOrder(input: CreateOrderInput): Promise<OrderDto> {
     throw new ApiError(404, 'Customer not found');
   }
 
-  // 1. Fetch next sequential order number
+  // 1. Fetch next sequential order number atomically
   const lastOrder = await Order.findOne().sort({ orderNumber: -1 }).select('orderNumber').lean();
-  const orderNumber = (lastOrder?.orderNumber || 0) + 1;
+  const fallback = (lastOrder?.orderNumber || 0) + 1;
+  const orderNumber = await getNextSequence('orderNumber', fallback);
 
   // 2. Set referenceId if confirmed on creation
   const status = input.status || 'enquiry';
@@ -280,8 +282,9 @@ export async function listOrders(query: Record<string, unknown>) {
   // Client-side search (referenceId, title, customer name/phone/email)
   const q = typeof query.q === 'string' ? query.q.trim() : '';
   if (q) {
-    const regex = new RegExp(q, 'i');
-    
+    // Escape user input to prevent regex injection / ReDoS.
+    const regex = searchRegex(q)!;
+
     // Find matching customers first to search in orders
     const matchingCustomers = await Customer.find({
       $or: [{ name: regex }, { phone: regex }, { email: regex }],
@@ -376,39 +379,54 @@ export async function transitionOrderStatus(
     throw new ApiError(400, 'Invalid Order ID');
   }
 
-  const order = await Order.findById(id);
-  if (!order) {
-    throw new ApiError(404, 'Order not found');
-  }
+  const { withTransaction } = await import('../utils/transaction');
+  const { ORDER_STATUS_TRANSITIONS } = await import('../shared/enums');
 
-  if (order.status === newStatus) {
-    return serializeOrder(await order.populate('customerId'));
-  }
+  const order = await withTransaction(async (session) => {
+    const order = await Order.findById(id).session(session ?? null);
+    if (!order) {
+      throw new ApiError(404, 'Order not found');
+    }
 
-  // Confirming order generates immutable Reference ID
-  if (newStatus === 'confirmed' && !order.referenceId) {
-    order.referenceId = generateReferenceId(order.orderNumber);
-  }
+    if (order.status === newStatus) {
+      return order;
+    }
 
-  // Cancelled order logic
-  if (newStatus === 'cancelled') {
-    order.cancelledReason = note || 'No cancellation reason provided';
-  }
+    // Enforce the shared state machine so an invalid jump (e.g. enquiry →
+    // delivery) cannot be persisted by a stale UI or a crafted request.
+    const allowed = ORDER_STATUS_TRANSITIONS[order.status] ?? [];
+    if (!allowed.includes(newStatus)) {
+      throw new ApiError(
+        409,
+        `Invalid status transition: ${order.status} → ${newStatus}`,
+        [{ allowedFrom: order.status, allowed: allowed }],
+      );
+    }
 
-  order.status = newStatus;
-  order.timeline.push({
-    status: newStatus,
-    note: note || `Status transitioned to ${newStatus}`,
-    actorId,
-    at: new Date(),
-  });
+    // Confirming order generates immutable Reference ID
+    if (newStatus === 'confirmed' && !order.referenceId) {
+      order.referenceId = generateReferenceId(order.orderNumber);
+    }
 
-  await order.save();
+    // Cancelled order logic
+    if (newStatus === 'cancelled') {
+      order.cancelledReason = note || 'No cancellation reason provided';
+    }
 
-  // Keep linked lead in sync (status + reference ID for admin/user visibility)
-  if (order.leadId) {
-    try {
-      const lead = await Lead.findById(order.leadId);
+    order.status = newStatus;
+    order.timeline.push({
+      status: newStatus,
+      note: note || `Status transitioned to ${newStatus}`,
+      actorId,
+      at: new Date(),
+    });
+
+    await order.save({ session: session ?? undefined });
+
+    // Keep the linked lead in sync in the SAME transaction. A failure here now
+    // rolls the order back instead of silently diverging order and lead.
+    if (order.leadId) {
+      const lead = await Lead.findById(order.leadId).session(session ?? null);
       if (lead) {
         if (order.referenceId && lead.referenceId !== order.referenceId) {
           lead.referenceId = order.referenceId;
@@ -441,11 +459,15 @@ export async function transitionOrderStatus(
             createdAt: new Date(),
           });
         }
-        await lead.save();
+        await lead.save({ session: session ?? undefined });
       }
-    } catch (err) {
-      console.warn('Lead sync after order status failed', err);
     }
+
+    return order;
+  });
+
+  if (order.status === newStatus && order.timeline.length === 0) {
+    return serializeOrder(await order.populate('customerId'));
   }
 
   const populated = await order.populate('customerId');
@@ -569,7 +591,8 @@ export async function createEnquiryOrderForLead(input: {
   }
 
   const lastOrder = await Order.findOne().sort({ orderNumber: -1 }).select('orderNumber').lean();
-  const orderNumber = (lastOrder?.orderNumber || 0) + 1;
+  const fallback = (lastOrder?.orderNumber || 0) + 1;
+  const orderNumber = await getNextSequence('orderNumber', fallback);
 
   const customer = await Customer.findById(input.customerId);
   const customerName = customer?.name || lead.name;

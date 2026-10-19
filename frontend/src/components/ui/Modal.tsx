@@ -112,14 +112,19 @@ export function Modal({
         tabIndex={-1}
         onKeyDown={onPanelKeyDown}
         className={cn(
-          'relative z-10 w-full rounded-lg border border-gold/30 bg-cream p-6 text-black shadow-[var(--shadow-soft)]',
+          'relative z-10 w-full rounded-xl border p-6 shadow-[var(--shadow-soft)]',
           'animate-fade-in-up outline-none',
           sizeClasses[size],
           className,
         )}
+        style={{
+          backgroundColor: 'var(--admin-card, var(--public-card, #ffffff))',
+          color: 'var(--admin-card-text, var(--public-card-text, #171717))',
+          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))',
+        }}
       >
         <div className="mb-4 flex items-start justify-between gap-4">
-          <h2 id={titleId} className="font-heading text-2xl">
+          <h2 id={titleId} className="font-heading text-xl font-bold text-inherit">
             {title}
           </h2>
           <Button
@@ -127,12 +132,12 @@ export function Modal({
             size="sm"
             onClick={() => onCloseRef.current()}
             aria-label="Close dialog"
-            className="!px-2"
+            className="!px-2 text-inherit opacity-70 hover:opacity-100 hover:bg-current/[0.06]"
           >
             ✕
           </Button>
         </div>
-        <div className="text-sm text-black/80">{children}</div>
+        <div className="text-sm text-inherit">{children}</div>
         {footer ? <div className="mt-6 flex justify-end gap-3">{footer}</div> : null}
       </div>
     </div>

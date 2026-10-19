@@ -1,3 +1,4 @@
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { type Express } from 'express';
 import helmet from 'helmet';
@@ -8,6 +9,7 @@ import { env } from './config/env';
 import { logger } from './config/logger';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 import { globalApiRateLimiter } from './middleware/rateLimit';
+import { autoAudit } from './middleware/autoAudit';
 import apiRoutes from './routes';
 
 /**
@@ -70,15 +72,33 @@ export function createApp(): Express {
 
   app.use(express.json({ limit: '1mb' }));
   app.use(express.urlencoded({ extended: true }));
+  // httpOnly refresh cookies (admin + portal). No signing: the value is already
+  // an unguessable 384-bit random token whose hash is stored server-side.
+  app.use(cookieParser());
 
   // Serve locally stored uploads (dev + production when UPLOAD_STORAGE=local).
-  app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+  // Hardened: no dotfiles, nosniff, long-lived immutable caching (filenames are
+  // timestamped/unique), and an explicit X-Content-Type-Options header so a
+  // mislabelled file can never be sniffed into an active content type.
+  app.use(
+    '/uploads',
+    express.static(path.join(process.cwd(), 'uploads'), {
+      dotfiles: 'deny',
+      index: false,
+      fallthrough: false,
+      setHeaders(res) {
+        res.setHeader('X-Content-Type-Options', 'nosniff');
+        res.setHeader('Content-Security-Policy', "default-src 'none'; sandbox");
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      },
+    }),
+  );
 
   app.get('/', (_req, res) => {
     res.json({ success: true, message: "Kadamba's Designer Studio API", version: '1.0.0' });
   });
 
-  app.use('/api', globalApiRateLimiter, apiRoutes);
+  app.use('/api', globalApiRateLimiter, autoAudit, apiRoutes);
 
   app.use(notFoundHandler);
   app.use(errorHandler);

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { body, param, query } from 'express-validator';
-import { authenticate, authorize } from '../middleware/auth';
+import { authenticate, authorize, requirePermission } from '../middleware/auth';
 import { validateRequest } from '../middleware/validate';
 import {
   listCategoriesHandler,
@@ -16,14 +16,14 @@ import {
 const router = Router();
 
 // Publicly readable endpoint if needed, but in our case, protect admin console paths
-router.use(authenticate);
-router.use(authorize('admin'));
+router.use(authenticate, authorize('admin', 'staff'));
 
 // Categories routes
-router.get('/categories', listCategoriesHandler);
+router.get('/categories', requirePermission('catalog:read'), listCategoriesHandler);
 
 router.post(
   '/categories',
+  requirePermission('catalog:write'),
   [
     body('code').trim().notEmpty().withMessage('Category code is required'),
     body('name').trim().notEmpty().withMessage('Category name is required'),
@@ -36,6 +36,7 @@ router.post(
 
 router.patch(
   '/categories/:id',
+  requirePermission('catalog:write'),
   [
     param('id').isMongoId().withMessage('Invalid Category ID'),
     body('code').optional().trim().notEmpty().withMessage('Category code cannot be empty'),
@@ -50,6 +51,7 @@ router.patch(
 // Product Types routes
 router.get(
   '/product-types',
+  requirePermission('catalog:read'),
   [
     query('categoryId').optional().trim(),
     query('search').optional().trim(),
@@ -61,6 +63,7 @@ router.get(
 
 router.get(
   '/product-types/:id',
+  requirePermission('catalog:read'),
   [param('id').isMongoId().withMessage('Invalid Product Type ID')],
   validateRequest,
   getProductTypeHandler,
@@ -68,6 +71,7 @@ router.get(
 
 router.post(
   '/product-types',
+  requirePermission('catalog:write'),
   [
     body('code').trim().notEmpty().withMessage('Product type code is required'),
     body('name').trim().notEmpty().withMessage('Product type name is required'),
@@ -87,6 +91,7 @@ router.post(
 
 router.patch(
   '/product-types/:id',
+  requirePermission('catalog:write'),
   [
     param('id').isMongoId().withMessage('Invalid Product Type ID'),
     body('code').optional().trim().notEmpty().withMessage('Product type code cannot be empty'),
@@ -106,6 +111,6 @@ router.patch(
 );
 
 // Catalog Seeder endpoint
-router.post('/seed', seedCatalogHandler);
+router.post('/seed', requirePermission('catalog:write'), seedCatalogHandler);
 
 export default router;

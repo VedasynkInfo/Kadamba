@@ -19,10 +19,6 @@ export interface MediaUploadProps {
   allowVideo?: boolean;
 }
 
-function isDemoToken(): boolean {
-  return localStorage.getItem('kadamba_token') === 'demo-admin-token';
-}
-
 function isVideoUrl(url: string, mimeHint?: string): boolean {
   if (mimeHint?.startsWith('video/')) return true;
   return /\.(mp4|webm|mov)(\?|$)/i.test(url);
@@ -62,13 +58,6 @@ export function MediaUpload({
     setUploading(true);
 
     try {
-      if (isDemoToken() && import.meta.env.DEV) {
-        // Offline demo unlock — keep a local object URL so drawers still work.
-        const objectUrl = URL.createObjectURL(file);
-        onChange(objectUrl);
-        return;
-      }
-
       const result = await uploadMedia(file, folder);
       onChange(result.url);
     } catch (err) {

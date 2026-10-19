@@ -11,23 +11,25 @@ export const adminHorizonMedia = {
 } as const;
 
 export const adminNav = [
-  { to: '/admin', end: true, label: 'Dashboard' },
-  { to: '/admin/gallery', end: false, label: 'Gallery' },
-  { to: '/admin/services', end: false, label: 'Services' },
-  { to: '/admin/portfolio', end: false, label: 'Portfolio' },
-  { to: '/admin/blogs', end: false, label: 'Blogs' },
-  { to: '/admin/leads', end: false, label: 'Leads' },
-  { to: '/admin/customers', end: false, label: 'Customers' },
-  { to: '/admin/products', end: false, label: 'Products' },
-  { to: '/admin/orders', end: false, label: 'Orders' },
-  { to: '/admin/measurements', end: false, label: 'Measurements' },
-  { to: '/admin/invoices', end: false, label: 'Invoices' },
-  { to: '/admin/payments', end: false, label: 'Payments' },
-  { to: '/admin/staff', end: false, label: 'Staff' },
-  { to: '/admin/finance', end: false, label: 'Finance' },
-  { to: '/admin/reports', end: false, label: 'Reports' },
-  { to: '/admin/settings', end: false, label: 'Settings' },
-  { to: '/admin/profile', end: false, label: 'Profile' },
+  { to: '/admin', end: true, label: 'Dashboard', permission: 'orders:read' },
+  { to: '/admin/gallery', end: false, label: 'Gallery', permission: 'content:write' },
+  { to: '/admin/services', end: false, label: 'Services', permission: 'content:write' },
+  { to: '/admin/portfolio', end: false, label: 'Portfolio', permission: 'content:write' },
+  { to: '/admin/blogs', end: false, label: 'Blogs', permission: 'content:write' },
+  { to: '/admin/leads', end: false, label: 'Leads', permission: 'leads:read' },
+  { to: '/admin/customers', end: false, label: 'Customers', permission: 'customers:read' },
+  { to: '/admin/products', end: false, label: 'Products', permission: 'catalog:read' },
+  { to: '/admin/orders', end: false, label: 'Orders', permission: 'orders:read' },
+  { to: '/admin/measurements', end: false, label: 'Measurements', permission: 'measurements:read' },
+  { to: '/admin/invoices', end: false, label: 'Invoices', permission: 'finance:read' },
+  { to: '/admin/payments', end: false, label: 'Payments', permission: 'finance:read' },
+  { to: '/admin/staff', end: false, label: 'Staff', permission: 'staff:read' },
+  { to: '/admin/finance', end: false, label: 'Finance', permission: 'finance:read' },
+  { to: '/admin/reports', end: false, label: 'Reports', permission: 'reports:read' },
+  { to: '/admin/users', end: false, label: 'Users & Roles', permission: 'users:manage' },
+  { to: '/admin/audit', end: false, label: 'Audit Log', permission: 'audit:read' },
+  { to: '/admin/settings', end: false, label: 'Settings', permission: 'content:write' },
+  { to: '/admin/profile', end: false, label: 'Profile', permission: null },
 ] as const;
 
 export const adminBanners = {
@@ -224,7 +226,24 @@ export interface WebsiteSettings {
   };
   theme: {
     primary: string;
+    primaryHover?: string;
+    primaryText?: string;
     accent: string;
+    publicBg?: string;
+    publicText?: string;
+    publicCard?: string;
+    publicCardText?: string;
+    publicSurface?: string;
+    adminBg?: string;
+    adminText?: string;
+    adminCard?: string;
+    adminCardText?: string;
+    adminSidebar?: string;
+    adminSidebarText?: string;
+    adminPrimary?: string;
+    adminPrimaryText?: string;
+    adminAccent?: string;
+    fontFamily?: string;
   };
 }
 
@@ -316,7 +335,24 @@ export const defaultWebsiteSettings: WebsiteSettings = {
   },
   theme: {
     primary: '#000000',
+    primaryHover: '#1a1a1a',
+    primaryText: '#ffffff',
     accent: '#b59410',
+    publicBg: '#ffffff',
+    publicText: '#171717',
+    publicCard: '#ffffff',
+    publicCardText: '#171717',
+    publicSurface: '#fafafa',
+    adminBg: '#0b0f17',
+    adminText: '#f3f4f6',
+    adminCard: '#1f2937',
+    adminCardText: '#f3f4f6',
+    adminSidebar: '#111827',
+    adminSidebarText: '#f3f4f6',
+    adminPrimary: '#b59410',
+    adminPrimaryText: '#000000',
+    adminAccent: '#ffd700',
+    fontFamily: 'Manrope, sans-serif',
   },
 };
 

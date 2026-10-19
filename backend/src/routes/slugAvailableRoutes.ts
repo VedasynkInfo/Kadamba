@@ -5,7 +5,7 @@ import { Blog } from '../models/Blog';
 import { GalleryItem } from '../models/GalleryItem';
 import { Portfolio } from '../models/Portfolio';
 import { Service } from '../models/Service';
-import { authenticate, authorize } from '../middleware/auth';
+import { authenticate, authorize, requirePermission } from '../middleware/auth';
 import { validateRequest } from '../middleware/validate';
 import { asyncHandler } from '../utils/asyncHandler';
 import { suggestUniqueSlug, slugify } from '../utils/generateSeo';
@@ -69,7 +69,8 @@ const checks = [
  */
 export function createSlugAvailableRouter(): Router {
   const router = Router();
-  router.use(authenticate, authorize('admin'));
+  // A helper for the CMS editors — reachable by anyone who can write content.
+  router.use(authenticate, authorize('admin', 'staff'), requirePermission('content:write'));
 
   router.get('/blogs/slug-available', checks, validateRequest, makeSlugHandler(Blog));
   router.get('/services/slug-available', checks, validateRequest, makeSlugHandler(Service));

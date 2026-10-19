@@ -8,9 +8,12 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "lint": "oxlint",
+    "typecheck": "tsc -b",
     "format": "prettier --write .",
     "test:e2e": "playwright test",
-    "test:e2e:install": "playwright install --with-deps chromium webkit"
+    "test:e2e:install": "playwright install --with-deps chromium webkit",
+    "check:tokens": "node ../scripts/check-tokens.mjs",
+    "check:contract": "node ../scripts/sync-shared.mjs --check"
   },
   "dependencies": {
     "axios": "^1.18.1",

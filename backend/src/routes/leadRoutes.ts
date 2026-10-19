@@ -8,8 +8,10 @@ import {
   getLeadHandler,
   listLeadsHandler,
   updateLeadHandler,
+  scheduleFollowUpHandler,
+  completeFollowUpHandler,
 } from '../controllers/leadController';
-import { authenticate, authorize } from '../middleware/auth';
+import { authenticate, authorize, requirePermission } from '../middleware/auth';
 import { publicWriteRateLimiter } from '../middleware/rateLimit';
 import { validateRequest } from '../middleware/validate';
 import { LEAD_STATUSES } from '../models/Lead';
@@ -68,13 +70,22 @@ router.post(
   createLead,
 );
 
-router.get('/', authenticate, authorize('admin'), listLeadsHandler);
+// Staff with `leads:read` work the pipeline day to day; a full CSV export of
+// the database is a bulk data-egress action and stays owner-only.
+router.get(
+  '/',
+  authenticate,
+  authorize('admin', 'staff'),
+  requirePermission('leads:read'),
+  listLeadsHandler,
+);
 router.get('/export', authenticate, authorize('admin'), exportLeadsHandler);
 
 router.get(
   '/:id',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('leads:read'),
   [param('id').isMongoId()],
   validateRequest,
   getLeadHandler,
@@ -83,7 +94,8 @@ router.get(
 router.patch(
   '/:id',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('leads:write'),
   [
     param('id').isMongoId(),
     body('status').optional().isIn([...LEAD_STATUSES]),
@@ -96,7 +108,8 @@ router.patch(
 router.post(
   '/:id/notes',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('leads:write'),
   [
     param('id').isMongoId(),
     body('body').trim().isLength({ min: 1, max: 2000 }).withMessage('Note body is required'),
@@ -104,6 +117,36 @@ router.post(
   ],
   validateRequest,
   addNoteHandler,
+);
+
+router.post(
+  '/:id/follow-ups',
+  authenticate,
+  authorize('admin', 'staff'),
+  requirePermission('leads:write'),
+  [
+    param('id').isMongoId(),
+    body('scheduledAt').isISO8601().withMessage('Valid ISO scheduled date is required'),
+    body('type').optional().isIn(['call', 'whatsapp', 'email', 'in_person_consultation']),
+    body('notes').optional().trim().isLength({ max: 1000 }),
+  ],
+  validateRequest,
+  scheduleFollowUpHandler,
+);
+
+router.patch(
+  '/:id/follow-ups/:followUpId/complete',
+  authenticate,
+  authorize('admin', 'staff'),
+  requirePermission('leads:write'),
+  [
+    param('id').isMongoId(),
+    param('followUpId').isMongoId(),
+    body('outcome').optional().trim().isLength({ max: 500 }),
+    body('notes').optional().trim().isLength({ max: 1000 }),
+  ],
+  validateRequest,
+  completeFollowUpHandler,
 );
 
 export default router;

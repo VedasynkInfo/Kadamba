@@ -11,7 +11,7 @@ import {
   addOrderNoteHandler,
   convertLeadHandler,
 } from '../controllers/orderController';
-import { authenticate, authorize } from '../middleware/auth';
+import { authenticate, authorize, requirePermission } from '../middleware/auth';
 import { validateRequest } from '../middleware/validate';
 import { ORDER_STATUSES, ORDER_PRIORITIES } from '../models/Order';
 
@@ -20,7 +20,8 @@ const router = Router();
 router.get(
   '/',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('orders:read'),
   [
     query('q').optional().trim(),
     query('status').optional(),
@@ -35,7 +36,8 @@ router.get(
 router.get(
   '/:id',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('orders:read'),
   [
     param('id').isMongoId().withMessage('Invalid Order ID'),
   ],
@@ -46,7 +48,8 @@ router.get(
 router.post(
   '/',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('orders:write'),
   [
     body('customerId').isMongoId().withMessage('Valid customer ID is required'),
     body('leadId').optional().isMongoId().withMessage('Valid lead ID is required'),
@@ -70,7 +73,8 @@ router.post(
 router.patch(
   '/:id',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('orders:write'),
   [
     param('id').isMongoId().withMessage('Invalid Order ID'),
     body('title').optional().trim().isLength({ min: 3, max: 200 }),
@@ -90,7 +94,8 @@ router.patch(
 router.post(
   '/:id/status',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('orders:write'),
   [
     param('id').isMongoId().withMessage('Invalid Order ID'),
     body('status').isIn(ORDER_STATUSES).withMessage('Valid status is required'),
@@ -103,7 +108,8 @@ router.post(
 router.post(
   '/:id/assign',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('orders:write'),
   [
     param('id').isMongoId().withMessage('Invalid Order ID'),
     body('assignedStaff').isArray().withMessage('Assigned staff must be an array'),
@@ -117,7 +123,8 @@ router.post(
 router.post(
   '/:id/link-measurements',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('orders:write'),
   [
     param('id').isMongoId().withMessage('Invalid Order ID'),
     body('measurementProfileIds').isArray().withMessage('Measurement profile ids must be an array'),
@@ -129,7 +136,8 @@ router.post(
 router.post(
   '/:id/notes',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('orders:write'),
   [
     param('id').isMongoId().withMessage('Invalid Order ID'),
     body('body').trim().notEmpty().withMessage('Note body cannot be empty'),
@@ -142,7 +150,8 @@ router.post(
 router.post(
   '/from-lead/:leadId',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('orders:write'),
   [
     param('leadId').isMongoId().withMessage('Invalid Lead ID'),
   ],

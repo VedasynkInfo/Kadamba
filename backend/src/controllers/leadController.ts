@@ -6,6 +6,8 @@ import {
   getLeadById,
   listLeads,
   updateLead,
+  scheduleLeadFollowUp,
+  completeLeadFollowUp,
 } from '../services/leadService';
 import { notifyRequestReceived } from '../services/notificationService';
 import { asyncHandler } from '../utils/asyncHandler';
@@ -109,6 +111,24 @@ export const addNoteHandler = asyncHandler(async (req: Request, res: Response) =
     'Studio Lead';
   const lead = await addLeadNote(req.params.id as string, req.body.body, author);
   res.status(201).json({ success: true, message: 'Note added', data: lead });
+});
+
+export const scheduleFollowUpHandler = asyncHandler(async (req: Request, res: Response) => {
+  const createdBy = req.user?.id || 'Studio Team';
+  const lead = await scheduleLeadFollowUp(req.params.id as string, {
+    ...req.body,
+    createdBy,
+  });
+  res.status(201).json({ success: true, message: 'Follow-up scheduled', data: lead });
+});
+
+export const completeFollowUpHandler = asyncHandler(async (req: Request, res: Response) => {
+  const lead = await completeLeadFollowUp(
+    req.params.id as string,
+    req.params.followUpId as string,
+    req.body,
+  );
+  res.status(200).json({ success: true, message: 'Follow-up marked completed', data: lead });
 });
 
 export const exportLeadsHandler = asyncHandler(async (req: Request, res: Response) => {

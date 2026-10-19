@@ -56,5 +56,10 @@ const salaryPaymentSchema = new Schema<ISalaryPayment>(
 salaryPaymentSchema.index({ staffId: 1 });
 salaryPaymentSchema.index({ year: 1, month: 1 });
 salaryPaymentSchema.index({ paidAt: -1 });
+// One salary payment per staff member per month — prevents duplicate payouts.
+salaryPaymentSchema.index(
+  { staffId: 1, year: 1, month: 1 },
+  { unique: true, name: 'uniq_staff_salary_period' },
+);
 
 export const SalaryPayment = mongoose.model<ISalaryPayment>('SalaryPayment', salaryPaymentSchema);

@@ -1,17 +1,9 @@
-import { useMemo, useState } from 'react';
-import { Button, Drawer, Input, Select, Textarea, useToast } from '@/components/ui';
-import type { BlogCategory, BlogPost } from '@/pages/blogs/data';
+﻿import { useMemo, useState } from 'react';
+import { useToast } from '@/components/ui';
+import type { BlogPost } from '@/pages/blogs/data';
 import { useAdminContent } from '../AdminContentContext';
 import { AdminHorizonBanner } from '../components/AdminHorizonBanner';
-import { BannerSizeGuide } from '../components/BannerSizeGuide';
 import { ConfirmDialog } from '../components/ConfirmDialog';
-import { EmptyState } from '../components/EmptyState';
-import { MediaUpload } from '../components/MediaUpload';
-import { SeoFields } from '../components/SeoFields';
-import { Skeleton } from '../components/Skeleton';
-import { SlugField } from '../components/SlugField';
-import { TagsInput } from '../components/TagsInput';
-import { adminBanners } from '../data';
 import {
   applySeoPack,
   buildSeoPack,
@@ -19,61 +11,80 @@ import {
   getSiteSeoDefaults,
   inferSeoAutoFlags,
 } from '../hooks/cmsSeoHelpers';
-import { uid } from '../hooks/useLocalCollection';
 import type { SeoAutoFlags } from '@/seo/generateSeo';
-
-const categories: BlogCategory[] = ['Bridal', 'Traditional', 'Tailoring', 'Studio Notes'];
-const SKELETON_ROWS = 7;
-
-function blankPost(): BlogPost {
-  return {
-    id: uid('blog'),
-    slug: '',
-    title: '',
-    excerpt: '',
-    content: [''],
-    category: 'Studio Notes',
-    tags: [],
-    coverImage: '',
-    coverAlt: '',
-    date: new Date().toISOString().slice(0, 10),
-    readMinutes: 4,
-    author: "Kadamba's Designer Studio",
-    featured: false,
-    published: true,
-    metaTitle: '',
-    metaDescription: '',
-    ogTitle: '',
-    ogDescription: '',
-    ogImage: '',
-    twitterTitle: '',
-    twitterDescription: '',
-    twitterImage: '',
-  };
-}
+import { BlogsMetrics } from './BlogsMetrics';
+import { BlogsModalForm } from './BlogsModalForm';
+import { BlogsPreviewModal } from './BlogsPreviewModal';
+import { BlogsTable } from './BlogsTable';
+import { BlogsToolbar } from './BlogsToolbar';
+import { createBlankBlog } from './types';
 
 export default function BlogsAdminPage() {
   const { blogs, upsertBlog, removeBlog, loading, settings } = useAdminContent();
   const { toast } = useToast();
+
+  // Filters state
   const [query, setQuery] = useState('');
-  const [open, setOpen] = useState(false);
-  const [form, setForm] = useState<BlogPost>(blankPost());
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [selectedStatus, setSelectedStatus] = useState<string>('All');
+  const [selectedFeatured, setSelectedFeatured] = useState<string>('All');
+  const [sortBy, setSortBy] = useState<'dateDesc' | 'titleAsc' | 'titleDesc'>('dateDesc');
+
+  // UI state
+  const [modalOpen, setModalOpen] = useState(false);
   const [isNew, setIsNew] = useState(true);
+  const [form, setForm] = useState<BlogPost>(createBlankBlog());
   const [bodyText, setBodyText] = useState('');
   const [slugAuto, setSlugAuto] = useState(true);
   const [seoAuto, setSeoAuto] = useState<SeoAutoFlags>(defaultSeoAutoFlags);
+  const [previewItem, setPreviewItem] = useState<BlogPost | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<BlogPost | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const siteSeo = useMemo(() => getSiteSeoDefaults(settings.seo), [settings.seo]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return blogs.filter((p) => {
-      if (!q) return true;
-      return [p.title, p.category, p.excerpt, p.slug].join(' ').toLowerCase().includes(q);
-    });
-  }, [blogs, query]);
+    return blogs
+      .filter((p) => {
+        if (q) {
+          const match = [p.title, p.category, p.excerpt, p.slug].join(' ').toLowerCase().includes(q);
+          if (!match) return false;
+        }
+        if (selectedCategory !== 'All' && p.category !== selectedCategory) return false;
+        if (selectedStatus === 'Published' && !p.published) return false;
+        if (selectedStatus === 'Draft' && p.published) return false;
+        if (selectedFeatured === 'Featured' && !p.featured) return false;
+        if (selectedFeatured === 'Standard' && p.featured) return false;
+        return true;
+      })
+      .sort((a, b) => {
+        if (sortBy === 'titleAsc') return a.title.localeCompare(b.title);
+        if (sortBy === 'titleDesc') return b.title.localeCompare(a.title);
+        if (sortBy === 'dateDesc') return (b.date || '').localeCompare(a.date || '');
+        return 0;
+      });
+  }, [blogs, query, selectedCategory, selectedStatus, selectedFeatured, sortBy]);
+
+  const metrics = useMemo(() => {
+    const total = blogs.length;
+    const published = blogs.filter((b) => b.published).length;
+    const drafts = total - published;
+    const featured = blogs.filter((b) => b.featured).length;
+    return { total, published, drafts, featured };
+  }, [blogs]);
+
+  const hasActiveFilters =
+    query || selectedCategory !== 'All' || selectedStatus !== 'All' || selectedFeatured !== 'All';
+
+  function resetFilters() {
+    setQuery('');
+    setSelectedCategory('All');
+    setSelectedStatus('All');
+    setSelectedFeatured('All');
+    setSortBy('dateDesc');
+  }
 
   function syncSeo(next: BlogPost) {
     const pack = buildSeoPack(next.title, next.excerpt, next.coverImage, siteSeo);
@@ -82,12 +93,11 @@ export default function BlogsAdminPage() {
 
   function openCreate() {
     setIsNew(true);
-    const next = blankPost();
-    setForm(next);
+    setForm(createBlankBlog());
     setBodyText('');
     setSlugAuto(true);
     setSeoAuto(defaultSeoAutoFlags);
-    setOpen(true);
+    setModalOpen(true);
   }
 
   function openEdit(item: BlogPost) {
@@ -115,19 +125,11 @@ export default function BlogsAdminPage() {
     );
     setSlugAuto(inferred.slugAuto);
     setSeoAuto(inferred.seoAuto);
-    setOpen(true);
+    setModalOpen(true);
   }
 
   function handleTitleChange(title: string) {
     setForm((f) => syncSeo({ ...f, title }));
-  }
-
-  function handleExcerptChange(excerpt: string) {
-    setForm((f) => syncSeo({ ...f, excerpt }));
-  }
-
-  function handleCoverChange(url: string) {
-    setForm((f) => syncSeo({ ...f, coverImage: url }));
   }
 
   function regenerateSeo() {
@@ -141,33 +143,61 @@ export default function BlogsAdminPage() {
 
   async function save() {
     if (!form.title.trim() || !form.excerpt.trim()) {
-      toast({ tone: 'error', title: 'Missing fields', description: 'Title and excerpt are required.' });
+      toast({ tone: 'error', title: 'Missing required fields', description: 'Title and excerpt are required.' });
       return;
     }
-    if (!form.coverImage.trim()) {
-      toast({ tone: 'error', title: 'Cover image required', description: 'Upload a cover image.' });
-      return;
-    }
-    const content = bodyText
-      .split(/\n\n+/)
-      .map((p) => p.trim())
-      .filter(Boolean);
+    setSaving(true);
     try {
-      await upsertBlog({
+      const paragraphs = bodyText
+        .split('\n\n')
+        .map((s) => s.trim())
+        .filter(Boolean);
+
+      const fallbackPack = buildSeoPack(form.title, form.excerpt, form.coverImage, siteSeo);
+      const toSave: BlogPost = {
         ...form,
-        slug: form.slug.trim() || buildSeoPack(form.title, form.excerpt, form.coverImage, siteSeo).slug,
         title: form.title.trim(),
+        slug: form.slug.trim() || fallbackPack.slug,
         excerpt: form.excerpt.trim(),
-        coverAlt: form.coverAlt || form.title,
-        content: content.length ? content : [form.excerpt.trim()],
-        readMinutes: Number(form.readMinutes) || 4,
-      });
-      toast({ tone: 'success', title: isNew ? 'Post added' : 'Post updated' });
-      setOpen(false);
+        content: paragraphs.length ? paragraphs : [form.excerpt.trim()],
+        metaTitle: form.metaTitle || fallbackPack.metaTitle,
+        metaDescription: form.metaDescription || fallbackPack.metaDescription,
+        ogTitle: form.ogTitle || fallbackPack.ogTitle,
+        ogDescription: form.ogDescription || fallbackPack.ogDescription,
+        ogImage: form.ogImage || fallbackPack.ogImage,
+        twitterTitle: form.twitterTitle || fallbackPack.twitterTitle,
+        twitterDescription: form.twitterDescription || fallbackPack.twitterDescription,
+        twitterImage: form.twitterImage || fallbackPack.twitterImage,
+      };
+
+      await upsertBlog(toSave);
+      toast({ tone: 'success', title: isNew ? 'Article published to journal' : 'Article updated' });
+      setModalOpen(false);
     } catch (err) {
       toast({
         tone: 'error',
         title: 'Save failed',
+        description: err instanceof Error ? err.message : undefined,
+      });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function togglePublished(item: BlogPost) {
+    try {
+      await upsertBlog({ ...item, published: !item.published });
+      toast({
+        tone: 'success',
+        title: !item.published ? 'Article published live' : 'Moved to drafts',
+      });
+      if (previewItem?.id === item.id) {
+        setPreviewItem({ ...previewItem, published: !item.published });
+      }
+    } catch (err) {
+      toast({
+        tone: 'error',
+        title: 'Status change failed',
         description: err instanceof Error ? err.message : undefined,
       });
     }
@@ -178,12 +208,13 @@ export default function BlogsAdminPage() {
     setDeleting(true);
     try {
       await removeBlog(deleteTarget.id);
-      toast({ tone: 'info', title: 'Post removed' });
+      toast({ tone: 'info', title: 'Article removed from journal' });
+      if (previewItem?.id === deleteTarget.id) setPreviewItem(null);
       setDeleteTarget(null);
     } catch (err) {
       toast({
         tone: 'error',
-        title: 'Remove failed',
+        title: 'Delete failed',
         description: err instanceof Error ? err.message : undefined,
       });
     } finally {
@@ -191,230 +222,101 @@ export default function BlogsAdminPage() {
     }
   }
 
+  function copyPublicUrl(slug: string) {
+    const url = `${window.location.origin}/blogs/${slug}`;
+    navigator.clipboard.writeText(url);
+    toast({ tone: 'info', title: 'Public article link copied to clipboard' });
+  }
+
   return (
-    <>
+    <div className="min-h-screen">
       <AdminHorizonBanner
-        title={adminBanners.blogs.title}
-        copy={adminBanners.blogs.copy}
-        actionLabel={adminBanners.blogs.actionLabel}
+        title="Editorial Journal & Studio Notes"
+        copy="Publish bridal styling tutorials, artisan couture craftsmanship articles, and studio news."
+        actionLabel="+ Add Article"
         onAction={openCreate}
       />
 
-      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 md:px-10">
-        <Input
-          label="Search journal"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="max-w-sm"
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 md:px-8 space-y-6">
+        {/* Metric Pulse Strip */}
+        <BlogsMetrics metrics={metrics} />
+
+        {/* Search, Filter & Action Toolbar */}
+        <BlogsToolbar
+          query={query}
+          onQueryChange={setQuery}
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
+          selectedStatus={selectedStatus}
+          onStatusChange={setSelectedStatus}
+          selectedFeatured={selectedFeatured}
+          onFeaturedChange={setSelectedFeatured}
+          sortBy={sortBy}
+          onSortByChange={setSortBy}
+          hasActiveFilters={Boolean(hasActiveFilters)}
+          onResetFilters={resetFilters}
+          filteredCount={filtered.length}
+          totalCount={blogs.length}
+          onAddBlog={openCreate}
         />
-        <div className="mt-8">
-          {loading ? (
-            <div className="space-y-3">
-              {Array.from({ length: SKELETON_ROWS }).map((_, i) => (
-                <Skeleton key={i} variant="table" />
-              ))}
-            </div>
-          ) : filtered.length === 0 ? (
-            <EmptyState
-              title="No journal posts yet"
-              description="Draft studio notes on bridal prep, fabric choices, and fitting care."
-              actionLabel={adminBanners.blogs.actionLabel}
-              onAction={openCreate}
-            />
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[640px] text-left text-sm">
-                <thead>
-                  <tr className="border-b border-black/15 text-[0.65rem] uppercase tracking-[0.18em] text-black/45">
-                    <th className="py-3 pr-4 font-medium">Post</th>
-                    <th className="py-3 pr-4 font-medium">Category</th>
-                    <th className="py-3 pr-4 font-medium">Status</th>
-                    <th className="py-3 pr-4 font-medium">Date</th>
-                    <th className="py-3 font-medium">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filtered.map((item) => (
-                    <tr key={item.id} className="border-b border-black/8">
-                      <td className="py-3 pr-4">
-                        <p className="font-heading text-base">
-                          {item.title}
-                          {item.featured ? (
-                            <span className="ml-2 text-[0.65rem] uppercase tracking-wider text-black/40">
-                              Featured
-                            </span>
-                          ) : null}
-                        </p>
-                        <p className="mt-1 max-w-md text-xs text-black/50 line-clamp-1">
-                          {item.excerpt}
-                        </p>
-                      </td>
-                      <td className="py-3 pr-4 text-black/60">{item.category}</td>
-                      <td className="py-3 pr-4">
-                        {item.published === false ? 'Draft' : 'Published'}
-                      </td>
-                      <td className="py-3 pr-4">{item.date}</td>
-                      <td className="py-3">
-                        <div className="flex gap-2">
-                          <Button variant="ghost" size="sm" onClick={() => openEdit(item)}>
-                            Edit
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setDeleteTarget(item)}
-                          >
-                            Delete
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
-      </section>
 
-      <Drawer
-        open={open}
-        onClose={() => setOpen(false)}
-        title={isNew ? 'New post' : 'Edit post'}
-        className="!max-w-md !bg-cream !text-black [&_h2]:!text-black"
-      >
-        <div className="space-y-4">
-          <Input
-            label="Title"
-            required
-            value={form.title}
-            onChange={(e) => handleTitleChange(e.target.value)}
-          />
-          <SlugField
-            collection="blogs"
-            value={form.slug}
-            excludeId={isNew ? undefined : form.id}
-            autoManaged={slugAuto}
-            titleForAuto={form.title}
-            onChange={(slug, opts) => {
-              if (opts?.locked) setSlugAuto(false);
-              setForm((f) => ({ ...f, slug }));
-            }}
-          />
-          <Select
-            label="Category"
-            value={form.category}
-            onChange={(e) =>
-              setForm((f) => ({ ...f, category: e.target.value as BlogCategory }))
-            }
-            options={categories.map((c) => ({ value: c, label: c }))}
-          />
-          <Textarea
-            label="Excerpt"
-            required
-            rows={2}
-            value={form.excerpt}
-            onChange={(e) => handleExcerptChange(e.target.value)}
-          />
-          <Textarea
-            label="Body (paragraphs separated by blank line)"
-            rows={8}
-            value={bodyText}
-            onChange={(e) => setBodyText(e.target.value)}
-          />
-          <div className="grid gap-3 sm:grid-cols-[1fr,minmax(0,11rem)]">
-            <MediaUpload
-              label="Cover image"
-              required
-              folder="blogs"
-              value={form.coverImage}
-              onChange={handleCoverChange}
-              hint="Upload from your device"
-            />
-            <BannerSizeGuide context="cover" />
-          </div>
-          <Input
-            label="Cover alt text"
-            value={form.coverAlt}
-            onChange={(e) => {
-              setSeoAuto((a) => ({ ...a, imageAlt: false }));
-              setForm((f) => ({ ...f, coverAlt: e.target.value }));
-            }}
-          />
-          <TagsInput
-            label="Tags"
-            labels={form.tags}
-            onChange={(tags) => setForm((f) => ({ ...f, tags }))}
-          />
-          <Input
-            label="Date"
-            type="date"
-            value={form.date}
-            onChange={(e) => setForm((f) => ({ ...f, date: e.target.value }))}
-          />
-          <Input
-            label="Read minutes"
-            type="number"
-            min={1}
-            value={form.readMinutes}
-            onChange={(e) =>
-              setForm((f) => ({ ...f, readMinutes: Number(e.target.value) || 1 }))
-            }
-          />
-          <Select
-            label="Featured"
-            value={form.featured ? 'yes' : 'no'}
-            onChange={(e) => setForm((f) => ({ ...f, featured: e.target.value === 'yes' }))}
-            options={[
-              { value: 'no', label: 'No' },
-              { value: 'yes', label: 'Yes' },
-            ]}
-          />
-          <Select
-            label="Published"
-            value={form.published !== false ? 'yes' : 'no'}
-            onChange={(e) => setForm((f) => ({ ...f, published: e.target.value === 'yes' }))}
-            options={[
-              { value: 'yes', label: 'Published' },
-              { value: 'no', label: 'Draft' },
-            ]}
-          />
-          <SeoFields
-            value={{
-              metaTitle: form.metaTitle ?? '',
-              metaDescription: form.metaDescription ?? '',
-              ogTitle: form.ogTitle,
-              ogDescription: form.ogDescription,
-              ogImage: form.ogImage,
-              twitterTitle: form.twitterTitle,
-              twitterDescription: form.twitterDescription,
-              twitterImage: form.twitterImage,
-            }}
-            onChange={(next, lockedField) => {
-              if (lockedField) setSeoAuto((a) => ({ ...a, [lockedField]: false }));
-              setForm((f) => ({ ...f, ...next }));
-            }}
-            onRegenerate={regenerateSeo}
-          />
-          <Button variant="primary" className="w-full" onClick={save}>
-            Save
-          </Button>
-        </div>
-      </Drawer>
+        {/* Modern Compact Table Card */}
+        <BlogsTable
+          items={filtered}
+          loading={loading}
+          hasActiveFilters={Boolean(hasActiveFilters)}
+          onResetFilters={resetFilters}
+          onAddBlog={openCreate}
+          onPreview={setPreviewItem}
+          onEdit={openEdit}
+          onTogglePublished={togglePublished}
+          onCopyUrl={copyPublicUrl}
+          onDelete={setDeleteTarget}
+        />
+      </div>
 
+      {/* Rich Interactive Preview Modal */}
+      <BlogsPreviewModal
+        item={previewItem}
+        onClose={() => setPreviewItem(null)}
+        onEdit={openEdit}
+        onTogglePublished={togglePublished}
+        onCopyUrl={copyPublicUrl}
+      />
+
+      {/* Modern Add / Edit Modal (Replaces Drawer) */}
+      <BlogsModalForm
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        isNew={isNew}
+        form={form}
+        setForm={setForm}
+        slugAuto={slugAuto}
+        setSlugAuto={setSlugAuto}
+        seoAuto={seoAuto}
+        setSeoAuto={setSeoAuto}
+        bodyText={bodyText}
+        setBodyText={setBodyText}
+        onTitleChange={handleTitleChange}
+        onRegenerateSeo={regenerateSeo}
+        onSave={save}
+        saving={saving}
+      />
+
+      {/* Confirm Delete Dialog */}
       <ConfirmDialog
         open={!!deleteTarget}
-        title="Delete post?"
+        title="Delete editorial article?"
         description={
           deleteTarget
-            ? `"${deleteTarget.title}" will be permanently removed from the journal.`
+            ? `"${deleteTarget.title}" will be permanently removed from the public journal.`
             : ''
         }
-        confirmLabel="Delete"
+        confirmLabel="Delete Article"
         onConfirm={confirmDelete}
         onCancel={() => setDeleteTarget(null)}
         isLoading={deleting}
       />
-    </>
+    </div>
   );
 }

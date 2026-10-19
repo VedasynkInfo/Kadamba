@@ -9,17 +9,18 @@ import {
   getCustomerOrdersHandler,
   getCustomerMeasurementsHandler,
 } from '../controllers/customerController';
-import { authenticate, authorize } from '../middleware/auth';
+import { authenticate, authorize, requirePermission } from '../middleware/auth';
 import { validateRequest } from '../middleware/validate';
 
 const router = Router();
 
-// Protect all CRM paths
-router.use(authenticate);
-router.use(authorize('admin'));
+// Protect all CRM paths. Staff need customer context to work on orders, so the
+// gate is capability-based rather than role-based.
+router.use(authenticate, authorize('admin', 'staff'));
 
 router.get(
   '/',
+  requirePermission('customers:read'),
   [
     query('q').optional().trim(),
     query('locality').optional().trim(),
@@ -34,6 +35,7 @@ router.get(
 
 router.post(
   '/',
+  requirePermission('customers:write'),
   [
     body('name').trim().isLength({ min: 2, max: 100 }).withMessage('Customer name must be 2-100 characters'),
     body('phone').trim().notEmpty().withMessage('Phone number is required'),
@@ -51,6 +53,7 @@ router.post(
 
 router.get(
   '/:id',
+  requirePermission('customers:read'),
   [param('id').isMongoId().withMessage('Invalid Customer ID')],
   validateRequest,
   getCustomerHandler,
@@ -58,6 +61,7 @@ router.get(
 
 router.patch(
   '/:id',
+  requirePermission('customers:write'),
   [
     param('id').isMongoId().withMessage('Invalid Customer ID'),
     body('name').optional().trim().isLength({ min: 2, max: 100 }).withMessage('Customer name must be 2-100 characters'),
@@ -78,6 +82,7 @@ router.patch(
 
 router.post(
   '/:id/notes',
+  requirePermission('customers:write'),
   [
     param('id').isMongoId().withMessage('Invalid Customer ID'),
     body('body').trim().notEmpty().withMessage('Note content is required'),
@@ -89,6 +94,7 @@ router.post(
 
 router.get(
   '/:id/orders',
+  requirePermission('customers:read'),
   [param('id').isMongoId().withMessage('Invalid Customer ID')],
   validateRequest,
   getCustomerOrdersHandler,
@@ -96,6 +102,7 @@ router.get(
 
 router.get(
   '/:id/measurements',
+  requirePermission('customers:read'),
   [param('id').isMongoId().withMessage('Invalid Customer ID')],
   validateRequest,
   getCustomerMeasurementsHandler,

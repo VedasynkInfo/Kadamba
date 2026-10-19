@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { financeApi, type PaymentRecord } from '@/services/finance/financeService';
-import { Button, Select, Spinner } from '@/components/ui';
-import { AdminHorizonBanner } from '../components/AdminHorizonBanner';
 import { PageMeta, staticPageMeta } from '@/seo';
+import { PaymentsMetrics } from './PaymentsMetrics';
+import { PaymentsToolbar } from './PaymentsToolbar';
+import { PaymentsTable } from './PaymentsTable';
+import { PaymentPreviewModal } from './PaymentPreviewModal';
+import { PaymentRecordModal } from './PaymentRecordModal';
 
 const MONTH_NAMES = [
   'January',
@@ -20,36 +22,20 @@ const MONTH_NAMES = [
   'December',
 ];
 
-function formatINR(v: number) {
-  return `₹${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
-}
-
-function formatDate(iso: string) {
-  try {
-    return new Date(iso).toLocaleDateString('en-IN', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-    });
-  } catch {
-    return iso;
-  }
-}
-
 function currentYearMonth() {
   const now = new Date();
   return { year: now.getFullYear(), month: now.getMonth() + 1 };
 }
 
-/** Build year options: from 2024 through current year (no future years). */
 function yearOptions(currentYear: number) {
   const start = 2024;
-  const years: number[] = [];
-  for (let y = currentYear; y >= start; y -= 1) years.push(y);
-  return years.map((y) => ({ value: String(y), label: String(y) }));
+  const years: { value: string; label: string }[] = [];
+  for (let y = currentYear; y >= start; y -= 1) {
+    years.push({ value: String(y), label: String(y) });
+  }
+  return years;
 }
 
-/** Months for selected year — future months disabled for current year. */
 function monthOptions(year: number, currentYear: number, currentMonth: number) {
   return MONTH_NAMES.map((name, idx) => {
     const month = idx + 1;
@@ -63,19 +49,28 @@ function monthOptions(year: number, currentYear: number, currentMonth: number) {
 }
 
 export default function PaymentsAdminPage() {
-  const today = currentYearMonth();
+  const today = useMemo(() => currentYearMonth(), []);
   const [year, setYear] = useState(today.year);
   const [month, setMonth] = useState(today.month);
   const [loading, setLoading] = useState(true);
   const [payments, setPayments] = useState<PaymentRecord[]>([]);
-  const [total, setTotal] = useState(0);
+
+  // Filtering
+  const [query, setQuery] = useState('');
+  const [selectedMethod, setSelectedMethod] = useState('All');
+
+  // Modals
+  const [previewPayment, setPreviewPayment] = useState<PaymentRecord | null>(null);
+  const [recordModalOpen, setRecordModalOpen] = useState(false);
 
   const months = useMemo(
     () => monthOptions(year, today.year, today.month),
     [year, today.year, today.month],
   );
 
-  // If year changes and selected month becomes future, clamp to current/last allowed
+  const years = useMemo(() => yearOptions(today.year), [today.year]);
+
+  // Clamp future months
   useEffect(() => {
     const opt = months.find((m) => Number(m.value) === month);
     if (opt?.disabled) {
@@ -94,11 +89,9 @@ export default function PaymentsAdminPage() {
         page: 1,
       });
       setPayments(data.items);
-      setTotal(data.pagination.total);
     } catch (err) {
       console.error('Failed to load payments', err);
       setPayments([]);
-      setTotal(0);
     } finally {
       setLoading(false);
     }
@@ -108,158 +101,138 @@ export default function PaymentsAdminPage() {
     void load();
   }, [load]);
 
-  const monthRevenue = useMemo(
+  // Filtered Payments
+  const filtered = useMemo(() => {
+    let result = [...payments];
+
+    if (selectedMethod !== 'All') {
+      result = result.filter(
+        (p) => p.method.toLowerCase() === selectedMethod.toLowerCase(),
+      );
+    }
+
+    if (query.trim()) {
+      const q = query.toLowerCase().trim();
+      result = result.filter((p) => {
+        const ref = (p.reference || '').toLowerCase();
+        const notes = (p.notes || '').toLowerCase();
+        const client = (p.order?.customer?.name || '').toLowerCase();
+        const phone = (p.order?.customer?.phone || '').toLowerCase();
+        const orderNum = p.order?.orderNumber ? String(p.order.orderNumber) : '';
+        return (
+          ref.includes(q) ||
+          notes.includes(q) ||
+          client.includes(q) ||
+          phone.includes(q) ||
+          orderNum.includes(q)
+        );
+      });
+    }
+
+    return result;
+  }, [payments, selectedMethod, query]);
+
+  // Metrics
+  const totalRevenue = useMemo(
     () => payments.reduce((sum, p) => sum + (p.amount || 0), 0),
     [payments],
   );
 
-  const methodBreakdown = useMemo(() => {
-    const map = new Map<string, number>();
-    for (const p of payments) {
-      map.set(p.method, (map.get(p.method) || 0) + p.amount);
-    }
-    return [...map.entries()].sort((a, b) => b[1] - a[1]);
-  }, [payments]);
+  const upiTotal = useMemo(
+    () =>
+      payments
+        .filter((p) => p.method === 'upi')
+        .reduce((sum, p) => sum + (p.amount || 0), 0),
+    [payments],
+  );
+
+  const cashTotal = useMemo(
+    () =>
+      payments
+        .filter((p) => p.method === 'cash')
+        .reduce((sum, p) => sum + (p.amount || 0), 0),
+    [payments],
+  );
 
   return (
     <>
-      <PageMeta {...staticPageMeta.admin} path="/admin/payments" title="Payments" />
-      <AdminHorizonBanner
-        title="Payments desk"
-        copy="Revenue received from workshop orders — filter by month. Future months are disabled."
-        actionLabel="View invoices"
-        actionTo="/admin/invoices"
+      <PageMeta {...staticPageMeta.admin} path="/admin/payments" title="Payments Desk" />
+
+      <div className="space-y-6">
+        {/* Compact Modern Header */}
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1
+              className="font-heading text-xl font-bold tracking-tight sm:text-2xl"
+              style={{ color: 'var(--admin-text, #f3f4f6)' }}
+            >
+              Payments Desk
+            </h1>
+            <p className="text-xs opacity-60">
+              Revenue receipts & advances received — {MONTH_NAMES[month - 1]} {year}
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => void load()}
+              disabled={loading}
+              className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold transition hover:bg-current/[0.05] active:scale-98 cursor-pointer"
+              style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))' }}
+            >
+              <span className={loading ? 'animate-spin' : ''}>??</span>
+              <span>Sync Receipts</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Pulse Metric Cards */}
+        <PaymentsMetrics
+          totalAmount={totalRevenue}
+          count={payments.length}
+          upiTotal={upiTotal}
+          cashTotal={cashTotal}
+        />
+
+        {/* Unified Search & Filters Toolbar */}
+        <PaymentsToolbar
+          query={query}
+          onQueryChange={setQuery}
+          year={year}
+          onYearChange={setYear}
+          month={month}
+          onMonthChange={setMonth}
+          yearOptions={years}
+          monthOptions={months}
+          selectedMethod={selectedMethod}
+          onMethodChange={setSelectedMethod}
+          filteredCount={filtered.length}
+          totalCount={payments.length}
+          onRecordPayment={() => setRecordModalOpen(true)}
+        />
+
+        {/* Locked Fixed Grid Table */}
+        <PaymentsTable
+          items={filtered}
+          loading={loading}
+          onPreview={(pay) => setPreviewPayment(pay)}
+          onNewPayment={() => setRecordModalOpen(true)}
+        />
+      </div>
+
+      {/* Snapshot Preview Modal */}
+      <PaymentPreviewModal
+        payment={previewPayment}
+        onClose={() => setPreviewPayment(null)}
       />
 
-      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 md:px-10">
-        <div className="flex flex-wrap items-end gap-4">
-          <Select
-            label="Year"
-            value={String(year)}
-            onChange={(e) => setYear(Number(e.target.value))}
-            options={yearOptions(today.year)}
-            className="max-w-[140px]"
-          />
-          <Select
-            label="Month"
-            value={String(month)}
-            onChange={(e) => setMonth(Number(e.target.value))}
-            options={months}
-            className="max-w-[200px]"
-          />
-          <Button type="button" variant="ghost" className="border border-black/15" onClick={load}>
-            Refresh
-          </Button>
-        </div>
-
-        <div className="mt-8 grid gap-4 sm:grid-cols-3">
-          <div className="border border-black/10 bg-white p-5">
-            <p className="text-[0.65rem] uppercase tracking-[0.18em] text-black/40">
-              {MONTH_NAMES[month - 1]} {year} revenue
-            </p>
-            <p className="mt-2 font-heading text-3xl text-black">{formatINR(monthRevenue)}</p>
-          </div>
-          <div className="border border-black/10 bg-white p-5">
-            <p className="text-[0.65rem] uppercase tracking-[0.18em] text-black/40">Payments</p>
-            <p className="mt-2 font-heading text-3xl text-black">{total}</p>
-          </div>
-          <div className="border border-black/10 bg-white p-5">
-            <p className="text-[0.65rem] uppercase tracking-[0.18em] text-black/40">By method</p>
-            <ul className="mt-2 space-y-1 text-sm text-black/70">
-              {methodBreakdown.length === 0 ? (
-                <li className="text-black/40">No receipts this month</li>
-              ) : (
-                methodBreakdown.map(([method, amount]) => (
-                  <li key={method} className="flex justify-between gap-4">
-                    <span className="uppercase tracking-wide">{method}</span>
-                    <span>{formatINR(amount)}</span>
-                  </li>
-                ))
-              )}
-            </ul>
-          </div>
-        </div>
-
-        <div className="mt-10 overflow-x-auto">
-          {loading ? (
-            <div className="flex justify-center py-16">
-              <Spinner label="Loading payments" />
-            </div>
-          ) : (
-            <table className="w-full min-w-[760px] text-left text-sm">
-              <thead>
-                <tr className="border-b border-black/15 text-[0.65rem] uppercase tracking-[0.16em] text-black/45">
-                  <th className="py-3 pr-4 font-medium">Date</th>
-                  <th className="py-3 pr-4 font-medium">Order</th>
-                  <th className="py-3 pr-4 font-medium">Customer</th>
-                  <th className="py-3 pr-4 font-medium">Amount</th>
-                  <th className="py-3 pr-4 font-medium">Method</th>
-                  <th className="py-3 pr-4 font-medium">Reference</th>
-                  <th className="py-3 font-medium"> </th>
-                </tr>
-              </thead>
-              <tbody>
-                {payments.length === 0 ? (
-                  <tr>
-                    <td colSpan={7} className="py-14 text-center text-black/40">
-                      No payments recorded for {MONTH_NAMES[month - 1]} {year}.
-                    </td>
-                  </tr>
-                ) : (
-                  payments.map((p) => {
-                    const order =
-                      p.order ||
-                      (typeof p.orderId === 'object' && p.orderId
-                        ? {
-                            id: String(p.orderId.id || p.orderId._id || ''),
-                            orderNumber: p.orderId.orderNumber,
-                            referenceId: p.orderId.referenceId,
-                            title: p.orderId.title,
-                            customer: p.orderId.customer,
-                          }
-                        : undefined);
-                    const orderId =
-                      order?.id || (typeof p.orderId === 'string' ? p.orderId : undefined);
-
-                    return (
-                      <tr key={p.id} className="border-b border-black/8 hover:bg-cream/40">
-                        <td className="py-4 pr-4 text-black/70">{formatDate(p.paidAt)}</td>
-                        <td className="py-4 pr-4">
-                          <p className="font-heading">
-                            {order?.orderNumber ? `#${order.orderNumber}` : '—'}
-                          </p>
-                          <p className="text-xs text-black/45">
-                            {order?.referenceId || order?.title || '—'}
-                          </p>
-                        </td>
-                        <td className="py-4 pr-4">
-                          <p>{order?.customer?.name || '—'}</p>
-                          <p className="text-xs text-black/45">{order?.customer?.phone}</p>
-                        </td>
-                        <td className="py-4 pr-4 font-medium">{formatINR(p.amount)}</td>
-                        <td className="py-4 pr-4 uppercase tracking-wide text-black/65">
-                          {p.method}
-                        </td>
-                        <td className="py-4 pr-4 text-xs text-black/50">{p.reference || '—'}</td>
-                        <td className="py-4 text-right">
-                          {orderId ? (
-                            <Link
-                              to={`/admin/orders/${orderId}`}
-                              className="text-xs uppercase tracking-[0.14em] text-black/55 hover:text-gold"
-                            >
-                              Order
-                            </Link>
-                          ) : null}
-                        </td>
-                      </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
-          )}
-        </div>
-      </section>
+      {/* Record Payment Dialog Modal */}
+      <PaymentRecordModal
+        open={recordModalOpen}
+        onClose={() => setRecordModalOpen(false)}
+        onSuccess={() => void load()}
+      />
     </>
   );
 }

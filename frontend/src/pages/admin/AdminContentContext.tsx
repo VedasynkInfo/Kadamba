@@ -70,10 +70,6 @@ interface AdminContentStore {
 
 const AdminContentContext = createContext<AdminContentStore | null>(null);
 
-function isDemoToken(): boolean {
-  return localStorage.getItem('kadamba_token') === 'demo-admin-token';
-}
-
 export function AdminContentProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [gallery, setGallery] = useState<GalleryItem[]>([]);
@@ -85,15 +81,6 @@ export function AdminContentProvider({ children }: { children: ReactNode }) {
   const refresh = useCallback(async () => {
     setLoading(true);
     try {
-      if (isDemoToken() && import.meta.env.DEV) {
-        setGallery(structuredClone(galleryItems));
-        setServices(structuredClone(serviceDetails));
-        setPortfolio(structuredClone(portfolioProjects));
-        setBlogs(structuredClone(blogPosts));
-        setSettings(mergeWebsiteSettings());
-        return;
-      }
-
       const [g, s, p, b, site] = await Promise.all([
         galleryApi.list(),
         servicesApi.list(),
@@ -134,18 +121,6 @@ export function AdminContentProvider({ children }: { children: ReactNode }) {
   }, [refresh]);
 
   const upsertGallery = useCallback(async (item: GalleryItem) => {
-    if (isDemoToken() && import.meta.env.DEV) {
-      setGallery((prev) => {
-        const idx = prev.findIndex((g) => g.id === item.id);
-        if (idx >= 0) {
-          const next = [...prev];
-          next[idx] = item;
-          return next;
-        }
-        return [...prev, item];
-      });
-      return;
-    }
     const saved = await galleryApi.upsert(item);
     setGallery((prev) => {
       const idx = prev.findIndex((g) => g.id === saved.id || g.id === item.id);
@@ -159,25 +134,11 @@ export function AdminContentProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const removeGallery = useCallback(async (id: string) => {
-    if (!(isDemoToken() && import.meta.env.DEV)) {
-      await galleryApi.remove(id);
-    }
+    await galleryApi.remove(id);
     setGallery((prev) => prev.filter((g) => g.id !== id));
   }, []);
 
   const upsertService = useCallback(async (item: ServiceDetail) => {
-    if (isDemoToken() && import.meta.env.DEV) {
-      setServices((prev) => {
-        const idx = prev.findIndex((s) => s.id === item.id);
-        if (idx >= 0) {
-          const next = [...prev];
-          next[idx] = item;
-          return next;
-        }
-        return [...prev, item];
-      });
-      return;
-    }
     const saved = await servicesApi.upsert(item);
     setServices((prev) => {
       const idx = prev.findIndex((s) => s.id === saved.id || s.id === item.id);
@@ -191,25 +152,11 @@ export function AdminContentProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const removeService = useCallback(async (id: string) => {
-    if (!(isDemoToken() && import.meta.env.DEV)) {
-      await servicesApi.remove(id);
-    }
+    await servicesApi.remove(id);
     setServices((prev) => prev.filter((s) => s.id !== id));
   }, []);
 
   const upsertProject = useCallback(async (item: PortfolioProject) => {
-    if (isDemoToken() && import.meta.env.DEV) {
-      setPortfolio((prev) => {
-        const idx = prev.findIndex((p) => p.id === item.id);
-        if (idx >= 0) {
-          const next = [...prev];
-          next[idx] = item;
-          return next;
-        }
-        return [...prev, item];
-      });
-      return;
-    }
     const saved = await portfolioApi.upsert(item);
     setPortfolio((prev) => {
       const idx = prev.findIndex((p) => p.id === saved.id || p.id === item.id);
@@ -223,25 +170,11 @@ export function AdminContentProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const removeProject = useCallback(async (id: string) => {
-    if (!(isDemoToken() && import.meta.env.DEV)) {
-      await portfolioApi.remove(id);
-    }
+    await portfolioApi.remove(id);
     setPortfolio((prev) => prev.filter((p) => p.id !== id));
   }, []);
 
   const upsertBlog = useCallback(async (item: BlogPost) => {
-    if (isDemoToken() && import.meta.env.DEV) {
-      setBlogs((prev) => {
-        const idx = prev.findIndex((b) => b.id === item.id);
-        if (idx >= 0) {
-          const next = [...prev];
-          next[idx] = item;
-          return next;
-        }
-        return [...prev, item];
-      });
-      return;
-    }
     const saved = await blogsApi.upsert(item);
     setBlogs((prev) => {
       const idx = prev.findIndex((b) => b.id === saved.id || b.id === item.id);
@@ -255,17 +188,11 @@ export function AdminContentProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const removeBlog = useCallback(async (id: string) => {
-    if (!(isDemoToken() && import.meta.env.DEV)) {
-      await blogsApi.remove(id);
-    }
+    await blogsApi.remove(id);
     setBlogs((prev) => prev.filter((b) => b.id !== id));
   }, []);
 
   const saveSettings = useCallback(async (next: WebsiteSettings) => {
-    if (isDemoToken() && import.meta.env.DEV) {
-      setSettings(mergeWebsiteSettings(next));
-      return;
-    }
     const saved = await settingsApi.update(next);
     setSettings(mergeWebsiteSettings(saved));
   }, []);

@@ -4,7 +4,7 @@ import { ApiError } from '../utils/ApiError';
 import { buildPaginationMeta, parsePagination } from '../utils/pagination';
 import { parseBooleanQuery, searchRegex } from '../utils/query';
 import { toDto } from '../utils/serialize';
-import { uniqueSlug, resolveClientSlug } from '../utils/slugify';
+import { resolveClientSlug } from '../utils/slugify';
 import { generateSeoWithSettings } from '../utils/generateSeo';
 
 export type BlogDto = Record<string, unknown> & {

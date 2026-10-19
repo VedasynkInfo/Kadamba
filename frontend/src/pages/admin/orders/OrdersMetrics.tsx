@@ -1,0 +1,60 @@
+﻿import type { OrdersMetricsData } from './types';
+
+interface OrdersMetricsProps {
+  metrics: OrdersMetricsData;
+}
+
+export function OrdersMetrics({ metrics }: OrdersMetricsProps) {
+  const cards = [
+    {
+      label: 'Total Orders',
+      value: metrics.total,
+      icon: '🧵',
+      sub: 'All registered studio commissions',
+    },
+    {
+      label: 'In Production',
+      value: metrics.inProduction,
+      icon: '✂️',
+      sub: 'Cutting, stitching & maggam work',
+      highlight: true,
+    },
+    {
+      label: 'Rush / High Priority',
+      value: metrics.rushOrders,
+      icon: '🔥',
+      sub: 'Expedited bridal delivery targets',
+    },
+    {
+      label: 'Trial & Fittings',
+      value: metrics.readyForTrial,
+      icon: '👗',
+      sub: 'Trial appointments scheduled',
+    },
+  ];
+
+  return (
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      {cards.map((c) => (
+        <div
+          key={c.label}
+          className="rounded-xl border p-3.5 shadow-xs transition-colors"
+          style={{
+            backgroundColor: 'var(--admin-card, #141b26)',
+            borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
+            color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
+          }}
+        >
+          <div className="flex items-center justify-between opacity-70">
+            <span className="text-[11px] font-semibold uppercase tracking-wider">{c.label}</span>
+            <span className="text-sm">{c.icon}</span>
+          </div>
+          <div className="mt-2 text-2xl font-bold font-heading tracking-tight text-inherit">
+            {c.value}
+          </div>
+          <div className="mt-1 text-[10px] opacity-50 truncate">{c.sub}</div>
+        </div>
+      ))}
+    </div>
+  );
+}

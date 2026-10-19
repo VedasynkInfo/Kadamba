@@ -11,6 +11,11 @@ import { validateRequest } from '../middleware/validate';
 
 const router = Router();
 
+/**
+ * Admin-only. These settings include SMTP credentials and integration secrets,
+ * so they are deliberately not delegable via `content:write` — a staff editor
+ * can change the public site copy, not the studio's mail server.
+ */
 router.use(authenticate, authorize('admin'));
 
 router.get('/', getAdminSettingsHandler);

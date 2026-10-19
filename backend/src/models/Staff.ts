@@ -137,6 +137,5 @@ const staffSchema = new Schema<IStaff>(
 );
 
 staffSchema.index({ status: 1 });
-staffSchema.index({ phone: 1 });
 
 export const Staff = mongoose.model<IStaff>('Staff', staffSchema);

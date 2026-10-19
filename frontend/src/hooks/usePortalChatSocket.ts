@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { io, type Socket } from 'socket.io-client';
-import { PORTAL_TOKEN_KEY, type PortalMessage } from '@/services/portal/portalService';
+import { getPortalToken } from '@/services/api/client';
+import type { PortalMessage } from '@/services/portal/portalService';
 
 function socketUrl() {
   const api = import.meta.env.VITE_API_URL as string | undefined;
@@ -23,7 +24,7 @@ export function usePortalChatSocket(onMessage: (msg: PortalMessage) => void) {
   handlerRef.current = onMessage;
 
   useEffect(() => {
-    const token = localStorage.getItem(PORTAL_TOKEN_KEY);
+    const token = getPortalToken();
     if (!token) return;
 
     const socket: Socket = io(socketUrl(), {

@@ -7,7 +7,7 @@ import {
   removeServiceHandler,
   updateServiceHandler,
 } from '../controllers/serviceController';
-import { authenticate, authorize } from '../middleware/auth';
+import { authenticate, authorize, requirePermission } from '../middleware/auth';
 import { optionalAuthenticate } from '../middleware/optionalAuth';
 import { validateRequest } from '../middleware/validate';
 import { SERVICE_CATEGORIES } from '../models/Service';
@@ -20,7 +20,8 @@ router.get('/:idOrSlug', optionalAuthenticate, getServiceHandler);
 router.post(
   '/',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('content:write'),
   [
     body('title').trim().isLength({ min: 2, max: 160 }).withMessage('Title is required'),
     body('category').isIn([...SERVICE_CATEGORIES]).withMessage('Invalid category'),
@@ -52,7 +53,8 @@ router.post(
 router.put(
   '/:id',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('content:write'),
   [
     param('id').isMongoId().withMessage('Invalid id'),
     body('title').optional().trim().isLength({ min: 2, max: 160 }).withMessage('Title must be between 2 and 160 characters'),
@@ -85,7 +87,8 @@ router.put(
 router.delete(
   '/:id',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('content:write'),
   [param('id').isMongoId().withMessage('Invalid id')],
   validateRequest,
   removeServiceHandler,

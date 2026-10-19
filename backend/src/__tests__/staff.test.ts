@@ -2,8 +2,6 @@ import request from 'supertest';
 import { describe, expect, it } from 'vitest';
 import { createApp } from '../app';
 import { registerAdminAndGetToken } from './helpers/auth';
-import { Staff } from '../models/Staff';
-
 const app = createApp();
 
 describe('Staff Management API', () => {

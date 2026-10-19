@@ -7,7 +7,7 @@ import {
   removeBlogHandler,
   updateBlogHandler,
 } from '../controllers/blogController';
-import { authenticate, authorize } from '../middleware/auth';
+import { authenticate, authorize, requirePermission } from '../middleware/auth';
 import { optionalAuthenticate } from '../middleware/optionalAuth';
 import { validateRequest } from '../middleware/validate';
 import { BLOG_CATEGORIES } from '../models/Blog';
@@ -20,7 +20,8 @@ router.get('/:idOrSlug', optionalAuthenticate, getBlogHandler);
 router.post(
   '/',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('content:write'),
   [
     body('title').trim().isLength({ min: 2, max: 200 }).withMessage('Title is required'),
     body('excerpt').trim().isLength({ min: 2, max: 500 }).withMessage('Excerpt is required'),
@@ -38,7 +39,8 @@ router.post(
 router.put(
   '/:id',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('content:write'),
   [param('id').isMongoId().withMessage('Invalid id')],
   validateRequest,
   updateBlogHandler,
@@ -47,7 +49,8 @@ router.put(
 router.delete(
   '/:id',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('content:write'),
   [param('id').isMongoId().withMessage('Invalid id')],
   validateRequest,
   removeBlogHandler,

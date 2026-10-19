@@ -3,17 +3,22 @@ import { env } from '../config/env';
 import { asyncHandler } from '../utils/asyncHandler';
 import { ApiError } from '../utils/ApiError';
 
-function absoluteLocalUploadUrl(req: Request, filename: string): string {
+/**
+ * Build an absolute URL for a locally-stored upload.
+ *
+ * Derived ONLY from trusted configuration (PUBLIC_API_URL / RENDER_EXTERNAL_URL).
+ * We deliberately do NOT read x-forwarded-host/proto here — on Render those are
+ * client-controllable and would let an attacker poison the returned URL.
+ */
+function absoluteLocalUploadUrl(filename: string): string {
   const base =
     env.publicApiUrl ||
-    (() => {
-      const proto = String(req.get('x-forwarded-proto') || req.protocol || 'https')
-        .split(',')[0]
-        .trim();
-      const host = req.get('x-forwarded-host') || req.get('host') || 'localhost';
-      return `${proto}://${host}`;
-    })();
-  return `${base.replace(/\/$/, '')}/uploads/${filename}`;
+    (env.isProduction ? '' : `http://localhost:${env.port}`);
+  if (!base) {
+    // Production without an explicit origin — fall back to a path-only URL.
+    return `/uploads/${filename}`;
+  }
+  return `${base.replace(/\/$/, '')}/uploads/${encodeURIComponent(filename)}`;
 }
 
 export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
@@ -35,7 +40,7 @@ export const uploadImage = asyncHandler(async (req: Request, res: Response) => {
   // Local disk returns an absolute API URL so the SPA (separate origin) can load it.
   const url = viaCloudinary
     ? file.path
-    : absoluteLocalUploadUrl(req, filename);
+    : absoluteLocalUploadUrl(filename);
 
   if (!url) {
     throw new ApiError(500, 'Upload succeeded but no URL was returned');

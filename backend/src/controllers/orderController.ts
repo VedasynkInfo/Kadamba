@@ -12,6 +12,7 @@ import {
 } from '../services/orderService';
 import { asyncHandler } from '../utils/asyncHandler';
 import { OrderStatus } from '../models/Order';
+import { recordAudit, actorFromRequest } from '../services/auditService';
 
 export const listOrdersHandler = asyncHandler(async (req: Request, res: Response) => {
   const data = await listOrders(req.query as Record<string, unknown>);
@@ -29,6 +30,19 @@ export const createOrderHandler = asyncHandler(async (req: Request, res: Respons
     ...req.body,
     actorId,
   });
+
+  await recordAudit(
+    {
+      action: 'order.created',
+      actor: actorFromRequest(req),
+      entityType: 'order',
+      entityId: order.id,
+      summary: `Created order ${order.referenceId ?? order.id}`,
+      changes: { title: order.title, totalQuoted: order.paymentSummary?.totalQuoted },
+    },
+    req,
+  );
+
   res.status(201).json({ success: true, message: 'Order created successfully', data: order });
 });
 
@@ -59,6 +73,18 @@ export const transitionOrderStatusHandler = asyncHandler(async (req: Request, re
       console.warn('notifyOrderConfirmed failed', err);
     });
   }
+
+  await recordAudit(
+    {
+      action: 'order.status_changed',
+      actor: actorFromRequest(req),
+      entityType: 'order',
+      entityId: order.id,
+      summary: `Order ${order.referenceId ?? order.id} moved to ${status}`,
+      changes: { status, note },
+    },
+    req,
+  );
 
   res.status(200).json({ success: true, message: 'Status transitioned successfully', data: order });
 });

@@ -10,7 +10,7 @@ import {
 } from 'react';
 import { io, type Socket } from 'socket.io-client';
 import { useToast } from '@/components/ui/Toast';
-import { PORTAL_TOKEN_KEY } from '@/services/portal/portalService';
+import { getPortalToken } from '@/services/api/client';
 import { socketOrigin } from './socketOrigin';
 
 type SoftRefreshKind = 'orders' | 'measurements' | 'payments' | 'dashboard' | 'chat';
@@ -40,7 +40,7 @@ export function PortalNotifyProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem(PORTAL_TOKEN_KEY);
+    const token = getPortalToken();
     if (!token) return;
 
     const socket: Socket = io(socketOrigin(), {

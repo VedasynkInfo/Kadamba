@@ -34,7 +34,46 @@ export function errorHandler(err: unknown, req: Request, res: Response, _next: N
   if (err instanceof multer.MulterError) {
     return res.status(400).json({
       success: false,
-      message: err.code === 'LIMIT_FILE_SIZE' ? 'Each image must be under 5MB' : err.message,
+      message:
+        err.code === 'LIMIT_FILE_SIZE'
+          ? 'Each file must be under 25MB'
+          : err.code === 'LIMIT_FILE_COUNT'
+            ? 'Only one file can be uploaded at a time'
+            : err.message,
+    });
+  }
+
+  // MongoDB duplicate key (unique index violation) → clean 409, not a 500.
+  if (
+    err &&
+    typeof err === 'object' &&
+    'code' in err &&
+    (err as { code?: number }).code === 11000
+  ) {
+    const keyValue = (err as { keyValue?: Record<string, unknown> }).keyValue;
+    return res.status(409).json({
+      success: false,
+      message: 'A record with these details already exists',
+      errors: keyValue ? [{ duplicate: keyValue }] : undefined,
+    });
+  }
+
+  // Mongoose validation error → 400 with field-level detail.
+  if (err instanceof Error && err.name === 'ValidationError') {
+    return res.status(400).json({
+      success: false,
+      message: err.message,
+      errors: Object.values(
+        (err as Error & { errors?: Record<string, { message: string }> }).errors ?? {},
+      ).map((e) => ({ message: e.message })),
+    });
+  }
+
+  // Malformed ObjectId etc. → 400 rather than 500.
+  if (err instanceof Error && err.name === 'CastError') {
+    return res.status(400).json({
+      success: false,
+      message: 'Invalid identifier supplied',
     });
   }
 

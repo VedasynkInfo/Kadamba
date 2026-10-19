@@ -1,12 +1,14 @@
 import { Router } from 'express';
 import { authenticate, authorize, requireCustomer } from '../middleware/auth';
 import { authRateLimiter } from '../middleware/rateLimit';
+import { requireTrustedOrigin } from '../middleware/trustedOrigin';
 import {
   portalCatalogHandler,
   portalChatListHandler,
   portalChatPostHandler,
   portalDashboardHandler,
   portalLoginHandler,
+  portalLogoutHandler,
   portalMeasurementsListHandler,
   portalMeasurementsSubmitHandler,
   portalMeasurementTemplateHandler,
@@ -14,6 +16,7 @@ import {
   portalOrderDetailHandler,
   portalOrdersHandler,
   portalPaymentsHandler,
+  portalRefreshHandler,
   portalInvoiceHandler,
   portalRequestHandler,
   setPasswordHandler,
@@ -29,6 +32,8 @@ const router = Router();
 router.post('/activate/verify', authRateLimiter, verifyActivateHandler);
 router.post('/activate/set-password', authRateLimiter, setPasswordHandler);
 router.post('/login', authRateLimiter, portalLoginHandler);
+router.post('/refresh', authRateLimiter, requireTrustedOrigin, portalRefreshHandler);
+router.post('/logout', requireTrustedOrigin, portalLogoutHandler);
 
 /** Public catalog browse (active products only). */
 router.get('/catalog', portalCatalogHandler);

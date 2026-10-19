@@ -7,6 +7,7 @@ import { cloudinary } from '../config/cloudinary';
 import { env } from '../config/env';
 import { uploadImage } from '../controllers/uploadController';
 import { authenticate, authorize } from '../middleware/auth';
+import { verifyUploadedFile } from '../middleware/verifyUploadedFile';
 
 const router = Router();
 
@@ -69,8 +70,12 @@ const upload = multer({
   storage: useCloudinaryUpload() ? cloudStorage : diskStorage,
   limits: {
     fileSize: 25 * 1024 * 1024,
+    files: 1, // single file only
+    fields: 8,
   },
   fileFilter: (_req, file, cb) => {
+    // Coarse gate on the client-declared type; the real check is the
+    // magic-byte verification in verifyUploadedFile (which runs after).
     if (file.mimetype.startsWith('image/') || file.mimetype.startsWith('video/')) {
       cb(null, true);
       return;
@@ -79,13 +84,23 @@ const upload = multer({
   },
 });
 
-/** Accept either `file` or legacy `image` field name. */
+/**
+ * Accept a single file under an explicit field whitelist. Replaces the old
+ * `upload.any()`, which accepted unlimited fields and any name. Unknown names
+ * are rejected rather than silently consumed.
+ */
+const SINGLE_UPLOAD_FIELDS = [
+  { name: 'file', maxCount: 1 },
+  { name: 'image', maxCount: 1 },
+];
+
 function uploadMedia(req: Request, res: Response, next: NextFunction) {
-  upload.any()(req, res, (err: unknown) => {
+  upload.fields(SINGLE_UPLOAD_FIELDS)(req, res, (err: unknown) => {
     if (err) return next(err);
-    const files = req.files as Express.Multer.File[] | undefined;
-    if (files?.length) {
-      req.file = files[0];
+    const files = req.files as Record<string, Express.Multer.File[]> | undefined;
+    const picked = files?.file?.[0] ?? files?.image?.[0];
+    if (picked) {
+      req.file = picked;
     }
     (req as Request & { uploadViaCloudinary?: boolean }).uploadViaCloudinary =
       useCloudinaryUpload();
@@ -93,6 +108,13 @@ function uploadMedia(req: Request, res: Response, next: NextFunction) {
   });
 }
 
-router.post('/', authenticate, authorize('admin'), uploadMedia, uploadImage);
+router.post(
+  '/',
+  authenticate,
+  authorize('admin', 'staff'),
+  uploadMedia,
+  verifyUploadedFile,
+  uploadImage,
+);
 
 export default router;

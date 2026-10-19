@@ -9,9 +9,23 @@ import { asyncHandler } from '../utils/asyncHandler';
  */
 export const getDashboardSummaryHandler = asyncHandler(async (req: Request, res: Response) => {
   const { from, to } = req.query as { from?: string; to?: string };
-  
+
   const summary = await getDashboardSummary(from, to);
-  
+
+  /**
+   * Revenue and outstanding balances are financial data. A staff account with
+   * order access (but no `finance:read`) gets the operational view with those
+   * fields redacted rather than a blanket 403 — they still need their worklist.
+   */
+  const canSeeFinance =
+    req.user?.role === 'admin' || (req.user?.permissions ?? []).includes('finance:read');
+
+  if (!canSeeFinance) {
+    summary.metrics.revenueMtd = null;
+    summary.metrics.outstandingBalance = null;
+    summary.series.revenueByMonth = [];
+  }
+
   res.status(200).json({
     success: true,
     message: 'Dashboard summary retrieved successfully',

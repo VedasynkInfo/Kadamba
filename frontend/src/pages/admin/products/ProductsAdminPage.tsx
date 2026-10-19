@@ -2,12 +2,15 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { productApi, type ProductCategory, type ProductType } from '@/services/products/productService';
 import { measurementApi, type MeasurementTemplate } from '@/services/measurements/measurementsService';
-import { Button, Drawer, Input, Spinner } from '@/components/ui';
+import {
+  Button, Drawer, Input, Textarea, Spinner, Select, Table, StatusBadge, useToast,
+} from '@/components/ui';
 import { AdminHorizonBanner } from '../components/AdminHorizonBanner';
 import { adminBanners } from '../data';
 import { cn } from '@/utils/cn';
 
 export default function ProductsAdminPage() {
+  const { toast } = useToast();
   const [categories, setCategories] = useState<ProductCategory[]>([]);
   const [productTypes, setProductTypes] = useState<ProductType[]>([]);
   const [templates, setTemplates] = useState<MeasurementTemplate[]>([]);
@@ -121,11 +124,11 @@ export default function ProductsAdminPage() {
     setSeeding(true);
     try {
       const result = await productApi.seedCatalog();
-      alert(`Seeded catalog! Categories created/linked: ${result.categoriesSeeded}, Garment types seeded: ${result.typesSeeded}`);
+      toast({ title: `Catalog seeded! ${result.categoriesSeeded} categories, ${result.typesSeeded} types`, tone: 'success' });
       await Promise.all([fetchCategories(), fetchTemplates()]);
       void fetchProductTypes();
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to seed product catalog.');
+      toast({ title: err.response?.data?.message || 'Failed to seed product catalog.', tone: 'error' });
     } finally {
       setSeeding(false);
     }
@@ -153,7 +156,7 @@ export default function ProductsAdminPage() {
       resetCategoryForm();
       void fetchCategories();
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to save product category.');
+      toast({ title: err.response?.data?.message || 'Failed to save product category.', tone: 'error' });
     } finally {
       setSavingCategory(false);
     }
@@ -213,7 +216,7 @@ export default function ProductsAdminPage() {
       resetTypeForm();
       void fetchProductTypes();
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to save product garment type.');
+      toast({ title: err.response?.data?.message || 'Failed to save product garment type.', tone: 'error' });
     } finally {
       setSavingType(false);
     }
@@ -245,7 +248,7 @@ export default function ProductsAdminPage() {
       await productApi.updateProductType(type.id || type._id!, { active: nextActive });
       void fetchProductTypes();
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to toggle status.');
+      toast({ title: err.response?.data?.message || 'Failed to toggle status.', tone: 'error' });
     }
   };
 
@@ -296,22 +299,22 @@ export default function ProductsAdminPage() {
                   className={cn(
                     'w-full text-left px-3 py-2 text-xs rounded transition font-medium',
                     selectedCategoryId === 'All'
-                      ? 'bg-black text-cream font-semibold'
-                      : 'text-black/75 hover:bg-black/5',
+                      ? 'bg-[var(--admin-primary,#b59410)] text-[var(--admin-primary-text,#ffffff)] font-semibold shadow-xs'
+                      : 'opacity-75 hover:bg-current/[0.05]',
                   )}
                   onClick={() => setSelectedCategoryId('All')}
                 >
                   All Categories
                 </button>
                 {categories.map((cat) => (
-                  <div key={cat.id || cat._id} className="group flex items-center justify-between rounded hover:bg-black/5 transition">
+                  <div key={cat.id || cat._id} className="group flex items-center justify-between rounded hover:bg-current/[0.05] transition">
                     <button
                       type="button"
                       className={cn(
                         'flex-1 text-left px-3 py-2 text-xs font-medium transition',
                         selectedCategoryId === (cat.id || cat._id)
-                          ? 'bg-black/10 text-black font-semibold rounded-l'
-                          : 'text-black/75',
+                          ? 'bg-[var(--admin-primary,#b59410)] text-[var(--admin-primary-text,#ffffff)] font-semibold rounded-l'
+                          : 'opacity-75 hover:opacity-100',
                       )}
                       onClick={() => setSelectedCategoryId(cat.id || cat._id!)}
                     >
@@ -364,15 +367,16 @@ export default function ProductsAdminPage() {
                 />
               </div>
               <div className="flex items-center gap-3">
-                <select
+                <Select
                   value={activeFilter}
                   onChange={(e) => setActiveFilter(e.target.value)}
-                  className="rounded-md border border-black/15 bg-cream px-3 py-1.5 text-xs text-black focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
-                >
-                  <option value="">All statuses...</option>
-                  <option value="true">Active only</option>
-                  <option value="false">Inactive only</option>
-                </select>
+                  className="w-[140px]"
+                  options={[
+                    { value: '', label: 'All statuses...' },
+                    { value: 'true', label: 'Active only' },
+                    { value: 'false', label: 'Inactive only' },
+                  ]}
+                />
               </div>
             </div>
 
@@ -399,79 +403,51 @@ export default function ProductsAdminPage() {
                 </Button>
               </div>
             ) : (
-              <div className="space-y-6">
-                <div className="border border-black/10 rounded-lg overflow-hidden bg-white shadow-[var(--shadow-soft)]">
-                  <div className="overflow-x-auto">
-                    <table className="w-full min-w-[800px] text-left border-collapse text-xs">
-                      <thead>
-                        <tr className="border-b border-black/10 bg-black/5 text-[0.65rem] uppercase font-semibold text-black/50">
-                          <th className="p-3.5">Code</th>
-                          <th className="p-3.5">Garment Name</th>
-                          <th className="p-3.5">Category</th>
-                          <th className="p-3.5">Fit Template</th>
-                          <th className="p-3.5">Indicative Price</th>
-                          <th className="p-3.5">Active</th>
-                          <th className="p-3.5 text-right">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-black/5 bg-white/10">
-                        {productTypes.map((type) => (
-                          <tr key={type.id || type._id} className="hover:bg-black/[0.01]">
-                            <td className="p-3.5 font-mono font-bold text-black">{type.code}</td>
-                            <td className="p-3.5">
-                              <span className="font-semibold text-black block">{type.name}</span>
-                              {type.description && <span className="text-[10px] text-black/45 block mt-0.5 max-w-[200px] truncate">{type.description}</span>}
-                            </td>
-                            <td className="p-3.5 text-black/75">
-                              {type.categoryId?.name || '—'}
-                            </td>
-                            <td className="p-3.5 font-mono text-[10px]">
-                              {type.measurementTemplateId ? (
-                                <Link to="/admin/measurements" className="text-black font-semibold hover:underline bg-black/5 px-1.5 py-0.5 rounded border border-black/10">
-                                  📏 {type.measurementTemplateId}
-                                </Link>
-                              ) : (
-                                <span className="text-black/35">Unmeasurable</span>
-                              )}
-                            </td>
-                            <td className="p-3.5 text-black/60 font-medium">
-                              {type.indicativePriceRange || '—'}
-                            </td>
-                            <td className="p-3.5">
-                              <span
-                                className={cn(
-                                  'inline-flex items-center rounded-sm px-1.5 py-0.5 text-[9px] font-bold border uppercase tracking-wider',
-                                  type.active ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-rose-50 text-rose-800 border-rose-200',
-                                )}
-                              >
-                                {type.active ? 'Active' : 'Inactive'}
-                              </span>
-                            </td>
-                            <td className="p-3.5 text-right space-x-2">
-                              <button
-                                type="button"
-                                onClick={() => handleEditTypeClick(type)}
-                                className="font-semibold text-black hover:underline"
-                              >
-                                Edit
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => handleDeactivateType(type)}
-                                className={cn(
-                                  'font-semibold hover:underline',
-                                  type.active ? 'text-rose-700 hover:text-rose-900' : 'text-emerald-700 hover:text-emerald-900',
-                                )}
-                              >
-                                {type.active ? 'Disable' : 'Enable'}
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
+              <div>
+                <Table
+                  data={productTypes}
+                  keyExtractor={(t) => t.id || t._id || ''}
+                  columns={[
+                    { key: 'code', header: 'Code', className: 'font-mono font-bold' },
+                    {
+                      key: 'name',
+                      header: 'Garment Name',
+                      render: (t) => (
+                        <div>
+                          <span className="font-semibold">{t.name}</span>
+                          {t.description && <span className="block text-[10px] text-black/45 mt-0.5 truncate max-w-[200px]">{t.description}</span>}
+                        </div>
+                      ),
+                    },
+                    { key: 'categoryId', header: 'Category', render: (t) => t.categoryId?.name || '—' },
+                    {
+                      key: 'measurementTemplateId',
+                      header: 'Fit Template',
+                      className: 'font-mono text-[10px]',
+                      render: (t) => t.measurementTemplateId
+                        ? <Link to="/admin/measurements" className="bg-black/5 px-1.5 py-0.5 rounded border border-black/10 font-semibold hover:underline">📏 {t.measurementTemplateId}</Link>
+                        : <span className="text-black/35">Unmeasurable</span>,
+                    },
+                    { key: 'indicativePriceRange', header: 'Indicative Price', render: (t) => t.indicativePriceRange || '—' },
+                    {
+                      key: 'active',
+                      header: 'Active',
+                      render: (t) => <StatusBadge value={t.active ? 'active' : 'inactive'} kind="generic" />,
+                    },
+                    {
+                      key: 'actions',
+                      header: '',
+                      render: (t) => (
+                        <div className="flex justify-end gap-2">
+                          <button type="button" onClick={() => handleEditTypeClick(t)} className="font-semibold hover:underline">Edit</button>
+                          <button type="button" onClick={() => handleDeactivateType(t)} className={cn('font-semibold hover:underline', t.active ? 'text-rose-700 hover:text-rose-900' : 'text-emerald-700 hover:text-emerald-900')}>
+                            {t.active ? 'Disable' : 'Enable'}
+                          </button>
+                        </div>
+                      ),
+                    },
+                  ]}
+                />
 
                 {/* Pagination */}
                 {pagination.pages > 1 && (
@@ -516,7 +492,7 @@ export default function ProductsAdminPage() {
       >
         <form onSubmit={handleCreateCategory} className="space-y-5 text-xs pb-10">
           <div>
-            <label className="block text-cream/80 mb-1.5 font-semibold">Category Code *</label>
+            <label className="block text-inherit opacity-85 mb-1.5 font-semibold">Category Code *</label>
             <Input
               type="text"
               placeholder="e.g. BRIDAL *"
@@ -527,7 +503,7 @@ export default function ProductsAdminPage() {
             />
           </div>
           <div>
-            <label className="block text-cream/80 mb-1.5 font-semibold">Category Name *</label>
+            <label className="block text-inherit opacity-85 mb-1.5 font-semibold">Category Name *</label>
             <Input
               type="text"
               placeholder="e.g. Bridal Collection *"
@@ -537,7 +513,7 @@ export default function ProductsAdminPage() {
             />
           </div>
           <div>
-            <label className="block text-cream/80 mb-1.5 font-semibold">Sort Order</label>
+            <label className="block text-inherit opacity-85 mb-1.5 font-semibold">Sort Order</label>
             <Input
               type="number"
               placeholder="0"
@@ -577,7 +553,7 @@ export default function ProductsAdminPage() {
         <form onSubmit={handleCreateProductType} className="space-y-5 text-xs pb-20">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-cream/80 mb-1.5 font-semibold">Garment Code *</label>
+              <label className="block text-inherit opacity-85 mb-1.5 font-semibold">Garment Code *</label>
               <Input
                 type="text"
                 placeholder="e.g. BR-LH *"
@@ -588,7 +564,7 @@ export default function ProductsAdminPage() {
               />
             </div>
             <div>
-              <label className="block text-cream/80 mb-1.5 font-semibold">Sort Order</label>
+              <label className="block text-inherit opacity-85 mb-1.5 font-semibold">Sort Order</label>
               <Input
                 type="number"
                 placeholder="0"
@@ -599,7 +575,7 @@ export default function ProductsAdminPage() {
           </div>
 
           <div>
-            <label className="block text-cream/80 mb-1.5 font-semibold">Garment Name *</label>
+            <label className="block text-inherit opacity-85 mb-1.5 font-semibold">Garment Name *</label>
             <Input
               type="text"
               placeholder="e.g. Bridal Lehenga *"
@@ -611,39 +587,27 @@ export default function ProductsAdminPage() {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-cream/80 mb-1.5 font-semibold">Category *</label>
-              <select
+              <label className="block text-inherit opacity-85 mb-1.5 font-semibold">Category *</label>
+              <Select
                 value={typeCategoryId}
                 onChange={(e) => setTypeCategoryId(e.target.value)}
-                className="w-full rounded-md border border-black/15 bg-cream px-3 py-2.5 text-sm text-black focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
-              >
-                <option value="" disabled>Select category...</option>
-                {categories.map((cat) => (
-                  <option key={cat.id || cat._id} value={cat.id || cat._id}>
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
+                placeholder="Select category..."
+                options={categories.map((cat) => ({ value: cat.id || cat._id || '', label: cat.name }))}
+              />
             </div>
             <div>
-              <label className="block text-cream/80 mb-1.5 font-semibold">Measurement Template</label>
-              <select
+              <label className="block text-inherit opacity-85 mb-1.5 font-semibold">Measurement Template</label>
+              <Select
                 value={typeTemplateCode}
                 onChange={(e) => setTypeTemplateCode(e.target.value)}
-                className="w-full rounded-md border border-black/15 bg-cream px-3 py-2.5 text-sm text-black focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
-              >
-                <option value="">Unmeasurable (No fitting card)</option>
-                {templates.map((t) => (
-                  <option key={t.id} value={t.code}>
-                    {t.name} ({t.code})
-                  </option>
-                ))}
-              </select>
+                placeholder="Unmeasurable (No fitting card)"
+                options={templates.map((t) => ({ value: t.code, label: `${t.name} (${t.code})` }))}
+              />
             </div>
           </div>
 
           <div>
-            <label className="block text-cream/80 mb-1.5 font-semibold">Indicative Price Range</label>
+            <label className="block text-inherit opacity-85 mb-1.5 font-semibold">Indicative Price Range</label>
             <Input
               type="text"
               placeholder="e.g. ₹8,000–₹12,000"
@@ -653,7 +617,7 @@ export default function ProductsAdminPage() {
           </div>
 
           <div>
-            <label className="block text-cream/80 mb-1.5 font-semibold">Internal Operations Description</label>
+            <label className="block text-inherit opacity-85 mb-1.5 font-semibold">Internal Operations Description</label>
             <Input
               type="text"
               placeholder="e.g. includes fall/pico, heavy embroidery support"
@@ -663,13 +627,12 @@ export default function ProductsAdminPage() {
           </div>
 
           <div>
-            <label className="block text-cream/80 mb-1.5 font-semibold">Portal Public Description</label>
-            <textarea
+            <label className="block text-inherit opacity-85 mb-1.5 font-semibold">Portal Public Description</label>
+            <Textarea
               placeholder="Detailed description showing on customer login portal..."
               value={typePublicDesc}
               onChange={(e) => setTypePublicDesc(e.target.value)}
               rows={3}
-              className="w-full rounded-md border border-black/15 bg-cream px-3 py-2 text-sm text-black focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
             />
           </div>
 

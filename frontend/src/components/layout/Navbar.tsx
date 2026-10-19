@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { Drawer } from '@/components/ui/Drawer';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/utils/cn';
+import { useTheme } from '@/context/ThemeContext';
 
 const links = [
   { to: '/', label: 'Home' },
@@ -21,6 +22,8 @@ const links = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const { logoDarkUrl, logoUrl } = useTheme();
+  const activeLogo = logoDarkUrl || logoUrl;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -43,9 +46,13 @@ export function Navbar() {
         >
           <NavLink
             to="/"
-            className="font-heading text-xl tracking-wide text-gold transition-opacity hover:opacity-90"
+            className="flex items-center gap-2 font-heading text-xl tracking-wide text-gold transition-opacity hover:opacity-90"
           >
-            Kadamba
+            {activeLogo ? (
+              <img src={activeLogo} alt="Kadamba" className="h-8 w-auto object-contain" />
+            ) : (
+              <span>Kadamba</span>
+            )}
           </NavLink>
 
           <ul className="hidden flex-wrap items-center gap-5 text-sm lg:flex">

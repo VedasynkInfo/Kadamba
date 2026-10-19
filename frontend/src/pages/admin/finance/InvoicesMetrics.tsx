@@ -1,0 +1,70 @@
+﻿function formatINR(v: number) {
+  return `₹${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
+}
+
+interface InvoicesMetricsProps {
+  summary: {
+    totalQuoted: number;
+    totalPaid: number;
+    totalBalance: number;
+    ordersWithBalance?: number;
+    unpaid?: number;
+    partial?: number;
+    paid?: number;
+  };
+}
+
+export function InvoicesMetrics({ summary }: InvoicesMetricsProps) {
+  const cards = [
+    {
+      label: 'Total Quoted Value',
+      value: formatINR(summary.totalQuoted || 0),
+      icon: '📜',
+      sub: 'All atelier commissioned work',
+    },
+    {
+      label: 'Collected Payments',
+      value: formatINR(summary.totalPaid || 0),
+      icon: '💰',
+      sub: 'Advances & completed payments',
+      highlight: true,
+    },
+    {
+      label: 'Outstanding Balance',
+      value: formatINR(summary.totalBalance || 0),
+      icon: '⏳',
+      sub: `${summary.unpaid || 0} unpaid · ${summary.partial || 0} partial`,
+    },
+    {
+      label: 'Fully Cleared Invoices',
+      value: summary.paid || 0,
+      icon: '✅',
+      sub: 'Orders settled in full',
+    },
+  ];
+
+  return (
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      {cards.map((c) => (
+        <div
+          key={c.label}
+          className="rounded-xl border p-3.5 shadow-xs transition-colors"
+          style={{
+            backgroundColor: 'var(--admin-card, #141b26)',
+            borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
+            color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
+          }}
+        >
+          <div className="flex items-center justify-between opacity-70">
+            <span className="text-[11px] font-semibold uppercase tracking-wider">{c.label}</span>
+            <span className="text-sm">{c.icon}</span>
+          </div>
+          <div className="mt-2 text-2xl font-bold font-heading tracking-tight text-inherit truncate">
+            {c.value}
+          </div>
+          <div className="mt-1 text-[10px] opacity-50 truncate">{c.sub}</div>
+        </div>
+      ))}
+    </div>
+  );
+}

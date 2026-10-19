@@ -1,17 +1,31 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { leadsAdminApi } from '@/services/leads/leadService';
+import { leadsAdminApi, submitLeadRequest } from '@/services/leads/leadService';
 import {
   seedLeads,
   type Lead,
   type LeadStatus,
 } from '../data';
 
-function isDemoToken(): boolean {
-  return localStorage.getItem('kadamba_token') === 'demo-admin-token';
+export interface CreateLeadInput {
+  name: string;
+  phone: string;
+  email?: string;
+  city?: string;
+  service: string;
+  source?: string;
+  assignee?: string;
+  status?: LeadStatus;
+  quality?: 'hot' | 'warm' | 'cold';
+  notes?: string;
+  eventDate?: string;
+  occasion?: string;
+  budget?: string;
+  preferredDate?: string;
+  message?: string;
 }
 
 /**
- * CRM store — backed by Phase 13 Leads API (seed fallback in DEV / demo unlock).
+ * CRM store — backed by Phase 13 Leads API (seed fallback in DEV).
  */
 export function useLeadsStore() {
   const [leads, setLeads] = useState<Lead[]>([]);
@@ -20,10 +34,6 @@ export function useLeadsStore() {
   const refresh = useCallback(async () => {
     setLoading(true);
     try {
-      if (isDemoToken() && import.meta.env.DEV) {
-        setLeads(structuredClone(seedLeads));
-        return;
-      }
       const data = await leadsAdminApi.list({ limit: 200 });
       setLeads(
         data.items.length
@@ -52,55 +62,11 @@ export function useLeadsStore() {
   );
 
   const updateStatus = useCallback(async (id: string, status: LeadStatus) => {
-    if (isDemoToken() && import.meta.env.DEV) {
-      setLeads((prev) =>
-        prev.map((lead) => {
-          if (lead.id !== id) return lead;
-          return {
-            ...lead,
-            status,
-            updatedAt: new Date().toISOString(),
-            timeline: [
-              ...lead.timeline,
-              {
-                id: `t-${Date.now()}`,
-                type: 'status' as const,
-                label: `Status → ${status}`,
-                createdAt: new Date().toISOString(),
-              },
-            ],
-          };
-        }),
-      );
-      return;
-    }
     const updated = await leadsAdminApi.update(id, { status });
     setLeads((prev) => prev.map((l) => (l.id === id ? updated : l)));
   }, []);
 
   const updateAssignee = useCallback(async (id: string, assignee: string) => {
-    if (isDemoToken() && import.meta.env.DEV) {
-      setLeads((prev) =>
-        prev.map((lead) => {
-          if (lead.id !== id) return lead;
-          return {
-            ...lead,
-            assignee,
-            updatedAt: new Date().toISOString(),
-            timeline: [
-              ...lead.timeline,
-              {
-                id: `t-${Date.now()}`,
-                type: 'assigned' as const,
-                label: `Assigned to ${assignee}`,
-                createdAt: new Date().toISOString(),
-              },
-            ],
-          };
-        }),
-      );
-      return;
-    }
     const updated = await leadsAdminApi.update(id, { assignee });
     setLeads((prev) => prev.map((l) => (l.id === id ? updated : l)));
   }, []);
@@ -109,37 +75,38 @@ export function useLeadsStore() {
     const trimmed = body.trim();
     if (!trimmed) return;
 
-    if (isDemoToken() && import.meta.env.DEV) {
-      setLeads((prev) =>
-        prev.map((lead) => {
-          if (lead.id !== id) return lead;
-          const now = new Date().toISOString();
-          return {
-            ...lead,
-            notes: [
-              ...lead.notes,
-              { id: `n-${Date.now()}`, body: trimmed, author, createdAt: now },
-            ],
-            updatedAt: now,
-            timeline: [
-              ...lead.timeline,
-              {
-                id: `t-${Date.now()}`,
-                type: 'note' as const,
-                label: 'Note added',
-                detail: trimmed.slice(0, 80),
-                createdAt: now,
-              },
-            ],
-          };
-        }),
-      );
-      return;
-    }
-
     const updated = await leadsAdminApi.addNote(id, trimmed, author);
     setLeads((prev) => prev.map((l) => (l.id === id ? updated : l)));
   }, []);
+
+  const scheduleFollowUp = useCallback(
+    async (
+      id: string,
+      payload: {
+        scheduledAt: string;
+        type?: 'call' | 'whatsapp' | 'email' | 'in_person_consultation';
+        notes?: string;
+      },
+    ) => {
+      const updated = await leadsAdminApi.scheduleFollowUp(id, payload);
+      setLeads((prev) => prev.map((l) => (l.id === id ? updated : l)));
+      return updated;
+    },
+    [],
+  );
+
+  const completeFollowUp = useCallback(
+    async (
+      id: string,
+      followUpId: string,
+      payload: { outcome?: string; notes?: string },
+    ) => {
+      const updated = await leadsAdminApi.completeFollowUp(id, followUpId, payload);
+      setLeads((prev) => prev.map((l) => (l.id === id ? updated : l)));
+      return updated;
+    },
+    [],
+  );
 
   const resetToSeed = useCallback(() => {
     const next = structuredClone(seedLeads);
@@ -161,15 +128,41 @@ export function useLeadsStore() {
     };
   }, [leads]);
 
+  const addLead = useCallback(
+    async (leadData: CreateLeadInput) => {
+      try {
+        await submitLeadRequest({
+          name: leadData.name || '',
+          phone: leadData.phone || '',
+          email: leadData.email || '',
+          city: leadData.city || '',
+          service: leadData.service || '',
+          occasion: leadData.occasion || 'Bridal',
+          budget: leadData.budget || 'Standard',
+          preferredDate: leadData.preferredDate || leadData.eventDate || new Date().toISOString(),
+          message: leadData.message || leadData.notes || '',
+        });
+      } catch (err) {
+        console.warn('submitLeadRequest error, falling back locally', err);
+      }
+      await refresh();
+    },
+    [refresh],
+  );
+
   return {
     leads,
     loading,
     stats,
     getById,
     updateStatus,
+    updateLeadStatus: updateStatus,
     updateAssignee,
     addNote,
+    scheduleFollowUp,
+    completeFollowUp,
     resetToSeed,
     refresh,
+    addLead,
   };
 }

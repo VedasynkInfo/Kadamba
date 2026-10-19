@@ -20,6 +20,7 @@ import uploadRoutes from './uploadRoutes';
 import staffRoutes from './staffRoutes';
 import financeRoutes from './financeRoutes';
 import reportRoutes from './reportRoutes';
+import userAdminRoutes from './userAdminRoutes';
 
 const router = Router();
 
@@ -33,6 +34,7 @@ router.use('/admin/customers', customerRoutes);
 router.use('/admin/orders', orderRoutes);
 router.use('/admin/products', productCatalogRoutes);
 router.use('/admin/staff', staffRoutes);
+router.use('/admin/users', userAdminRoutes);
 router.use('/admin/finance', financeRoutes);
 router.use('/admin/reports', reportRoutes);
 router.use('/admin/settings', adminSettingsRoutes);

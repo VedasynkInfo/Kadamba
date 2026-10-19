@@ -122,7 +122,11 @@ const customerSchema = new Schema<ICustomer>(
   { timestamps: true },
 );
 
-customerSchema.index({ name: 'text', phone: 1, email: 1 });
+// Text search is separate from exact-match lookups: a compound text index does
+// not efficiently serve `phone`/`email` equality queries.
+customerSchema.index({ name: 'text' });
+customerSchema.index({ phone: 1 });
+customerSchema.index({ email: 1 }, { sparse: true });
 customerSchema.index({ 'address.locality': 1 });
 customerSchema.index({ tags: 1 });
 customerSchema.index({ createdAt: -1 });

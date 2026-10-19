@@ -20,6 +20,12 @@ interface LeadDetailPanelProps {
   onAssignee: (assignee: string) => void;
   onAddNote: (body: string) => void;
   onConvertToOrder?: () => void;
+  onScheduleFollowUp?: (payload: {
+    scheduledAt: string;
+    type?: 'call' | 'whatsapp' | 'email' | 'in_person_consultation';
+    notes?: string;
+  }) => Promise<any>;
+  onCompleteFollowUp?: (followUpId: string) => Promise<any>;
 }
 
 /**
@@ -31,10 +37,15 @@ export function LeadDetailPanel({
   onAssignee,
   onAddNote,
   onConvertToOrder,
+  onScheduleFollowUp,
+  onCompleteFollowUp,
 }: LeadDetailPanelProps) {
   const navigate = useNavigate();
   const reduced = usePrefersReducedMotion();
   const [note, setNote] = useState('');
+  const [followUpDate, setFollowUpDate] = useState('');
+  const [followUpType, setFollowUpType] = useState<'call' | 'whatsapp' | 'email' | 'in_person_consultation'>('call');
+  const [followUpNotes, setFollowUpNotes] = useState('');
 
   function submitNote(e: FormEvent) {
     e.preventDefault();
@@ -71,14 +82,29 @@ export function LeadDetailPanel({
                 {lead.source} · Created {formatLeadDate(lead.createdAt)}
               </p>
             </div>
-            <span
-              className={cn(
-                'border px-3 py-1.5 text-[0.65rem] uppercase tracking-[0.16em]',
-                statusTone(lead.status),
-              )}
-            >
-              {lead.status}
-            </span>
+            <div className="flex items-center gap-2">
+              <span
+                className={cn(
+                  'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider',
+                  lead.quality === 'hot'
+                    ? 'bg-rose-100 text-rose-800 border border-rose-300'
+                    : lead.quality === 'warm'
+                    ? 'bg-amber-100 text-amber-800 border border-amber-300'
+                    : 'bg-slate-100 text-slate-700 border border-slate-300',
+                )}
+              >
+                {lead.quality === 'hot' ? '🔥 Hot Lead' : lead.quality === 'warm' ? '⚡ Warm Lead' : '❄️ Cold Lead'}
+                <span className="font-mono font-extrabold">({lead.score ?? 50}/100)</span>
+              </span>
+              <span
+                className={cn(
+                  'border px-3 py-1 text-[0.65rem] uppercase tracking-[0.16em]',
+                  statusTone(lead.status),
+                )}
+              >
+                {lead.status}
+              </span>
+            </div>
           </div>
 
           <dl className="mt-10 grid gap-5 sm:grid-cols-2">
@@ -167,6 +193,116 @@ export function LeadDetailPanel({
         </div>
 
         <div className="space-y-10">
+          <section className="rounded-lg border border-black/10 bg-black/[0.01] p-5">
+            <div className="flex items-center justify-between">
+              <h2 className="font-heading text-xl text-black">Follow-Up Schedule</h2>
+              <span className="text-xs font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                {lead.followUps?.filter((f) => f.status === 'pending').length || 0} Pending
+              </span>
+            </div>
+
+            {/* Schedule new follow up */}
+            <div className="mt-4 space-y-3 rounded border border-black/10 bg-white p-3">
+              <p className="text-xs font-bold uppercase tracking-wider text-black/60">Schedule Follow-Up Touchpoint</p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <input
+                  type="datetime-local"
+                  value={followUpDate}
+                  onChange={(e) => setFollowUpDate(e.target.value)}
+                  className="rounded border border-black/15 px-3 py-1.5 text-xs text-black"
+                />
+                <select
+                  value={followUpType}
+                  onChange={(e) => setFollowUpType(e.target.value as any)}
+                  className="rounded border border-black/15 px-3 py-1.5 text-xs text-black"
+                >
+                  <option value="call">Phone Call</option>
+                  <option value="whatsapp">WhatsApp Touchpoint</option>
+                  <option value="in_person_consultation">In-Person Consultation</option>
+                  <option value="email">Email</option>
+                </select>
+              </div>
+              <input
+                type="text"
+                value={followUpNotes}
+                onChange={(e) => setFollowUpNotes(e.target.value)}
+                placeholder="Follow-up notes (e.g. Call to discuss wedding trousseau budget)"
+                className="w-full rounded border border-black/15 px-3 py-1.5 text-xs text-black"
+              />
+              <Button
+                type="button"
+                size="sm"
+                variant="secondary"
+                disabled={!followUpDate}
+                onClick={async () => {
+                  if (!followUpDate || !onScheduleFollowUp) return;
+                  await onScheduleFollowUp({
+                    scheduledAt: new Date(followUpDate).toISOString(),
+                    type: followUpType,
+                    notes: followUpNotes,
+                  });
+                  setFollowUpNotes('');
+                  setFollowUpDate('');
+                }}
+              >
+                Schedule Follow-Up
+              </Button>
+            </div>
+
+            {/* List existing follow ups */}
+            <div className="mt-4 space-y-2">
+              {(lead.followUps || []).length === 0 ? (
+                <p className="text-xs text-black/45 py-2">No follow-ups scheduled yet.</p>
+              ) : (
+                [...(lead.followUps || [])].reverse().map((fu) => (
+                  <div
+                    key={fu.id}
+                    className={cn(
+                      'flex items-center justify-between gap-3 rounded border p-3 text-xs',
+                      fu.status === 'completed'
+                        ? 'border-black/5 bg-black/[0.02] text-black/50'
+                        : 'border-amber-200 bg-amber-50/50 text-black',
+                    )}
+                  >
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold uppercase tracking-wider text-[0.65rem]">
+                          {fu.type === 'whatsapp' ? '💬 WhatsApp' : fu.type === 'call' ? '📞 Call' : '📅 Consultation'}
+                        </span>
+                        <span>·</span>
+                        <span className="font-mono">
+                          {new Date(fu.scheduledAt).toLocaleDateString('en-IN', {
+                            day: '2-digit',
+                            month: 'short',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
+                        </span>
+                        {fu.status === 'completed' && (
+                          <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-[0.65rem] font-bold text-emerald-800">
+                            Completed
+                          </span>
+                        )}
+                      </div>
+                      {fu.notes && <p className="mt-1 text-black/70">{fu.notes}</p>}
+                    </div>
+
+                    {fu.status === 'pending' && onCompleteFollowUp && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="border border-black/15 text-xs shrink-0"
+                        onClick={() => onCompleteFollowUp(fu.id)}
+                      >
+                        Mark Done
+                      </Button>
+                    )}
+                  </div>
+                ))
+              )}
+            </div>
+          </section>
+
           <section>
             <h2 className="font-heading text-2xl text-black">Notes</h2>
             <form onSubmit={submitNote} className="mt-4 space-y-3">

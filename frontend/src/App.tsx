@@ -6,6 +6,7 @@ import { Spinner } from '@/components/ui';
 import { ToastProvider } from '@/components/ui';
 import { AuthProvider } from '@/hooks/useAuth';
 import { PortalAuthProvider } from '@/hooks/usePortalAuth';
+import { ThemeProvider } from '@/context/ThemeContext';
 import { AdminLayout } from '@/pages/admin/AdminLayout';
 import { PortalLayout } from '@/pages/portal/PortalLayout';
 
@@ -22,6 +23,8 @@ const ContactPage = lazy(() => import('@/pages/contact/ContactPage'));
 const RequestServicePage = lazy(() => import('@/pages/request-service/RequestServicePage'));
 const DesignSystemPage = lazy(() => import('@/pages/design-system/DesignSystemPage'));
 const AdminLoginPage = lazy(() => import('@/pages/admin/AdminLoginPage'));
+const ForgotPasswordPage = lazy(() => import('@/pages/admin/ForgotPasswordPage'));
+const ResetPasswordPage = lazy(() => import('@/pages/admin/ResetPasswordPage'));
 const AdminDashboardPage = lazy(() => import('@/pages/admin/DashboardPage'));
 const GalleryAdminPage = lazy(() => import('@/pages/admin/gallery/GalleryAdminPage'));
 const ServicesAdminPage = lazy(() => import('@/pages/admin/services/ServicesAdminPage'));
@@ -45,6 +48,8 @@ const InvoiceDetailAdminPage = lazy(() => import('@/pages/admin/finance/InvoiceD
 const PaymentsAdminPage = lazy(() => import('@/pages/admin/finance/PaymentsAdminPage'));
 const ReportsAdminPage = lazy(() => import('@/pages/admin/reports/ReportsAdminPage'));
 const ReportDetailPage = lazy(() => import('@/pages/admin/reports/ReportDetailPage'));
+const UsersAdminPage = lazy(() => import('@/pages/admin/users/UsersAdminPage'));
+const AuditAdminPage = lazy(() => import('@/pages/admin/users/AuditAdminPage'));
 const PortalLoginPage = lazy(() => import('@/pages/portal/PortalLoginPage'));
 const PortalActivatePage = lazy(() => import('@/pages/portal/PortalActivatePage'));
 const PortalDashboardPage = lazy(() => import('@/pages/portal/PortalDashboardPage'));
@@ -72,71 +77,77 @@ export default function App() {
     <ErrorBoundary>
       <AuthProvider>
         <PortalAuthProvider>
-          <ToastProvider>
-            <BrowserRouter>
-              <Suspense fallback={<RouteFallback />}>
-                <Routes>
-                  <Route path="admin/login" element={<AdminLoginPage />} />
+          <ThemeProvider>
+            <ToastProvider>
+              <BrowserRouter>
+                <Suspense fallback={<RouteFallback />}>
+                  <Routes>
+                    <Route path="admin/login" element={<AdminLoginPage />} />
+                    <Route path="admin/forgot-password" element={<ForgotPasswordPage />} />
+                    <Route path="admin/reset-password" element={<ResetPasswordPage />} />
 
-                  <Route path="admin" element={<AdminLayout />}>
-                    <Route index element={<AdminDashboardPage />} />
-                    <Route path="gallery" element={<GalleryAdminPage />} />
-                    <Route path="services" element={<ServicesAdminPage />} />
-                    <Route path="portfolio" element={<PortfolioAdminPage />} />
-                    <Route path="blogs" element={<BlogsAdminPage />} />
-                    <Route path="leads" element={<AdminLeadsDashboardPage />} />
-                    <Route path="leads/list" element={<AdminLeadsListPage />} />
-                    <Route path="leads/:id" element={<AdminLeadDetailPage />} />
-                    <Route path="customers" element={<CustomersAdminPage />} />
-                    <Route path="customers/:id" element={<CustomerDetailAdminPage />} />
-                    <Route path="products" element={<ProductsAdminPage />} />
-                    <Route path="orders" element={<OrdersAdminPage />} />
-                    <Route path="orders/:id" element={<OrderDetailAdminPage />} />
-                    <Route path="staff" element={<StaffAdminPage />} />
-                    <Route path="finance" element={<FinanceAdminPage />} />
-                    <Route path="invoices" element={<InvoicesAdminPage />} />
-                    <Route path="invoices/:id" element={<InvoiceDetailAdminPage />} />
-                    <Route path="payments" element={<PaymentsAdminPage />} />
-                    <Route path="reports" element={<ReportsAdminPage />} />
-                    <Route path="reports/:type" element={<ReportDetailPage />} />
-                    <Route path="settings" element={<SettingsAdminPage />} />
-                    <Route path="measurements" element={<MeasurementsPage />} />
-                    <Route path="profile" element={<ProfileAdminPage />} />
-                  </Route>
+                    <Route path="admin" element={<AdminLayout />}>
+                      <Route index element={<AdminDashboardPage />} />
+                      <Route path="gallery" element={<GalleryAdminPage />} />
+                      <Route path="services" element={<ServicesAdminPage />} />
+                      <Route path="portfolio" element={<PortfolioAdminPage />} />
+                      <Route path="blogs" element={<BlogsAdminPage />} />
+                      <Route path="leads" element={<AdminLeadsDashboardPage />} />
+                      <Route path="leads/list" element={<AdminLeadsListPage />} />
+                      <Route path="leads/:id" element={<AdminLeadDetailPage />} />
+                      <Route path="customers" element={<CustomersAdminPage />} />
+                      <Route path="customers/:id" element={<CustomerDetailAdminPage />} />
+                      <Route path="products" element={<ProductsAdminPage />} />
+                      <Route path="orders" element={<OrdersAdminPage />} />
+                      <Route path="orders/:id" element={<OrderDetailAdminPage />} />
+                      <Route path="staff" element={<StaffAdminPage />} />
+                      <Route path="finance" element={<FinanceAdminPage />} />
+                      <Route path="invoices" element={<InvoicesAdminPage />} />
+                      <Route path="invoices/:id" element={<InvoiceDetailAdminPage />} />
+                      <Route path="payments" element={<PaymentsAdminPage />} />
+                      <Route path="reports" element={<ReportsAdminPage />} />
+                      <Route path="reports/:type" element={<ReportDetailPage />} />
+                      <Route path="settings" element={<SettingsAdminPage />} />
+                      <Route path="measurements" element={<MeasurementsPage />} />
+                      <Route path="users" element={<UsersAdminPage />} />
+                      <Route path="audit" element={<AuditAdminPage />} />
+                      <Route path="profile" element={<ProfileAdminPage />} />
+                    </Route>
 
-                  <Route path="portal/login" element={<PortalLoginPage />} />
-                  <Route path="portal/activate" element={<PortalActivatePage />} />
-                  <Route path="portal" element={<PortalLayout />}>
-                    <Route index element={<PortalDashboardPage />} />
-                    <Route path="dashboard" element={<PortalDashboardPage />} />
-                    <Route path="orders" element={<PortalOrdersPage />} />
-                    <Route path="orders/:id" element={<PortalOrderDetailPage />} />
-                    <Route path="measurements" element={<PortalMeasurementsPage />} />
-                    <Route path="chat" element={<PortalChatPage />} />
-                    <Route path="payments" element={<PortalPaymentsPage />} />
-                    <Route path="invoices/:id" element={<PortalInvoicePage />} />
-                    <Route path="requests" element={<PortalRequestsPage />} />
-                  </Route>
+                    <Route path="portal/login" element={<PortalLoginPage />} />
+                    <Route path="portal/activate" element={<PortalActivatePage />} />
+                    <Route path="portal" element={<PortalLayout />}>
+                      <Route index element={<PortalDashboardPage />} />
+                      <Route path="dashboard" element={<PortalDashboardPage />} />
+                      <Route path="orders" element={<PortalOrdersPage />} />
+                      <Route path="orders/:id" element={<PortalOrderDetailPage />} />
+                      <Route path="measurements" element={<PortalMeasurementsPage />} />
+                      <Route path="chat" element={<PortalChatPage />} />
+                      <Route path="payments" element={<PortalPaymentsPage />} />
+                      <Route path="invoices/:id" element={<PortalInvoicePage />} />
+                      <Route path="requests" element={<PortalRequestsPage />} />
+                    </Route>
 
-                  <Route element={<MainLayout />}>
-                    <Route index element={<HomePage />} />
-                    <Route path="about" element={<AboutPage />} />
-                    <Route path="services" element={<ServicesPage />} />
-                    <Route path="services/:slug" element={<ServiceDetailPage />} />
-                    <Route path="gallery" element={<GalleryPage />} />
-                    <Route path="portfolio" element={<PortfolioPage />} />
-                    <Route path="portfolio/:slug" element={<PortfolioDetailPage />} />
-                    <Route path="blogs" element={<BlogsPage />} />
-                    <Route path="blogs/:slug" element={<BlogDetailPage />} />
-                    <Route path="contact" element={<ContactPage />} />
-                    <Route path="request-service" element={<RequestServicePage />} />
-                    <Route path="design-system" element={<DesignSystemPage />} />
-                    <Route path="*" element={<NotFoundPage />} />
-                  </Route>
-                </Routes>
-              </Suspense>
-            </BrowserRouter>
-          </ToastProvider>
+                    <Route element={<MainLayout />}>
+                      <Route index element={<HomePage />} />
+                      <Route path="about" element={<AboutPage />} />
+                      <Route path="services" element={<ServicesPage />} />
+                      <Route path="services/:slug" element={<ServiceDetailPage />} />
+                      <Route path="gallery" element={<GalleryPage />} />
+                      <Route path="portfolio" element={<PortfolioPage />} />
+                      <Route path="portfolio/:slug" element={<PortfolioDetailPage />} />
+                      <Route path="blogs" element={<BlogsPage />} />
+                      <Route path="blogs/:slug" element={<BlogDetailPage />} />
+                      <Route path="contact" element={<ContactPage />} />
+                      <Route path="request-service" element={<RequestServicePage />} />
+                      <Route path="design-system" element={<DesignSystemPage />} />
+                      <Route path="*" element={<NotFoundPage />} />
+                    </Route>
+                  </Routes>
+                </Suspense>
+              </BrowserRouter>
+            </ToastProvider>
+          </ThemeProvider>
         </PortalAuthProvider>
       </AuthProvider>
     </ErrorBoundary>

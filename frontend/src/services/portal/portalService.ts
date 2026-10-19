@@ -1,11 +1,10 @@
-import api from '@/services/api/client';
+import { portalApi as portalClient, setPortalToken } from '@/services/api/client';
 import type { ApiResponse } from '@/types';
 import axios from 'axios';
 
-const PORTAL_TOKEN_KEY = 'kadamba_portal_token';
 const PORTAL_USER_KEY = 'kadamba_portal_user';
 
-export { PORTAL_TOKEN_KEY, PORTAL_USER_KEY };
+export { PORTAL_USER_KEY };
 
 export interface PortalUser {
   id: string;
@@ -104,7 +103,7 @@ export interface PortalCatalogItem {
 }
 
 function portalHeaders() {
-  // Token is attached by the shared axios interceptor for /portal paths.
+  // Token is attached by the portal axios interceptor.
   return {};
 }
 
@@ -119,7 +118,7 @@ function toError(err: unknown, fallback: string): Error {
 
 async function portalGet<T>(url: string) {
   try {
-    const { data } = await api.get<ApiResponse<T>>(url, { headers: portalHeaders() });
+    const { data } = await portalClient.get<ApiResponse<T>>(url, { headers: portalHeaders() });
     if (!data.success) throw new Error(data.message || 'Request failed');
     return data.data as T;
   } catch (err) {
@@ -129,7 +128,9 @@ async function portalGet<T>(url: string) {
 
 async function portalPost<T>(url: string, body?: unknown) {
   try {
-    const { data } = await api.post<ApiResponse<T>>(url, body, { headers: portalHeaders() });
+    const { data } = await portalClient.post<ApiResponse<T>>(url, body, {
+      headers: portalHeaders(),
+    });
     if (!data.success) throw new Error(data.message || 'Request failed');
     return data.data as T;
   } catch (err) {
@@ -151,10 +152,31 @@ export const portalApi = {
     password: string;
     confirmPassword: string;
   }) =>
-    portalPost<{ user: PortalUser; token: string }>('/portal/activate/set-password', payload),
+    portalPost<{ user: PortalUser; token: string; expiresIn?: number }>(
+      '/portal/activate/set-password',
+      payload,
+    ),
 
   login: (payload: { email: string; password: string }) =>
-    portalPost<{ user: PortalUser; token: string }>('/portal/login', payload),
+    portalPost<{ user: PortalUser; token: string; expiresIn?: number }>('/portal/login', payload),
+
+  /** Restore the session from the httpOnly refresh cookie. */
+  refresh: async () => {
+    const { data } = await portalClient.post<
+      ApiResponse<{ user: PortalUser; token: string; expiresIn?: number }>
+    >('/portal/refresh');
+    if (!data.success || !data.data) return null;
+    setPortalToken(data.data.token);
+    return data.data;
+  },
+
+  logout: async () => {
+    try {
+      await portalClient.post('/portal/logout');
+    } finally {
+      setPortalToken(null);
+    }
+  },
 
   dashboard: () => portalGet<PortalDashboard>('/portal/dashboard'),
   orders: () => portalGet<PortalOrder[]>('/portal/orders'),
@@ -227,13 +249,7 @@ export const portalApi = {
     ),
 };
 
-export function storePortalSession(user: PortalUser, token: string) {
-  localStorage.setItem(PORTAL_TOKEN_KEY, token);
-  localStorage.setItem(PORTAL_USER_KEY, JSON.stringify(user));
-}
-
 export function clearPortalSession() {
-  localStorage.removeItem(PORTAL_TOKEN_KEY);
   localStorage.removeItem(PORTAL_USER_KEY);
 }
 

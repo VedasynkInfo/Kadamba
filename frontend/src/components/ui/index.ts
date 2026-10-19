@@ -1,6 +1,3 @@
-/**
- * Design system UI barrel — import from `@/components/ui`.
- */
 export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from './Button';
 export {
   Card,
@@ -25,3 +22,12 @@ export { Section, type SectionProps } from './Section';
 export { SectionIntro, type SectionIntroProps } from './SectionIntro';
 export { Heading, type HeadingProps, type HeadingLevel } from './Heading';
 export { PageShell } from './PageShell';
+export { Table, type TableProps, type Column } from './Table';
+export { FormField, type FormFieldProps } from './FormField';
+export { FormSection, type FormSectionProps } from './FormSection';
+export { StatusBadge, type StatusBadgeProps, type StatusKind } from './StatusBadge';
+export { SearchInput, type SearchInputProps } from './SearchInput';
+export { FilterBar, FilterGroup, type FilterBarProps, type FilterGroupProps } from './FilterBar';
+export { Alert, type AlertProps, type AlertTone } from './Alert';
+export { StatCard, type StatCardProps } from './StatCard';
+export { Tabs, type TabsProps, type Tab } from './Tabs';

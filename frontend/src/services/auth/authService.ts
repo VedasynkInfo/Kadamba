@@ -1,4 +1,4 @@
-import api from '../api/client';
+import { adminApi, setAdminToken } from '../api/client';
 import type {
   ApiResponse,
   AuthTokens,
@@ -8,17 +8,30 @@ import type {
   User,
 } from '@/types';
 
+interface LoginPayload {
+  user?: User;
+  token?: string;
+  expiresIn?: number;
+  mfaRequired?: boolean;
+  mfaTicket?: string;
+}
+
 export const authApi = {
   login: async (credentials: LoginCredentials) => {
-    const { data } = await api.post<ApiResponse<{ user: User } & AuthTokens>>(
-      '/auth/login',
-      credentials,
-    );
+    const { data } = await adminApi.post<ApiResponse<LoginPayload>>('/auth/login', credentials);
+    if (data.data?.token) setAdminToken(data.data.token);
+    return data;
+  },
+
+  /** Complete the second factor for accounts with TOTP enabled. */
+  verifyMfa: async (payload: { mfaTicket: string; code?: string; recoveryCode?: string }) => {
+    const { data } = await adminApi.post<ApiResponse<LoginPayload>>('/auth/login/mfa', payload);
+    if (data.data?.token) setAdminToken(data.data.token);
     return data;
   },
 
   register: async (payload: RegisterPayload) => {
-    const { data } = await api.post<ApiResponse<{ user: User } & AuthTokens>>(
+    const { data } = await adminApi.post<ApiResponse<{ user: User } & AuthTokens>>(
       '/auth/register',
       payload,
     );
@@ -26,20 +39,110 @@ export const authApi = {
   },
 
   me: async () => {
-    const { data } = await api.get<ApiResponse<{ user: User }>>('/auth/me');
+    const { data } = await adminApi.get<ApiResponse<{ user: User }>>('/auth/me');
     return data;
   },
 
+  /** Uses the httpOnly refresh cookie; no token is passed from JS. */
   refresh: async () => {
-    const { data } = await api.post<ApiResponse<{ user: User } & AuthTokens>>('/auth/refresh');
+    const { data } = await adminApi.post<ApiResponse<LoginPayload>>('/auth/refresh');
+    if (data.data?.token) setAdminToken(data.data.token);
     return data;
+  },
+
+  logout: async () => {
+    try {
+      await adminApi.post('/auth/logout');
+    } finally {
+      setAdminToken(null);
+    }
   },
 
   updateProfile: async (payload: UpdateProfilePayload) => {
-    const { data } = await api.patch<ApiResponse<{ user: User } & AuthTokens>>(
-      '/auth/profile',
-      payload,
+    const { data } = await adminApi.patch<ApiResponse<LoginPayload>>('/auth/profile', payload);
+    if (data.data?.token) setAdminToken(data.data.token);
+    return data;
+  },
+
+  forgotPassword: async (email: string) => {
+    const { data } = await adminApi.post<
+      ApiResponse<{ devToken?: string } | undefined>
+    >('/auth/forgot-password', { email });
+    return data;
+  },
+
+  resetPassword: async (payload: { token: string; password: string }) => {
+    const { data } = await adminApi.post<ApiResponse>('/auth/reset-password', payload);
+    return data;
+  },
+
+  /* ------------------------------------------------------------------ */
+  /* Two-factor authentication                                          */
+  /* ------------------------------------------------------------------ */
+
+  mfaStatus: async () => {
+    const { data } = await adminApi.get<ApiResponse<{ enabled: boolean }>>('/auth/mfa');
+    return data;
+  },
+
+  mfaEnrollStart: async () => {
+    const { data } = await adminApi.post<
+      ApiResponse<{ secret: string; otpauthUri: string }>
+    >('/auth/mfa/enroll');
+    return data;
+  },
+
+  mfaEnrollConfirm: async (code: string) => {
+    const { data } = await adminApi.post<
+      ApiResponse<{ enabled: boolean; backupCodes: string[] }>
+    >('/auth/mfa/enroll/confirm', { code });
+    return data;
+  },
+
+  mfaDisable: async (payload: { password: string; code: string }) => {
+    const { data } = await adminApi.post<ApiResponse>('/auth/mfa/disable', payload);
+    setAdminToken(null);
+    return data;
+  },
+
+  mfaBackupCodes: async (password: string) => {
+    const { data } = await adminApi.post<ApiResponse<{ backupCodes: string[] }>>(
+      '/auth/mfa/backup-codes',
+      { password },
     );
+    return data;
+  },
+
+  /* ------------------------------------------------------------------ */
+  /* Sessions                                                           */
+  /* ------------------------------------------------------------------ */
+
+  sessions: async () => {
+    const { data } = await adminApi.get<
+      ApiResponse<{
+        items: Array<{
+          id: string;
+          familyId: string;
+          current: boolean;
+          createdAt: string;
+          lastUsedAt: string;
+          userAgent?: string;
+          ip?: string;
+          expiresAt: string;
+        }>;
+      }>
+    >('/auth/sessions');
+    return data;
+  },
+
+  revokeSession: async (familyId: string) => {
+    const { data } = await adminApi.delete<ApiResponse>(`/auth/sessions/${familyId}`);
+    return data;
+  },
+
+  revokeAllSessions: async () => {
+    const { data } = await adminApi.post<ApiResponse>('/auth/sessions/revoke-all');
+    setAdminToken(null);
     return data;
   },
 };

@@ -4,17 +4,26 @@ import { useAuth } from '@/hooks/useAuth';
 import { Spinner } from '@/components/ui';
 
 /**
- * JWT gate for the studio console — admin role required.
+ * Session gate for the studio console.
+ *
+ * The access token lives in memory, so on a hard refresh there is a brief
+ * window while the httpOnly refresh cookie is exchanged for a new one. We show
+ * the fallback during that window instead of redirecting to the login page
+ * (which would make every reload look like a sign-out).
  */
 export function RequireAdmin({ children }: { children: ReactNode }) {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, loading } = useAuth();
   const location = useLocation();
+
+  if (loading) {
+    return <AdminGateFallback />;
+  }
 
   if (!isAuthenticated || !user) {
     return <Navigate to="/admin/login" replace state={{ from: location.pathname }} />;
   }
 
-  if (user.role !== 'admin') {
+  if (user.role !== 'admin' && user.role !== 'staff') {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[#0a0a0a] px-6 text-center text-cream">
         <p className="font-heading text-2xl text-gold">Access limited</p>
@@ -31,7 +40,7 @@ export function RequireAdmin({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
-/** Lightweight placeholder while auth hydrates from storage (sync today). */
+/** Lightweight placeholder while the session is restored from the cookie. */
 export function AdminGateFallback() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a]">

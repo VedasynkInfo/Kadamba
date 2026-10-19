@@ -19,7 +19,7 @@ describe('admin dashboard API', () => {
     const now = new Date();
     
     // Lead 1: open, created today, source: 'WhatsApp'
-    const lead1 = await Lead.create({
+    await Lead.create({
       name: 'Client One',
       phone: '9999999999',
       email: 'one@test.local',
@@ -35,7 +35,7 @@ describe('admin dashboard API', () => {
     });
 
     // Lead 2: open, created today, source: 'Request Service'
-    const lead2 = await Lead.create({
+    await Lead.create({
       name: 'Client Two',
       phone: '8888888888',
       email: 'two@test.local',
@@ -51,7 +51,7 @@ describe('admin dashboard API', () => {
     });
 
     // Lead 3: closed (Completed), created today, source: 'Referral'
-    const lead3 = await Lead.create({
+    await Lead.create({
       name: 'Client Three',
       phone: '7777777777',
       email: 'three@test.local',
@@ -69,7 +69,7 @@ describe('admin dashboard API', () => {
     // Lead 4: created 2 months ago (Open)
     const twoMonthsAgo = new Date();
     twoMonthsAgo.setMonth(now.getMonth() - 2);
-    const lead4 = await Lead.create({
+    await Lead.create({
       name: 'Client Four',
       phone: '6666666666',
       email: 'four@test.local',

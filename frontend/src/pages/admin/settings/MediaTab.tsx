@@ -1,0 +1,117 @@
+import type { WebsiteSettings } from '../data';
+
+interface MediaTabProps {
+  form: WebsiteSettings;
+  patchForm: (updater: (prev: WebsiteSettings) => WebsiteSettings) => void;
+}
+
+export function MediaTab({ form, patchForm }: MediaTabProps) {
+  const maxMb = Math.round((form.media?.maxUploadBytes || 5242880) / (1024 * 1024));
+
+  return (
+    <div className="space-y-6 text-xs">
+      {/* Upload Limits & Processing */}
+      <div
+        className="rounded-2xl border p-5 shadow-xs space-y-4 transition-colors"
+        style={{
+          backgroundColor: 'var(--admin-card, #141b26)',
+          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
+          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
+        }}
+      >
+        <div className="border-b pb-3" style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}>
+          <h3 className="font-heading text-sm font-bold tracking-wide">Media & Storage Rules</h3>
+          <p className="text-[10px] opacity-60 mt-0.5">Asset upload limits, CDN compression, and format requirements</p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">
+              Max Upload Size (MB)
+            </label>
+            <input
+              type="number"
+              min="1"
+              max="50"
+              value={maxMb}
+              onChange={(e) => {
+                const mb = Number(e.target.value) || 5;
+                patchForm((f) => ({
+                  ...f,
+                  media: { ...f.media, maxUploadBytes: mb * 1024 * 1024 },
+                }));
+              }}
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)]"
+              style={{
+                backgroundColor: 'rgba(128, 128, 128, 0.05)',
+                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
+                color: 'inherit',
+              }}
+            />
+            <span className="text-[10px] opacity-50 block mt-0.5">
+              Applies to lookbook pictures, gallery items, and customer fit photos
+            </span>
+          </div>
+
+          <div className="space-y-1">
+            <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">
+              Default Dimension Unit
+            </label>
+            <select
+              value={form.media?.defaultUnit || 'in'}
+              onChange={(e) =>
+                patchForm((f) => ({
+                  ...f,
+                  media: { ...f.media, defaultUnit: e.target.value as 'in' | 'cm' },
+                }))
+              }
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary,#b59410)] cursor-pointer"
+              style={{
+                backgroundColor: 'var(--admin-card, #141b26)',
+                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.25))',
+                color: 'inherit',
+              }}
+            >
+              <option value="in">Inches (Standard Indian Couture)</option>
+              <option value="cm">Centimeters (Metric)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Preset Aspect Ratios */}
+      <div
+        className="rounded-2xl border p-5 shadow-xs space-y-4 transition-colors"
+        style={{
+          backgroundColor: 'var(--admin-card, #141b26)',
+          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.18))',
+          color: 'var(--admin-card-text, var(--admin-text, #f3f4f6))',
+        }}
+      >
+        <div className="border-b pb-3" style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}>
+          <h3 className="font-heading text-sm font-bold tracking-wide">Lookbook & Banner Presets</h3>
+          <p className="text-[10px] opacity-60 mt-0.5">Target canvas resolutions used for responsive atelier media</p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {(form.media?.bannerPresets || []).map((preset, idx) => (
+            <div
+              key={idx}
+              className="rounded-xl border p-3.5 space-y-1"
+              style={{
+                borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))',
+                backgroundColor: 'rgba(128, 128, 128, 0.04)',
+              }}
+            >
+              <span className="font-bold text-xs block">{preset.label}</span>
+              <div className="flex justify-between text-[11px] opacity-65 font-mono">
+                <span>{preset.width} × {preset.height} px</span>
+                <span>{preset.aspect}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

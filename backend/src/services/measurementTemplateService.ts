@@ -20,8 +20,7 @@ export type MeasurementTemplateDto = {
 };
 
 function serialize(doc: IMeasurementTemplate | Record<string, unknown>): MeasurementTemplateDto {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return toDto<MeasurementTemplateDto>(doc as any);
+  return toDto<MeasurementTemplateDto>(doc as unknown as MeasurementTemplateDto);
 }
 
 async function templateExists(code: string, excludeId?: string): Promise<boolean> {
@@ -81,7 +80,7 @@ export async function createTemplate(
   return serialize(doc.toJSON());
 }
 
-export async function updateTemplate(code: string, input: Record<string, unknown>, actor: string) {
+export async function updateTemplate(code: string, input: Record<string, unknown>, _actor: string) {
   const existing = await MeasurementTemplate.findOne({ code });
   if (!existing) throw new ApiError(404, 'Measurement template not found');
 

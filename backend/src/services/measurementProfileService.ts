@@ -25,19 +25,14 @@ export type MeasurementProfileDto = {
 };
 
 function serialize(doc: IMeasurementProfile | Record<string, unknown>, customerName?: string): MeasurementProfileDto {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const dto = toDto<MeasurementProfileDto>(doc as any);
+  const dto = toDto<MeasurementProfileDto>(doc as unknown as MeasurementProfileDto);
   return {
     ...dto,
     customerName: customerName || dto.customerName,
     productTypeName: typeof doc === 'object' && 'productTypeCode' in doc
-      ? (doc as any).productTypeCode as string
+      ? (doc as unknown as { productTypeCode?: string }).productTypeCode
       : undefined,
   };
-}
-
-async function profileExists(id: string): Promise<boolean> {
-  return Boolean(await MeasurementProfile.exists({ _id: id }));
 }
 
 async function findByIdOrThrow(id: string) {
@@ -102,10 +97,15 @@ export async function getProfile(id: string) {
 }
 
 export async function createProfile(input: Record<string, unknown>, actor: string) {
-  const existingTemplate = await MeasurementTemplate.findOne({
-    code: input.productTypeCode as string,
-    active: true,
-  });
+  if (input.productTypeCode) {
+    const existingTemplate = await MeasurementTemplate.findOne({
+      code: input.productTypeCode as string,
+      active: true,
+    });
+    if (!existingTemplate) {
+      throw new ApiError(404, 'Measurement template not found or inactive');
+    }
+  }
 
   const doc = await MeasurementProfile.create({
     ...input,

@@ -1,25 +1,9 @@
 import mongoose, { Document, Schema } from 'mongoose';
+import { LEAD_STATUSES, LEAD_SOURCES } from '../shared/enums';
+import type { LeadStatus, LeadSource } from '../shared/enums';
 
-export const LEAD_STATUSES = [
-  'New',
-  'Contacted',
-  'Qualified',
-  'Appointment',
-  'Completed',
-  'Rejected',
-] as const;
-
-export type LeadStatus = (typeof LEAD_STATUSES)[number];
-
-export const LEAD_SOURCES = [
-  'Request Service',
-  'Contact',
-  'WhatsApp',
-  'Walk-in',
-  'Referral',
-] as const;
-
-export type LeadSource = (typeof LEAD_SOURCES)[number];
+export { LEAD_STATUSES, LEAD_SOURCES };
+export type { LeadStatus, LeadSource };
 
 export interface ILeadNote {
   body: string;
@@ -32,6 +16,17 @@ export interface ILeadTimelineEvent {
   label: string;
   detail?: string;
   createdAt: Date;
+}
+
+export interface IFollowUp {
+  _id?: mongoose.Types.ObjectId;
+  scheduledAt: Date;
+  type: 'call' | 'whatsapp' | 'email' | 'in_person_consultation';
+  notes: string;
+  status: 'pending' | 'completed' | 'cancelled' | 'rescheduled';
+  completedAt?: Date;
+  outcome?: string;
+  createdBy?: string;
 }
 
 export interface ILead extends Document {
@@ -58,6 +53,18 @@ export interface ILead extends Document {
   referenceId?: string;
   notes: ILeadNote[];
   timeline: ILeadTimelineEvent[];
+  // Lead scoring & follow-up extensions
+  score?: number;
+  quality?: 'hot' | 'warm' | 'cold';
+  scoreBreakdown?: {
+    budgetScore: number;
+    timelineScore: number;
+    serviceScore: number;
+    detailsScore: number;
+    contactScore: number;
+  };
+  followUps: IFollowUp[];
+  nextFollowUpDate?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -67,6 +74,27 @@ const leadNoteSchema = new Schema<ILeadNote>(
     body: { type: String, required: true, trim: true, maxlength: 2000 },
     author: { type: String, required: true, trim: true, maxlength: 80 },
     createdAt: { type: Date, default: Date.now },
+  },
+  { _id: true },
+);
+
+const leadFollowUpSchema = new Schema<IFollowUp>(
+  {
+    scheduledAt: { type: Date, required: true },
+    type: {
+      type: String,
+      enum: ['call', 'whatsapp', 'email', 'in_person_consultation'],
+      default: 'call',
+    },
+    notes: { type: String, default: '', trim: true, maxlength: 1000 },
+    status: {
+      type: String,
+      enum: ['pending', 'completed', 'cancelled', 'rescheduled'],
+      default: 'pending',
+    },
+    completedAt: { type: Date },
+    outcome: { type: String, trim: true, maxlength: 500 },
+    createdBy: { type: String, trim: true },
   },
   { _id: true },
 );
@@ -208,6 +236,40 @@ const leadSchema = new Schema<ILead>(
     timeline: {
       type: [leadTimelineSchema],
       default: [],
+    },
+    score: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 100,
+      index: true,
+    },
+    quality: {
+      type: String,
+      enum: ['hot', 'warm', 'cold'],
+      default: 'warm',
+      index: true,
+    },
+    scoreBreakdown: {
+      type: new Schema(
+        {
+          budgetScore: { type: Number, default: 0 },
+          timelineScore: { type: Number, default: 0 },
+          serviceScore: { type: Number, default: 0 },
+          detailsScore: { type: Number, default: 0 },
+          contactScore: { type: Number, default: 0 },
+        },
+        { _id: false },
+      ),
+      default: () => ({}),
+    },
+    followUps: {
+      type: [leadFollowUpSchema],
+      default: [],
+    },
+    nextFollowUpDate: {
+      type: Date,
+      index: true,
     },
   },
   { timestamps: true },

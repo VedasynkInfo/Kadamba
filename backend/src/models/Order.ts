@@ -1,23 +1,9 @@
 import mongoose, { Document, Schema } from 'mongoose';
+import { ORDER_STATUSES, ORDER_PRIORITIES } from '../shared/enums';
+import type { OrderStatus, OrderPriority } from '../shared/enums';
 
-export const ORDER_STATUSES = [
-  'enquiry',
-  'confirmed',
-  'measurements',
-  'cutting',
-  'stitching',
-  'embroidery_maggam',
-  'trial',
-  'finishing',
-  'delivery',
-  'cancelled',
-  'on_hold',
-] as const;
-
-export type OrderStatus = (typeof ORDER_STATUSES)[number];
-
-export const ORDER_PRIORITIES = ['normal', 'high', 'rush'] as const;
-export type OrderPriority = (typeof ORDER_PRIORITIES)[number];
+export { ORDER_STATUSES, ORDER_PRIORITIES };
+export type { OrderStatus, OrderPriority };
 
 export interface IOrderLineItem {
   productTypeCode?: string; // template code (e.g. BL-MG, BR-LH)

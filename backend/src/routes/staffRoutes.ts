@@ -6,8 +6,9 @@ import {
   updateStaffHandler,
   listStaffHandler,
   addPerformanceNoteHandler,
+  provisionLoginHandler,
 } from '../controllers/staffController';
-import { authenticate, authorize } from '../middleware/auth';
+import { authenticate, authorize, requirePermission } from '../middleware/auth';
 import { validateRequest } from '../middleware/validate';
 
 const router = Router();
@@ -15,7 +16,8 @@ const router = Router();
 router.get(
   '/',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('staff:read'),
   [
     query('status').optional().isIn(['active', 'inactive']),
     query('employmentType').optional().isIn(['permanent', 'freelance', 'intern']),
@@ -29,7 +31,8 @@ router.get(
 router.get(
   '/:id',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('staff:read'),
   [param('id').isMongoId().withMessage('Invalid Staff ID')],
   validateRequest,
   getStaffHandler,
@@ -38,7 +41,8 @@ router.get(
 router.post(
   '/',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('staff:write'),
   [
     body('fullName').trim().notEmpty().withMessage('Full name is required'),
     body('phone').trim().notEmpty().withMessage('Phone number is required'),
@@ -48,15 +52,33 @@ router.post(
     body('salaryType').optional().isIn(['monthly', 'piece-rate', 'freelance', 'other']),
     body('salaryAmount').optional().isFloat({ min: 0 }).withMessage('Salary amount must be a positive number'),
     body('joiningDate').optional().isISO8601().withMessage('Joining date must be ISO8601 format'),
+    body('createLogin').optional().isBoolean(),
+    body('permissions').optional().isArray(),
   ],
   validateRequest,
   createStaffHandler,
 );
 
+router.post(
+  '/:id/login',
+  authenticate,
+  authorize('admin', 'staff'),
+  requirePermission('staff:write'),
+  requirePermission('users:manage'),
+  [
+    param('id').isMongoId().withMessage('Invalid Staff ID'),
+    body('email').optional().isEmail(),
+    body('permissions').optional().isArray(),
+  ],
+  validateRequest,
+  provisionLoginHandler,
+);
+
 router.patch(
   '/:id',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('staff:write'),
   [
     param('id').isMongoId().withMessage('Invalid Staff ID'),
     body('fullName').optional().trim().notEmpty().withMessage('Full name cannot be empty'),
@@ -75,7 +97,8 @@ router.patch(
 router.post(
   '/:id/performance-notes',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('staff:write'),
   [
     param('id').isMongoId().withMessage('Invalid Staff ID'),
     body('body').trim().notEmpty().withMessage('Note content is required'),

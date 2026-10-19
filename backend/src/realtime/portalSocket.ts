@@ -1,9 +1,9 @@
 import type { Server as HttpServer } from 'http';
-import jwt from 'jsonwebtoken';
 import { Server, type Socket } from 'socket.io';
 import { env } from '../config/env';
 import { logger } from '../config/logger';
 import type { AuthPayload } from '../middleware/auth';
+import { verifyAccessToken, getUserState } from '../services/tokenService';
 
 let io: Server | null = null;
 
@@ -27,7 +27,7 @@ export function initPortalSocket(server: HttpServer): Server {
     },
   });
 
-  io.use((socket, next) => {
+  io.use(async (socket, next) => {
     try {
       const token =
         (socket.handshake.auth?.token as string | undefined) ||
@@ -40,8 +40,23 @@ export function initPortalSocket(server: HttpServer): Server {
         return next(new Error('Unauthorized'));
       }
 
-      const payload = jwt.verify(token, env.jwtSecret) as AuthPayload;
-      socket.data.user = payload;
+      // Same verification path as the HTTP middleware: issuer/audience must
+      // match, and the session must not have been revoked since the token was
+      // minted. Sockets otherwise stay open after a forced sign-out.
+      const payload = verifyAccessToken(token);
+
+      const state = await getUserState(payload.id);
+      if (!state || state.status !== 'active' || (payload.tv ?? 0) !== state.tokenVersion) {
+        return next(new Error('Unauthorized'));
+      }
+
+      socket.data.user = {
+        id: payload.id,
+        role: state.role as AuthPayload['role'],
+        customerId: payload.customerId,
+        tv: payload.tv,
+        sid: payload.sid,
+      } satisfies AuthPayload;
       next();
     } catch {
       next(new Error('Unauthorized'));

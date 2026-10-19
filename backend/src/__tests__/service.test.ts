@@ -3,7 +3,6 @@ import { describe, expect, it } from 'vitest';
 import mongoose from 'mongoose';
 import { createApp } from '../app';
 import { registerAdminAndGetToken } from './helpers/auth';
-import { Service } from '../models/Service';
 import { Order } from '../models/Order';
 import { Customer } from '../models/Customer';
 

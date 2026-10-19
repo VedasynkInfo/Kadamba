@@ -15,7 +15,7 @@ import {
 } from 'recharts';
 import { AdminHorizonBanner } from '../components/AdminHorizonBanner';
 import { adminBanners } from '../data';
-import { Button, Spinner } from '@/components/ui';
+import { Button, Select, Spinner } from '@/components/ui';
 import { cn } from '@/utils/cn';
 import {
   reportsApi,
@@ -142,8 +142,8 @@ export default function ReportDetailPage() {
                 className={cn(
                   'px-3 py-1.5 text-xs font-medium rounded border transition',
                   preset === key
-                    ? 'bg-black text-cream border-black'
-                    : 'border-black/15 text-black/60 hover:border-black/40',
+                    ? 'bg-[var(--admin-primary,#b59410)] text-[var(--admin-primary-text,#ffffff)] border-transparent font-bold shadow-xs'
+                    : 'border-current/15 opacity-70 hover:opacity-100 hover:border-current/40',
                 )}
               >
                 {label}
@@ -177,15 +177,15 @@ export default function ReportDetailPage() {
             {meta?.needsGroupBy && (
               <label className="text-xs text-black/55">
                 Group by
-                <select
+                <Select
                   value={groupBy}
                   onChange={(e) => setGroupBy(e.target.value as GroupBy)}
-                  className="mt-1 block rounded border border-black/15 bg-white px-2 py-1.5 text-sm text-black"
-                >
-                  <option value="day">Day</option>
-                  <option value="week">Week</option>
-                  <option value="month">Month</option>
-                </select>
+                  options={[
+                    { value: 'day', label: 'Day' },
+                    { value: 'week', label: 'Week' },
+                    { value: 'month', label: 'Month' },
+                  ]}
+                />
               </label>
             )}
             <Button variant="secondary" onClick={() => setRunKey((k) => k + 1)}>

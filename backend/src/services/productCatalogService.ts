@@ -1,6 +1,7 @@
 import { ProductCategory, IProductCategory } from '../models/ProductCategory';
 import { ProductType, IProductType } from '../models/ProductType';
 import { seedData } from './measurementTemplateService';
+import { searchRegex } from '../utils/query';
 
 export async function listCategories(): Promise<IProductCategory[]> {
   return ProductCategory.find().sort({ sortOrder: 1, name: 1 });
@@ -50,8 +51,8 @@ export async function listProductTypes(
   }
 
   if (filters.search) {
-    const regex = new RegExp(filters.search.trim(), 'i');
-    query.$or = [{ name: regex }, { code: regex }];
+    const regex = searchRegex(filters.search);
+    if (regex) query.$or = [{ name: regex }, { code: regex }];
   }
 
   const skip = (page - 1) * limit;

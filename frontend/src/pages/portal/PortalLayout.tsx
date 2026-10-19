@@ -6,6 +6,7 @@ import { PortalNotifyProvider, usePortalNotify } from '@/hooks/usePortalNotifySo
 import { portalApi } from '@/services/portal/portalService';
 import { cn } from '@/utils/cn';
 import { PageMeta } from '@/seo';
+import { useTheme } from '@/context/ThemeContext';
 
 const nav = [
   { to: '/portal/dashboard', label: 'Home', end: true },
@@ -17,8 +18,17 @@ const nav = [
 ];
 
 function RequirePortal({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated } = usePortalAuth();
+  const { isAuthenticated, loading } = usePortalAuth();
   const location = useLocation();
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#0c0a08]">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-gold/30 border-t-gold" />
+      </div>
+    );
+  }
+
   if (!isAuthenticated) {
     return <Navigate to="/portal/login" replace state={{ from: location.pathname }} />;
   }
@@ -28,6 +38,8 @@ function RequirePortal({ children }: { children: React.ReactNode }) {
 function PortalShell() {
   const { user, logout } = usePortalAuth();
   const notify = usePortalNotify();
+  const { logoDarkUrl, logoUrl } = useTheme();
+  const activeLogo = logoDarkUrl || logoUrl;
   const [unreadChat, setUnreadChat] = useState(0);
 
   const refreshUnread = useCallback(async () => {
@@ -55,13 +67,19 @@ function PortalShell() {
     <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_#2a2118_0%,_#0c0a08_55%)] text-cream">
       <header className="border-b border-gold/20 bg-black/40 backdrop-blur-md">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-          <Link to="/portal/dashboard" className="min-w-0">
-            <p className="font-heading text-xl tracking-wide text-gold sm:text-2xl">
-              {brand.shortName}
-            </p>
-            <p className="truncate text-[0.62rem] uppercase tracking-[0.28em] text-cream/50">
-              Customer portal · {brand.location}
-            </p>
+          <Link to="/portal/dashboard" className="flex items-center gap-3 min-w-0">
+            {activeLogo ? (
+              <img src={activeLogo} alt={brand.shortName} className="h-8 w-auto object-contain" />
+            ) : (
+              <p className="font-heading text-xl tracking-wide text-gold sm:text-2xl">
+                {brand.shortName}
+              </p>
+            )}
+            <div>
+              <p className="truncate text-[0.62rem] uppercase tracking-[0.28em] text-cream/50">
+                Customer portal · {brand.location}
+              </p>
+            </div>
           </Link>
           <div className="flex items-center gap-3 text-right">
             <div className="hidden sm:block">

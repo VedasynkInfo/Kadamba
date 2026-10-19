@@ -87,6 +87,30 @@ export const leadsAdminApi = {
     return data.data!;
   },
 
+  scheduleFollowUp: async (
+    id: string,
+    payload: {
+      scheduledAt: string;
+      type?: 'call' | 'whatsapp' | 'email' | 'in_person_consultation';
+      notes?: string;
+    },
+  ) => {
+    const { data } = await api.post<ApiResponse<Lead>>(`/leads/${id}/follow-ups`, payload);
+    return data.data!;
+  },
+
+  completeFollowUp: async (
+    id: string,
+    followUpId: string,
+    payload: { outcome?: string; notes?: string },
+  ) => {
+    const { data } = await api.patch<ApiResponse<Lead>>(
+      `/leads/${id}/follow-ups/${followUpId}/complete`,
+      payload,
+    );
+    return data.data!;
+  },
+
   exportCsv: async (params?: Record<string, string>) => {
     const { data } = await api.get<string>('/leads/export', {
       params,

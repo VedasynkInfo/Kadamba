@@ -10,12 +10,14 @@
 @theme {
   --color-black: #000000;
   --color-gold: #ffd700;
+  --color-gold-dark: #8a6d2f;
   --color-cream: #fffdd0;
   --color-elevated: #111111;
   --color-muted: rgba(255, 253, 208, 0.7);
 
   --font-heading: 'Playfair Display', Georgia, serif;
-  --font-body: 'Inter', system-ui, sans-serif;
+  --font-body: 'Manrope', 'Inter', system-ui, sans-serif;
+  --font-admin: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   --text-h1: 3rem;
   --text-h2: 2.25rem;
@@ -39,6 +41,7 @@
 :root {
   --color-black: #000000;
   --color-gold: #ffd700;
+  --color-gold-dark: #8a6d2f;
   --color-cream: #fffdd0;
   --color-dark-bg: #000000;
   --color-light-bg: #fffdd0;
@@ -47,8 +50,29 @@
   --color-secondary-text: #ffd700;
   --color-muted: rgba(255, 253, 208, 0.7);
 
+  /* Dynamic Theming tokens (overridable at runtime from Settings) */
+  --color-primary: #000000;
+  --color-primary-hover: #1a1a1a;
+  --color-primary-text: #ffffff;
+  --color-accent: #b59410;
+  --public-bg: #ffffff;
+  --public-text: #171717;
+  --public-card: #ffffff;
+  --public-card-text: #171717;
+  --public-surface: #fafafa;
+  --admin-bg: #0b0f17;
+  --admin-sidebar: #111827;
+  --admin-sidebar-text: #f3f4f6;
+  --admin-text: #f3f4f6;
+  --admin-card: #1f2937;
+  --admin-card-text: #f3f4f6;
+  --admin-primary: #b59410;
+  --admin-primary-text: #000000;
+  --admin-accent: #ffd700;
+
   --font-heading: 'Playfair Display', Georgia, serif;
-  --font-body: 'Inter', system-ui, sans-serif;
+  --font-body: 'Manrope', 'Inter', system-ui, sans-serif;
+  --font-admin: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-size-h1: 3rem;
   --font-size-h2: 2.25rem;
   --font-size-h3: 1.5rem;
@@ -87,8 +111,8 @@ body {
   font-size: var(--font-size-body);
   line-height: 1.65;
   letter-spacing: 0.01em;
-  background-color: var(--color-cream);
-  color: var(--color-black);
+  background-color: var(--public-bg, var(--color-cream));
+  color: var(--public-text, var(--color-black));
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -188,3 +212,111 @@ body {
 .animate-toast-in {
   animation: toast-in var(--duration-base) var(--ease-luxury) both;
 }
+
+.admin-scope {
+  background-color: var(--admin-bg, #0b0f17);
+  color: var(--admin-text, #f3f4f6);
+}
+
+.admin-scope label {
+  color: var(--admin-text, #f3f4f6);
+}
+
+.admin-scope .text-black {
+  color: var(--admin-text, #f3f4f6);
+}
+
+.admin-scope .text-black\/60,
+.admin-scope .text-black\/70,
+.admin-scope .text-black\/80 {
+  color: var(--admin-text, #f3f4f6);
+  opacity: 0.75;
+}
+
+.admin-scope .text-black\/40,
+.admin-scope .text-black\/45,
+.admin-scope .text-black\/50 {
+  color: var(--admin-text, #f3f4f6);
+  opacity: 0.55;
+}
+
+/* Ensure any legacy text-cream in admin inherits the theme's text color */
+.admin-scope .text-cream {
+  color: inherit;
+}
+
+.admin-scope .text-cream\/80,
+.admin-scope .text-cream\/75,
+.admin-scope .text-cream\/70 {
+  color: inherit;
+  opacity: 0.75;
+}
+
+.admin-scope .text-cream\/65,
+.admin-scope .text-cream\/60,
+.admin-scope .text-cream\/55,
+.admin-scope .text-cream\/50 {
+  color: inherit;
+  opacity: 0.55;
+}
+
+.admin-scope .text-cream\/45,
+.admin-scope .text-cream\/40,
+.admin-scope .text-cream\/35 {
+  color: inherit;
+  opacity: 0.4;
+}
+
+.admin-scope .border-black\/10,
+.admin-scope .border-black\/15,
+.admin-scope .border-black\/20 {
+  border-color: var(--admin-border, rgba(128, 128, 128, 0.2));
+}
+
+.admin-scope .bg-black\/\[0\.01\],
+.admin-scope .bg-black\/\[0\.02\],
+.admin-scope .bg-black\/5 {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+.admin-scope input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+.admin-scope select,
+.admin-scope textarea {
+  background-color: var(--admin-card, #1f2937);
+  color: var(--admin-card-text, var(--admin-text, #f3f4f6));
+  border-color: var(--admin-border, rgba(128, 128, 128, 0.25));
+}
+
+.admin-scope input::placeholder,
+.admin-scope textarea::placeholder {
+  color: var(--admin-card-text, var(--admin-text, #f3f4f6));
+  opacity: 0.45;
+}
+
+/* Aceternity UI & 21st.dev Luxury Light-Beam & Border Highlights */
+.card-beam {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-beam::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(128, 128, 128, 0.3) 50%, transparent 100%);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Tactile Micro-Press & Smooth Transitions */
+.btn-modern {
+  transition: all var(--duration-fast) var(--ease-luxury);
+}
+
+.btn-modern:active {
+  transform: scale(0.98);
+}
+
+

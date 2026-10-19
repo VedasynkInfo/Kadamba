@@ -7,7 +7,7 @@ import {
   removeGallery,
   updateGallery,
 } from '../controllers/galleryController';
-import { authenticate, authorize } from '../middleware/auth';
+import { authenticate, authorize, requirePermission } from '../middleware/auth';
 import { optionalAuthenticate } from '../middleware/optionalAuth';
 import { validateRequest } from '../middleware/validate';
 import { GALLERY_CATEGORIES } from '../models/GalleryItem';
@@ -20,7 +20,8 @@ router.get('/:idOrSlug', optionalAuthenticate, getGallery);
 router.post(
   '/',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('content:write'),
   [
     body('title').trim().isLength({ min: 2, max: 160 }).withMessage('Title is required'),
     body('category').isIn([...GALLERY_CATEGORIES]).withMessage('Invalid category'),
@@ -39,7 +40,8 @@ router.post(
 router.put(
   '/:id',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('content:write'),
   [param('id').isMongoId().withMessage('Invalid id')],
   validateRequest,
   updateGallery,
@@ -48,7 +50,8 @@ router.put(
 router.delete(
   '/:id',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('content:write'),
   [param('id').isMongoId().withMessage('Invalid id')],
   validateRequest,
   removeGallery,

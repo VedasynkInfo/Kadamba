@@ -2,7 +2,6 @@ import request from 'supertest';
 import { describe, expect, it } from 'vitest';
 import { createApp } from '../app';
 import { registerAdminAndGetToken } from './helpers/auth';
-import { Customer } from '../models/Customer';
 import { Order } from '../models/Order';
 import { MeasurementProfile } from '../models/MeasurementProfile';
 

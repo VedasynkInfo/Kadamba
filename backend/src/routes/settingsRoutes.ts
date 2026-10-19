@@ -5,7 +5,7 @@ import {
   getSettingsHandler,
   updateSettingsHandler,
 } from '../controllers/settingsController';
-import { authenticate, authorize } from '../middleware/auth';
+import { authenticate, authorize, requirePermission } from '../middleware/auth';
 import { validateRequest } from '../middleware/validate';
 
 const router = Router();
@@ -16,7 +16,8 @@ router.get('/', getSettingsHandler);
 router.put(
   '/',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('content:write'),
   [
     body('studioName').optional().trim().isLength({ min: 2, max: 120 }),
     body('location').optional().trim().isLength({ min: 2, max: 80 }),

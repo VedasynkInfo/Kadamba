@@ -1,13 +1,9 @@
 import mongoose, { Document, Schema } from 'mongoose';
+import { MEASUREMENT_STATUSES } from '../shared/enums';
+import type { MeasurementStatus } from '../shared/enums';
 
-export const MEASUREMENT_STATUSES = [
-  'draft',
-  'active',
-  'archived',
-  'pending_approval',
-] as const;
-
-export type MeasurementStatus = (typeof MEASUREMENT_STATUSES)[number];
+export { MEASUREMENT_STATUSES };
+export type { MeasurementStatus };
 
 export interface IMeasurementVersion {
   values: Record<string, unknown>;

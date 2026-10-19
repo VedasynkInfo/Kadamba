@@ -86,7 +86,24 @@ export interface IWebsiteSettings extends Document {
   };
   theme: {
     primary: string;
+    primaryHover?: string;
+    primaryText?: string;
     accent: string;
+    publicBg?: string;
+    publicText?: string;
+    publicCard?: string;
+    publicCardText?: string;
+    publicSurface?: string;
+    adminBg?: string;
+    adminText?: string;
+    adminCard?: string;
+    adminCardText?: string;
+    adminSidebar?: string;
+    adminSidebarText?: string;
+    adminPrimary?: string;
+    adminPrimaryText?: string;
+    adminAccent?: string;
+    fontFamily?: string;
   };
   createdAt: Date;
   updatedAt: Date;
@@ -256,7 +273,24 @@ const websiteSettingsSchema = new Schema<IWebsiteSettings>(
       type: new Schema(
         {
           primary: { type: String, default: '#000000' },
+          primaryHover: { type: String, default: '#1a1a1a' },
+          primaryText: { type: String, default: '#ffffff' },
           accent: { type: String, default: '#b59410' },
+          publicBg: { type: String, default: '#ffffff' },
+          publicText: { type: String, default: '#171717' },
+          publicCard: { type: String, default: '#ffffff' },
+          publicCardText: { type: String, default: '#171717' },
+          publicSurface: { type: String, default: '#fafafa' },
+          adminBg: { type: String, default: '#0b0f17' },
+          adminText: { type: String, default: '#f3f4f6' },
+          adminCard: { type: String, default: '#1f2937' },
+          adminCardText: { type: String, default: '#f3f4f6' },
+          adminSidebar: { type: String, default: '#111827' },
+          adminSidebarText: { type: String, default: '#f3f4f6' },
+          adminPrimary: { type: String, default: '#b59410' },
+          adminPrimaryText: { type: String, default: '#000000' },
+          adminAccent: { type: String, default: '#ffd700' },
+          fontFamily: { type: String, default: 'Manrope, sans-serif' },
         },
         { _id: false },
       ),

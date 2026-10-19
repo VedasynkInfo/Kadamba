@@ -5,14 +5,16 @@ import { useLeads } from '@/pages/leads/LeadsContext';
 import { AdminHorizonBanner } from '../components/AdminHorizonBanner';
 import { adminBanners } from '../data';
 import { ordersApi } from '@/services/orders/orderService';
+import { useToast } from '@/components/ui';
 import { useState } from 'react';
 
 /**
  * Single lead detail inside Phase 12 console.
  */
 export default function AdminLeadDetailPage() {
+  const { toast } = useToast();
   const { id } = useParams<{ id: string }>();
-  const { getById, updateStatus, updateAssignee, addNote } = useLeads();
+  const { getById, updateStatus, updateAssignee, addNote, scheduleFollowUp, completeFollowUp } = useLeads();
   const navigate = useNavigate();
   const [converting, setConverting] = useState(false);
   const lead = id ? getById(id) : undefined;
@@ -28,7 +30,7 @@ export default function AdminLeadDetailPage() {
       const order = await ordersApi.convertFromLead(lead.id);
       navigate(`/admin/orders/${order.id}`);
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to convert lead to order');
+      toast({ title: err.response?.data?.message || 'Failed to convert lead to order', tone: 'error' });
     } finally {
       setConverting(false);
     }
@@ -48,6 +50,8 @@ export default function AdminLeadDetailPage() {
         onAssignee={(assignee) => updateAssignee(lead.id, assignee)}
         onAddNote={(body) => addNote(lead.id, body)}
         onConvertToOrder={handleConvertToOrder}
+        onScheduleFollowUp={(payload) => scheduleFollowUp(lead.id, payload)}
+        onCompleteFollowUp={(followUpId) => completeFollowUp(lead.id, followUpId, { outcome: 'Completed by admin' })}
       />
     </>
   );

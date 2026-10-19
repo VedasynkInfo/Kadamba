@@ -195,6 +195,20 @@ export async function updateService(id: string, input: Record<string, unknown>) 
     existing.cardImage = existing.bannerImage || '';
   }
 
+  // If metaTitle was updated but ogTitle/twitterTitle was not explicitly provided in input, sync them
+  if (input.metaTitle && !input.ogTitle) {
+    existing.ogTitle = String(input.metaTitle);
+  }
+  if (input.metaTitle && !input.twitterTitle) {
+    existing.twitterTitle = String(input.metaTitle);
+  }
+  if (input.metaDescription && !input.ogDescription) {
+    existing.ogDescription = String(input.metaDescription);
+  }
+  if (input.metaDescription && !input.twitterDescription) {
+    existing.twitterDescription = String(input.metaDescription);
+  }
+
   const rawDocObj = existing.toObject() as unknown as Record<string, unknown>;
   await applySeoDefaults(rawDocObj);
   for (const field of [

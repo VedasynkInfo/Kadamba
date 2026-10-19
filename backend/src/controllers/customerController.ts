@@ -4,6 +4,7 @@ import { Order } from '../models/Order';
 import { MeasurementProfile } from '../models/MeasurementProfile';
 import { asyncHandler } from '../utils/asyncHandler';
 import { parsePagination, buildPaginationMeta } from '../utils/pagination';
+import { searchRegex } from '../utils/query';
 
 export const listCustomersHandler = asyncHandler(async (req: Request, res: Response) => {
   const { page, limit, skip } = parsePagination(req.query);
@@ -12,21 +13,23 @@ export const listCustomersHandler = asyncHandler(async (req: Request, res: Respo
   // Query search
   const q = typeof req.query.q === 'string' ? req.query.q.trim() : '';
   if (q) {
-    const regex = new RegExp(q, 'i');
-    filter.$or = [
-      { name: regex },
-      { phone: regex },
-      { email: regex },
-      { 'address.locality': regex },
-      { tags: regex },
-    ];
+    const regex = searchRegex(q);
+    if (regex) {
+      filter.$or = [
+        { name: regex },
+        { phone: regex },
+        { email: regex },
+        { 'address.locality': regex },
+        { tags: regex },
+      ];
+    }
   }
 
   // Filter params
   const { locality, tag, portalStatus, source, hasOpenOrders } = req.query;
 
   if (typeof locality === 'string' && locality.trim()) {
-    filter['address.locality'] = new RegExp(locality.trim(), 'i');
+    filter['address.locality'] = searchRegex(locality.trim());
   }
 
   if (typeof tag === 'string' && tag.trim()) {

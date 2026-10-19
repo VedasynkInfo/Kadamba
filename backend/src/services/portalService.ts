@@ -11,7 +11,9 @@ import { PortalMessage } from '../models/PortalMessage';
 import { ProductType } from '../models/ProductType';
 import { User } from '../models/User';
 import { ApiError } from '../utils/ApiError';
+import { escapeRegex } from '../utils/query';
 import { createProfile } from './measurementProfileService';
+import { invalidateUserState } from './tokenService';
 
 const REFERENCE_ID_RE = /^KDS-\d{4}-\d{4}$/;
 const GENERIC_ACTIVATE_ERROR = 'Unable to verify Reference ID. Check your details and try again.';
@@ -60,17 +62,6 @@ function verifyActivationToken(token: string): ActivationPayload {
   } catch {
     throw new ApiError(400, GENERIC_ACTIVATE_ERROR);
   }
-}
-
-function signCustomerToken(userId: string, customerId: string): string {
-  const options: SignOptions = {
-    expiresIn: env.jwtExpiresIn as SignOptions['expiresIn'],
-  };
-  return jwt.sign(
-    { id: userId, role: 'customer', customerId },
-    env.jwtSecret,
-    options,
-  );
 }
 
 function sanitizePortalUser(user: {
@@ -298,20 +289,67 @@ export async function setPortalPassword(input: {
 
   await user.save();
 
-  customer.portalUserId = String(user._id);
-  customer.portalStatus = 'active';
-  if (!customer.email) customer.email = email;
-  await customer.save();
+  // Account + portal link must commit together, otherwise a crash leaves a
+  // login with no customer (or vice versa).
+  const { withTransaction } = await import('../utils/transaction');
+  await withTransaction(async (session) => {
+    await Customer.updateOne(
+      { _id: customer._id },
+      {
+        $set: {
+          portalUserId: user!._id,
+          portalStatus: 'active',
+          ...(customer.email ? {} : { email }),
+        },
+      },
+      { session: session ?? undefined },
+    );
+  });
 
-  const token = signCustomerToken(String(user._id), String(customer._id));
-  return { user: sanitizePortalUser(user), token };
+  const { createSession } = await import('./tokenService');
+  const session = await createSession(user);
+  invalidateUserState(String(user._id));
+
+  return {
+    user: sanitizePortalUser(user),
+    token: session.accessToken,
+    refreshToken: session.refreshToken,
+    expiresIn: session.expiresInSeconds,
+  };
 }
 
-export async function loginPortal(input: { email: string; password: string }) {
-  const user = await User.findOne({ email: input.email.toLowerCase(), role: 'customer' }).select('+password');
-  if (!user || !(await user.comparePassword(input.password))) {
+export async function loginPortal(
+  input: { email: string; password: string },
+  context: { userAgent?: string; ip?: string } = {},
+) {
+  const { env: appEnv } = await import('../config/env');
+  const user = await User.findOne({ email: input.email.toLowerCase(), role: 'customer' }).select(
+    '+password',
+  );
+
+  if (!user) {
+    // Equalise timing with the admin login path.
+    const bcrypt = await import('bcryptjs');
+    await bcrypt.default.compare(input.password, '$2b$12$C6UzMDM.H6dfI/f/IKcEe.7Q9p9p1vJ8x0q3Ff4y5T6u7V8w9X0aB');
     throw new ApiError(401, 'Invalid email or password');
   }
+
+  if (user.lockedUntil && user.lockedUntil.getTime() > Date.now()) {
+    throw new ApiError(423, 'Too many failed attempts. Try again later.');
+  }
+
+  if (!(await user.comparePassword(input.password))) {
+    const attempts = (user.failedLoginAttempts ?? 0) + 1;
+    if (attempts >= appEnv.security.maxFailedLogins) {
+      user.lockedUntil = new Date(Date.now() + appEnv.security.lockoutMinutes * 60_000);
+      user.failedLoginAttempts = 0;
+    } else {
+      user.failedLoginAttempts = attempts;
+    }
+    await user.save();
+    throw new ApiError(401, 'Invalid email or password');
+  }
+
   if (user.status === 'disabled') {
     throw new ApiError(403, 'Account is locked. Contact the boutique.');
   }
@@ -319,11 +357,21 @@ export async function loginPortal(input: { email: string; password: string }) {
     throw new ApiError(403, 'Portal account is incomplete. Contact the boutique.');
   }
 
+  user.failedLoginAttempts = 0;
+  user.lockedUntil = undefined;
   user.lastLoginAt = new Date();
   await user.save();
 
-  const token = signCustomerToken(String(user._id), String(user.customerId));
-  return { user: sanitizePortalUser(user), token };
+  const { createSession, cacheUserState } = await import('./tokenService');
+  cacheUserState(user);
+  const session = await createSession(user, context);
+
+  return {
+    user: sanitizePortalUser(user),
+    token: session.accessToken,
+    refreshToken: session.refreshToken,
+    expiresIn: session.expiresInSeconds,
+  };
 }
 
 export async function getPortalDashboard(customerId: string) {
@@ -850,7 +898,7 @@ export async function approveMeasurementProfile(id: string) {
   // Save approved profile under the customer's name for admin clarity
   if (customerName) {
     const baseName = profile.profileName
-      .replace(new RegExp(`^${customerName}\\s*[—-]\\s*`, 'i'), '')
+      .replace(new RegExp(`^${escapeRegex(customerName)}\\s*[—-]\\s*`, 'i'), '')
       .replace(/\s*\(update\)\s*$/i, '')
       .trim();
     profile.profileName = `${customerName} — ${baseName || profile.productTypeCode}`;

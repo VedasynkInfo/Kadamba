@@ -83,14 +83,22 @@ export function Drawer({
         tabIndex={-1}
         onKeyDown={onPanelKeyDown}
         className={cn(
-          'absolute top-0 flex h-full w-full max-w-[24rem] flex-col bg-black text-cream shadow-[var(--shadow-soft)] outline-none',
+          'absolute top-0 flex h-full w-full max-w-[24rem] flex-col shadow-[var(--shadow-soft)] outline-none border-l',
           'transition-transform duration-300 ease-[var(--ease-luxury)]',
           side === 'right' ? 'right-0 animate-fade-in-up' : 'left-0 animate-fade-in-up',
           className,
         )}
+        style={{
+          backgroundColor: 'var(--admin-card, var(--public-card, #0a0a0a))',
+          color: 'var(--admin-card-text, var(--public-card-text, #f3f4f6))',
+          borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))',
+        }}
       >
-        <div className="flex items-center justify-between border-b border-gold/20 px-5 py-4">
-          <h2 id={titleId} className="font-heading text-xl text-gold">
+        <div
+          className="flex items-center justify-between border-b px-5 py-4"
+          style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.2))' }}
+        >
+          <h2 id={titleId} className="font-heading text-xl text-[var(--admin-primary,var(--color-accent,#b59410))]">
             {title}
           </h2>
           <Button
@@ -98,7 +106,7 @@ export function Drawer({
             size="sm"
             onClick={() => onCloseRef.current()}
             aria-label="Close drawer"
-            className="!text-cream hover:!bg-white/10"
+            className="!text-inherit opacity-70 hover:opacity-100 hover:!bg-current/[0.08]"
           >
             ✕
           </Button>

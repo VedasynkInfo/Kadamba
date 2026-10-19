@@ -14,7 +14,7 @@ import {
   getCustomerRepeatHandler,
   exportReportHandler,
 } from '../controllers/reportController';
-import { authenticate, authorize } from '../middleware/auth';
+import { authenticate, authorize, requirePermission } from '../middleware/auth';
 import { validateRequest } from '../middleware/validate';
 import { REPORT_TYPES } from '../services/reportService';
 
@@ -32,7 +32,8 @@ const optionalAsOf = [
 router.get(
   '/orders-by-status',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('reports:read'),
   dateRangeValidators,
   validateRequest,
   getOrdersByStatusHandler,
@@ -41,7 +42,8 @@ router.get(
 router.get(
   '/deliveries-trials',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('reports:read'),
   dateRangeValidators,
   validateRequest,
   getDeliveriesTrialsHandler,
@@ -50,7 +52,8 @@ router.get(
 router.get(
   '/revenue-trend',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('reports:read'),
   [
     ...dateRangeValidators,
     query('groupBy').optional().isIn(['day', 'week', 'month']).withMessage('groupBy must be day, week, or month'),
@@ -62,7 +65,8 @@ router.get(
 router.get(
   '/revenue-by-product',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('reports:read'),
   dateRangeValidators,
   validateRequest,
   getRevenueByProductHandler,
@@ -71,7 +75,8 @@ router.get(
 router.get(
   '/revenue-by-service',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('reports:read'),
   dateRangeValidators,
   validateRequest,
   getRevenueByServiceHandler,
@@ -80,7 +85,8 @@ router.get(
 router.get(
   '/outstanding',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('reports:read'),
   optionalAsOf,
   validateRequest,
   getOutstandingHandler,
@@ -89,7 +95,8 @@ router.get(
 router.get(
   '/expenses-salaries',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('reports:read'),
   dateRangeValidators,
   validateRequest,
   getExpensesSalariesHandler,
@@ -98,7 +105,8 @@ router.get(
 router.get(
   '/pnl',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('reports:read'),
   dateRangeValidators,
   validateRequest,
   getPnlHandler,
@@ -107,7 +115,8 @@ router.get(
 router.get(
   '/leads-conversion',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('reports:read'),
   dateRangeValidators,
   validateRequest,
   getLeadsConversionHandler,
@@ -116,7 +125,8 @@ router.get(
 router.get(
   '/staff-workload',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('reports:read'),
   dateRangeValidators,
   validateRequest,
   getStaffWorkloadHandler,
@@ -125,7 +135,8 @@ router.get(
 router.get(
   '/customer-repeat',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('reports:read'),
   dateRangeValidators,
   validateRequest,
   getCustomerRepeatHandler,
@@ -134,7 +145,8 @@ router.get(
 router.get(
   '/export/:type',
   authenticate,
-  authorize('admin'),
+  authorize('admin', 'staff'),
+  requirePermission('reports:read'),
   [
     param('type').isIn([...REPORT_TYPES]).withMessage('Invalid report type'),
     query('from').optional().isISO8601(),

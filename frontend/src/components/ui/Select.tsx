@@ -32,7 +32,7 @@ export function Select({
   return (
     <div className="flex w-full flex-col gap-1.5">
       {label ? (
-        <label htmlFor={selectId} className="text-sm font-medium text-black">
+        <label htmlFor={selectId} className="text-sm font-medium text-inherit opacity-90">
           {label}
         </label>
       ) : null}
@@ -41,11 +41,12 @@ export function Select({
         disabled={disabled}
         aria-invalid={error ? true : undefined}
         className={cn(
-          'w-full appearance-none rounded-md border bg-cream px-3 py-2.5 text-sm text-black',
+          'w-full appearance-none rounded-lg border px-3.5 py-2 text-sm transition-all',
+          'bg-[var(--public-card,#ffffff)] text-[var(--public-card-text,#171717)] border-black/15',
           'bg-[length:1rem] bg-[right_0.75rem_center] bg-no-repeat',
           'focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30',
           'disabled:cursor-not-allowed disabled:opacity-50',
-          error ? 'border-red-600' : 'border-black/15',
+          error ? 'border-red-600' : undefined,
           className,
         )}
         style={{

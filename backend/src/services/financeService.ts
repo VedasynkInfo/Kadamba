@@ -1,16 +1,16 @@
 import mongoose from 'mongoose';
-import { Payment, IPayment, PaymentMethod } from '../models/Payment';
-import { Expense, IExpense, ExpenseCategory } from '../models/Expense';
-import { SalaryPayment, ISalaryPayment } from '../models/SalaryPayment';
+import { Payment, PaymentMethod } from '../models/Payment';
+import { Expense, ExpenseCategory } from '../models/Expense';
+import { SalaryPayment } from '../models/SalaryPayment';
 import { Order } from '../models/Order';
 import { Staff } from '../models/Staff';
 import { ApiError } from '../utils/ApiError';
 import { toDto } from '../utils/serialize';
 import { parsePagination, buildPaginationMeta } from '../utils/pagination';
+import { searchRegex } from '../utils/query';
 import {
   computeBillStatus,
   formatInvoiceNumber,
-  getInvoiceDetail,
 } from './invoiceService';
 
 export { getInvoiceDetail } from './invoiceService';
@@ -47,42 +47,68 @@ export interface RecordSalaryInput {
 }
 
 export async function recordPayment(input: RecordPaymentInput) {
-  const order = await Order.findById(input.orderId);
-  if (!order) {
-    throw new ApiError(404, 'Order not found');
-  }
+  const { logger } = await import('../config/logger');
+  const { withTransaction } = await import('../utils/transaction');
 
-  // Calculate current total paid from database to avoid caching issues
-  const existingPayments = await Payment.find({ orderId: order._id });
-  const currentPaidSum = existingPayments.reduce((sum, p) => sum + p.amount, 0);
+  const { payment, order } = await withTransaction(async (session) => {
+    const order = await Order.findById(input.orderId).session(session ?? null);
+    if (!order) {
+      throw new ApiError(404, 'Order not found');
+    }
 
-  const remaining = order.paymentSummary.totalQuoted - currentPaidSum;
-  if (input.amount > remaining && !input.bypassBalanceCheck) {
-    throw new ApiError(400, 'Payment exceeds remaining balance', [{
-      remaining,
-      message: `Payment amount ₹${input.amount} exceeds the remaining balance ₹${remaining}. Please confirm override if intended.`,
-    }]);
-  }
+    // Recompute from the database inside the transaction so two concurrent
+    // payments can never both pass the balance check against a stale sum.
+    const existingPayments = await Payment.find({ orderId: order._id }).session(
+      session ?? null,
+    );
+    const currentPaidSum = existingPayments.reduce((sum, p) => sum + p.amount, 0);
 
-  const payment = new Payment({
-    ...input,
-    paidAt: input.paidAt ? new Date(input.paidAt) : new Date(),
+    const remaining = order.paymentSummary.totalQuoted - currentPaidSum;
+    if (input.amount > remaining && !input.bypassBalanceCheck) {
+      throw new ApiError(400, 'Payment exceeds remaining balance', [
+        {
+          remaining,
+          message: `Payment amount ₹${input.amount} exceeds the remaining balance ₹${remaining}. Please confirm override if intended.`,
+        },
+      ]);
+    }
+
+    if (input.amount > remaining && input.bypassBalanceCheck) {
+      logger.warn(
+        {
+          orderId: String(order._id),
+          orderNumber: order.orderNumber,
+          amount: input.amount,
+          remaining,
+          recordedBy: input.recordedBy,
+        },
+        'Overpayment recorded with bypassBalanceCheck',
+      );
+    }
+
+    const payment = new Payment({
+      ...input,
+      paidAt: input.paidAt ? new Date(input.paidAt) : new Date(),
+    });
+    await payment.save({ session: session ?? undefined });
+
+    // Recompute the summary from every persisted payment (including this one).
+    const allPayments = await Payment.find({ orderId: order._id }).session(session ?? null);
+    const totalPaid = allPayments.reduce((sum, p) => sum + p.amount, 0);
+
+    order.paymentSummary.totalPaid = totalPaid;
+    order.paymentSummary.balance = Math.max(0, order.paymentSummary.totalQuoted - totalPaid);
+
+    if (order.paymentSummary.advance === 0 && allPayments.length > 0) {
+      // Pick the earliest payment as advance.
+      const sorted = [...allPayments].sort((a, b) => a.paidAt.getTime() - b.paidAt.getTime());
+      order.paymentSummary.advance = sorted[0].amount;
+    }
+
+    await order.save({ session: session ?? undefined });
+
+    return { payment, order };
   });
-  await payment.save();
-
-  // Update Order payment summary
-  const allPayments = await Payment.find({ orderId: order._id });
-  const totalPaid = allPayments.reduce((sum, p) => sum + p.amount, 0);
-  order.paymentSummary.totalPaid = totalPaid;
-  order.paymentSummary.balance = Math.max(0, order.paymentSummary.totalQuoted - totalPaid);
-  
-  if (order.paymentSummary.advance === 0 && allPayments.length > 0) {
-    // Pick the earliest payment as advance
-    const sorted = [...allPayments].sort((a, b) => a.paidAt.getTime() - b.paidAt.getTime());
-    order.paymentSummary.advance = sorted[0].amount;
-  }
-  
-  await order.save();
 
   const dto = toDto(payment);
 
@@ -322,7 +348,8 @@ export async function listExpenses(query: Record<string, any>) {
   }
 
   if (query.q) {
-    filter.title = new RegExp(String(query.q).replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&'), 'i');
+    const regex = searchRegex(String(query.q));
+    if (regex) filter.title = regex;
   }
 
   const [items, total] = await Promise.all([

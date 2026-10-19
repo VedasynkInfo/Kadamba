@@ -30,8 +30,19 @@ export interface LeadTimelineEvent {
   createdAt: string;
 }
 
+export interface LeadFollowUp {
+  id: string;
+  scheduledAt: string;
+  type: 'call' | 'whatsapp' | 'email' | 'in_person_consultation';
+  notes: string;
+  status: 'pending' | 'completed' | 'cancelled' | 'rescheduled';
+  completedAt?: string;
+  outcome?: string;
+  createdBy?: string;
+}
+
 /**
- * CRUD-ready lead record — maps to a future Mongo Lead model (Phase 13).
+ * CRUD-ready lead record — maps to Mongo Lead model.
  */
 export interface Lead {
   id: string;
@@ -52,6 +63,17 @@ export interface Lead {
   referenceId?: string;
   notes: LeadNote[];
   timeline: LeadTimelineEvent[];
+  score?: number;
+  quality?: 'hot' | 'warm' | 'cold';
+  scoreBreakdown?: {
+    budgetScore: number;
+    timelineScore: number;
+    serviceScore: number;
+    detailsScore: number;
+    contactScore: number;
+  };
+  followUps?: LeadFollowUp[];
+  nextFollowUpDate?: string;
   createdAt: string;
   updatedAt: string;
 }

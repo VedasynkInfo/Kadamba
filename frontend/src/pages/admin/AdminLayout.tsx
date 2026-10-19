@@ -5,11 +5,34 @@ import { useAuth } from '@/hooks/useAuth';
 import { AdminNotifyProvider, useAdminNotify } from '@/hooks/useAdminNotifySocket';
 import { brand } from '@/pages/home/data';
 import { LeadsProvider } from '@/pages/leads/LeadsContext';
+import { useTheme } from '@/context/ThemeContext';
 import { PageMeta, staticPageMeta } from '@/seo';
 import { cn } from '@/utils/cn';
 import { AdminContentProvider } from './AdminContentContext';
 import { adminNav } from './data';
 import { RequireAdmin } from './RequireAdmin';
+
+const navIcons: Record<string, string> = {
+  '/admin': '📊',
+  '/admin/gallery': '📸',
+  '/admin/services': '✂️',
+  '/admin/portfolio': '✨',
+  '/admin/blogs': '✍️',
+  '/admin/leads': '🎯',
+  '/admin/customers': '👥',
+  '/admin/products': '👗',
+  '/admin/orders': '📦',
+  '/admin/measurements': '📏',
+  '/admin/invoices': '🧾',
+  '/admin/payments': '💳',
+  '/admin/staff': '🧑‍🎨',
+  '/admin/finance': '📈',
+  '/admin/reports': '📋',
+  '/admin/settings': '⚙️',
+  '/admin/users': '🔐',
+  '/admin/audit': '📜',
+  '/admin/profile': '👤',
+};
 
 function NavBadge({ count }: { count: number }) {
   if (!count) return null;
@@ -22,6 +45,15 @@ function NavBadge({ count }: { count: number }) {
 
 function AdminNavLinks({ collapsed, mobile }: { collapsed?: boolean; mobile?: boolean }) {
   const { badges } = useAdminNotify();
+  const { user } = useAuth();
+
+  /** Admins see everything; staff only see what they can actually open. */
+  const visibleNav = adminNav.filter((item) => {
+    if (!item.permission) return true;
+    if (!user) return false;
+    if (user.role === 'admin') return true;
+    return (user.permissions ?? []).includes(item.permission);
+  });
 
   function badgeFor(to: string) {
     if (to.startsWith('/admin/leads')) return badges.leads;
@@ -31,35 +63,37 @@ function AdminNavLinks({ collapsed, mobile }: { collapsed?: boolean; mobile?: bo
 
   return (
     <>
-      {adminNav.map((item) => {
+      {visibleNav.map((item) => {
         const count = badgeFor(item.to);
+        const icon = navIcons[item.to] || '📁';
         return (
           <NavLink
             key={item.to}
             to={item.to}
             end={item.end}
             title={item.label}
+            style={({ isActive }) => ({
+              color: isActive ? 'var(--color-accent, #ffd700)' : 'var(--admin-sidebar-text, #f3f4f6)',
+              backgroundColor: isActive ? 'rgba(255, 215, 0, 0.12)' : undefined,
+            })}
             className={({ isActive }) =>
               cn(
+                'group flex items-center gap-2.5 transition rounded-md',
                 mobile
                   ? 'shrink-0 px-3 py-2 text-[0.65rem] uppercase tracking-[0.14em]'
-                  : 'rounded-sm px-3 py-2.5 text-sm transition',
-                !mobile && collapsed && 'px-2 text-center text-[0.65rem] tracking-wide',
-                mobile
-                  ? isActive
-                    ? 'text-gold'
-                    : 'text-cream/55'
-                  : isActive
-                    ? 'bg-gold/15 text-gold'
-                    : 'text-cream/65 hover:bg-cream/5 hover:text-cream',
+                  : 'px-3 py-2.5 text-sm',
+                !mobile && collapsed && 'justify-center px-2 py-2 text-center text-xs',
+                !isActive && 'opacity-75 hover:opacity-100 hover:bg-white/[0.06]',
+                isActive && 'font-semibold',
               )
             }
           >
-            {collapsed && !mobile ? (
-              item.label.slice(0, 1)
-            ) : (
-              <span className="inline-flex items-center">
-                {item.label}
+            <span className={cn('text-sm shrink-0', collapsed && !mobile && 'text-base')}>
+              {icon}
+            </span>
+            {collapsed && !mobile ? null : (
+              <span className="inline-flex flex-1 items-center justify-between">
+                <span className="truncate">{item.label}</span>
                 <NavBadge count={count} />
               </span>
             )}
@@ -75,8 +109,21 @@ function AdminNavLinks({ collapsed, mobile }: { collapsed?: boolean; mobile?: bo
  */
 export function AdminLayout() {
   const { user, logout } = useAuth();
+  const { logoDarkUrl, logoUrl } = useTheme();
   const navigate = useNavigate();
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(() => {
+    return localStorage.getItem('kadamba_admin_sidebar_collapsed') === 'true';
+  });
+
+  const activeLogo = logoDarkUrl || logoUrl;
+
+  const toggleCollapse = () => {
+    setCollapsed((prev) => {
+      const next = !prev;
+      localStorage.setItem('kadamba_admin_sidebar_collapsed', String(next));
+      return next;
+    });
+  };
 
   return (
     <RequireAdmin>
@@ -84,45 +131,61 @@ export function AdminLayout() {
       <AdminContentProvider>
         <AdminNotifyProvider>
           <LeadsProvider>
-            <div className="flex min-h-screen bg-[#0a0a0a] text-cream">
+            <div
+              className="flex min-h-screen font-admin"
+              style={{
+                backgroundColor: 'var(--admin-bg, #0b0f17)',
+                color: 'var(--admin-text, #f3f4f6)',
+              }}
+            >
               <aside
                 className={cn(
-                  'hidden shrink-0 flex-col border-r border-gold/15 bg-black transition-[width] duration-300 md:flex',
-                  collapsed ? 'w-[4.5rem]' : 'w-60',
+                  'hidden shrink-0 flex-col border-r border-white/10 transition-[width] duration-300 md:flex',
+                  collapsed ? 'w-[4.25rem]' : 'w-60',
                 )}
+                style={{
+                  backgroundColor: 'var(--admin-sidebar, #111827)',
+                  color: 'var(--admin-sidebar-text, #f3f4f6)',
+                }}
               >
-                <div className={cn('px-4 py-8', collapsed && 'px-3')}>
+                <div className={cn('px-4 py-6', collapsed && 'px-2 text-center')}>
                   {!collapsed ? (
-                    <>
-                      <p className="font-heading text-2xl tracking-wide text-gold">
-                        {brand.shortName}
-                      </p>
-                      <p className="mt-1 text-[0.62rem] uppercase tracking-[0.28em] text-cream/45">
-                        Studio console
-                      </p>
-                    </>
+                    <div className="flex items-center gap-2">
+                      {activeLogo ? (
+                        <img src={activeLogo} alt={brand.shortName} className="h-7 w-auto object-contain" />
+                      ) : (
+                        <p className="font-heading text-xl font-bold tracking-wide text-gold">
+                          {brand.shortName}
+                        </p>
+                      )}
+                    </div>
                   ) : (
-                    <p className="text-center font-heading text-xl text-gold">K</p>
+                    <p className="text-center font-heading text-xl font-extrabold text-gold">K</p>
+                  )}
+                  {!collapsed && (
+                    <p className="mt-1 text-[0.62rem] uppercase tracking-[0.25em] opacity-60">
+                      Studio Console
+                    </p>
                   )}
                 </div>
 
                 <nav
-                  className="flex flex-1 flex-col gap-0.5 px-2 pb-4"
+                  className="flex flex-1 flex-col gap-1 px-2 pb-4 overflow-y-auto"
                   aria-label="Admin navigation"
                 >
                   <AdminNavLinks collapsed={collapsed} />
                 </nav>
 
-                <div className="mt-auto space-y-3 border-t border-gold/10 px-3 py-5">
+                <div className="mt-auto space-y-3 border-t border-white/10 px-3 py-5">
                   <button
                     type="button"
-                    onClick={() => setCollapsed((c) => !c)}
-                    className="w-full text-left text-[0.65rem] uppercase tracking-[0.18em] text-cream/40 transition hover:text-gold"
+                    onClick={toggleCollapse}
+                    className="w-full text-left text-[0.65rem] uppercase tracking-[0.18em] opacity-60 transition hover:opacity-100 hover:text-gold"
                   >
                     {collapsed ? '»' : 'Collapse'}
                   </button>
                   {!collapsed && user ? (
-                    <p className="truncate text-xs text-cream/50">{user.email}</p>
+                    <p className="truncate text-xs opacity-60">{user.email}</p>
                   ) : null}
                   <Button
                     variant="secondary"
@@ -138,7 +201,7 @@ export function AdminLayout() {
                   <a
                     href="/"
                     className={cn(
-                      'block text-[0.65rem] uppercase tracking-[0.18em] text-cream/40 transition hover:text-gold',
+                      'block text-[0.65rem] uppercase tracking-[0.18em] opacity-60 transition hover:opacity-100 hover:text-gold',
                       collapsed && 'text-center',
                     )}
                   >
@@ -148,7 +211,13 @@ export function AdminLayout() {
               </aside>
 
               <div className="flex min-w-0 flex-1 flex-col">
-                <header className="flex items-center justify-between gap-3 border-b border-gold/10 px-4 py-3 md:hidden">
+                <header
+                  className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3 md:hidden"
+                  style={{
+                    backgroundColor: 'var(--admin-sidebar, #111827)',
+                    color: 'var(--admin-sidebar-text, #f3f4f6)',
+                  }}
+                >
                   <p className="font-heading text-lg text-gold">{brand.shortName}</p>
                   <Button
                     variant="secondary"
@@ -162,12 +231,22 @@ export function AdminLayout() {
                   </Button>
                 </header>
                 <nav
-                  className="flex gap-1 overflow-x-auto border-b border-gold/10 px-2 py-2 md:hidden"
+                  className="flex gap-1 overflow-x-auto border-b border-white/10 px-2 py-2 md:hidden"
+                  style={{
+                    backgroundColor: 'var(--admin-sidebar, #111827)',
+                    color: 'var(--admin-sidebar-text, #f3f4f6)',
+                  }}
                   aria-label="Admin mobile"
                 >
                   <AdminNavLinks mobile />
                 </nav>
-                <div className="flex-1 bg-cream text-black">
+                <div
+                  className="flex-1 transition-colors min-h-screen admin-scope"
+                  style={{
+                    backgroundColor: 'var(--admin-bg, #0b0f17)',
+                    color: 'var(--admin-text, #f3f4f6)',
+                  }}
+                >
                   <Outlet />
                 </div>
               </div>

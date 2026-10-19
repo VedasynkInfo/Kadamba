@@ -1,31 +1,24 @@
 import 'dotenv/config';
 import mongoose from 'mongoose';
-import { User } from './src/models/User';
 import { Customer } from './src/models/Customer';
 import { MeasurementTemplate } from './src/models/MeasurementTemplate';
 import { seedTemplates } from './src/services/measurementTemplateService';
 
+/**
+ * Seeds measurement templates and (optionally) sample customers.
+ *
+ * NOTE: Admin accounts are intentionally NOT created here. Use the secure,
+ * env-driven bootstrap instead so no credentials are ever committed:
+ *
+ *   ADMIN_NAME="..." ADMIN_EMAIL="..." ADMIN_PASSWORD="..." npm run seed:admin
+ */
 async function main() {
   const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/kadamba';
   console.log(`Connecting to: ${uri}`);
   await mongoose.connect(uri);
   console.log('Connected to MongoDB');
 
-  // 1. Seed admin user
-  const existing = await User.findOne({ email: 'admin@kadamba.local' });
-  if (!existing) {
-    await User.create({
-      name: 'Admin',
-      email: 'admin@kadambastudio.com',
-      password: 'Kadamba@9898',
-      role: 'admin',
-    });
-    console.log('Created admin user');
-  } else {
-    console.log('Admin user already exists');
-  }
-
-  // 1b. Seed sample customers
+  // 1. Seed sample customers
   const sampleCustomers = [
     { name: 'Priya Sharma', phone: '9876543210', city: 'Kurnool' },
     { name: 'Ananya Reddy', phone: '9876543211', city: 'Kurnool' },

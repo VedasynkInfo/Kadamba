@@ -25,7 +25,7 @@ function CharHint({ value, max }: { value: string; max: number }) {
   const len = value.length;
   const over = len > max;
   return (
-    <span className={cn('text-[0.65rem]', over ? 'text-rose-600' : 'text-black/40')}>
+    <span className={cn('text-[0.65rem]', over ? 'text-rose-500 font-semibold' : 'opacity-60')}>
       {len}/{max}
     </span>
   );
@@ -39,20 +39,20 @@ export function SeoFields({
   onChange,
   onRegenerate,
   className,
-  tone = 'light',
+  tone: _tone = 'light',
 }: SeoFieldsProps) {
-  const heading = tone === 'dark' ? 'text-cream' : 'text-black';
-  const muted = tone === 'dark' ? 'text-cream/60' : 'text-black/55';
+  const heading = 'text-inherit font-bold';
+  const muted = 'opacity-65';
 
   function patch<K extends keyof SeoFieldsValue>(key: K, val: string) {
     onChange({ ...value, [key]: val }, key);
   }
 
   return (
-    <div className={cn('space-y-5', className)}>
+    <div className={cn('space-y-5 text-inherit', className)}>
       <div className="flex flex-wrap items-end justify-between gap-2">
         <div>
-          <h3 className={cn('text-sm font-semibold uppercase tracking-[0.14em]', heading)}>
+          <h3 className={cn('text-sm uppercase tracking-[0.14em]', heading)}>
             SEO
           </h3>
           <p className={cn('mt-1 text-xs', muted)}>
@@ -63,7 +63,7 @@ export function SeoFields({
           <button
             type="button"
             onClick={onRegenerate}
-            className="text-xs font-semibold uppercase tracking-[0.12em] text-black/70 underline"
+            className="text-xs font-semibold uppercase tracking-[0.12em] opacity-80 hover:opacity-100 underline"
           >
             Regenerate from title
           </button>

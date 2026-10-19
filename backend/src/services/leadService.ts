@@ -8,6 +8,7 @@ import {
   type LeadSource,
   type LeadStatus,
 } from '../models/Lead';
+import { calculateLeadScore } from './leadScoringService';
 import { ApiError } from '../utils/ApiError';
 import { buildPaginationMeta, parsePagination } from '../utils/pagination';
 import { searchRegex } from '../utils/query';
@@ -59,6 +60,26 @@ export type LeadDto = {
     detail?: string;
     createdAt: string;
   }>;
+  score?: number;
+  quality?: 'hot' | 'warm' | 'cold';
+  scoreBreakdown?: {
+    budgetScore: number;
+    timelineScore: number;
+    serviceScore: number;
+    detailsScore: number;
+    contactScore: number;
+  };
+  followUps?: Array<{
+    id: string;
+    scheduledAt: string;
+    type: string;
+    notes: string;
+    status: string;
+    completedAt?: string;
+    outcome?: string;
+    createdBy?: string;
+  }>;
+  nextFollowUpDate?: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -155,6 +176,22 @@ function serializeLead(doc: ILead | Record<string, unknown>): LeadDto {
     referenceId: raw.referenceId ? String(raw.referenceId) : undefined,
     notes,
     timeline,
+    score: typeof raw.score === 'number' ? raw.score : 0,
+    quality: (raw.quality as 'hot' | 'warm' | 'cold') || 'warm',
+    scoreBreakdown: raw.scoreBreakdown as any,
+    followUps: Array.isArray(raw.followUps)
+      ? (raw.followUps as Array<Record<string, unknown>>).map((f) => ({
+          id: String(f.id ?? f._id ?? ''),
+          scheduledAt: String(f.scheduledAt ?? ''),
+          type: String(f.type ?? 'call'),
+          notes: String(f.notes ?? ''),
+          status: String(f.status ?? 'pending'),
+          completedAt: f.completedAt ? String(f.completedAt) : undefined,
+          outcome: f.outcome ? String(f.outcome) : undefined,
+          createdBy: f.createdBy ? String(f.createdBy) : undefined,
+        }))
+      : [],
+    nextFollowUpDate: raw.nextFollowUpDate ? String(raw.nextFollowUpDate) : undefined,
     createdAt: String(raw.createdAt ?? ''),
     updatedAt: String(raw.updatedAt ?? ''),
   };
@@ -166,6 +203,17 @@ function serializeLead(doc: ILead | Record<string, unknown>): LeadDto {
  */
 export async function createLeadFromRequest(input: CreateLeadInput): Promise<ILead> {
   const inspirationImages = await uploadInspirationBuffers(input.inspirationFiles ?? []);
+
+  const scoreResult = calculateLeadScore({
+    service: input.service,
+    budget: input.budget,
+    preferredDate: input.preferredDate,
+    phone: input.phone,
+    email: input.email,
+    message: input.message,
+    fabricStatus: input.fabricStatus,
+    inspirationImages,
+  });
 
   const lead = await Lead.create({
     name: input.name,
@@ -184,11 +232,14 @@ export async function createLeadFromRequest(input: CreateLeadInput): Promise<ILe
     status: 'New',
     source: 'Request Service',
     assignee: 'Unassigned',
+    score: scoreResult.score,
+    quality: scoreResult.quality,
+    scoreBreakdown: scoreResult.scoreBreakdown,
     notes: [],
     timeline: [
       {
         type: 'created',
-        label: 'Lead created',
+        label: `Lead created (Quality: ${scoreResult.quality.toUpperCase()}, Score: ${scoreResult.score}/100)`,
         detail: 'From request-service form',
         createdAt: new Date(),
       },
@@ -361,6 +412,76 @@ export async function addLeadNote(
     type: 'note',
     label: 'Note added',
     detail: trimmed.slice(0, 80),
+    createdAt: new Date(),
+  });
+
+  await lead.save();
+  return serializeLead(lead);
+}
+
+export async function scheduleLeadFollowUp(
+  id: string,
+  input: {
+    scheduledAt: string | Date;
+    type?: 'call' | 'whatsapp' | 'email' | 'in_person_consultation';
+    notes?: string;
+    createdBy?: string;
+  },
+): Promise<LeadDto> {
+  if (!mongoose.isValidObjectId(id)) throw new ApiError(400, 'Invalid lead id');
+  const lead = await Lead.findById(id);
+  if (!lead) throw new ApiError(404, 'Lead not found');
+
+  const scheduledDate = new Date(input.scheduledAt);
+  const followUp = {
+    scheduledAt: scheduledDate,
+    type: input.type || 'call',
+    notes: (input.notes || '').trim(),
+    status: 'pending' as const,
+    createdBy: input.createdBy || 'Studio Team',
+  };
+
+  lead.followUps.push(followUp);
+  lead.nextFollowUpDate = scheduledDate;
+
+  lead.timeline.push({
+    type: 'note',
+    label: `Follow-up scheduled (${followUp.type.toUpperCase()})`,
+    detail: `${scheduledDate.toLocaleDateString()} — ${followUp.notes || 'No extra notes'}`,
+    createdAt: new Date(),
+  });
+
+  await lead.save();
+  return serializeLead(lead);
+}
+
+export async function completeLeadFollowUp(
+  leadId: string,
+  followUpId: string,
+  input: { outcome?: string; notes?: string },
+): Promise<LeadDto> {
+  if (!mongoose.isValidObjectId(leadId)) throw new ApiError(400, 'Invalid lead id');
+  const lead = await Lead.findById(leadId);
+  if (!lead) throw new ApiError(404, 'Lead not found');
+
+  const fu = lead.followUps.find((f) => String(f._id) === followUpId);
+  if (!fu) throw new ApiError(404, 'Follow-up not found');
+
+  fu.status = 'completed';
+  fu.completedAt = new Date();
+  if (input.outcome) fu.outcome = input.outcome.trim();
+  if (input.notes) fu.notes = (fu.notes ? `${fu.notes}\n` : '') + input.notes.trim();
+
+  // Find next pending follow-up date if any
+  const nextPending = lead.followUps
+    .filter((f) => f.status === 'pending')
+    .sort((a, b) => new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime())[0];
+  lead.nextFollowUpDate = nextPending ? nextPending.scheduledAt : undefined;
+
+  lead.timeline.push({
+    type: 'note',
+    label: `Follow-up completed (${fu.type.toUpperCase()})`,
+    detail: input.outcome || 'Marked as completed',
     createdAt: new Date(),
   });
 

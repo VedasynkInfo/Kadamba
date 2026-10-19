@@ -380,7 +380,7 @@ export async function transitionOrderStatus(
   }
 
   const { withTransaction } = await import('../utils/transaction');
-  const { ORDER_STATUS_TRANSITIONS } = await import('../shared/enums');
+  const { allowedOrderTransitions, isOrderStatusTerminal } = await import('../shared/enums');
 
   const order = await withTransaction(async (session) => {
     const order = await Order.findById(id).session(session ?? null);
@@ -393,19 +393,36 @@ export async function transitionOrderStatus(
     }
 
     // Enforce the shared state machine so an invalid jump (e.g. enquiry →
-    // delivery) cannot be persisted by a stale UI or a crafted request.
-    const allowed = ORDER_STATUS_TRANSITIONS[order.status] ?? [];
+    // delivery) cannot be persisted by a stale UI or a crafted request. The
+    // allowed set is repeated in the error detail because the point of the
+    // refusal is "here is what you *can* do" — the console already renders only
+    // these options, so reaching this means the order moved underneath the
+    // operator.
+    const allowed = allowedOrderTransitions(order.status);
     if (!allowed.includes(newStatus)) {
-      throw new ApiError(
-        409,
-        `Invalid status transition: ${order.status} → ${newStatus}`,
-        [{ allowedFrom: order.status, allowed: allowed }],
-      );
+      const from = order.status;
+      const detail = isOrderStatusTerminal(from)
+        ? `A delivered order is complete and has no further status changes.`
+        : `From ${from} an order can move to: ${allowed.join(', ')}.`;
+      throw ApiError.invalidTransition(`An order in ${from} cannot move to ${newStatus}.`, [
+        { field: 'status', message: detail },
+      ]);
     }
 
     // Confirming order generates immutable Reference ID
     if (newStatus === 'confirmed' && !order.referenceId) {
       order.referenceId = generateReferenceId(order.orderNumber);
+    }
+
+    // A state that represents a milestone stamps the date it happened, so
+    // reports and the customer portal read a real date instead of trusting
+    // someone to fill the edit form. Only when unset: a date corrected by hand
+    // must not be overwritten by re-entering the same state.
+    if (newStatus === 'trial' && !order.actualTrialAt) {
+      order.actualTrialAt = new Date();
+    }
+    if (newStatus === 'delivery' && !order.actualDeliveryAt) {
+      order.actualDeliveryAt = new Date();
     }
 
     // Cancelled order logic

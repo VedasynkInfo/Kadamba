@@ -220,3 +220,102 @@ describe('Order Management API', () => {
     expect(filterRes.body.data.items[0].title).toBe('Simple Blouse');
   });
 });
+
+/**
+ * The lifecycle is a state machine, not a free-text field. These tests pin both
+ * halves of that: an impossible move is refused with the list of moves that *are*
+ * available, and walking the machine records the milestones as it goes.
+ */
+describe('Order status machine', () => {
+  async function createEnquiryOrder(token: string, phone: string) {
+    const customer = await Customer.create({ name: 'Lifecycle Test', phone });
+    const res = await request(app)
+      .post('/api/admin/orders')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        customerId: customer._id.toString(),
+        title: 'Lifecycle Probe',
+        status: 'enquiry',
+        lineItems: [{ name: 'Blouse', qty: 1 }],
+      });
+
+    expect(res.status).toBe(201);
+    return res.body.data.id as string;
+  }
+
+  it('refuses a move the machine forbids, and names what is allowed instead', async () => {
+    const token = await registerAdminAndGetToken(app);
+    const orderId = await createEnquiryOrder(token, '9000000010');
+
+    const res = await request(app)
+      .post(`/api/admin/orders/${orderId}/status`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ status: 'delivery' });
+
+    expect(res.status).toBe(409);
+    expect(res.body.success).toBe(false);
+    expect(res.body.code).toBe('INVALID_TRANSITION');
+    expect(res.body.message).toContain('enquiry');
+    expect(res.body.message).toContain('delivery');
+    // The refusal carries the way forward, not just the refusal.
+    expect(res.body.errors[0].message).toContain('confirmed');
+
+    // …and nothing was persisted.
+    const order = await Order.findById(orderId);
+    expect(order?.status).toBe('enquiry');
+  });
+
+  it('walks the production flow, stamps each milestone, and stops at delivery', async () => {
+    const token = await registerAdminAndGetToken(app);
+    const orderId = await createEnquiryOrder(token, '9000000011');
+
+    const flow = [
+      'confirmed',
+      'measurements',
+      'cutting',
+      'stitching',
+      'trial',
+      'finishing',
+      'delivery',
+    ] as const;
+
+    for (const status of flow) {
+      const res = await request(app)
+        .post(`/api/admin/orders/${orderId}/status`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({ status });
+
+      expect(res.status, `expected ${status} to be reachable`).toBe(200);
+      expect(res.body.data.status).toBe(status);
+    }
+
+    const delivered = await Order.findById(orderId);
+    expect(delivered?.actualTrialAt).toBeInstanceOf(Date);
+    expect(delivered?.actualDeliveryAt).toBeInstanceOf(Date);
+
+    // A delivered order is finished: the machine offers nothing further.
+    const after = await request(app)
+      .post(`/api/admin/orders/${orderId}/status`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ status: 'finishing' });
+
+    expect(after.status).toBe(409);
+    expect(after.body.code).toBe('INVALID_TRANSITION');
+    expect(after.body.errors[0].message).toContain('complete');
+  });
+
+  it('treats re-sending the current status as a no-op rather than an error', async () => {
+    const token = await registerAdminAndGetToken(app);
+    const orderId = await createEnquiryOrder(token, '9000000012');
+
+    const res = await request(app)
+      .post(`/api/admin/orders/${orderId}/status`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ status: 'enquiry' });
+
+    expect(res.status).toBe(200);
+    expect(res.body.data.status).toBe('enquiry');
+    // No duplicate timeline entry for a move that did not happen.
+    expect(res.body.data.timeline.length).toBe(1);
+  });
+});

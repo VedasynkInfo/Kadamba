@@ -1,4 +1,5 @@
 import api from '../api/client';
+import type { OrderStatus } from '@/shared/enums';
 import type { ApiResponse, PaginatedData } from '@/types';
 
 export interface OrderLineItem {
@@ -48,7 +49,7 @@ export interface Order {
     city?: string;
   };
   leadId?: string;
-  status: string;
+  status: OrderStatus;
   priority: string;
   title: string;
   lineItems: OrderLineItem[];
@@ -127,7 +128,7 @@ export const ordersApi = {
     return data.data!;
   },
 
-  transitionStatus: async (id: string, status: string, note?: string): Promise<Order> => {
+  transitionStatus: async (id: string, status: OrderStatus, note?: string): Promise<Order> => {
     const { data } = await api.post<ApiResponse<Order>>(`/admin/orders/${id}/status`, { status, note });
     return data.data!;
   },

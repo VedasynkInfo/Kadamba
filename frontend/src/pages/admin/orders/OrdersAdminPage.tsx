@@ -7,7 +7,9 @@ import { OrdersToolbar } from './OrdersToolbar';
 import { OrdersTable } from './OrdersTable';
 import { OrderPreviewModal } from './OrderPreviewModal';
 import { OrderCreateModal } from './OrderCreateModal';
-import { createBlankOrderForm, type OrderFormData, type OrdersMetricsData } from './types';
+import { createBlankOrderForm, orderStatusLabel, type OrderFormData, type OrdersMetricsData } from './types';
+import type { OrderStatus } from '@/shared/enums';
+import { toAppError } from '@/lib/apiError';
 
 export default function OrdersAdminPage() {
   const { toast } = useToast();
@@ -163,18 +165,29 @@ export default function OrdersAdminPage() {
     }
   }
 
-  async function handleStatusChange(orderId: string, nextStatus: string) {
+  async function handleStatusChange(orderId: string, nextStatus: OrderStatus) {
     try {
       await ordersApi.transitionStatus(orderId, nextStatus);
-      toast({ title: `Order status updated to ${nextStatus}`, tone: 'success' });
+      toast({
+        title: `Order moved to ${orderStatusLabel(nextStatus)}`,
+        tone: 'success',
+      });
       setOrders((prev) =>
         prev.map((o) => (o.id === orderId ? { ...o, status: nextStatus } : o)),
       );
       if (previewOrder?.id === orderId) {
         setPreviewOrder((prev) => (prev ? { ...prev, status: nextStatus } : null));
       }
-    } catch {
-      toast({ title: 'Failed to update order status', tone: 'error' });
+    } catch (err) {
+      // The order may have moved since this desk loaded it; the machine's
+      // refusal names the stages that are actually available.
+      const error = toAppError(err);
+      const detail = error.fieldErrors[0];
+      toast({
+        title: error.message,
+        description: detail && detail !== error.message ? detail : undefined,
+        tone: 'error',
+      });
     }
   }
 

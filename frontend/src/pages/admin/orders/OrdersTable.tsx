@@ -1,6 +1,7 @@
 ﻿import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import type { Order } from '@/services/orders/orderService';
+import { canTransitionOrder, type OrderStatus } from '@/shared/enums';
 import { ORDER_STATUS_CONFIG } from './types';
 import { whatsappDeepLink } from '@/utils/whatsapp';
 import { EmptyState } from '../components/EmptyState';
@@ -32,7 +33,7 @@ interface OrdersTableProps {
   onResetFilters: () => void;
   onNewOrder: () => void;
   onPreview: (order: Order) => void;
-  onStatusChange: (orderId: string, status: string) => void;
+  onStatusChange: (orderId: string, status: OrderStatus) => void;
 }
 
 export function OrdersTable({
@@ -369,7 +370,10 @@ export function OrdersTable({
               style={{ borderColor: 'var(--admin-border, rgba(128, 128, 128, 0.15))' }}
             />
 
-            {menuAnchor.order.status !== 'delivery' ? (
+            {/* Only the moves the API will accept from *this* order's stage.
+                The previous version offered "Mark Delivered" to an enquiry and
+                "Move to Finishing" to a delivered order — both refused. */}
+            {canTransitionOrder(menuAnchor.order.status, 'delivery') ? (
               <button
                 type="button"
                 onClick={() => {
@@ -382,7 +386,9 @@ export function OrdersTable({
                 <span className="text-sm">📦</span>
                 <span>Mark Delivered</span>
               </button>
-            ) : (
+            ) : null}
+
+            {canTransitionOrder(menuAnchor.order.status, 'finishing') ? (
               <button
                 type="button"
                 onClick={() => {
@@ -395,7 +401,7 @@ export function OrdersTable({
                 <span className="text-sm">↩️</span>
                 <span>Move to Finishing</span>
               </button>
-            )}
+            ) : null}
           </div>
         </>
       ) : null}

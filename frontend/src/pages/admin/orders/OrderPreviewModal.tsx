@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import type { Order } from '@/services/orders/orderService';
-import { ORDER_STATUS_CONFIG } from './types';
+import type { OrderStatus } from '@/shared/enums';
+import { ORDER_STATUS_CONFIG, orderStatusChoices } from './types';
 import { whatsappDeepLink } from '@/utils/whatsapp';
 import { cn } from '@/utils/cn';
 
@@ -24,7 +25,7 @@ function formatDate(iso?: string) {
 interface OrderPreviewModalProps {
   order: Order | null;
   onClose: () => void;
-  onStatusChange: (orderId: string, status: string) => void;
+  onStatusChange: (orderId: string, status: OrderStatus) => void;
 }
 
 export function OrderPreviewModal({ order, onClose, onStatusChange }: OrderPreviewModalProps) {
@@ -35,6 +36,8 @@ export function OrderPreviewModal({ order, onClose, onStatusChange }: OrderPrevi
     color: 'bg-zinc-500/15 text-zinc-400 border-zinc-500/30',
     dotColor: 'bg-zinc-400',
   };
+
+  const stageChoices = orderStatusChoices(order.status);
 
   const totalQ = order.paymentSummary?.totalQuoted || 0;
   const paid = order.paymentSummary?.totalPaid || 0;
@@ -213,30 +216,30 @@ export function OrderPreviewModal({ order, onClose, onStatusChange }: OrderPrevi
             </div>
           </div>
 
-          {/* Quick Stage Transition */}
+          {/* Quick Stage Transition — only the moves the API will accept. */}
           <div className="space-y-1.5">
-            <label className="text-[11px] font-semibold opacity-75 block">Update Atelier Stage:</label>
-            <div className="flex flex-wrap gap-1.5">
-              {Object.entries(ORDER_STATUS_CONFIG).slice(0, 6).map(([stKey, cfg]) => {
-                const isActive = order.status === stKey;
-                return (
+            <label className="text-[11px] font-semibold opacity-75 block">Move to next stage:</label>
+            {stageChoices.length === 0 ? (
+              <p className="text-[11px] opacity-60">
+                {stConfig.label} — lifecycle complete, no further stages.
+              </p>
+            ) : (
+              <div className="flex flex-wrap gap-1.5">
+                {stageChoices.map((choice) => (
                   <button
-                    key={stKey}
+                    key={choice.value}
                     type="button"
-                    onClick={() => onStatusChange(order.id, stKey)}
+                    onClick={() => onStatusChange(order.id, choice.value)}
                     className={cn(
                       'px-2.5 py-1 rounded-lg border text-[11px] font-semibold transition cursor-pointer',
-                      isActive
-                        ? 'bg-[var(--admin-primary,#b59410)] text-white border-[var(--admin-primary,#b59410)]'
-                        : 'opacity-70 hover:opacity-100 border-current/20 hover:bg-current/[0.04]',
+                      'opacity-70 hover:opacity-100 border-current/20 hover:bg-current/[0.04]',
                     )}
                   >
-                    {isActive ? '✓ ' : ''}
-                    {cfg.label}
+                    {choice.label}
                   </button>
-                );
-              })}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 

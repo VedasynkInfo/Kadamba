@@ -26,6 +26,13 @@ import {
   websiteSettingsSchema,
 } from '../shared/schemas';
 import { registerAdminAndGetToken } from './helpers/auth';
+import {
+  allowedOrderTransitions,
+  canTransitionOrder,
+  isOrderStatusTerminal,
+  ORDER_STATUSES,
+  ORDER_STATUS_TRANSITIONS,
+} from '../shared/enums';
 
 const app = createApp();
 
@@ -234,5 +241,50 @@ describe('shared response contract', () => {
       .post('/api/leads')
       .send({ ...base, email: 'not-an-email' });
     expect(badEmail.status).toBe(400);
+  });
+});
+
+/**
+ * The order lifecycle is shared vocabulary, and both ends now derive from
+ * `ORDER_STATUS_TRANSITIONS` — the server to enforce it, the console to decide
+ * which moves to offer. These assertions are what keeps that map a machine.
+ */
+describe('order state machine', () => {
+  it('only ever points at real statuses, and never at itself', () => {
+    for (const from of ORDER_STATUSES) {
+      for (const to of ORDER_STATUS_TRANSITIONS[from]) {
+        expect(ORDER_STATUSES, `${from} → ${to}`).toContain(to);
+        expect(to, `${from} → ${to}`).not.toBe(from);
+      }
+    }
+  });
+
+  it('covers every status, so no state is undefined', () => {
+    for (const status of ORDER_STATUSES) {
+      expect(ORDER_STATUS_TRANSITIONS[status], status).toBeDefined();
+    }
+  });
+
+  it('leaves every status somewhere to go except the one that ends the story', () => {
+    const stuck = ORDER_STATUSES.filter((status) => allowedOrderTransitions(status).length === 0);
+    expect(stuck).toEqual(['delivery']);
+  });
+
+  it('answers canTransitionOrder from the same map the API enforces', () => {
+    expect(canTransitionOrder('enquiry', 'confirmed')).toBe(true);
+    expect(canTransitionOrder('enquiry', 'delivery')).toBe(false);
+    expect(canTransitionOrder('delivery', 'finishing')).toBe(false);
+    expect(canTransitionOrder('cancelled', 'enquiry')).toBe(true);
+
+    expect(isOrderStatusTerminal('delivery')).toBe(true);
+    expect(isOrderStatusTerminal('finishing')).toBe(false);
+  });
+
+  it('lets an order be paused or cancelled from anywhere it is still moving', () => {
+    const pausable = ORDER_STATUSES.filter((status) => allowedOrderTransitions(status).length > 0);
+    for (const status of pausable) {
+      const allowed = allowedOrderTransitions(status);
+      expect(allowed.includes('cancelled') || status === 'cancelled', status).toBe(true);
+    }
   });
 });

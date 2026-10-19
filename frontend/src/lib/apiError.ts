@@ -71,6 +71,7 @@ const defaultMessage: Record<ClientErrorCode, string> = {
   VALIDATION_FAILED: 'Please check the highlighted fields.',
   NOT_FOUND: 'We could not find that record.',
   CONFLICT: 'That change conflicts with existing data.',
+  INVALID_TRANSITION: 'That move is not allowed from the order\u2019s current stage.',
   RATE_LIMITED: 'Too many requests. Please wait a moment.',
   UPLOAD_INVALID: 'That file was rejected. Check the format and size.',
   INTERNAL: 'Something went wrong on our side. Please try again.',

@@ -62,6 +62,17 @@ export class ApiError extends Error {
     return new ApiError(409, message, errors, 'CONFLICT');
   }
 
+  /**
+   * 409 — a lifecycle move the state machine does not allow.
+   *
+   * Its own code rather than a plain `CONFLICT`, because "that slug is taken" and
+   * "a stitching order cannot be delivered" need different words in the UI, and
+   * the client should not have to match on prose to tell them apart.
+   */
+  static invalidTransition(message: string, errors?: unknown[]) {
+    return new ApiError(409, message, errors, 'INVALID_TRANSITION');
+  }
+
   /** 423 — repeated failures have locked the account for a cooling-off period. */
   static accountLocked(message: string) {
     return new ApiError(423, message, undefined, 'ACCOUNT_LOCKED');

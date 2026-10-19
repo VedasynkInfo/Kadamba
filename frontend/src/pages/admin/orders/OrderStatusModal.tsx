@@ -1,13 +1,16 @@
 ﻿import { Button, Input, Modal } from '@/components/ui';
+import type { OrderStatus } from '@/shared/enums';
+import { orderStatusLabel } from './types';
 
 interface OrderStatusModalProps {
   open: boolean;
   onClose: () => void;
-  nextStatus: string;
+  /** The stage being moved to; null when no transition is pending. */
+  nextStatus: OrderStatus | null;
   transitionNote: string;
   setTransitionNote: (v: string) => void;
   transitioning: boolean;
-  onTransition: (status: string, note: string) => void;
+  onTransition: (status: OrderStatus, note: string) => void;
 }
 
 export function OrderStatusModal({
@@ -24,8 +27,10 @@ export function OrderStatusModal({
       <div className="space-y-4">
         <p className="text-xs text-black/65">
           You are moving this order status to{' '}
-          <span className="font-semibold uppercase">{nextStatus.replace('_', ' ')}</span>.
-          Please record a brief reason or notes below for audit records.
+          <span className="font-semibold uppercase">
+            {nextStatus ? orderStatusLabel(nextStatus) : ''}
+          </span>
+          . Please record a brief reason or notes below for audit records.
         </p>
         <Input
           type="text"
@@ -40,8 +45,10 @@ export function OrderStatusModal({
           </Button>
           <Button
             size="sm"
-            disabled={transitioning || !transitionNote.trim()}
-            onClick={() => onTransition(nextStatus, transitionNote.trim())}
+            disabled={transitioning || !nextStatus || !transitionNote.trim()}
+            onClick={() => {
+              if (nextStatus) onTransition(nextStatus, transitionNote.trim());
+            }}
           >
             {transitioning ? 'Saving...' : 'Transition'}
           </Button>

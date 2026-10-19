@@ -1,4 +1,5 @@
-﻿import type { CustomerProfile } from '@/services/orders/orderService';
+﻿import { allowedOrderTransitions, ORDER_PRODUCTION_FLOW, type OrderStatus } from '@/shared/enums';
+import type { CustomerProfile } from '@/services/orders/orderService';
 
 export const ORDER_STATUS_CONFIG: Record<
   string,
@@ -18,6 +19,44 @@ export const ORDER_STATUS_CONFIG: Record<
 };
 
 export const ORDER_STATUS_OPTIONS = Object.keys(ORDER_STATUS_CONFIG);
+
+/** Display label for a status value, tolerating a value we do not know. */
+export function orderStatusLabel(status: string): string {
+  return ORDER_STATUS_CONFIG[status]?.label ?? status.replace(/_/g, ' ');
+}
+
+/** Where a status sits on the happy path, or -1 for cancelled / on hold. */
+function productionStageIndex(status: string): number {
+  return (ORDER_PRODUCTION_FLOW as readonly OrderStatus[]).indexOf(status as OrderStatus);
+}
+
+/**
+ * The stages this order may move to next, ready to render.
+ *
+ * Read from the shared machine rather than listed again here, so the console
+ * cannot offer a move the API will refuse with a 409. A delivered order yields
+ * an empty list: its lifecycle is complete.
+ */
+export function orderStatusChoices(from: string): { value: OrderStatus; label: string }[] {
+  return allowedOrderTransitions(from as OrderStatus).map((value) => ({
+    value,
+    label: orderStatusLabel(value),
+  }));
+}
+
+/**
+ * Whether a transition should ask for a reason before it happens.
+ *
+ * Cancelling or pausing always deserves one, and so does moving *backwards*
+ * along the production flow — a finished garment sent back to trial is rework,
+ * and the audit trail should record who asked for it and why.
+ */
+export function transitionNeedsNote(from: string, to: OrderStatus): boolean {
+  if (to === 'cancelled' || to === 'on_hold') return true;
+  const fromIndex = productionStageIndex(from);
+  const toIndex = productionStageIndex(to);
+  return fromIndex >= 0 && toIndex >= 0 && toIndex < fromIndex;
+}
 
 export const ORDER_PRIORITIES = [
   { value: 'normal', label: 'Normal' },

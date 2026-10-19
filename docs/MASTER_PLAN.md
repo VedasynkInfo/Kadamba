@@ -164,7 +164,7 @@
 | 5.1 | Error-code adoption on the backend (`code` on every error) | ✅ |
 | 5.2 | Zod schemas shared via contract (server + client) | ✅ |
 | 5.3 | React Router v7 data router (loaders/actions/errorElement) | ✅ (loaders + errorElement + scroll restoration; actions intentionally not adopted — see notes) |
-| 5.4 | Typed order state machine (shared transitions) | ⬜ (transitions defined ✅) |
+| 5.4 | Typed order state machine (shared transitions) | ✅ (enforced + mirrored in the console; `INVALID_TRANSITION`) |
 | 5.5 | Socket events → query cache invalidation | ⬜ |
 | 5.6 | Offline mutation retry queue + offline banner | ⬜ |
 
@@ -197,6 +197,15 @@
 - **Loaders overlap the fetch with the chunk download.** Each public content route prefetches through `queryClient.ensureQueryData` using the *same descriptor object* its component's `useQuery` reads, so the request starts during navigation instead of after mount, and the hook finds it already in the cache (asserted by a test: one request, not two). Two decisions keep this safe: the prefetch disables `retry` (a loader blocks navigation, so the query layer's retry policy would hold the visitor on the *previous* page for seconds while a slow API times out) and swallows failure (the page's own `ContentError` is a better home for a failed collection than a route error screen that discards the navbar). Admin routes deliberately do not prefetch: the access token lives in memory, so a loader running before the refresh-cookie exchange would fire an anonymous 401.
 - **Actions are intentionally not adopted.** React Router actions exist to post a form and let the router revalidate. Every write here goes through a TanStack Query mutation so it can be optimistic, invalidate both cache families and report through the shared error bridge; routing the same writes through actions would put two owners on one piece of server state. Recorded as a decision rather than an omission.
 - **Not-found inside the console and the portal.** `/admin/<unknown>` used to match the `admin` layout and render its chrome around an empty outlet; both subtrees now have a `*` child rendering the branded 404.
+
+**5.4 — the order lifecycle, enforced and mirrored**
+- `ORDER_STATUS_TRANSITIONS` existed but only one end used it: the API refused illegal jumps with a generic 409 while the console offered all eleven statuses — including from enquiry to *Delivered* — and let the operator find out by failing. Two of three quick actions in the orders table were unreachable-by-design (`Mark Delivered` on an enquiry, `Move to Finishing` on a delivered order, which the machine forbids).
+- **The machine is now a call, not a map.** `allowedOrderTransitions`, `canTransitionOrder` and `isOrderStatusTerminal` live in `shared/enums.ts` next to the transition table, so both ends compute the same answer from the same source. The console renders its choices with `orderStatusChoices()`, the API refuses with the same list, and the two can no longer drift.
+- **A refusal that answers the question.** Illegal moves now return `409 INVALID_TRANSITION` (its own code, because "that slug is taken" and "a stitching order cannot be delivered" need different words) with the allowed set in `errors[0].message` — so the toast reads *"An order in stitching cannot move to delivery. From stitching an order can move to: embroidery_maggam, trial, finishing, cancelled, on_hold."* A delivered order instead says its lifecycle is complete. The order desk shows that detail as a toast description rather than swallowing it.
+- **The machine now records what its states mean.** Reaching `trial` stamps `actualTrialAt` and `delivery` stamps `actualDeliveryAt` (only when unset, so a date corrected by hand survives). Those fields previously existed only to be filled in by hand from the edit form, while reports and the customer portal read them as fact.
+- **The console stopped keeping its own copy of the flow.** `OrderDetailAdminPage` had a hand-written nine-entry `ORDER_STATUS_FLOW` for its "is this move backwards?" heuristic — a second, silent definition of the lifecycle. It now reads `ORDER_PRODUCTION_FLOW` and asks `transitionNeedsNote()`, which still demands a reason for a cancel, a hold, or rework (a finished garment sent back to trial). The status `<select>` offers only legal moves and renders a plain "lifecycle complete" line instead of a selector when there is nowhere left to go.
+- **`Order.status` is `OrderStatus`**, not `string`, in the SPA's own type — so a typo in a stage name is a compile error rather than a 409 at runtime.
+- Not in this workstream: order/customer/portal payloads still use `express-validator` alone rather than the shared zod contract (that is the remaining "not yet migrated" slice above); 5.4 is the lifecycle itself.
 
 ---
 

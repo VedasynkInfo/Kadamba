@@ -202,6 +202,32 @@ export const ORDER_STATUS_TRANSITIONS: Record<OrderStatus, readonly OrderStatus[
   on_hold: ['enquiry', 'confirmed', 'cancelled'],
 };
 
+/**
+ * The states an order in `status` may move to — the machine, as a call.
+ *
+ * Both ends read this rather than the raw map. The console renders exactly these
+ * as its choices, so an impossible move cannot be offered and then refused; the
+ * API answers with the same list when it refuses anyway.
+ *
+ * `delivery` returns `[]`: a delivered order is finished.
+ */
+export function allowedOrderTransitions(status: OrderStatus): readonly OrderStatus[] {
+  // The fallback covers a document holding a value from before this list —
+  // Mongo does not enforce an enum on read, and an unknown state should offer
+  // nothing rather than everything.
+  return ORDER_STATUS_TRANSITIONS[status] ?? [];
+}
+
+/** Whether `to` is a legal next state for an order currently in `from`. */
+export function canTransitionOrder(from: OrderStatus, to: OrderStatus): boolean {
+  return allowedOrderTransitions(from).includes(to);
+}
+
+/** True when no transition leaves `status` — i.e. the lifecycle is complete. */
+export function isOrderStatusTerminal(status: OrderStatus): boolean {
+  return allowedOrderTransitions(status).length === 0;
+}
+
 /* -------------------------------------------------------------------------- */
 /* Leads / CRM                                                                */
 /* -------------------------------------------------------------------------- */
@@ -327,6 +353,8 @@ export const ERROR_CODES = [
   'MFA_REQUIRED',
   'MFA_INVALID',
   'ACCOUNT_LOCKED',
+  /** 409 — the requested lifecycle move is not allowed from the current state. */
+  'INVALID_TRANSITION',
   /**
    * Client-originated: the response arrived but did not match
    * `shared/schemas.ts`. The server never sends this; the SPA raises it when a

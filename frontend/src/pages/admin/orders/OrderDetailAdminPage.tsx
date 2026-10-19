@@ -13,18 +13,9 @@ import { OrderStaffModal } from './OrderStaffModal';
 import { OrderStatusModal } from './OrderStatusModal';
 import { OrderMeasurementsModal } from './OrderMeasurementsModal';
 import { OrderTimelineSection } from './OrderTimelineSection';
-
-const ORDER_STATUS_FLOW = [
-  'enquiry',
-  'confirmed',
-  'measurements',
-  'cutting',
-  'stitching',
-  'embroidery_maggam',
-  'trial',
-  'finishing',
-  'delivery',
-];
+import { isOrderStatusTerminal, type OrderStatus } from '@/shared/enums';
+import { orderStatusChoices, orderStatusLabel, transitionNeedsNote } from './types';
+import { toAppError } from '@/lib/apiError';
 
 export default function OrderDetailAdminPage() {
   const { toast } = useToast();
@@ -39,7 +30,7 @@ export default function OrderDetailAdminPage() {
 
   // Status transition states
   const [statusModalOpen, setStatusModalOpen] = useState(false);
-  const [nextStatus, setNextStatus] = useState<string>('');
+  const [nextStatus, setNextStatus] = useState<OrderStatus | null>(null);
   const [transitionNote, setTransitionNote] = useState('');
   const [transitioning, setTransitioning] = useState(false);
 
@@ -103,15 +94,12 @@ export default function OrderDetailAdminPage() {
     }
   };
 
-  const handleStatusChangeRequest = (statusVal: string) => {
+  const handleStatusChangeRequest = (statusVal: OrderStatus) => {
     setNextStatus(statusVal);
-    
-    // Check if status requires note popup: cancelled, on_hold, or moving backward in flow
-    const currentIdx = ORDER_STATUS_FLOW.indexOf(order?.status || '');
-    const nextIdx = ORDER_STATUS_FLOW.indexOf(statusVal);
-    const movingBackward = currentIdx >= 0 && nextIdx >= 0 && nextIdx < currentIdx;
 
-    if (statusVal === 'cancelled' || statusVal === 'on_hold' || movingBackward) {
+    // Cancelling, pausing, or sending the order backwards asks for a reason
+    // first (see `transitionNeedsNote`).
+    if (transitionNeedsNote(order?.status ?? '', statusVal)) {
       setTransitionNote('');
       setStatusModalOpen(true);
     } else {
@@ -119,15 +107,23 @@ export default function OrderDetailAdminPage() {
     }
   };
 
-  const executeStatusTransition = async (statusVal: string, noteVal: string) => {
+  const executeStatusTransition = async (statusVal: OrderStatus, noteVal: string) => {
     if (!id) return;
     setTransitioning(true);
     try {
       const updated = await ordersApi.transitionStatus(id, statusVal, noteVal);
       setOrder(updated);
       setStatusModalOpen(false);
-    } catch (err: any) {
-      toast({ title: err.response?.data?.message || 'Failed to transition status', tone: 'error' });
+    } catch (err) {
+      // The machine's refusal names the stages that *are* allowed; showing it
+      // turns "failed" into "here is what you can do".
+      const error = toAppError(err);
+      const detail = error.fieldErrors[0];
+      toast({
+        title: error.message,
+        description: detail && detail !== error.message ? detail : undefined,
+        tone: 'error',
+      });
     } finally {
       setTransitioning(false);
     }
@@ -293,23 +289,34 @@ export default function OrderDetailAdminPage() {
                 </div>
                 <div className="flex flex-col items-end">
                   <span className="text-[10px] uppercase tracking-wider text-black/45">Atelier lifecycle</span>
-                  <select
-                    value={order.status}
-                    onChange={(e) => handleStatusChangeRequest(e.target.value)}
-                    className="mt-1 min-w-[150px] uppercase text-xs font-semibold rounded-md border border-black/15 bg-cream px-3 py-2 text-black focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
-                  >
-                    <option value="enquiry">Enquiry</option>
-                    <option value="confirmed">Confirmed</option>
-                    <option value="measurements">Measurements</option>
-                    <option value="cutting">Cutting</option>
-                    <option value="stitching">Stitching</option>
-                    <option value="embroidery_maggam">Maggam Work</option>
-                    <option value="trial">Trial / Fitting</option>
-                    <option value="finishing">Finishing</option>
-                    <option value="delivery">Delivered</option>
-                    <option value="cancelled">Cancelled</option>
-                    <option value="on_hold">On Hold</option>
-                  </select>
+                  {isOrderStatusTerminal(order.status) ? (
+                    <>
+                      <span className="mt-1 text-xs font-semibold uppercase text-black/70">
+                        {orderStatusLabel(order.status)}
+                      </span>
+                      <span className="text-[10px] text-black/45">
+                        Lifecycle complete — no further stages
+                      </span>
+                    </>
+                  ) : (
+                    <select
+                      value={order.status}
+                      onChange={(e) => handleStatusChangeRequest(e.target.value as OrderStatus)}
+                      aria-label="Move the order to its next stage"
+                      className="mt-1 min-w-[150px] uppercase text-xs font-semibold rounded-md border border-black/15 bg-cream px-3 py-2 text-black focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
+                    >
+                      {/* Only the moves the API will accept are offered, so an
+                          impossible stage cannot be chosen and then refused. */}
+                      <option value={order.status} disabled>
+                        {orderStatusLabel(order.status)} (current)
+                      </option>
+                      {orderStatusChoices(order.status).map((choice) => (
+                        <option key={choice.value} value={choice.value}>
+                          {choice.label}
+                        </option>
+                      ))}
+                    </select>
+                  )}
                 </div>
               </div>
 

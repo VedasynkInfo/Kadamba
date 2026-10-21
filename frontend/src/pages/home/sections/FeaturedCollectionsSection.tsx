@@ -1,35 +1,70 @@
 import { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
 import { Icon } from '@/components/icons';
 import { Button, Section, SectionIntro } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { usePublicCatalog } from '@/hooks/usePublicProducts';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 import { fadeUp, staggerChildren } from '@/motion/variants';
+import { productImage, productPath } from '@/pages/products/data';
 import { cn } from '@/utils/cn';
 import { openWithSharedElement } from '@/utils/viewTransition';
-import { collectionCategories, collections, type CollectionItem } from '../data';
+import { collections, type CollectionItem } from '../data';
 import { ImageLightbox } from './ImageLightbox';
 
 /**
- * Featured collections — animated featured slider + responsive bento grid.
+ * Featured collections - animated featured slider + responsive bento grid.
+ *
+ * Products marked `featured` in the catalogue are the source of truth. The
+ * static collection list remains as a graceful fallback while the public API is
+ * unavailable (or before the studio has featured anything).
  */
 export function FeaturedCollectionsSection() {
   const reduced = usePrefersReducedMotion();
+  const navigate = useNavigate();
+  const { catalog } = usePublicCatalog();
   const revealRef = useScrollReveal<HTMLDivElement>({ y: 28, stagger: 0.12 });
-  const [filter, setFilter] = useState<(typeof collectionCategories)[number]>('All');
+  const [filter, setFilter] = useState('All');
   const [active, setActive] = useState<CollectionItem | null>(null);
   const [featuredIndex, setFeaturedIndex] = useState(0);
   const [paused, setPaused] = useState(false);
 
+  const items = useMemo<CollectionItem[]>(() => {
+    const featuredProducts = (catalog?.products ?? []).filter((product) => product.featured);
+    if (featuredProducts.length === 0) return collections;
+    return featuredProducts.map((product) => ({
+      id: product.id,
+      title: product.name,
+      category: product.category?.name ?? 'Atelier',
+      image: productImage(product),
+      alt: product.gallery[0]?.alt || `${product.name} from Kadamba`,
+      href: productPath(product),
+    }));
+  }, [catalog]);
+
+  const categories = useMemo(
+    () => ['All', ...Array.from(new Set(items.map((item) => item.category)))],
+    [items],
+  );
+
+  useEffect(() => {
+    if (!categories.includes(filter)) setFilter('All');
+  }, [categories, filter]);
+
   const filtered = useMemo(
-    () => (filter === 'All' ? collections : collections.filter((c) => c.category === filter)),
-    [filter],
+    () => (filter === 'All' ? items : items.filter((item) => item.category === filter)),
+    [filter, items],
   );
 
   useEffect(() => {
     setFeaturedIndex(0);
   }, [filter]);
+
+  useEffect(() => {
+    if (featuredIndex >= filtered.length) setFeaturedIndex(0);
+  }, [featuredIndex, filtered.length]);
 
   useEffect(() => {
     if (reduced || paused || filtered.length <= 1) return;
@@ -42,6 +77,16 @@ export function FeaturedCollectionsSection() {
   const featured = filtered[featuredIndex] ?? filtered[0];
   const gridItems = filtered.filter((item) => item.id !== featured?.id);
 
+  function openItem(event: React.MouseEvent<HTMLButtonElement>, item: CollectionItem) {
+    if (item.href) {
+      navigate(item.href);
+      return;
+    }
+    openWithSharedElement(event.currentTarget, () => setActive(item), {
+      enabled: !reduced,
+    });
+  }
+
   return (
     <Section tone="dark" className="overflow-hidden py-16 md:py-24">
       <div ref={revealRef}>
@@ -52,7 +97,7 @@ export function FeaturedCollectionsSection() {
             description="Bridal, traditional, festive, and tailored looks from our Kurnool boutique — filter by occasion."
             actions={
               <div className="flex flex-wrap gap-2" role="group" aria-label="Collection categories">
-                {collectionCategories.map((category) => (
+                {categories.map((category) => (
                   <Button
                     key={category}
                     size="sm"
@@ -93,11 +138,7 @@ export function FeaturedCollectionsSection() {
                   key={featured.id}
                   type="button"
                   className="absolute inset-0 block w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus"
-                  onClick={(event) =>
-                    openWithSharedElement(event.currentTarget, () => setActive(featured), {
-                      enabled: !reduced,
-                    })
-                  }
+                  onClick={(event) => openItem(event, featured)}
                   initial={reduced ? false : { opacity: 0, scale: 1.04 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={reduced ? undefined : { opacity: 0 }}
@@ -126,7 +167,7 @@ export function FeaturedCollectionsSection() {
                       </p>
                     </div>
                     <span className="inline-flex items-center gap-1 text-sm text-ink-inverse/80">
-                      Open preview
+                      {featured.href ? 'View piece' : 'Open preview'}
                       <Icon name="arrowRight" size={14} />
                     </span>
                   </div>
@@ -200,11 +241,7 @@ export function FeaturedCollectionsSection() {
                     index === 0 && 'lg:min-h-[460px]',
                     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
                   )}
-                  onClick={(event) =>
-                    openWithSharedElement(event.currentTarget, () => setActive(item), {
-                      enabled: !reduced,
-                    })
-                  }
+                  onClick={(event) => openItem(event, item)}
                 >
                   <OptimizedImage
                     sizes="(min-width: 1200px) 368px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"

@@ -1,8 +1,10 @@
-﻿import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
 import { ClipReveal } from '@/components/motion/ClipReveal';
 import { Button, Section, SectionIntro } from '@/components/ui';
 import type { PublicProduct } from '@/services/products/publicProductService';
+import { ImageLightbox } from '@/pages/home/sections/ImageLightbox';
 import { productDetailCopy, productFaqs, productImage, productPath } from '../data';
 
 export function ProductBannerSection({ product }: { product: PublicProduct }) {
@@ -14,7 +16,7 @@ export function ProductBannerSection({ product }: { product: PublicProduct }) {
         <ClipReveal className="relative aspect-[4/5] bg-white/5 md:aspect-[4/4.6]">
           <OptimizedImage
             src={productImage(product)}
-            alt={`${product.name} made by Kadamba`}
+            alt={product.gallery[0]?.alt || `${product.name} made by Kadamba`}
             priority
             sizes="(min-width: 768px) 540px, 100vw"
             width={1200}
@@ -45,9 +47,31 @@ export function ProductBannerSection({ product }: { product: PublicProduct }) {
           {product.indicativePriceRange ? (
             <p className="mt-4 text-sm text-ink-inverse/70">{product.indicativePriceRange}</p>
           ) : null}
+          {product.leadTimeDays ? (
+            <p className="mt-2 inline-flex rounded-full border border-gold/30 px-3 py-1 text-xs text-gold">
+              Made in about {product.leadTimeDays} days
+            </p>
+          ) : null}
+          {product.leadTimeNote ? (
+            <p className="mt-2 text-xs leading-relaxed text-ink-inverse/55">
+              {product.leadTimeNote}
+            </p>
+          ) : null}
           <p className="text-lede mt-6 text-ink-inverse/75">
             {product.publicDescription || product.description || 'Made to measure in Kurnool.'}
           </p>
+          {product.tags.length > 0 ? (
+            <ul className="mt-4 flex flex-wrap gap-1.5" aria-label="Product tags">
+              {product.tags.map((tag) => (
+                <li
+                  key={tag}
+                  className="rounded-full border border-white/15 px-2.5 py-0.5 text-[11px] text-ink-inverse/65"
+                >
+                  {tag}
+                </li>
+              ))}
+            </ul>
+          ) : null}
 
           <div className="mt-8 flex flex-wrap gap-3">
             <Button
@@ -120,11 +144,84 @@ export function ProductNotesSection({ product }: { product: PublicProduct }) {
             </ol>
           )}
           <p className="mt-6 text-sm leading-relaxed text-ink/60">
-            Typical bridal lead time is six to ten weeks. Festive and everyday pieces are confirmed
-            at the consultation.
+            {product.leadTimeNote ||
+              (product.leadTimeDays
+                ? `Typical lead time is about ${product.leadTimeDays} days from the final fitting.`
+                : 'Typical bridal lead time is six to ten weeks. Festive and everyday pieces are confirmed at the consultation.')}
           </p>
+          {product.variants.length > 0 ? (
+            <div className="mt-6 border-t border-line pt-5">
+              <h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-ink/60">
+                Available variations
+              </h3>
+              <ul className="mt-3 space-y-2">
+                {product.variants.map((variant) => (
+                  <li key={variant.id} className="text-sm text-ink/75">
+                    <span className="font-medium text-ink">{variant.name}</span>
+                    {variant.priceRange ? (
+                      <span className="ml-2 text-xs text-gold">{variant.priceRange}</span>
+                    ) : null}
+                    {variant.description ? (
+                      <p className="mt-0.5 text-xs leading-relaxed text-ink/60">
+                        {variant.description}
+                      </p>
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
         </div>
       </div>
+    </Section>
+  );
+}
+
+export function ProductGallerySection({ product }: { product: PublicProduct }) {
+  const [active, setActive] = useState<number | null>(null);
+  const images = product.gallery.length > 0 ? product.gallery : [];
+
+  if (images.length <= 1) return null;
+
+  const selected = active === null ? null : (images[active] ?? null);
+
+  return (
+    <Section tone="light" className="border-t border-line/15 py-16 md:py-20">
+      <SectionIntro
+        title="The piece in detail"
+        description="Photographs from the atelier. Your final embroidery, fabric and finish are confirmed at the consultation."
+      />
+      <ul className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-3">
+        {images.map((image, index) => (
+          <li key={image.id} className={index === 0 ? 'col-span-2 md:col-span-2' : undefined}>
+            <button
+              type="button"
+              className="group relative block aspect-[4/3] w-full overflow-hidden bg-surface-sunken focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+              onClick={() => setActive(index)}
+              aria-label={`Open image ${index + 1}: ${image.alt || product.name}`}
+            >
+              <OptimizedImage
+                src={image.url}
+                alt={image.alt || `${product.name} detail ${index + 1}`}
+                sizes={
+                  index === 0 ? '(min-width: 768px) 720px, 100vw' : '(min-width: 768px) 360px, 50vw'
+                }
+                width={index === 0 ? 1200 : 720}
+                height={900}
+                className="h-full w-full object-cover transition-transform duration-700 ease-luxury group-hover:scale-105"
+              />
+            </button>
+          </li>
+        ))}
+      </ul>
+
+      <ImageLightbox
+        open={Boolean(selected)}
+        onClose={() => setActive(null)}
+        title={product.name}
+        image={selected?.url ?? ''}
+        alt={selected?.alt || product.name}
+      />
     </Section>
   );
 }

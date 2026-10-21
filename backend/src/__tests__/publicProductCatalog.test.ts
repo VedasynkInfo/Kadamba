@@ -113,4 +113,36 @@ describe('Public product catalogue', () => {
     const saved = await ProductType.findOne({ code: 'ZZ-ACTIVE' }).select('slug');
     expect(saved?.slug).toBe('legacy-garment-2');
   });
+
+  it('serves featured products with gallery, variants and lead time', async () => {
+    const token = await registerAdminAndGetToken(app);
+    await request(app)
+      .post('/api/admin/products/seed')
+      .set('Authorization', `Bearer ${token}`)
+      .send()
+      .expect(200);
+
+    const catalog = await request(app).get('/api/products').expect(200);
+    const product = catalog.body.data.products.find((item: { featured: boolean }) => item.featured);
+    expect(product).toBeTruthy();
+
+    const detail = await request(app).get(`/api/products/${product.slug}`).expect(200);
+    expect(detail.body.data.featured).toBe(true);
+    expect(Array.isArray(detail.body.data.gallery)).toBe(true);
+    expect(Array.isArray(detail.body.data.variants)).toBe(true);
+    expect(detail.body.data.leadTimeDays).toBeGreaterThan(0);
+    expect(detail.body.data).not.toHaveProperty('measurementTemplateId');
+    expect(detail.body.data).not.toHaveProperty('sku');
+
+    const featuredOnly = await request(app).get('/api/products?featured=true').expect(200);
+    expect(featuredOnly.body.data.products.length).toBeGreaterThan(0);
+    expect(
+      featuredOnly.body.data.products.every((item: { featured: boolean }) => item.featured),
+    ).toBe(true);
+
+    const hidden = await request(app).get('/api/products?featured=false').expect(200);
+    expect(hidden.body.data.products.every((item: { featured: boolean }) => !item.featured)).toBe(
+      true,
+    );
+  });
 });

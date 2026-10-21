@@ -1,4 +1,4 @@
-﻿import { useMemo, useState, type ReactNode } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
 import { ClipReveal } from '@/components/motion/ClipReveal';
@@ -82,7 +82,7 @@ export function ProductsCatalogSection() {
                     <div className="relative aspect-[4/5] overflow-hidden bg-surface-sunken">
                       <OptimizedImage
                         src={productImage(product)}
-                        alt={`${product.name} from Kadamba`}
+                        alt={product.gallery[0]?.alt || `${product.name} from Kadamba`}
                         sizes="(min-width: 1024px) 368px, (min-width: 640px) 50vw, 100vw"
                         width={900}
                         height={1125}
@@ -95,6 +95,11 @@ export function ProductsCatalogSection() {
                       <span className="absolute bottom-4 left-4 text-[0.65rem] uppercase tracking-[0.24em] text-gold">
                         {product.category?.name ?? 'Atelier'}
                       </span>
+                      {product.featured ? (
+                        <span className="absolute right-4 top-4 rounded-full bg-gold/90 px-2.5 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-black">
+                          Featured
+                        </span>
+                      ) : null}
                     </div>
                     <h3 className="mt-4 font-heading text-2xl text-ink">{product.name}</h3>
                     <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-ink/65">
@@ -105,6 +110,11 @@ export function ProductsCatalogSection() {
                     {product.indicativePriceRange ? (
                       <p className="mt-3 text-xs uppercase tracking-[0.18em] text-ink/55">
                         {product.indicativePriceRange}
+                      </p>
+                    ) : null}
+                    {product.leadTimeDays ? (
+                      <p className="mt-1 text-xs text-ink/50">
+                        About {product.leadTimeDays} days to make
                       </p>
                     ) : null}
                   </Link>

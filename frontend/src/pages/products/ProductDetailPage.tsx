@@ -1,4 +1,4 @@
-﻿import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import { Spinner } from '@/components/ui';
 import { ContentError } from '@/components/feedback/ContentState';
 import { usePublicCatalog, usePublicProduct } from '@/hooks/usePublicProducts';
@@ -8,6 +8,7 @@ import {
   ProductBannerSection,
   ProductCtaSection,
   ProductFaqSection,
+  ProductGallerySection,
   ProductNotesSection,
   ProductRelatedSection,
 } from './sections';
@@ -47,6 +48,7 @@ export default function ProductDetailPage() {
 
   const path = productPath(product);
   const description =
+    product.seo?.metaDescription ||
     product.publicDescription ||
     product.description ||
     `${product.name} made to measure at Kadamba in Kurnool.`;
@@ -54,18 +56,18 @@ export default function ProductDetailPage() {
   return (
     <>
       <PageMeta
-        title={product.name}
+        title={product.seo?.metaTitle || product.name}
         description={description}
         path={path}
-        image={productImage(product)}
+        image={product.seo?.ogImage || productImage(product)}
       />
       <JsonLd
         data={[
           productJsonLd({
             name: product.name,
-            description,
+            description: product.seo?.ogDescription || description,
             path,
-            image: productImage(product),
+            image: product.seo?.ogImage || productImage(product),
             category: product.category?.name,
             priceRange: product.indicativePriceRange,
           }),
@@ -74,6 +76,7 @@ export default function ProductDetailPage() {
       />
       <ProductBannerSection product={product} />
       <ProductNotesSection product={product} />
+      <ProductGallerySection product={product} />
       <ProductFaqSection />
       <ProductRelatedSection product={product} products={products} />
       <ProductCtaSection />

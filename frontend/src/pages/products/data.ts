@@ -1,4 +1,4 @@
-﻿import { brand } from '@/pages/home/data';
+import { brand } from '@/pages/home/data';
 import type { PublicProduct } from '@/services/products/publicProductService';
 
 /**
@@ -24,6 +24,7 @@ const fallback = '/media/placeholders/lehenga.jpg';
 
 export function productImage(product: PublicProduct): string {
   if (product.image) return product.image;
+  if (product.gallery?.[0]?.url) return product.gallery[0].url;
   return categoryImages[product.category?.code ?? ''] ?? fallback;
 }
 

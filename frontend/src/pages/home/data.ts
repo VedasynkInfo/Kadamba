@@ -23,6 +23,8 @@ export interface CollectionItem {
   category: string;
   image: string;
   alt: string;
+  /** When present, the card opens the public product page instead of a lightbox. */
+  href?: string;
 }
 
 export interface TestimonialItem {

@@ -465,19 +465,47 @@
 
 ---
 
-## Phase 9 — Product catalog & admin management
+## Phase 9 - Product catalog & admin management
 
 | # | Task | Status |
 |---|------|--------|
-| 9.1 | `measurementTemplateId` → real ref; add gallery/variants/leadTime/tags/featured/seo | ⬜ |
-| 9.1 | Make Service ↔ ProductType relationship explicit | ⬜ |
-| 9.2 | Master/detail editor + drag reorder + bulk ops + CSV import/export | ⬜ |
-| 9.2 | Live template preview; unlink-usage warning; "orders using" count | ⬜ |
-| 9.3 | Multi-image gallery + cover selection + alt text | ⬜ |
-| 9.4 | Public catalog + featured collections from `featured` flag | ⬜ |
-| 9.5 | Inventory seam (`sku`/`stockItem`) left open, not built | ⬜ |
+| 9.1 | `measurementTemplateId` -> real ref; add gallery/variants/leadTime/tags/featured/seo | Done |
+| 9.1 | Make Service <-> ProductType relationship explicit | Done |
+| 9.2 | Master/detail editor + drag reorder + bulk ops + CSV import/export | Done |
+| 9.2 | Live template preview; unlink-usage warning; "orders using" count | Done |
+| 9.3 | Multi-image gallery + cover selection + alt text | Done |
+| 9.4 | Public catalog + featured collections from `featured` flag | Done |
+| 9.5 | Inventory seam (`sku`/`stockItem`) left open, not built | Done |
 
-**Gate:** end-to-end product publish with zero deploys; reorder persists; unlink warns with usage; CSV validates row-by-row.
+**Gate:** end-to-end product publish with zero deploys; reorder persists; unlink warns with usage; CSV validates row-by-row. Met in code and tests.
+
+**9.1 - one canonical fit-card reference**
+- `ProductType.measurementTemplateId` is now an ObjectId reference to `MeasurementTemplate`, not a copied template code. Admin writes still accept a legacy code (and CSV sends codes) but resolve it to the real reference before saving.
+- Gallery, variants, lead time, tags, `featured`, nested SEO and the inventory seams `sku`/`stockItem` live on the product document. The console edits the marketing fields; inventory is deliberately not connected yet.
+- `npm run data:backfill-product-template-refs` converts older code-valued records. The script uses the raw collection so Mongoose does not reject the legacy value during the migration window.
+
+**9.1 - the service relationship is explicit**
+- `Service.linkedProductTypeIds` remains the single stored Service -> ProductType relation. The product desk reads it through `GET /api/admin/products/product-types/:id/usage` rather than duplicating links on the product.
+- Usage counts include order line items matched by both the product code and the linked template code, so renaming a product does not hide its order history.
+
+**9.2 - the catalogue is edited as a master/detail desk**
+- The left list supports drag reorder through `@dnd-kit`, multi-select bulk activate/draft/feature/unfeature/move-to-category, and a cover thumbnail. Reordering is disabled while a search or filter is active so dragging cannot silently reshuffle unseen products.
+- The detail editor has Story & fit, Gallery, Variants and SEO tabs. A selected fit card previews its actual fields, and changing/unlinking a template used by orders opens a confirmation that explains existing orders keep their original fit card.
+- `PATCH /api/admin/products/product-types/reorder` persists the ordered ids. `PATCH .../bulk` applies one status/feature/category change to a selection. Both are permission-gated with `catalog:write`.
+- CSV import uses a real RFC 4180 parser (quoted commas, doubled quotes, newlines in descriptions) and sends row numbers to `POST .../import`. The server validates and saves each row independently, returning created/updated counts and per-row failures. Export is lossless for nested gallery/variants/SEO through JSON columns.
+
+**9.3 - gallery and cover are separate decisions**
+- `image` remains the explicit cover used by cards and social previews; `gallery` is the ordered detail-page set. Every gallery item carries an id, URL and alt text. Editors can upload, reorder, set a cover or remove an image without losing the legacy cover on first edit.
+
+**9.4 - the storefront reads the same flag**
+- The home Featured Collections section now prefers active products with `featured: true` and falls back to the curated static set while the public API is unavailable. Product cards link to their detail pages instead of opening a lightbox when a catalogue href exists.
+- Product detail pages render the gallery, lead time, tags and active variants, and use product-level SEO fields for the document head and Product JSON-LD. Public DTOs still omit workshop-only fields such as template ids and SKUs.
+- `GET /api/products?featured=true` filters the public catalogue without a separate collection document or deploy.
+
+**9.5 - the inventory seam stays a seam**
+- `sku` and `stockItem` are stored and validated but intentionally absent from the public DTO and the editor. This keeps the schema ready for Phase 13 without pretending stock movements exist now.
+
+**Verification:** backend `npm run lint`, `npm run build`, `npx tsc --noEmit` and Vitest (120 tests) pass; frontend `npm run lint`, `npm run typecheck`, Vite production build and Vitest (227 tests) pass. `check:tokens`, `check:emoji` and `check:contract` remain at their zero/clean baselines.
 
 ---
 

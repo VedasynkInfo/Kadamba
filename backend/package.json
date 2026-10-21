@@ -17,7 +17,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check:contract": "node ../scripts/sync-shared.mjs --check",
-    "data:backfill-product-slugs": "tsx src/scripts/backfillProductSlugs.ts"
+    "data:backfill-product-slugs": "tsx src/scripts/backfillProductSlugs.ts",
+    "data:backfill-product-template-refs": "tsx src/scripts/backfillProductTemplateRefs.ts"
   },
   "keywords": [
     "kadamba",

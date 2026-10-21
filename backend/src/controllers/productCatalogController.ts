@@ -3,7 +3,7 @@ import { asyncHandler } from '../utils/asyncHandler';
 import { parsePagination, buildPaginationMeta } from '../utils/pagination';
 import * as catalogService from '../services/productCatalogService';
 
-export const listCategoriesHandler = asyncHandler(async (req: Request, res: Response) => {
+export const listCategoriesHandler = asyncHandler(async (_req: Request, res: Response) => {
   const categories = await catalogService.listCategories();
   res.status(200).json({
     success: true,
@@ -35,7 +35,7 @@ export const updateCategoryHandler = asyncHandler(async (req: Request, res: Resp
 
 export const listProductTypesHandler = asyncHandler(async (req: Request, res: Response) => {
   const { page, limit } = parsePagination(req.query);
-  const { categoryId, search, active } = req.query;
+  const { categoryId, search, active, featured } = req.query;
 
   const filters: catalogService.ProductTypeFilters = {};
 
@@ -51,6 +51,12 @@ export const listProductTypesHandler = asyncHandler(async (req: Request, res: Re
     filters.active = true;
   } else if (active === 'false') {
     filters.active = false;
+  }
+
+  if (featured === 'true') {
+    filters.featured = true;
+  } else if (featured === 'false') {
+    filters.featured = false;
   }
 
   const { items, total } = await catalogService.listProductTypes(filters, page, limit);
@@ -98,7 +104,42 @@ export const updateProductTypeHandler = asyncHandler(async (req: Request, res: R
   });
 });
 
-export const seedCatalogHandler = asyncHandler(async (req: Request, res: Response) => {
+export const reorderProductTypesHandler = asyncHandler(async (req: Request, res: Response) => {
+  const result = await catalogService.reorderProductTypes(req.body.ids);
+  res.status(200).json({
+    success: true,
+    message: 'Product order saved',
+    data: result,
+  });
+});
+
+export const bulkUpdateProductTypesHandler = asyncHandler(async (req: Request, res: Response) => {
+  const result = await catalogService.bulkUpdateProductTypes(req.body.ids, req.body.updates);
+  res.status(200).json({
+    success: true,
+    message: 'Products updated',
+    data: result,
+  });
+});
+
+export const getProductUsageHandler = asyncHandler(async (req: Request, res: Response) => {
+  const usage = await catalogService.getProductUsage(String(req.params.id));
+  res.status(200).json({
+    success: true,
+    data: usage,
+  });
+});
+
+export const importProductTypesHandler = asyncHandler(async (req: Request, res: Response) => {
+  const result = await catalogService.importProductTypes(req.body.rows);
+  res.status(200).json({
+    success: true,
+    message: 'CSV import processed',
+    data: result,
+  });
+});
+
+export const seedCatalogHandler = asyncHandler(async (_req: Request, res: Response) => {
   const results = await catalogService.seedCatalog();
   res.status(200).json({
     success: true,
@@ -109,8 +150,11 @@ export const seedCatalogHandler = asyncHandler(async (req: Request, res: Respons
 
 /* ----------------------------- public storefront ---------------------------- */
 
-export const getPublicCatalogHandler = asyncHandler(async (_req: Request, res: Response) => {
-  const catalog = await catalogService.getPublicCatalog();
+export const getPublicCatalogHandler = asyncHandler(async (req: Request, res: Response) => {
+  const catalog = await catalogService.getPublicCatalog({
+    featured:
+      req.query.featured === 'true' ? true : req.query.featured === 'false' ? false : undefined,
+  });
   res.status(200).json({
     success: true,
     data: catalog,

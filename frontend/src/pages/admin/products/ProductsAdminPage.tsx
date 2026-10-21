@@ -1,680 +1,623 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Icon } from '@/components/icons';
-import { productApi, type ProductCategory, type ProductType } from '@/services/products/productService';
-import { measurementApi, type MeasurementTemplate } from '@/services/measurements/measurementsService';
+import { Alert, Button, Input, Select, Spinner, useToast } from '@/components/ui';
 import {
-  Button, Drawer, Input, Textarea, Spinner, Select, Table, StatusBadge, useToast,
-} from '@/components/ui';
+  measurementApi,
+  type MeasurementTemplate,
+} from '@/services/measurements/measurementsService';
+import {
+  productApi,
+  type ProductCategory,
+  type ProductImportResult,
+  type ProductImportRow,
+  type ProductPayload,
+  type ProductType,
+  type ProductUsage,
+} from '@/services/products/productService';
 import { AdminHorizonBanner } from '../components/AdminHorizonBanner';
 import { adminBanners } from '../data';
-import { cn } from '@/utils/cn';
+import { queryClient } from '@/lib/queryClient';
+import { CategoryManagerModal } from './CategoryManagerModal';
+import { ProductEditor } from './ProductEditor';
+import { ProductImportModal } from './ProductImportModal';
+import { ProductMasterList } from './ProductMasterList';
+import { downloadProductCsv } from './productCsv';
+
+const PAGE_SIZE = 100;
+type StatusFilter = 'all' | 'active' | 'draft' | 'featured';
+
+function messageFor(error: unknown, fallback: string): string {
+  if (error && typeof error === 'object' && 'response' in error) {
+    const response = (error as { response?: { data?: { message?: string } } }).response;
+    if (response?.data?.message) return response.data.message;
+  }
+  return error instanceof Error ? error.message : fallback;
+}
+
+/** The storefront shares one query cache; a save must be visible without a deploy. */
+function invalidatePublicProducts() {
+  void queryClient.invalidateQueries({ queryKey: ['public-content', 'products'] });
+}
 
 export default function ProductsAdminPage() {
   const { toast } = useToast();
   const [categories, setCategories] = useState<ProductCategory[]>([]);
   const [productTypes, setProductTypes] = useState<ProductType[]>([]);
   const [templates, setTemplates] = useState<MeasurementTemplate[]>([]);
-  
   const [loading, setLoading] = useState(true);
-  const [loadingTypes, setLoadingTypes] = useState(false);
-  const [pagination, setPagination] = useState({ page: 1, limit: 15, total: 0, pages: 1 });
+  const [loadError, setLoadError] = useState<string | null>(null);
 
-  // Filters state
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string>('All');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeFilter, setActiveFilter] = useState<string>('');
+  const [search, setSearch] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('All');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const [creating, setCreating] = useState(false);
+  const [createKey, setCreateKey] = useState(0);
 
-  // Seeding state
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [bulkSaving, setBulkSaving] = useState(false);
   const [seeding, setSeeding] = useState(false);
+  const [usage, setUsage] = useState<ProductUsage | null>(null);
+  const [usageLoading, setUsageLoading] = useState(false);
+  const [usageVersion, setUsageVersion] = useState(0);
+  const [pendingSave, setPendingSave] = useState<{
+    payload: ProductPayload;
+    isNew: boolean;
+  } | null>(null);
 
-  // Category Drawer/Form state
-  const [categoryDrawerOpen, setCategoryDrawerOpen] = useState(false);
-  const [savingCategory, setSavingCategory] = useState(false);
-  const [catCode, setCatCode] = useState('');
-  const [catName, setCatName] = useState('');
-  const [catSortOrder, setCatSortOrder] = useState('0');
-  const [selectedEditCat, setSelectedEditCat] = useState<ProductCategory | null>(null);
+  const [importOpen, setImportOpen] = useState(false);
+  const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const [categorySaving, setCategorySaving] = useState(false);
 
-  // Product Type Drawer/Form state
-  const [typeDrawerOpen, setTypeDrawerOpen] = useState(false);
-  const [savingType, setSavingType] = useState(false);
-  const [typeCode, setTypeCode] = useState('');
-  const [typeName, setTypeName] = useState('');
-  const [typeCategoryId, setTypeCategoryId] = useState('');
-  const [typeDescription, setTypeDescription] = useState('');
-  const [typePublicDesc, setTypePublicDesc] = useState('');
-  const [typeTemplateCode, setTypeTemplateCode] = useState('');
-  const [typePriceRange, setTypePriceRange] = useState('');
-  const [typeActive, setTypeActive] = useState(true);
-  const [typeSortOrder, setTypeSortOrder] = useState('0');
-  const [selectedEditType, setSelectedEditType] = useState<ProductType | null>(null);
-
-  const fetchCategories = async () => {
-    try {
-      const data = await productApi.listCategories();
-      setCategories(data);
-    } catch (err) {
-      console.error('Failed to get categories', err);
+  const loadProducts = useCallback(async (): Promise<ProductType[]> => {
+    const first = await productApi.listProductTypes({ page: 1, limit: PAGE_SIZE });
+    const items = [...first.items];
+    const pages = first.pagination?.pages ?? 1;
+    for (let page = 2; page <= pages; page += 1) {
+      const next = await productApi.listProductTypes({ page, limit: PAGE_SIZE });
+      items.push(...next.items);
     }
-  };
-
-  const fetchTemplates = async () => {
-    try {
-      const data = await measurementApi.listTemplates({ active: true });
-      setTemplates(data.items);
-    } catch (err) {
-      console.error('Failed to get measurement templates', err);
-    }
-  };
-
-  const fetchProductTypes = async () => {
-    setLoadingTypes(true);
-    try {
-      const data = await productApi.listProductTypes({
-        categoryId: selectedCategoryId === 'All' ? undefined : selectedCategoryId,
-        search: searchQuery || undefined,
-        active: activeFilter || undefined,
-        page: pagination.page,
-        limit: pagination.limit,
-      });
-      setProductTypes(data.items);
-      setPagination(data.pagination);
-    } catch (err) {
-      console.error('Failed to get product types', err);
-    } finally {
-      setLoadingTypes(false);
-    }
-  };
-
-  useEffect(() => {
-    const initLoad = async () => {
-      setLoading(true);
-      try {
-        const cats = await productApi.listCategories();
-        await fetchTemplates();
-        if (cats.length === 0) {
-          await productApi.seedCatalog();
-          const reloadedCats = await productApi.listCategories();
-          setCategories(reloadedCats);
-        } else {
-          setCategories(cats);
-        }
-      } catch (err) {
-        console.error('Failed to initialize product catalog', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    void initLoad();
+    return items;
   }, []);
 
-  useEffect(() => {
-    if (categories.length > 0 && !typeCategoryId) {
-      setTypeCategoryId(categories[0].id || categories[0]._id || '');
+  const refreshCategories = useCallback(async () => {
+    const next = await productApi.listCategories();
+    setCategories(next);
+    return next;
+  }, []);
+
+  const refreshTemplates = useCallback(async () => {
+    const result = await measurementApi.listTemplates({ limit: 100 });
+    setTemplates(result.items);
+    return result.items;
+  }, []);
+
+  const loadAll = useCallback(async () => {
+    setLoading(true);
+    setLoadError(null);
+    try {
+      const [nextCategories, nextTemplates, nextProducts] = await Promise.all([
+        productApi.listCategories(),
+        measurementApi.listTemplates({ limit: 100 }),
+        loadProducts(),
+      ]);
+      setCategories(nextCategories);
+      setTemplates(nextTemplates.items);
+      setProductTypes(nextProducts);
+      setSelectedId((current) => {
+        if (current && nextProducts.some((product) => product.id === current)) return current;
+        return nextProducts[0]?.id ?? null;
+      });
+    } catch (error) {
+      setLoadError(messageFor(error, 'The product catalogue could not be loaded.'));
+    } finally {
+      setLoading(false);
     }
-  }, [categories, typeCategoryId]);
+  }, [loadProducts]);
 
   useEffect(() => {
-    if (!loading) {
-      void fetchProductTypes();
-    }
-  }, [selectedCategoryId, searchQuery, activeFilter, pagination.page, loading]);
+    void loadAll();
+  }, [loadAll]);
 
-  const handleSeedCatalog = async () => {
+  useEffect(() => {
+    setSelectedKeys([]);
+  }, [search, categoryFilter, statusFilter]);
+
+  useEffect(() => {
+    if (!selectedId || creating) {
+      setUsage(null);
+      return;
+    }
+    let active = true;
+    setUsageLoading(true);
+    productApi
+      .getProductUsage(selectedId)
+      .then((next) => {
+        if (active) setUsage(next);
+      })
+      .catch(() => {
+        if (active) setUsage(null);
+      })
+      .finally(() => {
+        if (active) setUsageLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [selectedId, creating, usageVersion]);
+
+  const selectedProduct = useMemo(
+    () => productTypes.find((product) => product.id === selectedId) ?? null,
+    [productTypes, selectedId],
+  );
+
+  const filtered = useMemo(() => {
+    const needle = search.trim().toLowerCase();
+    return productTypes.filter((product) => {
+      if (categoryFilter !== 'All' && product.categoryId?.id !== categoryFilter) return false;
+      if (statusFilter === 'active' && !product.active) return false;
+      if (statusFilter === 'draft' && product.active) return false;
+      if (statusFilter === 'featured' && !product.featured) return false;
+      if (!needle) return true;
+      return [
+        product.name,
+        product.code,
+        product.slug,
+        product.categoryId?.name,
+        product.measurementTemplate?.code,
+        ...(product.tags ?? []),
+      ]
+        .filter(Boolean)
+        .some((value) => String(value).toLowerCase().includes(needle));
+    });
+  }, [productTypes, categoryFilter, statusFilter, search]);
+
+  const canReorder =
+    categoryFilter === 'All' &&
+    statusFilter === 'all' &&
+    search.trim() === '' &&
+    !loading &&
+    productTypes.length <= 500;
+
+  const metrics = useMemo(
+    () => ({
+      total: productTypes.length,
+      active: productTypes.filter((product) => product.active).length,
+      featured: productTypes.filter((product) => product.featured).length,
+      drafts: productTypes.filter((product) => !product.active).length,
+      fits: productTypes.filter((product) => Boolean(product.measurementTemplateId)).length,
+    }),
+    [productTypes],
+  );
+
+  async function persist(payload: ProductPayload, isNew: boolean) {
+    setSaving(true);
+    setSaveError(null);
+    try {
+      const saved = isNew
+        ? await productApi.createProductType(payload)
+        : await productApi.updateProductType(selectedId ?? '', payload);
+      setProductTypes((current) => {
+        const exists = current.some((product) => product.id === saved.id);
+        const next = exists
+          ? current.map((product) => (product.id === saved.id ? saved : product))
+          : [saved, ...current];
+        return next.sort(
+          (a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0) || a.name.localeCompare(b.name),
+        );
+      });
+      setSelectedId(saved.id);
+      setCreating(false);
+      setSelectedKeys([]);
+      setUsageVersion((version) => version + 1);
+      invalidatePublicProducts();
+      toast({
+        title: isNew ? 'Product created' : 'Product saved',
+        description: saved.active
+          ? `${saved.name} is live on the storefront.`
+          : `${saved.name} is saved as a draft.`,
+        tone: 'success',
+      });
+    } catch (error) {
+      setSaveError(messageFor(error, 'The product could not be saved.'));
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  function handleSave(
+    payload: ProductPayload,
+    meta: { templateChanged: boolean; usage: ProductUsage | null },
+  ) {
+    const isNew = creating || !selectedProduct;
+    if (!isNew && meta.templateChanged && (meta.usage?.orderCount ?? 0) > 0) {
+      setPendingSave({ payload, isNew });
+      return;
+    }
+    void persist(payload, isNew);
+  }
+
+  async function handleReorder(orderedIds: string[]) {
+    const order = new Map(orderedIds.map((id, index) => [id, index]));
+    const previous = productTypes;
+    const next = [...productTypes].sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
+    setProductTypes(next);
+    try {
+      await productApi.reorderProductTypes(orderedIds);
+      invalidatePublicProducts();
+      toast({ title: 'Product order saved', tone: 'success' });
+    } catch (error) {
+      setProductTypes(previous);
+      toast({
+        title: 'Could not save the new order',
+        description: messageFor(error, 'Try again after refreshing.'),
+        tone: 'error',
+      });
+    }
+  }
+
+  async function handleBulk(updates: {
+    active?: boolean;
+    featured?: boolean;
+    categoryId?: string;
+  }) {
+    if (selectedKeys.length === 0) return;
+    setBulkSaving(true);
+    try {
+      const result = await productApi.bulkUpdateProductTypes(selectedKeys, updates);
+      const refreshed = await loadProducts();
+      setProductTypes(refreshed);
+      setSelectedKeys([]);
+      invalidatePublicProducts();
+      toast({
+        title: `${result.updated} product${result.updated === 1 ? '' : 's'} updated`,
+        tone: 'success',
+      });
+    } catch (error) {
+      toast({
+        title: 'Bulk update failed',
+        description: messageFor(error, 'No products were changed.'),
+        tone: 'error',
+      });
+    } finally {
+      setBulkSaving(false);
+    }
+  }
+
+  async function handleSeed() {
     setSeeding(true);
     try {
       const result = await productApi.seedCatalog();
-      toast({ title: `Catalog seeded! ${result.categoriesSeeded} categories, ${result.typesSeeded} types`, tone: 'success' });
-      await Promise.all([fetchCategories(), fetchTemplates()]);
-      void fetchProductTypes();
-    } catch (err: any) {
-      toast({ title: err.response?.data?.message || 'Failed to seed product catalog.', tone: 'error' });
+      await Promise.all([refreshCategories(), refreshTemplates()]);
+      await loadAll();
+      invalidatePublicProducts();
+      toast({
+        title: 'Starter catalogue seeded',
+        description: `${result.categoriesSeeded} categories and ${result.typesSeeded} new product types.`,
+        tone: 'success',
+      });
+    } catch (error) {
+      toast({
+        title: 'Could not seed the catalogue',
+        description: messageFor(error, 'Try again after refreshing.'),
+        tone: 'error',
+      });
     } finally {
       setSeeding(false);
     }
-  };
+  }
 
-  const handleCreateCategory = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!catCode.trim() || !catName.trim()) return;
-    setSavingCategory(true);
+  async function handleImport(rows: ProductImportRow[]): Promise<ProductImportResult> {
+    const result = await productApi.importProductTypes(rows);
+    const refreshed = await loadProducts();
+    setProductTypes(refreshed);
+    invalidatePublicProducts();
+    return result;
+  }
+
+  async function handleCategorySave(
+    id: string | null,
+    payload: { code: string; name: string; sortOrder: number; active: boolean },
+  ) {
+    setCategorySaving(true);
     try {
-      if (selectedEditCat) {
-        await productApi.updateCategory(selectedEditCat.id || selectedEditCat._id!, {
-          code: catCode,
-          name: catName,
-          sortOrder: parseInt(catSortOrder) || 0,
-        });
-      } else {
-        await productApi.createCategory({
-          code: catCode,
-          name: catName,
-          sortOrder: parseInt(catSortOrder) || 0,
-        });
-      }
-      setCategoryDrawerOpen(false);
-      resetCategoryForm();
-      void fetchCategories();
-    } catch (err: any) {
-      toast({ title: err.response?.data?.message || 'Failed to save product category.', tone: 'error' });
+      if (id) await productApi.updateCategory(id, payload);
+      else await productApi.createCategory(payload);
+      await refreshCategories();
+      const refreshed = await loadProducts();
+      setProductTypes(refreshed);
+      invalidatePublicProducts();
+      toast({ title: id ? 'Category updated' : 'Category created', tone: 'success' });
+    } catch (error) {
+      throw new Error(messageFor(error, 'Check the code and try again.'));
     } finally {
-      setSavingCategory(false);
+      setCategorySaving(false);
     }
-  };
+  }
 
-  const resetCategoryForm = () => {
-    setCatCode('');
-    setCatName('');
-    setCatSortOrder('0');
-    setSelectedEditCat(null);
-  };
+  function startCreate() {
+    setCreating(true);
+    setCreateKey((key) => key + 1);
+    setSelectedId(null);
+    setSelectedKeys([]);
+    setSaveError(null);
+  }
 
-  const handleEditCategoryClick = (cat: ProductCategory) => {
-    setSelectedEditCat(cat);
-    setCatCode(cat.code);
-    setCatName(cat.name);
-    setCatSortOrder(String(cat.sortOrder));
-    setCategoryDrawerOpen(true);
-  };
-
-  const resetTypeForm = () => {
-    setTypeCode('');
-    setTypeName('');
-    setTypeCategoryId(categories[0]?.id || categories[0]?._id || '');
-    setTypeDescription('');
-    setTypePublicDesc('');
-    setTypeTemplateCode('');
-    setTypePriceRange('');
-    setTypeActive(true);
-    setTypeSortOrder('0');
-    setSelectedEditType(null);
-  };
-
-  const handleCreateProductType = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!typeCode.trim() || !typeName.trim() || !typeCategoryId) return;
-    setSavingType(true);
-    try {
-      const payload = {
-        code: typeCode,
-        name: typeName,
-        categoryId: typeCategoryId,
-        description: typeDescription || undefined,
-        publicDescription: typePublicDesc || undefined,
-        measurementTemplateId: typeTemplateCode || undefined,
-        indicativePriceRange: typePriceRange || undefined,
-        active: typeActive,
-        sortOrder: parseInt(typeSortOrder) || 0,
-      };
-
-      if (selectedEditType) {
-        await productApi.updateProductType(selectedEditType.id || selectedEditType._id!, payload);
-      } else {
-        await productApi.createProductType(payload);
-      }
-      setTypeDrawerOpen(false);
-      resetTypeForm();
-      void fetchProductTypes();
-    } catch (err: any) {
-      toast({ title: err.response?.data?.message || 'Failed to save product garment type.', tone: 'error' });
-    } finally {
-      setSavingType(false);
-    }
-  };
-
-  const handleEditTypeClick = (type: ProductType) => {
-    setSelectedEditType(type);
-    setTypeCode(type.code);
-    setTypeName(type.name);
-    setTypeCategoryId(type.categoryId?.id || type.categoryId?._id || '');
-    setTypeDescription(type.description || '');
-    setTypePublicDesc(type.publicDescription || '');
-    setTypeTemplateCode(type.measurementTemplateId || '');
-    setTypePriceRange(type.indicativePriceRange || '');
-    setTypeActive(type.active);
-    setTypeSortOrder(String(type.sortOrder));
-    setTypeDrawerOpen(true);
-  };
-
-  const handleDeactivateType = async (type: ProductType) => {
-    const nextActive = !type.active;
-    const confirmMsg = nextActive
-      ? `Are you sure you want to activate garment type ${type.code}?`
-      : `Are you sure you want to deactivate garment type ${type.code}? Deactivated garments are hidden from new order pickers.`;
-
-    if (!confirm(confirmMsg)) return;
-
-    try {
-      await productApi.updateProductType(type.id || type._id!, { active: nextActive });
-      void fetchProductTypes();
-    } catch (err: any) {
-      toast({ title: err.response?.data?.message || 'Failed to toggle status.', tone: 'error' });
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="flex min-h-[500px] flex-col items-center justify-center">
-        <Spinner size="lg" label="Retrieving boutique catalog..." />
-      </div>
-    );
+  function cancelEdit() {
+    setCreating(false);
+    setSaveError(null);
+    setSelectedId((current) => current ?? productTypes[0]?.id ?? null);
   }
 
   return (
-    <>
+    <div className="mx-auto max-w-[92rem] space-y-5 px-4 py-6 sm:px-6 md:px-8">
       <AdminHorizonBanner
         density="desk"
         title={adminBanners.products.title}
         copy={adminBanners.products.copy}
         actionLabel={adminBanners.products.actionLabel}
-        onAction={() => {
-          resetTypeForm();
-          setTypeDrawerOpen(true);
-        }}
+        onAction={startCreate}
       />
 
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 md:px-10">
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
-          
-          {/* Categories Sidebar */}
-          <div className="lg:col-span-1 space-y-6">
-            <div className="rounded-lg border border-line bg-surface-raised p-5 space-y-4 shadow-soft">
-              <div className="flex justify-between items-center border-b border-line pb-2">
-                <span className="text-xs font-semibold uppercase tracking-wider text-ink/55">Categories</span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    resetCategoryForm();
-                    setCategoryDrawerOpen(true);
-                  }}
-                  className="text-[10px] font-semibold text-ink hover:underline uppercase"
-                >
-                  + Add
-                </button>
-              </div>
-
-              <div className="space-y-1">
-                <button
-                  type="button"
-                  className={cn(
-                    'w-full text-left px-3 py-2 text-xs rounded transition font-medium',
-                    selectedCategoryId === 'All'
-                      ? 'bg-brand text-ink-on-brand font-semibold shadow-xs'
-                      : 'opacity-75 hover:bg-current/[0.05]',
-                  )}
-                  onClick={() => setSelectedCategoryId('All')}
-                >
-                  All Categories
-                </button>
-                {categories.map((cat) => (
-                  <div key={cat.id || cat._id} className="group flex items-center justify-between rounded hover:bg-current/[0.05] transition">
-                    <button
-                      type="button"
-                      className={cn(
-                        'flex-1 text-left px-3 py-2 text-xs font-medium transition',
-                        selectedCategoryId === (cat.id || cat._id)
-                          ? 'bg-brand text-ink-on-brand font-semibold rounded-l'
-                          : 'opacity-75 hover:opacity-100',
-                      )}
-                      onClick={() => setSelectedCategoryId(cat.id || cat._id!)}
-                    >
-                      {cat.name}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleEditCategoryClick(cat)}
-                      className="px-2.5 py-2 text-[10px] text-ink/70 hover:text-ink hidden group-hover:block font-semibold uppercase"
-                    >
-                      Edit
-                    </button>
-                  </div>
-                ))}
-              </div>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
+        {[
+          { label: 'Products', value: metrics.total, icon: 'products' as const },
+          { label: 'Live', value: metrics.active, icon: 'publish' as const },
+          { label: 'Drafts', value: metrics.drafts, icon: 'file' as const },
+          { label: 'Featured', value: metrics.featured, icon: 'featured' as const },
+          { label: 'Fit cards linked', value: metrics.fits, icon: 'measurements' as const },
+        ].map((metric) => (
+          <div key={metric.label} className="rounded-lg border border-line bg-surface-raised p-3">
+            <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] opacity-60">
+              <Icon name={metric.icon} size={12} />
+              {metric.label}
             </div>
-
-            {/* Quick Actions / Seeding */}
-            <div className="rounded-lg border border-line bg-surface-raised p-5 space-y-3 text-xs shadow-soft">
-              <span className="font-semibold text-ink uppercase tracking-wider text-[10px] block border-b border-line pb-2">
-                Catalog Seeding
-              </span>
-              <p className="text-ink/55 leading-relaxed">
-                Seed the default Kurnool bridal and designer blouse catalog to automatically map template fit fields.
-              </p>
-              <Button
-                variant="secondary"
-                size="sm"
-                className="w-full text-center mt-2"
-                disabled={seeding}
-                onClick={handleSeedCatalog}
-              >
-                {seeding ? (
-                  'Seeding...'
-                ) : (
-                  <span className="inline-flex items-center gap-1">
-                    <Icon name="database" size={14} />
-                    Seed catalog templates
-                  </span>
-                )}
-              </Button>
-            </div>
+            <p className="mt-1 font-heading text-2xl font-bold">{metric.value}</p>
           </div>
+        ))}
+      </div>
 
-          {/* Product Type Directory */}
-          <div className="lg:col-span-3 min-w-0 space-y-6">
-            
-            {/* Filters bar */}
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-line pb-4">
-              <div className="flex flex-1 min-w-[200px] max-w-sm">
-                <Input
-                  type="text"
-                  placeholder="Search by code or name..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-surface-sunken text-xs"
-                />
-              </div>
-              <div className="flex items-center gap-3">
-                <Select
-                  value={activeFilter}
-                  onChange={(e) => setActiveFilter(e.target.value)}
-                  className="w-[140px]"
-                  options={[
-                    { value: '', label: 'All statuses...' },
-                    { value: 'true', label: 'Active only' },
-                    { value: 'false', label: 'Inactive only' },
-                  ]}
-                />
-              </div>
-            </div>
+      {loadError ? (
+        <Alert tone="error" title="Catalogue unavailable">
+          {loadError}{' '}
+          <button type="button" className="font-semibold underline" onClick={() => void loadAll()}>
+            Retry
+          </button>
+        </Alert>
+      ) : null}
 
-            {/* Table */}
-            {loadingTypes ? (
-              <div className="flex min-h-[250px] items-center justify-center">
-                <Spinner size="lg" label="Updating directory..." />
-              </div>
-            ) : productTypes.length === 0 ? (
-              <div className="text-center py-12 border border-line border-dashed rounded-lg bg-surface-sunken p-6 text-xs">
-                <h4 className="font-semibold text-ink">No garment types found</h4>
-                <p className="text-ink/70 mt-1">
-                  Ensure the catalog migration has been executed, or create a brand new custom product type.
+      <div className="flex flex-wrap items-end gap-2 rounded-xl border border-line bg-surface-raised p-3">
+        <div className="min-w-[12rem] flex-1">
+          <Input
+            aria-label="Search products"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Search name, code, tag, or fit card..."
+          />
+        </div>
+        <Select
+          aria-label="Filter by category"
+          value={categoryFilter}
+          onChange={(event) => setCategoryFilter(event.target.value)}
+          options={[
+            { value: 'All', label: 'All categories' },
+            ...categories.map((category) => ({ value: category.id, label: category.name })),
+          ]}
+          className="w-48"
+        />
+        <Select
+          aria-label="Filter by status"
+          value={statusFilter}
+          onChange={(event) => setStatusFilter(event.target.value as StatusFilter)}
+          options={[
+            { value: 'all', label: 'All statuses' },
+            { value: 'active', label: 'Live only' },
+            { value: 'draft', label: 'Drafts only' },
+            { value: 'featured', label: 'Featured only' },
+          ]}
+          className="w-40"
+        />
+        <Button
+          type="button"
+          variant="secondary"
+          size="sm"
+          onClick={() => {
+            downloadProductCsv(filtered);
+            toast({
+              title: `Exported ${filtered.length} product${filtered.length === 1 ? '' : 's'}`,
+              tone: 'info',
+            });
+          }}
+          disabled={filtered.length === 0}
+        >
+          <Icon name="download" size={14} />
+          Export CSV
+        </Button>
+        <Button type="button" variant="secondary" size="sm" onClick={() => setImportOpen(true)}>
+          <Icon name="upload" size={14} />
+          Import
+        </Button>
+        <Button type="button" variant="secondary" size="sm" onClick={() => setCategoriesOpen(true)}>
+          <Icon name="tags" size={14} />
+          Categories
+        </Button>
+        <Button type="button" variant="admin" size="sm" onClick={startCreate}>
+          <Icon name="add" size={14} />
+          New product
+        </Button>
+      </div>
+
+      {loading ? (
+        <div className="flex items-center justify-center gap-3 rounded-xl border border-line bg-surface-raised p-16">
+          <Spinner label="Loading products" />
+          <span className="text-sm opacity-70">Loading the catalogue...</span>
+        </div>
+      ) : (
+        <div className="grid items-start gap-4 xl:grid-cols-[minmax(20rem,0.82fr)_minmax(0,1.5fr)]">
+          <div className="min-w-0 space-y-3">
+            <ProductMasterList
+              products={filtered}
+              categories={categories}
+              selectedId={selectedId}
+              selectedKeys={selectedKeys}
+              canReorder={canReorder}
+              onSelect={(id) => {
+                setSelectedId(id);
+                setCreating(false);
+                setSaveError(null);
+              }}
+              onSelectionChange={setSelectedKeys}
+              onReorder={(ids) => void handleReorder(ids)}
+              onBulk={(updates) => void handleBulk(updates)}
+            />
+
+            {bulkSaving ? (
+              <p className="flex items-center gap-2 text-xs opacity-65">
+                <Spinner size="sm" label="Saving bulk changes" />
+                Saving bulk changes...
+              </p>
+            ) : null}
+
+            {productTypes.length === 0 ? (
+              <div className="rounded-xl border border-dashed border-line bg-surface-raised p-5 text-center">
+                <Icon name="database" size={24} className="mx-auto mb-2 opacity-50" />
+                <p className="text-sm font-medium">The catalogue is empty</p>
+                <p className="mt-1 text-xs opacity-65">
+                  Seed the studio&apos;s starting garments, categories and fit-card links, or create
+                  the first product manually.
                 </p>
                 <Button
+                  type="button"
                   variant="secondary"
-                  className="mt-4"
-                  onClick={() => {
-                    resetTypeForm();
-                    setTypeDrawerOpen(true);
-                  }}
+                  size="sm"
+                  className="mt-3"
+                  loading={seeding}
+                  onClick={() => void handleSeed()}
                 >
-                  Add garment type
+                  <Icon name="database" size={14} />
+                  Seed starter catalogue
                 </Button>
               </div>
-            ) : (
-              <div>
-                <Table
-                  data={productTypes}
-                  keyExtractor={(t) => t.id || t._id || ''}
-                  columns={[
-                    { key: 'code', header: 'Code', className: 'font-mono font-bold' },
-                    {
-                      key: 'name',
-                      header: 'Garment Name',
-                      render: (t) => (
-                        <div>
-                          <span className="font-semibold">{t.name}</span>
-                          {t.description && <span className="block text-[10px] text-ink/70 mt-0.5 truncate max-w-[200px]">{t.description}</span>}
-                        </div>
-                      ),
-                    },
-                    { key: 'categoryId', header: 'Category', render: (t) => t.categoryId?.name || '—' },
-                    {
-                      key: 'measurementTemplateId',
-                      header: 'Fit Template',
-                      className: 'font-mono text-[10px]',
-                      render: (t) => t.measurementTemplateId
-                        ? <Link to="/admin/measurements" className="bg-surface-sunken px-1.5 py-0.5 rounded border border-line font-semibold hover:underline"><Icon name="measurements" size={14} className="mr-1 inline align-middle" /> {t.measurementTemplateId}</Link>
-                        : <span className="text-ink/70">Unmeasurable</span>,
-                    },
-                    { key: 'indicativePriceRange', header: 'Indicative Price', render: (t) => t.indicativePriceRange || '—' },
-                    {
-                      key: 'active',
-                      header: 'Active',
-                      render: (t) => <StatusBadge value={t.active ? 'active' : 'inactive'} kind="generic" />,
-                    },
-                    {
-                      key: 'actions',
-                      header: '',
-                      render: (t) => (
-                        <div className="flex justify-end gap-2">
-                          <button type="button" onClick={() => handleEditTypeClick(t)} className="font-semibold hover:underline">Edit</button>
-                          <button type="button" onClick={() => handleDeactivateType(t)} className={cn('font-semibold hover:underline', t.active ? 'text-rose-700 hover:text-rose-900' : 'text-emerald-700 hover:text-emerald-900')}>
-                            {t.active ? 'Disable' : 'Enable'}
-                          </button>
-                        </div>
-                      ),
-                    },
-                  ]}
-                />
+            ) : null}
+          </div>
 
-                {/* Pagination */}
-                {pagination.pages > 1 && (
-                  <div className="flex items-center justify-between border-t border-line pt-4">
-                    <span className="text-xs text-ink/70">
-                      Showing page {pagination.page} of {pagination.pages}
-                    </span>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        disabled={pagination.page === 1}
-                        onClick={() => setPagination((p) => ({ ...p, page: p.page - 1 }))}
-                      >
-                        Previous
-                      </Button>
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        disabled={pagination.page === pagination.pages}
-                        onClick={() => setPagination((p) => ({ ...p, page: p.page + 1 }))}
-                      >
-                        Next
-                      </Button>
-                    </div>
-                  </div>
-                )}
+          <div className="min-w-0 space-y-3">
+            {saveError ? (
+              <Alert tone="error" title="Product not saved" onDismiss={() => setSaveError(null)}>
+                {saveError}
+              </Alert>
+            ) : null}
+
+            {creating || selectedProduct ? (
+              <ProductEditor
+                key={creating ? `new-${createKey}` : selectedProduct?.id}
+                product={creating ? null : selectedProduct}
+                isNew={creating}
+                categories={categories}
+                templates={templates}
+                usage={usage}
+                usageLoading={usageLoading}
+                saving={saving}
+                defaultCategoryId={categoryFilter !== 'All' ? categoryFilter : categories[0]?.id}
+                defaultSortOrder={
+                  productTypes.reduce((max, product) => Math.max(max, product.sortOrder ?? 0), -1) +
+                  1
+                }
+                onSave={handleSave}
+                onCancel={cancelEdit}
+              />
+            ) : (
+              <div className="rounded-xl border border-dashed border-line bg-surface-raised p-12 text-center">
+                <Icon name="products" size={28} className="mx-auto mb-3 opacity-40" />
+                <p className="font-heading text-lg font-bold">Select a product</p>
+                <p className="mx-auto mt-1 max-w-sm text-sm opacity-65">
+                  Choose a garment from the master list to edit its story, gallery, fit card, and
+                  storefront SEO.
+                </p>
+                <Button
+                  type="button"
+                  variant="admin"
+                  size="sm"
+                  className="mt-4"
+                  onClick={startCreate}
+                >
+                  <Icon name="add" size={14} />
+                  Add a product
+                </Button>
               </div>
             )}
           </div>
         </div>
-      </div>
+      )}
 
-      {/* Category Edit Drawer */}
-      <Drawer
-        open={categoryDrawerOpen}
-        onClose={() => {
-          setCategoryDrawerOpen(false);
-          resetCategoryForm();
+      <ProductImportModal
+        open={importOpen}
+        onClose={() => setImportOpen(false)}
+        onImport={handleImport}
+        onImported={() => {
+          void refreshCategories();
         }}
-        title={selectedEditCat ? 'Edit Category' : 'Create Category'}
-      >
-        <form onSubmit={handleCreateCategory} className="space-y-5 text-xs pb-10">
-          <div>
-            <label className="block text-inherit opacity-85 mb-1.5 font-semibold">Category Code *</label>
-            <Input
-              type="text"
-              placeholder="e.g. BRIDAL *"
-              required
-              disabled={!!selectedEditCat}
-              value={catCode}
-              onChange={(e) => setCatCode(e.target.value)}
-            />
-          </div>
-          <div>
-            <label className="block text-inherit opacity-85 mb-1.5 font-semibold">Category Name *</label>
-            <Input
-              type="text"
-              placeholder="e.g. Bridal Collection *"
-              required
-              value={catName}
-              onChange={(e) => setCatName(e.target.value)}
-            />
-          </div>
-          <div>
-            <label className="block text-inherit opacity-85 mb-1.5 font-semibold">Sort Order</label>
-            <Input
-              type="number"
-              placeholder="0"
-              value={catSortOrder}
-              onChange={(e) => setCatSortOrder(e.target.value)}
-            />
-          </div>
+      />
 
-          <div className="flex gap-3 justify-end pt-3 border-t border-line">
-            <Button
-              type="button"
-              variant="secondary"
-              disabled={savingCategory}
-              onClick={() => {
-                setCategoryDrawerOpen(false);
-                resetCategoryForm();
-              }}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" disabled={savingCategory}>
-              {savingCategory ? 'Saving...' : 'Save Category'}
-            </Button>
-          </div>
-        </form>
-      </Drawer>
+      <CategoryManagerModal
+        open={categoriesOpen}
+        categories={categories}
+        saving={categorySaving}
+        onClose={() => setCategoriesOpen(false)}
+        onSave={handleCategorySave}
+      />
 
-      {/* Product Type Edit/Create Drawer */}
-      <Drawer
-        open={typeDrawerOpen}
-        onClose={() => {
-          setTypeDrawerOpen(false);
-          resetTypeForm();
-        }}
-        title={selectedEditType ? 'Edit Garment Type' : 'Create Garment Type'}
-      >
-        <form onSubmit={handleCreateProductType} className="space-y-5 text-xs pb-20">
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-inherit opacity-85 mb-1.5 font-semibold">Garment Code *</label>
-              <Input
-                type="text"
-                placeholder="e.g. BR-LH *"
-                required
-                disabled={!!selectedEditType}
-                value={typeCode}
-                onChange={(e) => setTypeCode(e.target.value)}
-              />
+      {pendingSave ? (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="unlink-template-title"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+        >
+          <div className="w-full max-w-md rounded-xl border border-line bg-surface-raised p-6 shadow-soft">
+            <div className="flex items-start gap-3">
+              <span className="rounded-full bg-amber-100 p-2 text-amber-700">
+                <Icon name="warning" size={18} />
+              </span>
+              <div>
+                <h2 id="unlink-template-title" className="font-heading text-lg font-bold">
+                  Change a fit card that is already in use?
+                </h2>
+                <p className="mt-1 text-sm opacity-75">
+                  {usage?.orderCount ?? 0} order
+                  {(usage?.orderCount ?? 0) === 1 ? '' : 's'} use this product. Existing orders keep
+                  their original fit card; only new orders will use the new template.
+                </p>
+              </div>
             </div>
-            <div>
-              <label className="block text-inherit opacity-85 mb-1.5 font-semibold">Sort Order</label>
-              <Input
-                type="number"
-                placeholder="0"
-                value={typeSortOrder}
-                onChange={(e) => setTypeSortOrder(e.target.value)}
-              />
+            <div className="mt-5 flex justify-end gap-2">
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                onClick={() => setPendingSave(null)}
+              >
+                Keep current template
+              </Button>
+              <Button
+                type="button"
+                variant="admin"
+                size="sm"
+                loading={saving}
+                onClick={() => {
+                  const next = pendingSave;
+                  setPendingSave(null);
+                  void persist(next.payload, next.isNew);
+                }}
+              >
+                Change and save
+              </Button>
             </div>
           </div>
-
-          <div>
-            <label className="block text-inherit opacity-85 mb-1.5 font-semibold">Garment Name *</label>
-            <Input
-              type="text"
-              placeholder="e.g. Bridal Lehenga *"
-              required
-              value={typeName}
-              onChange={(e) => setTypeName(e.target.value)}
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-inherit opacity-85 mb-1.5 font-semibold">Category *</label>
-              <Select
-                value={typeCategoryId}
-                onChange={(e) => setTypeCategoryId(e.target.value)}
-                placeholder="Select category..."
-                options={categories.map((cat) => ({ value: cat.id || cat._id || '', label: cat.name }))}
-              />
-            </div>
-            <div>
-              <label className="block text-inherit opacity-85 mb-1.5 font-semibold">Measurement Template</label>
-              <Select
-                value={typeTemplateCode}
-                onChange={(e) => setTypeTemplateCode(e.target.value)}
-                placeholder="Unmeasurable (No fitting card)"
-                options={templates.map((t) => ({ value: t.code, label: `${t.name} (${t.code})` }))}
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-inherit opacity-85 mb-1.5 font-semibold">Indicative Price Range</label>
-            <Input
-              type="text"
-              placeholder="e.g. ₹8,000–₹12,000"
-              value={typePriceRange}
-              onChange={(e) => setTypePriceRange(e.target.value)}
-            />
-          </div>
-
-          <div>
-            <label className="block text-inherit opacity-85 mb-1.5 font-semibold">Internal Operations Description</label>
-            <Input
-              type="text"
-              placeholder="e.g. includes fall/pico, heavy embroidery support"
-              value={typeDescription}
-              onChange={(e) => setTypeDescription(e.target.value)}
-            />
-          </div>
-
-          <div>
-            <label className="block text-inherit opacity-85 mb-1.5 font-semibold">Portal Public Description</label>
-            <Textarea
-              placeholder="Detailed description showing on customer login portal..."
-              value={typePublicDesc}
-              onChange={(e) => setTypePublicDesc(e.target.value)}
-              rows={3}
-            />
-          </div>
-
-          <div className="flex items-center gap-1.5">
-            <input
-              type="checkbox"
-              id="type-act"
-              checked={typeActive}
-              onChange={(e) => setTypeActive(e.target.checked)}
-            />
-            <label htmlFor="type-act" className="font-semibold text-ink/75 cursor-pointer">
-              Garment is Active (New orders can select this type)
-            </label>
-          </div>
-
-          <div className="flex gap-4 pt-4 border-t border-line">
-            <Button
-              type="button"
-              variant="secondary"
-              className="flex-1"
-              disabled={savingType}
-              onClick={() => {
-                setTypeDrawerOpen(false);
-                resetTypeForm();
-              }}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" className="flex-1" disabled={savingType}>
-              {savingType ? 'Saving...' : 'Save Garment'}
-            </Button>
-          </div>
-        </form>
-      </Drawer>
-    </>
+        </div>
+      ) : null}
+    </div>
   );
 }

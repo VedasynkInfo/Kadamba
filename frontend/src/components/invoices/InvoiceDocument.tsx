@@ -120,7 +120,7 @@ export function InvoiceDocument({ invoice, className, footerNote }: InvoiceDocum
             <p className="font-heading text-2xl tracking-wide text-ink sm:text-3xl">
               {studio.name}
             </p>
-            <p className="mt-1 text-[0.65rem] uppercase tracking-[0.28em] text-ink/45">
+            <p className="mt-1 text-[0.65rem] uppercase tracking-[0.28em] text-ink/70">
               Boutique & custom tailoring · {studio.location}
             </p>
             <div className="mt-4 space-y-0.5 text-sm text-ink/65">
@@ -132,8 +132,8 @@ export function InvoiceDocument({ invoice, className, footerNote }: InvoiceDocum
             </div>
           </div>
           <div className="text-right">
-            <p className="text-[0.65rem] uppercase tracking-[0.22em] text-ink/40">Invoice</p>
-            <p className="mt-1 font-heading text-2xl text-brand">{invoice.invoiceNumber}</p>
+            <p className="text-[0.65rem] uppercase tracking-[0.22em] text-ink/70">Invoice</p>
+            <p className="mt-1 font-heading text-2xl text-brand-strong">{invoice.invoiceNumber}</p>
             <p className="mt-3 text-sm text-ink/60">
               Date · {formatDate(invoice.invoiceDate)}
             </p>
@@ -152,7 +152,7 @@ export function InvoiceDocument({ invoice, className, footerNote }: InvoiceDocum
       {/* Parties + meta */}
       <div className="grid gap-8 border-b border-line px-6 py-8 sm:grid-cols-2 sm:px-10">
         <div>
-          <p className="text-[0.65rem] uppercase tracking-[0.2em] text-ink/40">Bill to</p>
+          <p className="text-[0.65rem] uppercase tracking-[0.2em] text-ink/70">Bill to</p>
           <p className="mt-2 font-heading text-xl">{customer.name}</p>
           <div className="mt-2 space-y-0.5 text-sm text-ink/65">
             {customer.phone ? <p>{customer.phone}</p> : null}
@@ -163,24 +163,24 @@ export function InvoiceDocument({ invoice, className, footerNote }: InvoiceDocum
           </div>
         </div>
         <div className="sm:text-right">
-          <p className="text-[0.65rem] uppercase tracking-[0.2em] text-ink/40">Order details</p>
+          <p className="text-[0.65rem] uppercase tracking-[0.2em] text-ink/70">Order details</p>
           <dl className="mt-2 space-y-1.5 text-sm">
             <div className="flex justify-between gap-4 sm:justify-end">
-              <dt className="text-ink/45">Order</dt>
+              <dt className="text-ink/70">Order</dt>
               <dd className="font-medium">#{order.orderNumber}</dd>
             </div>
             {order.referenceId ? (
               <div className="flex justify-between gap-4 sm:justify-end">
-                <dt className="text-ink/45">Reference</dt>
+                <dt className="text-ink/70">Reference</dt>
                 <dd className="font-mono text-xs">{order.referenceId}</dd>
               </div>
             ) : null}
             <div className="flex justify-between gap-4 sm:justify-end">
-              <dt className="text-ink/45">Job</dt>
+              <dt className="text-ink/70">Job</dt>
               <dd className="max-w-[220px] text-right">{order.title}</dd>
             </div>
             <div className="flex justify-between gap-4 sm:justify-end">
-              <dt className="text-ink/45">Status</dt>
+              <dt className="text-ink/70">Status</dt>
               <dd className="capitalize">{order.status.replace(/_/g, ' ')}</dd>
             </div>
           </dl>
@@ -189,10 +189,10 @@ export function InvoiceDocument({ invoice, className, footerNote }: InvoiceDocum
 
       {/* Line items */}
       <div className="px-6 py-6 sm:px-10">
-        <p className="text-[0.65rem] uppercase tracking-[0.2em] text-ink/40">Items & services</p>
+        <p className="text-[0.65rem] uppercase tracking-[0.2em] text-ink/70">Items & services</p>
         <table className="mt-4 w-full text-left text-sm">
           <thead>
-            <tr className="border-b border-line text-[0.65rem] uppercase tracking-[0.14em] text-ink/45">
+            <tr className="border-b border-line text-[0.65rem] uppercase tracking-[0.14em] text-ink/70">
               <th className="pb-2 pr-3 font-medium">Description</th>
               <th className="pb-2 pr-3 font-medium text-right">Qty</th>
             </tr>
@@ -200,7 +200,7 @@ export function InvoiceDocument({ invoice, className, footerNote }: InvoiceDocum
           <tbody className="stagger-rows">
             {lineItems.length === 0 ? (
               <tr>
-                <td className="py-4 text-ink/50" colSpan={2}>
+                <td className="py-4 text-ink/70" colSpan={2}>
                   {order.title}
                 </td>
               </tr>
@@ -210,7 +210,7 @@ export function InvoiceDocument({ invoice, className, footerNote }: InvoiceDocum
                   <td className="py-3 pr-3 align-top">
                     <p className="font-medium text-ink/90">{item.name}</p>
                     {item.productTypeCode ? (
-                      <p className="mt-0.5 text-xs text-ink/40">{item.productTypeCode}</p>
+                      <p className="mt-0.5 text-xs text-ink/70">{item.productTypeCode}</p>
                     ) : null}
                     {item.notes ? (
                       <p className="mt-1 text-xs leading-relaxed text-ink/55">{item.notes}</p>
@@ -228,22 +228,22 @@ export function InvoiceDocument({ invoice, className, footerNote }: InvoiceDocum
       <div className="border-t border-line px-6 py-6 sm:px-10">
         <div className="ml-auto max-w-sm space-y-2 text-sm">
           <div className="flex justify-between gap-6">
-            <span className="text-ink/50">Total quoted</span>
+            <span className="text-ink/70">Total quoted</span>
             <span className="font-medium tabular-nums">
               {formatINR(paymentSummary.totalQuoted)}
             </span>
           </div>
           <div className="flex justify-between gap-6">
-            <span className="text-ink/50">Advance</span>
+            <span className="text-ink/70">Advance</span>
             <span className="tabular-nums">{formatINR(paymentSummary.advance)}</span>
           </div>
           <div className="flex justify-between gap-6">
-            <span className="text-ink/50">Total paid</span>
+            <span className="text-ink/70">Total paid</span>
             <span className="tabular-nums">{formatINR(paymentSummary.totalPaid)}</span>
           </div>
           <div className="mt-2 flex justify-between gap-6 border-t border-line pt-3">
             <span className="font-heading text-base">Balance due</span>
-            <span className="font-heading text-xl tabular-nums text-brand">
+            <span className="font-heading text-xl tabular-nums text-brand-strong">
               {formatINR(paymentSummary.balance)}
             </span>
           </div>
@@ -252,15 +252,15 @@ export function InvoiceDocument({ invoice, className, footerNote }: InvoiceDocum
 
       {/* Payment history */}
       <div className="border-t border-line px-6 py-6 sm:px-10">
-        <p className="text-[0.65rem] uppercase tracking-[0.2em] text-ink/40">
+        <p className="text-[0.65rem] uppercase tracking-[0.2em] text-ink/70">
           Payment history
         </p>
         {payments.length === 0 ? (
-          <p className="mt-3 text-sm text-ink/50">No payments recorded yet.</p>
+          <p className="mt-3 text-sm text-ink/70">No payments recorded yet.</p>
         ) : (
           <table className="mt-4 w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-line text-[0.65rem] uppercase tracking-[0.14em] text-ink/45">
+              <tr className="border-b border-line text-[0.65rem] uppercase tracking-[0.14em] text-ink/70">
                 <th className="pb-2 pr-3 font-medium">Date</th>
                 <th className="pb-2 pr-3 font-medium">Method</th>
                 <th className="pb-2 pr-3 font-medium">Reference</th>
@@ -272,7 +272,7 @@ export function InvoiceDocument({ invoice, className, footerNote }: InvoiceDocum
                 <tr key={p.id} className="border-b border-line/8">
                   <td className="py-2.5 pr-3">{formatDate(p.paidAt)}</td>
                   <td className="py-2.5 pr-3 uppercase tracking-wide text-ink/65">{p.method}</td>
-                  <td className="py-2.5 pr-3 text-xs text-ink/50">{p.reference || '—'}</td>
+                  <td className="py-2.5 pr-3 text-xs text-ink/70">{p.reference || '—'}</td>
                   <td className="py-2.5 text-right tabular-nums">{formatINR(p.amount)}</td>
                 </tr>
               ))}
@@ -283,7 +283,7 @@ export function InvoiceDocument({ invoice, className, footerNote }: InvoiceDocum
 
       {invoice.notes ? (
         <div className="border-t border-line px-6 py-5 sm:px-10">
-          <p className="text-[0.65rem] uppercase tracking-[0.2em] text-ink/40">Notes</p>
+          <p className="text-[0.65rem] uppercase tracking-[0.2em] text-ink/70">Notes</p>
           <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-ink/70">
             {invoice.notes}
           </p>
@@ -291,7 +291,7 @@ export function InvoiceDocument({ invoice, className, footerNote }: InvoiceDocum
       ) : null}
 
       <footer className="border-t border-line px-6 py-5 text-center sm:px-10">
-        <p className="text-xs leading-relaxed text-ink/45">
+        <p className="text-xs leading-relaxed text-ink/70">
           {footerNote ||
             `Thank you for choosing ${studio.name}. For billing questions, contact the boutique in ${studio.location}.`}
         </p>

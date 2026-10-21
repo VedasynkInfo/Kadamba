@@ -85,7 +85,7 @@ export function ImageLightbox({ open, onClose, title, image, alt }: ImageLightbo
             onClick={onClose}
             className={cn(
               'rounded-md px-3 py-1.5 text-sm text-ink-inverse/80 transition-colors',
-              'hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold',
+              'hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
             )}
             aria-label="Close lightbox"
           >

@@ -56,7 +56,7 @@ export function ContactChannelsSection() {
       >
         {channels.map((channel) => (
           <motion.li key={channel.id} variants={reduced ? undefined : fadeUp}>
-            <p className="text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-ink/45">
+            <p className="text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-ink/70">
               {channel.label}
             </p>
             <a
@@ -73,7 +73,7 @@ export function ContactChannelsSection() {
       </motion.ul>
 
       <div className="mt-14 border-t border-line pt-10">
-        <p className="text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-ink/45">
+        <p className="text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-ink/70">
           Boutique hours
         </p>
         <ul className="mt-4 space-y-2">

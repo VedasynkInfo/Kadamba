@@ -98,7 +98,7 @@ export default function PortalActivatePage() {
                 placeholder="KDS-2026-0001"
                 required
               />
-              <p className="text-[0.7rem] text-ink-inverse/40">{refHint}</p>
+              <p className="text-[0.7rem] text-ink-inverse/70">{refHint}</p>
               <Input
                 label="Email or mobile"
                 value={emailOrMobile}
@@ -128,7 +128,7 @@ export default function PortalActivatePage() {
                 required
                 autoComplete="new-password"
               />
-              <p className="text-[0.7rem] text-ink-inverse/40">
+              <p className="text-[0.7rem] text-ink-inverse/70">
                 At least 8 characters, with a letter and a number.
               </p>
               {error ? <p className="text-sm text-rose-300">{error}</p> : null}

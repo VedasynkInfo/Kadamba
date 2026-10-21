@@ -1,4 +1,4 @@
-﻿import type { CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import type { WebsiteSettings } from '../data';
 import { DEFAULT_THEME_TOKENS, THEME_PRESETS } from '@/theme/palettes';
 
@@ -56,7 +56,7 @@ function ColorField({ label, sub, value, fallback, onChange }: ColorFieldProps) 
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={fallback}
-          className="w-20 rounded-lg border border-line bg-surface-sunken py-1.5 px-2 text-center text-[11px] font-mono uppercase text-ink focus:outline-none focus:ring-1 focus:ring-brand"
+          className="w-20 rounded-lg border border-line bg-surface-sunken py-1.5 px-2 text-center text-[11px] font-mono uppercase text-ink focus:outline-none focus:ring-1 focus:ring-focus"
         />
       </div>
     </div>

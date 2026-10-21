@@ -79,7 +79,7 @@ export function ServicesSection() {
         title="Services"
         description={`${brand.summary} Explore bridal wear, traditional ensembles, custom tailoring, and boutique styling.`}
         actions={
-          <p className="hidden text-xs uppercase tracking-[0.2em] text-ink/40 md:block" aria-hidden>
+          <p className="hidden text-xs uppercase tracking-[0.2em] text-ink/70 md:block" aria-hidden>
             Hover to explore
           </p>
         }
@@ -121,7 +121,7 @@ export function ServicesSection() {
                 type="button"
                 className={cn(
                   'group relative h-full w-full overflow-hidden text-left',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-cream',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-cream',
                 )}
                 onClick={() => navigate(service.href)}
                 aria-expanded={isActive}
@@ -193,7 +193,7 @@ export function ServicesSection() {
           <motion.li key={service.id} variants={reduced ? undefined : fadeUp}>
             <button
               type="button"
-              className="group relative block aspect-[16/11] w-full overflow-hidden text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              className="group relative block aspect-[16/11] w-full overflow-hidden text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
               onClick={() => navigate(service.href)}
             >
               <OptimizedImage

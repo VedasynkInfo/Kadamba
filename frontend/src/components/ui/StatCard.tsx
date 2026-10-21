@@ -73,7 +73,10 @@ export function StatCard({
 
   if (href) {
     return (
-      <Link to={href} className="block transition hover:opacity-95 focus:outline-none">
+      <Link
+        to={href}
+        className="block rounded-xl transition hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+      >
         {content}
       </Link>
     );

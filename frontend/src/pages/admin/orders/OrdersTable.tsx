@@ -1,27 +1,19 @@
-﻿import { useState, useEffect } from 'react';
+﻿import { useMemo, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '@/components/icons';
+import { DataTable, type Column } from '@/components/ui';
 import type { Order } from '@/services/orders/orderService';
-import { canTransitionOrder, type OrderStatus } from '@/shared/enums';
 import { ORDER_STATUS_CONFIG } from './types';
-import { whatsappDeepLink } from '@/utils/whatsapp';
-import { EmptyState } from '../components/EmptyState';
-import { Skeleton } from '../components/Skeleton';
 import { cn } from '@/utils/cn';
 
-const SKELETON_ROWS = 6;
-
-function formatINR(v: number) {
-  return `₹${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
+function formatINR(value: number) {
+  return `₹${value.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
 }
 
 function formatDate(iso?: string) {
   if (!iso) return '—';
   try {
-    return new Date(iso).toLocaleDateString('en-IN', {
-      day: '2-digit',
-      month: 'short',
-    });
+    return new Date(iso).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
   } catch {
     return iso;
   }
@@ -30,356 +22,226 @@ function formatDate(iso?: string) {
 interface OrdersTableProps {
   items: Order[];
   loading?: boolean;
-  hasActiveFilters: boolean;
-  onResetFilters: () => void;
-  onNewOrder: () => void;
+  selectedKeys: string[];
+  onSelectionChange: (keys: string[]) => void;
+  onBulkExport: (keys: string[]) => void;
   onPreview: (order: Order) => void;
-  onStatusChange: (orderId: string, status: OrderStatus) => void;
+  emptyState: ReactNode;
 }
 
+/**
+ * The orders desk, as a `DataTable`.
+ *
+ * Selection is for the one bulk action an orders list actually needs — handing
+ * a filtered set to a spreadsheet — and the table stays virtualised because a
+ * studio's order history only grows.
+ */
 export function OrdersTable({
   items,
   loading = false,
-  hasActiveFilters,
-  onResetFilters,
-  onNewOrder,
+  selectedKeys,
+  onSelectionChange,
+  onBulkExport,
   onPreview,
-  onStatusChange,
+  emptyState,
 }: OrdersTableProps) {
-  const [menuAnchor, setMenuAnchor] = useState<{
-    order: Order;
-    top: number;
-    right: number;
-    showAbove: boolean;
-  } | null>(null);
-
-  useEffect(() => {
-    if (!menuAnchor) return;
-    const handleClose = () => setMenuAnchor(null);
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setMenuAnchor(null);
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('scroll', handleClose, true);
-    window.addEventListener('resize', handleClose);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('scroll', handleClose, true);
-      window.removeEventListener('resize', handleClose);
-    };
-  }, [menuAnchor]);
-
-  function handleOpenMenu(e: React.MouseEvent<HTMLButtonElement>, order: Order) {
-    e.stopPropagation();
-    if (menuAnchor?.order.id === order.id) {
-      setMenuAnchor(null);
-      return;
-    }
-    const rect = e.currentTarget.getBoundingClientRect();
-    const menuHeight = 220;
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const showAbove = spaceBelow < menuHeight && rect.top > menuHeight;
-
-    setMenuAnchor({
-      order,
-      top: showAbove ? rect.top - 6 : rect.bottom + 6,
-      right: window.innerWidth - rect.right,
-      showAbove,
-    });
-  }
-
-  return (
-    <div
-      className="rounded-xl border shadow-xs overflow-visible transition-colors bg-surface-raised border-line text-ink-raised"
-    >
-      {loading ? (
-        <div className="p-6 space-y-3">
-          {Array.from({ length: SKELETON_ROWS }).map((_, i) => (
-            <Skeleton key={i} variant="table" />
-          ))}
-        </div>
-      ) : items.length === 0 ? (
-        <div className="p-8">
-          <EmptyState
-            title="No orders found"
-            description={
-              hasActiveFilters
-                ? 'No studio commissions match the active search or filters.'
-                : 'Create bridal couture orders, record measurements, and track production workflows.'
-            }
-            actionLabel={hasActiveFilters ? 'Clear Filters' : '+ New Order'}
-            onAction={hasActiveFilters ? onResetFilters : onNewOrder}
-          />
-        </div>
-      ) : (
-        <div className="overflow-x-auto overflow-y-hidden">
-          <table className="w-full min-w-[950px] text-left border-collapse text-xs table-fixed">
-            <thead>
-              <tr
-                className="border-b text-[0.65rem] uppercase tracking-wider font-semibold opacity-75 border-line bg-surface-sunken"
+  const columns = useMemo<Column<Order>[]>(
+    () => [
+      {
+        key: 'order',
+        header: 'Order & Garments',
+        sortable: true,
+        sortValue: (order) => order.orderNumber,
+        render: (order) => (
+          <div className="min-w-[220px]">
+            <div className="flex items-center gap-1.5">
+              <span className="rounded border border-line bg-surface-sunken px-1.5 py-0.5 font-mono text-[10px] font-bold">
+                #{order.orderNumber}
+              </span>
+              <button
+                type="button"
+                onClick={() => onPreview(order)}
+                className="block max-w-[180px] truncate rounded-sm text-left text-xs font-semibold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
               >
-                <th className="py-3 px-4 min-w-[220px]">Order & Garments</th>
-                <th className="py-3 px-4 w-[170px]">Client / Contact</th>
-                <th className="py-3 px-4 w-[150px]">Atelier Stage</th>
-                <th className="py-3 px-4 w-[170px]">Payment Summary</th>
-                <th className="py-3 px-4 w-[140px]">Target Dates</th>
-                <th className="py-3 px-4 w-[90px]">Priority</th>
-                <th className="py-3 px-4 w-[70px] text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody
-              className="stagger-rows divide-y border-line"
+                {order.title || 'Untitled Order'}
+              </button>
+            </div>
+            <div className="mt-1 flex items-center gap-1 text-[11px] text-ink/65">
+              <span>{order.lineItems?.length || 1} garment(s)</span>
+              {order.lineItems?.[0]?.name ? (
+                <span className="max-w-[150px] truncate">· {order.lineItems[0].name}</span>
+              ) : null}
+            </div>
+          </div>
+        ),
+      },
+      {
+        key: 'client',
+        header: 'Client / Contact',
+        sortable: true,
+        sortValue: (order) => order.customerId?.name ?? '',
+        render: (order) => (
+          <div className="max-w-[170px] truncate">
+            <span className="block truncate text-xs font-semibold">
+              {order.customerId?.name || 'Walk-in Client'}
+            </span>
+            <span className="mt-0.5 block text-[11px] text-ink/65">
+              {order.customerId?.phone || '—'}
+            </span>
+          </div>
+        ),
+      },
+      {
+        key: 'status',
+        header: 'Atelier Stage',
+        sortable: true,
+        sortValue: (order) => order.status,
+        render: (order) => {
+          const config = ORDER_STATUS_CONFIG[order.status] ?? {
+            label: order.status,
+            color: 'bg-zinc-500/15 text-zinc-300 border-zinc-500/30',
+            dotColor: 'bg-zinc-400',
+          };
+          return (
+            <span
+              className={cn(
+                'inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider',
+                config.color,
+              )}
             >
-              {items.map((order) => {
-                const isMenuOpen = menuAnchor?.order.id === order.id;
-                const stConfig = ORDER_STATUS_CONFIG[order.status] || {
-                  label: order.status,
-                  color: 'bg-zinc-500/15 text-zinc-400 border-zinc-500/30',
-                  dotColor: 'bg-zinc-400',
-                };
-                const totalQ = order.paymentSummary?.totalQuoted || 0;
-                const paid = order.paymentSummary?.totalPaid || 0;
-                const balance = order.paymentSummary?.balance || 0;
-                const paidPercent = totalQ > 0 ? Math.min(100, Math.round((paid / totalQ) * 100)) : 0;
-
-                return (
-                  <tr
-                    key={order.id}
-                    className="transition hover:bg-current/[0.03] group border-line"
-                  >
-                    {/* Order Number & Title */}
-                    <td className="py-3 px-4">
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <span
-                            className="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded border border-line bg-surface-sunken"
-                          >
-                            #{order.orderNumber}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => onPreview(order)}
-                            className="font-semibold text-inherit text-left hover:underline text-xs truncate max-w-[170px] block cursor-pointer"
-                          >
-                            {order.title || 'Untitled Order'}
-                          </button>
-                        </div>
-                        <div className="flex items-center gap-1 mt-1 text-[11px] opacity-60">
-                          <span>{order.lineItems?.length || 1} garment(s)</span>
-                          {order.lineItems?.[0]?.name ? (
-                            <span className="truncate max-w-[150px]">· {order.lineItems[0].name}</span>
-                          ) : null}
-                        </div>
-                      </div>
-                    </td>
-
-                    {/* Client Name & Phone */}
-                    <td className="py-3 px-4">
-                      <div className="truncate max-w-[160px]">
-                        <span className="font-semibold block truncate">
-                          {order.customerId?.name || 'Walk-in Client'}
-                        </span>
-                        <span className="text-[11px] opacity-60 block mt-0.5">
-                          {order.customerId?.phone || '—'}
-                        </span>
-                      </div>
-                    </td>
-
-                    {/* Pipeline Stage */}
-                    <td className="py-3 px-4 whitespace-nowrap">
-                      <span
-                        className={cn(
-                          'inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-bold border uppercase tracking-wider',
-                          stConfig.color,
-                        )}
-                      >
-                        <span className={cn('h-1.5 w-1.5 rounded-full', stConfig.dotColor)} />
-                        {stConfig.label}
-                      </span>
-                    </td>
-
-                    {/* Financial Progress Bar */}
-                    <td className="py-3 px-4">
-                      <div>
-                        <div className="flex items-center justify-between text-[11px] font-medium">
-                          <span>{formatINR(paid)}</span>
-                          <span className="opacity-50 font-mono text-[10px]">{paidPercent}%</span>
-                        </div>
-                        <div
-                          className="mt-1 h-1.5 w-full rounded-full overflow-hidden bg-line"
-                        >
-                          <div
-                            className={cn(
-                              'h-full rounded-full transition-all duration-300',
-                              paidPercent === 100
-                                ? 'bg-emerald-500'
-                                : paidPercent > 0
-                                ? 'bg-amber-500'
-                                : 'bg-rose-500',
-                            )}
-                            style={{ width: `${paidPercent}%` }}
-                          />
-                        </div>
-                        <div className="flex items-center justify-between text-[10px] opacity-60 mt-0.5">
-                          <span>Quoted: {formatINR(totalQ)}</span>
-                          {balance > 0 ? (
-                            <span className="text-amber-500 font-semibold">Due: {formatINR(balance)}</span>
-                          ) : (
-                            <span className="text-emerald-500">Paid</span>
-                          )}
-                        </div>
-                      </div>
-                    </td>
-
-                    {/* Target Dates */}
-                    <td className="py-3 px-4 whitespace-nowrap">
-                      <div className="text-[11px]">
-                        <div className="flex items-center gap-1">
-                          <span className="opacity-50">Fitting:</span>
-                          <span className="font-semibold">{formatDate(order.expectedTrialAt)}</span>
-                        </div>
-                        <div className="flex items-center gap-1 mt-0.5">
-                          <span className="opacity-50">Delivery:</span>
-                          <span className="font-medium">{formatDate(order.expectedDeliveryAt)}</span>
-                        </div>
-                      </div>
-                    </td>
-
-                    {/* Priority */}
-                    <td className="py-3 px-4 whitespace-nowrap">
-                      <span
-                        className={cn(
-                          'inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider',
-                          order.priority === 'rush'
-                            ? 'bg-rose-500/15 text-rose-500 border border-rose-500/30'
-                            : order.priority === 'high'
-                            ? 'bg-amber-500/15 text-amber-500 border border-amber-500/30'
-                            : 'opacity-60',
-                        )}
-                      >
-                        {order.priority || 'normal'}
-                      </span>
-                    </td>
-
-                    {/* Actions Menu */}
-                    <td className="py-3 px-4 text-right whitespace-nowrap w-[70px]">
-                      <button
-                        type="button"
-                        onClick={(e) => handleOpenMenu(e, order)}
-                        className={cn(
-                          'inline-flex h-8 w-8 items-center justify-center rounded-lg border transition cursor-pointer',
-                          isMenuOpen
-                            ? 'bg-brand/15 text-brand font-bold'
-                            : 'hover:bg-current/[0.08]', isMenuOpen ? 'border-brand' : 'border-line'
-                        )}
-                        aria-label="Actions menu"
-                        aria-expanded={isMenuOpen}
-                      >
-                        <span className="text-base leading-none font-bold">⋮</span>
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {/* Floating Action Dropdown */}
-      {menuAnchor ? (
-        <>
-          <div
-            className="fixed inset-0 z-40 bg-transparent"
-            onClick={() => setMenuAnchor(null)}
-          />
-
-          <div
-            className="fixed z-50 w-52 rounded-xl border p-1 shadow-2xl animate-fade-in text-left text-xs bg-surface-raised border-line text-ink-raised"
-            style={{
-              top: menuAnchor.showAbove ? undefined : `${menuAnchor.top}px`,
-              bottom: menuAnchor.showAbove ? `${window.innerHeight - menuAnchor.top}px` : undefined,
-              right: `${menuAnchor.right}px`,
-            }}
-            onClick={(e) => e.stopPropagation()}
+              <span className={cn('size-1.5 rounded-full', config.dotColor)} />
+              {config.label}
+            </span>
+          );
+        },
+      },
+      {
+        key: 'payment',
+        header: 'Payment Summary',
+        hide: 'md',
+        sortValue: (order) => order.paymentSummary?.balance ?? 0,
+        render: (order) => {
+          const quoted = order.paymentSummary?.totalQuoted || 0;
+          const paid = order.paymentSummary?.totalPaid || 0;
+          const balance = order.paymentSummary?.balance || 0;
+          const paidPercent = quoted > 0 ? Math.min(100, Math.round((paid / quoted) * 100)) : 0;
+          return (
+            <div className="min-w-[150px]">
+              <div className="flex items-center justify-between text-[11px] font-medium">
+                <span>{formatINR(paid)}</span>
+                <span className="font-mono text-[10px] text-ink/65">{paidPercent}%</span>
+              </div>
+              <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-line">
+                <div
+                  className={cn(
+                    'h-full rounded-full transition-all duration-300',
+                    paidPercent === 100
+                      ? 'bg-emerald-500'
+                      : paidPercent > 0
+                        ? 'bg-amber-500'
+                        : 'bg-rose-500',
+                  )}
+                  style={{ width: `${paidPercent}%` }}
+                />
+              </div>
+              <div className="mt-0.5 flex items-center justify-between text-[10px] text-ink/65">
+                <span>Quoted: {formatINR(quoted)}</span>
+                {balance > 0 ? (
+                  <span className="font-semibold text-amber-500">Due: {formatINR(balance)}</span>
+                ) : (
+                  <span className="text-emerald-500">Paid</span>
+                )}
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        key: 'dates',
+        header: 'Target Dates',
+        hide: 'lg',
+        render: (order) => (
+          <div className="whitespace-nowrap text-[11px]">
+            <div className="flex items-center gap-1">
+              <span className="text-ink/65">Fitting:</span>
+              <span className="font-semibold">{formatDate(order.expectedTrialAt)}</span>
+            </div>
+            <div className="mt-0.5 flex items-center gap-1">
+              <span className="text-ink/65">Delivery:</span>
+              <span className="font-medium">{formatDate(order.expectedDeliveryAt)}</span>
+            </div>
+          </div>
+        ),
+      },
+      {
+        key: 'priority',
+        header: 'Priority',
+        sortable: true,
+        sortValue: (order) => order.priority,
+        render: (order) => (
+          <span
+            className={cn(
+              'inline-flex items-center whitespace-nowrap rounded border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider',
+              order.priority === 'rush'
+                ? 'border-rose-500/30 bg-rose-500/15 text-rose-400'
+                : order.priority === 'high'
+                  ? 'border-amber-500/30 bg-amber-500/15 text-amber-400'
+                  : 'border-line text-ink/65',
+            )}
           >
+            {order.priority || 'normal'}
+          </span>
+        ),
+      },
+      {
+        key: 'actions',
+        header: 'Actions',
+        className: 'text-right',
+        render: (order) => (
+          <div className="flex items-center justify-end gap-1">
             <button
               type="button"
-              onClick={() => {
-                const ord = menuAnchor.order;
-                setMenuAnchor(null);
-                onPreview(ord);
-              }}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
+              onClick={() => onPreview(order)}
+              aria-label={`Preview order ${order.orderNumber}`}
+              className="inline-flex size-8 items-center justify-center rounded-lg border border-line transition hover:bg-current/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
             >
               <Icon name="view" size={14} />
-              <span>Quick Preview</span>
             </button>
-
             <Link
-              to={`/admin/orders/${menuAnchor.order.id}`}
-              onClick={() => setMenuAnchor(null)}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
+              to={`/admin/orders/${order.id}`}
+              aria-label={`Open order ${order.orderNumber}`}
+              className="inline-flex size-8 items-center justify-center rounded-lg border border-line transition hover:bg-current/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
             >
-              <Icon name="thread" size={14} />
-              <span>Full Order Workspace</span>
+              <Icon name="arrowRight" size={14} />
             </Link>
-
-            {menuAnchor.order.customerId?.phone ? (
-              <a
-                href={whatsappDeepLink(
-                  menuAnchor.order.customerId.phone,
-                  `Hi ${menuAnchor.order.customerId.name}, this is Kadamba's Designer Studio regarding your order #${menuAnchor.order.orderNumber} (${menuAnchor.order.title}).`,
-                )}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setMenuAnchor(null)}
-                className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-500 hover:bg-emerald-500/10 transition cursor-pointer"
-              >
-                <Icon name="message" size={14} />
-                <span>WhatsApp Client</span>
-              </a>
-            ) : null}
-
-            <div
-              className="my-1 border-t border-line"
-            />
-
-            {/* Only the moves the API will accept from *this* order's stage.
-                The previous version offered "Mark Delivered" to an enquiry and
-                "Move to Finishing" to a delivered order — both refused. */}
-            {canTransitionOrder(menuAnchor.order.status, 'delivery') ? (
-              <button
-                type="button"
-                onClick={() => {
-                  const id = menuAnchor.order.id;
-                  setMenuAnchor(null);
-                  onStatusChange(id, 'delivery');
-                }}
-                className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-500 hover:bg-emerald-500/10 cursor-pointer"
-              >
-                <Icon name="archived" size={14} />
-                <span>Mark Delivered</span>
-              </button>
-            ) : null}
-
-            {canTransitionOrder(menuAnchor.order.status, 'finishing') ? (
-              <button
-                type="button"
-                onClick={() => {
-                  const id = menuAnchor.order.id;
-                  setMenuAnchor(null);
-                  onStatusChange(id, 'finishing');
-                }}
-                className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium opacity-70 hover:opacity-100 hover:bg-current/[0.06] cursor-pointer"
-              >
-                <Icon name="undo" size={14} />
-                <span>Move to Finishing</span>
-              </button>
-            ) : null}
           </div>
-        </>
-      ) : null}
-    </div>
+        ),
+      },
+    ],
+    [onPreview],
+  );
+
+  return (
+    <DataTable
+      columns={columns}
+      data={items}
+      rowKey={(order) => order.id}
+      loading={loading}
+      selectedKeys={selectedKeys}
+      onSelectionChange={onSelectionChange}
+      selectAllLabel="Select all orders on this page"
+      selectRowLabel="Select order"
+      bulkActions={[
+        {
+          label: 'Export CSV',
+          icon: 'file',
+          onClick: onBulkExport,
+        },
+      ]}
+      emptyState={emptyState}
+      maxHeight={620}
+      virtualize={{ threshold: 40, rowHeight: 72 }}
+      ariaLabel="Production orders"
+    />
   );
 }

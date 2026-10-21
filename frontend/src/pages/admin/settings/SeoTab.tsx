@@ -1,4 +1,4 @@
-﻿import type { WebsiteSettings } from '../data';
+import type { WebsiteSettings } from '../data';
 import { MediaUpload } from '../components/MediaUpload';
 
 interface SeoTabProps {
@@ -66,7 +66,7 @@ export function SeoTab({ form, patchForm }: SeoTabProps) {
                 }))
               }
               placeholder="Kadamba's Designer Studio"
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
             />
           </div>
 
@@ -84,7 +84,7 @@ export function SeoTab({ form, patchForm }: SeoTabProps) {
                 }))
               }
               placeholder="{{title}} | {{siteName}}"
-              className="w-full rounded-xl border py-2 px-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+              className="w-full rounded-xl border py-2 px-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
             />
           </div>
         </div>
@@ -103,7 +103,7 @@ export function SeoTab({ form, patchForm }: SeoTabProps) {
               }))
             }
             placeholder="Luxury bespoke atelier specializing in bridal lehengas, hand embroidery, maggam art, and couture tailoring."
-            className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+            className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
           />
         </div>
 

@@ -399,7 +399,7 @@ export function RequestFormSection() {
                     ? 'text-sm font-medium text-ink'
                     : i < stepIndex
                       ? 'text-sm text-ink/55'
-                      : 'text-sm text-ink/35'
+                      : 'text-sm text-ink/70'
                 }
               >
                 <span className="font-heading text-gold">{String(i + 1).padStart(2, '0')}</span>
@@ -552,7 +552,7 @@ export function RequestFormSection() {
                   <div>
                     <label htmlFor={fileInputId} className="text-sm font-medium text-ink">
                       Inspiration images
-                      <span className="ml-1 font-normal text-ink/50">
+                      <span className="ml-1 font-normal text-ink/70">
                         (optional, up to {formCopy.maxImages})
                       </span>
                     </label>
@@ -565,7 +565,7 @@ export function RequestFormSection() {
                       onChange={onPickImages}
                     />
                     {errors.images ? (
-                      <p role="alert" className="mt-1.5 text-xs text-red-700">
+                      <p role="alert" className="mt-1.5 text-xs text-danger">
                         {errors.images}
                       </p>
                     ) : null}
@@ -638,7 +638,7 @@ export function RequestFormSection() {
           </div>
         </form>
 
-        <p className="mt-12 text-center text-xs uppercase tracking-[0.22em] text-ink/45">
+        <p className="mt-12 text-center text-xs uppercase tracking-[0.22em] text-ink/70">
           {formCopy.trustLine}
         </p>
       </div>

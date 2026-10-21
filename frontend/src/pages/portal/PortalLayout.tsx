@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, Suspense } from 'react';
 import { NavLink, Outlet, Navigate, useLocation, Link } from 'react-router-dom';
+import { RouteFallback } from '@/components/layout/RouterShell';
 import { brand } from '@/pages/home/data';
 import { usePortalAuth } from '@/hooks/usePortalAuth';
 import { PortalNotifyProvider, usePortalNotify } from '@/hooks/usePortalNotifySocket';
@@ -83,7 +84,7 @@ function PortalShell() {
               </p>
             )}
             <div>
-              <p className="truncate text-[0.62rem] uppercase tracking-[0.28em] text-ink-inverse/50">
+              <p className="truncate text-[0.62rem] uppercase tracking-[0.28em] text-ink-inverse/70">
                 Customer portal · {brand.location}
               </p>
             </div>
@@ -137,8 +138,14 @@ function PortalShell() {
           })}
         </nav>
       </header>
-      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
-        <Outlet />
+      <main
+        id="portal-main"
+        tabIndex={-1}
+        className="mx-auto max-w-5xl px-4 py-8 outline-none sm:px-6 sm:py-10"
+      >
+        <Suspense fallback={<RouteFallback />}>
+          <Outlet />
+        </Suspense>
       </main>
     </div>
   );

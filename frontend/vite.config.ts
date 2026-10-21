@@ -83,4 +83,54 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    // Routes are already split per desk. What remains is the shared vendor
+    // layer: keeping the chart, motion, form and realtime libraries in their own
+    // chunks means a dashboard visit does not download the board's dnd-kit, and
+    // a library upgrade invalidates one chunk rather than the entry.
+    rolldownOptions: {
+      output: {
+        codeSplitting: {
+          groups: [
+            {
+              name: 'vendor-realtime',
+              priority: 30,
+              test: /node_modules[\\/](socket\.io-client|engine\.io-client|socket\.io-parser)[\\/]/,
+            },
+            {
+              name: 'vendor-charts',
+              priority: 25,
+              test: /node_modules[\\/](recharts|d3-[^\\/]+|victory-vendor|internmap)[\\/]/,
+            },
+            {
+              name: 'vendor-motion',
+              priority: 24,
+              test: /node_modules[\\/](framer-motion|motion-dom|motion-utils)[\\/]/,
+            },
+            {
+              name: 'vendor-forms',
+              priority: 23,
+              test: /node_modules[\\/](react-hook-form|zod)[\\/]/,
+            },
+            {
+              name: 'vendor-dnd',
+              priority: 22,
+              test: /node_modules[\\/]@dnd-kit[\\/]/,
+            },
+            {
+              name: 'vendor-react',
+              priority: 21,
+              test: /node_modules[\\/](react|react-dom|react-router|react-router-dom|scheduler)[\\/]/,
+            },
+            {
+              name: 'vendor',
+              priority: 1,
+              minSize: 20_000,
+              test: /node_modules[\\/]/,
+            },
+          ],
+        },
+      },
+    },
+  },
 });

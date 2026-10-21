@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Icon } from '@/components/icons';
 import { financeApi } from '@/services/finance/financeService';
 import type { Staff } from '@/services/staff/staffService';
@@ -162,7 +162,7 @@ export function SalaryModalForm({ open, staffList, onClose, onSuccess }: SalaryM
             <select
               value={staffId}
               onChange={(e) => handleStaffChange(e.target.value)}
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus cursor-pointer bg-surface-raised border-line"
             >
               {staffList.map((s) => (
                 <option key={s.id} value={s.id}>
@@ -181,7 +181,7 @@ export function SalaryModalForm({ open, staffList, onClose, onSuccess }: SalaryM
               <select
                 value={month}
                 onChange={(e) => setMonth(e.target.value)}
-                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand cursor-pointer bg-surface-raised border-line"
+                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus cursor-pointer bg-surface-raised border-line"
               >
                 {MONTH_NAMES.map((name, idx) => (
                   <option key={idx + 1} value={String(idx + 1)}>
@@ -199,7 +199,7 @@ export function SalaryModalForm({ open, staffList, onClose, onSuccess }: SalaryM
                 type="number"
                 value={year}
                 onChange={(e) => setYear(e.target.value)}
-                className="w-full rounded-xl border py-2 px-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                className="w-full rounded-xl border py-2 px-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
               />
             </div>
           </div>
@@ -218,7 +218,7 @@ export function SalaryModalForm({ open, staffList, onClose, onSuccess }: SalaryM
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="e.g. 25000"
-                className="w-full rounded-xl border py-2 px-3 text-xs font-bold text-amber-400 focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                className="w-full rounded-xl border py-2 px-3 text-xs font-bold text-amber-400 focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
               />
             </div>
 
@@ -231,7 +231,7 @@ export function SalaryModalForm({ open, staffList, onClose, onSuccess }: SalaryM
                 required
                 value={paidAt}
                 onChange={(e) => setPaidAt(e.target.value)}
-                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
               />
             </div>
           </div>
@@ -246,7 +246,7 @@ export function SalaryModalForm({ open, staffList, onClose, onSuccess }: SalaryM
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Bank transfer reference, IMPS txn ID, or cash payout notes..."
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
             />
           </div>
 

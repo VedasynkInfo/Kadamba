@@ -1,7 +1,7 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 import { cn } from '@/utils/cn';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'luxury' | 'admin';
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'luxury' | 'admin' | 'danger';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -16,11 +16,13 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    'bg-[var(--color-primary)] text-[var(--color-primary-text)] border border-white/10 hover:opacity-90 shadow-sm focus-visible:ring-brand',
+    'bg-[var(--color-primary)] text-[var(--color-primary-text)] border border-white/10 hover:opacity-90 shadow-sm focus-visible:ring-focus',
   admin:
-    'bg-brand text-ink-on-brand border border-white/20 hover:brightness-105 shadow-sm font-semibold focus-visible:ring-gold',
+    'bg-brand text-ink-on-brand border border-white/20 hover:brightness-105 shadow-sm font-semibold focus-visible:ring-focus',
   secondary:
     'bg-transparent text-inherit border border-line hover:border-gold/50 hover:bg-surface-sunken shadow-xs',
+  danger:
+    'bg-danger/10 text-danger border border-danger/40 hover:bg-danger/20 shadow-xs',
   ghost:
     'bg-transparent text-inherit hover:bg-current/[0.08] border border-transparent',
   luxury:
@@ -58,7 +60,7 @@ export function Button({
         'group relative inline-flex items-center justify-center gap-2 font-medium tracking-wide',
         'transition-all duration-200 ease-luxury',
         'active:scale-[0.98] disabled:active:scale-100',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-offset-transparent',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-1 focus-visible:ring-offset-transparent',
         'disabled:pointer-events-none disabled:opacity-50 cursor-pointer',
         variantClasses[variant],
         sizeClasses[size],

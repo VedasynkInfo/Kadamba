@@ -1,4 +1,5 @@
 import { cn } from '@/utils/cn';
+import { pageWindow } from '@/utils/pagination';
 import { Button } from './Button';
 
 export interface PaginationProps {
@@ -9,12 +10,10 @@ export interface PaginationProps {
 }
 
 /**
- * Pagination controls with previous / next and page numbers.
+ * Pagination controls with previous / next and a windowed page list.
  */
 export function Pagination({ page, totalPages, onPageChange, className }: PaginationProps) {
   if (totalPages <= 1) return null;
-
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
     <nav aria-label="Pagination" className={cn('flex items-center gap-2', className)}>
@@ -29,20 +28,26 @@ export function Pagination({ page, totalPages, onPageChange, className }: Pagina
         Prev
       </Button>
       <ul className="flex items-center gap-1">
-        {pages.map((p) => (
-          <li key={p}>
-            <Button
-              variant={p === page ? 'primary' : 'ghost'}
-              size="sm"
-              onClick={() => onPageChange(p)}
-              aria-label={`Page ${p}`}
-              aria-current={p === page ? 'page' : undefined}
-              className="min-w-9"
-            >
-              {p}
-            </Button>
-          </li>
-        ))}
+        {pageWindow(page, totalPages).map((entry, index) =>
+          entry === 'gap' ? (
+            <li key={`gap-${index}`} aria-hidden className="px-1 text-xs text-ink/65">
+              …
+            </li>
+          ) : (
+            <li key={entry}>
+              <Button
+                variant={entry === page ? 'primary' : 'ghost'}
+                size="sm"
+                onClick={() => onPageChange(entry)}
+                aria-label={`Page ${entry}`}
+                aria-current={entry === page ? 'page' : undefined}
+                className="min-w-9"
+              >
+                {entry}
+              </Button>
+            </li>
+          ),
+        )}
       </ul>
       <Button
         variant="secondary"

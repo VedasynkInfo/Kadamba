@@ -128,7 +128,7 @@ function BlogPostPreview({ post, onOpen }: { post: BlogPost; onOpen: () => void 
             height={500}
           />
         </div>
-        <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.65rem] uppercase tracking-[0.22em] text-ink/45">
+        <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.65rem] uppercase tracking-[0.22em] text-ink/70">
           <span className="text-ink/60">{post.category}</span>
           <span aria-hidden>·</span>
           <time dateTime={post.date}>{formatBlogDate(post.date)}</time>

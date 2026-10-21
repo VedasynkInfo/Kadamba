@@ -42,7 +42,7 @@ export default function PortalInvoicePage() {
         <button
           type="button"
           onClick={() => navigate('/portal/payments')}
-          className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.18em] text-ink-inverse/50 hover:text-gold"
+          className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.18em] text-ink-inverse/70 hover:text-gold"
         >
           <Icon name="arrowLeft" size={14} />
           Payments &amp; invoices

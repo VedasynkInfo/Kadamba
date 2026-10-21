@@ -149,7 +149,7 @@ export default function AdminLoginPage() {
                       setCode('');
                       setError('');
                     }}
-                    className="w-full inline-flex items-center justify-center gap-1 text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/45 transition hover:text-gold"
+                    className="w-full inline-flex items-center justify-center gap-1 text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/70 transition hover:text-gold"
                   >
                     <Icon name="arrowLeft" size={14} />
                     Back to sign in
@@ -204,7 +204,7 @@ export default function AdminLoginPage() {
 
                 <a
                   href="/admin/forgot-password"
-                  className="mt-6 inline-block text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/45 transition hover:text-gold"
+                  className="mt-6 inline-block text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/70 transition hover:text-gold"
                 >
                   Forgot password?
                 </a>
@@ -213,7 +213,7 @@ export default function AdminLoginPage() {
 
             <a
               href="/"
-              className="mt-10 inline-flex items-center gap-1 text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/40 transition hover:text-gold"
+              className="mt-10 inline-flex items-center gap-1 text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/70 transition hover:text-gold"
             >
               <Icon name="arrowLeft" size={14} />
               Public site

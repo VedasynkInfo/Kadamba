@@ -1440,7 +1440,7 @@ const settings: WebsiteSettingsSeed = {
     primaryHover: '#1a1a1a',
     primaryText: '#ffffff',
     accent: '#b59410',
-    publicBg: '#ffffff',
+    publicBg: '#fffdd0',
     publicText: '#171717',
     publicCard: '#ffffff',
     publicCardText: '#171717',

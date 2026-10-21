@@ -44,7 +44,7 @@ export function Sparkline({ values, className, trend }: SparklineProps) {
         'h-7 w-full',
         resolvedTrend === 'up' && 'text-emerald-400',
         resolvedTrend === 'down' && 'text-rose-400',
-        resolvedTrend === 'flat' && 'text-brand',
+        resolvedTrend === 'flat' && 'text-brand-strong',
         className,
       )}
       aria-hidden

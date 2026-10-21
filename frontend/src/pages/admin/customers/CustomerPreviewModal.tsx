@@ -34,7 +34,7 @@ export function CustomerPreviewModal({ customer, onClose }: CustomerPreviewModal
         >
           <div className="flex items-center gap-2">
             <span
-              className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-brand/15 text-brand"
+              className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-brand/15 text-brand-strong"
             >
               #{customer.id.slice(-6).toUpperCase()}
             </span>

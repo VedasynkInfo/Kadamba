@@ -30,7 +30,7 @@ export function Checkbox({ label, error, id, className, disabled, ...props }: Ch
           className={cn(
             'mt-0.5 size-4 shrink-0 appearance-none rounded border border-line-strong bg-surface-field',
             'checked:border-gold checked:bg-gold',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus/40',
             'disabled:cursor-not-allowed',
           )}
           {...props}
@@ -38,7 +38,7 @@ export function Checkbox({ label, error, id, className, disabled, ...props }: Ch
         <span>{label}</span>
       </label>
       {error ? (
-        <p role="alert" className="text-xs text-red-700">
+        <p role="alert" className="text-xs text-danger">
           {error}
         </p>
       ) : null}

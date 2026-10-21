@@ -78,7 +78,7 @@ export default function PortalPaymentsPage() {
       </div>
 
       <div className="border border-gold/20 bg-black/30 px-5 py-6">
-        <p className="text-[0.65rem] uppercase tracking-[0.2em] text-ink-inverse/45">Outstanding balance</p>
+        <p className="text-[0.65rem] uppercase tracking-[0.2em] text-ink-inverse/70">Outstanding balance</p>
         <p className="mt-2 font-heading text-3xl text-gold">{formatINR(data.outstandingBalance)}</p>
       </div>
 
@@ -86,7 +86,7 @@ export default function PortalPaymentsPage() {
         <h2 className="font-heading text-xl text-gold">Your invoices</h2>
         <ul className="mt-4 divide-y divide-gold/10 border border-gold/15">
           {data.invoices.length === 0 ? (
-            <li className="px-4 py-8 text-sm text-ink-inverse/50">
+            <li className="px-4 py-8 text-sm text-ink-inverse/70">
               No invoice until your order is quoted by the boutique. Once pricing is set, invoices
               appear here.
             </li>
@@ -99,7 +99,7 @@ export default function PortalPaymentsPage() {
                       {inv.invoiceNumber || `Order #${inv.orderNumber}`}
                     </p>
                     <p className="mt-0.5 text-sm text-ink-inverse/70">{inv.title}</p>
-                    <p className="mt-1 font-mono text-[0.7rem] text-ink-inverse/40">
+                    <p className="mt-1 font-mono text-[0.7rem] text-ink-inverse/70">
                       {inv.referenceId
                         ? inv.referenceId
                         : inv.orderNumber
@@ -144,7 +144,7 @@ export default function PortalPaymentsPage() {
         <h2 className="font-heading text-xl text-gold">Payment history</h2>
         <ul className="mt-4 divide-y divide-gold/10 border border-gold/15">
           {data.payments.length === 0 ? (
-            <li className="px-4 py-8 text-sm text-ink-inverse/50">No payments recorded yet.</li>
+            <li className="px-4 py-8 text-sm text-ink-inverse/70">No payments recorded yet.</li>
           ) : (
             data.payments.map((p) => (
               <li
@@ -153,7 +153,7 @@ export default function PortalPaymentsPage() {
               >
                 <div>
                   <p className="text-ink-inverse">{formatINR(p.amount)}</p>
-                  <p className="text-[0.7rem] text-ink-inverse/45">
+                  <p className="text-[0.7rem] text-ink-inverse/70">
                     {p.orderTitle || p.referenceId || (p.orderNumber ? `#${p.orderNumber}` : '')} ·{' '}
                     {p.method}
                     {p.reference ? ` · ${p.reference}` : ''}

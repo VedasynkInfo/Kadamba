@@ -23,13 +23,13 @@ export default function NotFoundPage() {
         <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
           <Link
             to="/"
-            className="rounded-md bg-black px-6 py-2.5 text-sm font-medium text-ink-inverse transition-colors hover:bg-black/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            className="rounded-md bg-black px-6 py-2.5 text-sm font-medium text-ink-inverse transition-colors hover:bg-black/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
           >
             Back to home
           </Link>
           <Link
             to="/gallery"
-            className="rounded-md border border-line-strong px-6 py-2.5 text-sm font-medium text-ink transition-colors hover:border-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            className="rounded-md border border-line-strong px-6 py-2.5 text-sm font-medium text-ink transition-colors hover:border-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
           >
             View gallery
           </Link>

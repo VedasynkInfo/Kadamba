@@ -1,4 +1,4 @@
-﻿import { Icon } from '@/components/icons';
+import { Icon } from '@/components/icons';
 import { Link } from 'react-router-dom';
 import { ORDER_PRIORITIES, ORDER_STATUS_CONFIG } from './types';
 
@@ -46,7 +46,7 @@ export function OrdersToolbar({
               value={query}
               onChange={(e) => onQueryChange(e.target.value)}
               placeholder="Search order #, client, phone, title..."
-              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition border-line"
+              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition border-line"
             />
             {query ? (
               <button
@@ -66,7 +66,7 @@ export function OrdersToolbar({
               value={selectedStatus}
               onChange={(e) => onStatusChange(e.target.value)}
               aria-label="Filter by order status"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="All">All Statuses</option>
               {Object.entries(ORDER_STATUS_CONFIG).map(([key, cfg]) => (
@@ -83,7 +83,7 @@ export function OrdersToolbar({
               value={selectedPriority}
               onChange={(e) => onPriorityChange(e.target.value)}
               aria-label="Filter by priority"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="">All Priorities</option>
               {ORDER_PRIORITIES.map((p) => (

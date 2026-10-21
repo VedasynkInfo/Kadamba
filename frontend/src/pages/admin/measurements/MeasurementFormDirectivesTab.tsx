@@ -65,7 +65,7 @@ export function MeasurementFormDirectivesTab({
           value={form.notes}
           onChange={(e) => onUpdateField('notes', e.target.value)}
           placeholder="e.g. Sloping left shoulder, deep back illusion net preference, padded bust cups with princess seam, 2-inch hem allowance..."
-          className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+          className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
         />
       </div>
 
@@ -79,7 +79,7 @@ export function MeasurementFormDirectivesTab({
           value={form.measuredBy}
           onChange={(e) => onUpdateField('measuredBy', e.target.value)}
           placeholder="e.g. Master Tailor Desk"
-          className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+          className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
         />
       </div>
     </div>

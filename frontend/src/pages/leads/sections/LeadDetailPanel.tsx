@@ -64,7 +64,7 @@ export function LeadDetailPanel({
       <button
         type="button"
         onClick={() => navigate('/admin/leads/list')}
-        className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.22em] text-ink/45 transition hover:text-ink"
+        className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.22em] text-ink/70 transition hover:text-ink"
       >
         <Icon name="arrowLeft" size={14} />
         All leads
@@ -140,7 +140,7 @@ export function LeadDetailPanel({
               ],
             ].map(([label, value]) => (
               <div key={label} className="border-t border-line pt-3">
-                <dt className="text-[0.65rem] uppercase tracking-[0.2em] text-ink/40">{label}</dt>
+                <dt className="text-[0.65rem] uppercase tracking-[0.2em] text-ink/70">{label}</dt>
                 <dd className="mt-1 text-base text-ink/85">{value}</dd>
               </div>
             ))}
@@ -174,7 +174,7 @@ export function LeadDetailPanel({
           ) : null}
 
           <div className="mt-8 border-t border-line pt-6">
-            <p className="text-[0.65rem] uppercase tracking-[0.2em] text-ink/40">Message</p>
+            <p className="text-[0.65rem] uppercase tracking-[0.2em] text-ink/70">Message</p>
             <p className="mt-3 text-base leading-relaxed text-ink/75">{lead.message}</p>
           </div>
 
@@ -268,7 +268,7 @@ export function LeadDetailPanel({
             {/* List existing follow ups */}
             <div className="mt-4 space-y-2">
               {(lead.followUps || []).length === 0 ? (
-                <p className="text-xs text-ink/45 py-2">No follow-ups scheduled yet.</p>
+                <p className="text-xs text-ink/70 py-2">No follow-ups scheduled yet.</p>
               ) : (
                 [...(lead.followUps || [])].reverse().map((fu) => (
                   <div
@@ -276,7 +276,7 @@ export function LeadDetailPanel({
                     className={cn(
                       'flex items-center justify-between gap-3 rounded border p-3 text-xs',
                       fu.status === 'completed'
-                        ? 'border-line bg-black/[0.02] text-ink/50'
+                        ? 'border-line bg-black/[0.02] text-ink/70'
                         : 'border-amber-200 bg-amber-50/50 text-ink',
                     )}
                   >
@@ -352,13 +352,13 @@ export function LeadDetailPanel({
               {[...lead.notes].reverse().map((item) => (
                 <li key={item.id} className="border-t border-line pt-4">
                   <p className="text-sm leading-relaxed text-ink/80">{item.body}</p>
-                  <p className="mt-2 text-[0.65rem] uppercase tracking-[0.18em] text-ink/40">
+                  <p className="mt-2 text-[0.65rem] uppercase tracking-[0.18em] text-ink/70">
                     {item.author} · {formatLeadDate(item.createdAt)}
                   </p>
                 </li>
               ))}
               {lead.notes.length === 0 ? (
-                <li className="text-sm text-ink/45">No notes yet.</li>
+                <li className="text-sm text-ink/70">No notes yet.</li>
               ) : null}
             </ul>
           </section>
@@ -376,7 +376,7 @@ export function LeadDetailPanel({
                   {event.detail ? (
                     <p className="mt-1 text-sm text-ink/60">{event.detail}</p>
                   ) : null}
-                  <p className="mt-2 text-[0.65rem] uppercase tracking-[0.18em] text-ink/40">
+                  <p className="mt-2 text-[0.65rem] uppercase tracking-[0.18em] text-ink/70">
                     {formatLeadDate(event.createdAt)}
                   </p>
                 </li>

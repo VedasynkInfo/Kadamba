@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '@/components/icons';
 import type { InvoiceRecord } from '@/services/finance/financeService';
@@ -232,7 +232,7 @@ export function InvoicesTable({
                         className={cn(
                           'inline-flex h-8 w-8 items-center justify-center rounded-lg border transition cursor-pointer',
                           isMenuOpen
-                            ? 'bg-brand/15 text-brand font-bold'
+                            ? 'bg-brand/15 text-brand-strong font-bold'
                             : 'hover:bg-current/[0.08]', isMenuOpen ? 'border-brand' : 'border-line'
                         )}
                         aria-label="Actions menu"
@@ -311,7 +311,7 @@ export function InvoicesTable({
             <Link
               to="/admin/payments"
               onClick={() => setMenuAnchor(null)}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-brand hover:bg-current/[0.06] cursor-pointer"
+              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-brand-strong hover:bg-current/[0.06] cursor-pointer"
             >
               <Icon name="card" size={14} />
               <span>Record Payment</span>

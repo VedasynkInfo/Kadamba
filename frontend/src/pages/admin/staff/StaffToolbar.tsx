@@ -1,4 +1,4 @@
-﻿import { Icon } from '@/components/icons';
+import { Icon } from '@/components/icons';
 import { SPECIALIZATIONS, EMPLOYMENT_TYPES } from './types';
 
 interface StaffToolbarProps {
@@ -53,7 +53,7 @@ export function StaffToolbar({
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder="Search artisan name, phone, locality..."
-              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition border-line"
+              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition border-line"
             />
             {searchQuery ? (
               <button
@@ -73,7 +73,7 @@ export function StaffToolbar({
               value={statusFilter}
               onChange={(e) => onStatusChange(e.target.value)}
               aria-label="Filter by status"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="">All Statuses</option>
               <option value="active">Active Only</option>
@@ -87,7 +87,7 @@ export function StaffToolbar({
               value={employmentFilter}
               onChange={(e) => onEmploymentChange(e.target.value)}
               aria-label="Filter by employment type"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="">All Types</option>
               {EMPLOYMENT_TYPES.map((t) => (
@@ -104,7 +104,7 @@ export function StaffToolbar({
               value={specializationFilter}
               onChange={(e) => onSpecializationChange(e.target.value)}
               aria-label="Filter by craft specialization"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="">All Crafts & Skills</option>
               {SPECIALIZATIONS.map((s) => (

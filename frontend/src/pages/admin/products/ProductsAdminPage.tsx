@@ -324,7 +324,7 @@ export default function ProductsAdminPage() {
                     <button
                       type="button"
                       onClick={() => handleEditCategoryClick(cat)}
-                      className="px-2.5 py-2 text-[10px] text-ink/40 hover:text-ink hidden group-hover:block font-semibold uppercase"
+                      className="px-2.5 py-2 text-[10px] text-ink/70 hover:text-ink hidden group-hover:block font-semibold uppercase"
                     >
                       Edit
                     </button>
@@ -396,7 +396,7 @@ export default function ProductsAdminPage() {
             ) : productTypes.length === 0 ? (
               <div className="text-center py-12 border border-line border-dashed rounded-lg bg-surface-sunken p-6 text-xs">
                 <h4 className="font-semibold text-ink">No garment types found</h4>
-                <p className="text-ink/45 mt-1">
+                <p className="text-ink/70 mt-1">
                   Ensure the catalog migration has been executed, or create a brand new custom product type.
                 </p>
                 <Button
@@ -423,7 +423,7 @@ export default function ProductsAdminPage() {
                       render: (t) => (
                         <div>
                           <span className="font-semibold">{t.name}</span>
-                          {t.description && <span className="block text-[10px] text-ink/45 mt-0.5 truncate max-w-[200px]">{t.description}</span>}
+                          {t.description && <span className="block text-[10px] text-ink/70 mt-0.5 truncate max-w-[200px]">{t.description}</span>}
                         </div>
                       ),
                     },
@@ -434,7 +434,7 @@ export default function ProductsAdminPage() {
                       className: 'font-mono text-[10px]',
                       render: (t) => t.measurementTemplateId
                         ? <Link to="/admin/measurements" className="bg-surface-sunken px-1.5 py-0.5 rounded border border-line font-semibold hover:underline"><Icon name="measurements" size={14} className="mr-1 inline align-middle" /> {t.measurementTemplateId}</Link>
-                        : <span className="text-ink/35">Unmeasurable</span>,
+                        : <span className="text-ink/70">Unmeasurable</span>,
                     },
                     { key: 'indicativePriceRange', header: 'Indicative Price', render: (t) => t.indicativePriceRange || '—' },
                     {
@@ -460,7 +460,7 @@ export default function ProductsAdminPage() {
                 {/* Pagination */}
                 {pagination.pages > 1 && (
                   <div className="flex items-center justify-between border-t border-line pt-4">
-                    <span className="text-xs text-ink/50">
+                    <span className="text-xs text-ink/70">
                       Showing page {pagination.page} of {pagination.pages}
                     </span>
                     <div className="flex gap-2">

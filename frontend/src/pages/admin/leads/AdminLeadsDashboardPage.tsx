@@ -96,7 +96,7 @@ export default function AdminLeadsDashboardPage() {
             <h3 className="text-sm font-bold tracking-tight text-inherit">Recently Active Enquiries</h3>
             <a
               href="/admin/leads/list"
-              className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:underline"
+              className="inline-flex items-center gap-1 text-xs font-semibold text-brand-strong hover:underline"
             >
               View All Pipeline ({leads.length})
               <Icon name="arrowRight" size={14} />

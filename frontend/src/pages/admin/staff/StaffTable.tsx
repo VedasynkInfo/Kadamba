@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import type { Staff } from '@/services/staff/staffService';
 import { Icon } from '@/components/icons';
 import { SPECIALIZATIONS } from './types';
@@ -177,7 +177,7 @@ export function StaffTable({
                           return (
                             <span
                               key={spec}
-                              className="rounded px-2 py-0.5 text-[10px] font-medium border bg-brand/12 border-brand/30 text-brand"
+                              className="rounded px-2 py-0.5 text-[10px] font-medium border bg-brand/12 border-brand/30 text-brand-strong"
                             >
                               {label}
                             </span>
@@ -240,7 +240,7 @@ export function StaffTable({
                         className={cn(
                           'inline-flex h-8 w-8 items-center justify-center rounded-lg border transition cursor-pointer',
                           isMenuOpen
-                            ? 'bg-brand/15 text-brand font-bold'
+                            ? 'bg-brand/15 text-brand-strong font-bold'
                             : 'hover:bg-current/[0.08]', isMenuOpen ? 'border-brand' : 'border-line'
                         )}
                         aria-label="Actions menu"

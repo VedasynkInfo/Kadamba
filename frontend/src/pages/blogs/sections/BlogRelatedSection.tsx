@@ -56,7 +56,7 @@ export function BlogRelatedSection({ post }: BlogRelatedSectionProps) {
                 </div>
                 <time
                   dateTime={item.date}
-                  className="mt-4 block text-[0.65rem] uppercase tracking-[0.22em] text-ink/45"
+                  className="mt-4 block text-[0.65rem] uppercase tracking-[0.22em] text-ink/70"
                 >
                   {formatBlogDate(item.date)}
                 </time>

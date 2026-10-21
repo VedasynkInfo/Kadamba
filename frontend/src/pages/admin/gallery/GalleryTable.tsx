@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Icon } from '@/components/icons';
 import type { GalleryItem } from '@/pages/gallery/data';
 import { EmptyState } from '../components/EmptyState';
@@ -176,7 +176,7 @@ export function GalleryTable({
                     {/* Category */}
                     <td className="py-2.5 px-4 whitespace-nowrap">
                       <span
-                        className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold border bg-brand/12 text-brand border-brand/25"
+                        className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold border bg-brand/12 text-brand-strong border-brand/25"
                       >
                         {item.category}
                       </span>
@@ -227,7 +227,7 @@ export function GalleryTable({
                         className={cn(
                           'inline-flex h-8 w-8 items-center justify-center rounded-lg border transition cursor-pointer',
                           isMenuOpen
-                            ? 'bg-brand/15 text-brand font-bold'
+                            ? 'bg-brand/15 text-brand-strong font-bold'
                             : 'hover:bg-current/[0.08]', isMenuOpen ? 'border-brand' : 'border-line'
                         )}
                         aria-label="Actions menu"

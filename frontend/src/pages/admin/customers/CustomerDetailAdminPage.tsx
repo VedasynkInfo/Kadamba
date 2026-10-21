@@ -349,8 +349,8 @@ export default function CustomerDetailAdminPage() {
               >
                 <Icon name="message" size={14} className="mr-1 inline align-middle" /> WhatsApp
               </a>
-              {customer.email && <span className="text-ink/45">· {customer.email}</span>}
-              {customer.address?.locality && <span className="text-ink/45">· {customer.address.locality}</span>}
+              {customer.email && <span className="text-ink/70">· {customer.email}</span>}
+              {customer.address?.locality && <span className="text-ink/70">· {customer.address.locality}</span>}
             </div>
           </div>
 
@@ -379,7 +379,7 @@ export default function CustomerDetailAdminPage() {
                 'px-6 py-3.5 text-xs font-semibold uppercase tracking-wider border-b-2 transition-all whitespace-nowrap',
                 activeTab === tab.id
                   ? 'border-line text-ink font-bold'
-                  : 'border-transparent text-ink/45 hover:text-ink hover:border-line',
+                  : 'border-transparent text-ink/70 hover:text-ink hover:border-line',
               )}
             >
               {tab.label}
@@ -407,12 +407,12 @@ export default function CustomerDetailAdminPage() {
                 {loadingOrders ? (
                   <div className="py-8 text-center"><Spinner size="sm" /></div>
                 ) : orders.length === 0 ? (
-                  <p className="text-xs text-ink/45 text-center py-6">No orders registered for this customer yet.</p>
+                  <p className="text-xs text-ink/70 text-center py-6">No orders registered for this customer yet.</p>
                 ) : (
                   <div className="overflow-x-auto border border-line rounded overflow-hidden">
                     <table className="w-full text-left border-collapse text-xs">
                       <thead>
-                        <tr className="border-b border-line bg-surface-sunken text-[0.65rem] uppercase font-semibold text-ink/50">
+                        <tr className="border-b border-line bg-surface-sunken text-[0.65rem] uppercase font-semibold text-ink/70">
                           <th className="p-3">Ref ID</th>
                           <th className="p-3">Order Description</th>
                           <th className="p-3">Status</th>
@@ -469,7 +469,7 @@ export default function CustomerDetailAdminPage() {
                 {loadingMeasurements ? (
                   <div className="py-8 text-center"><Spinner size="sm" /></div>
                 ) : measurements.length === 0 ? (
-                  <p className="text-xs text-ink/45 text-center py-6">No measurement profile records recorded yet.</p>
+                  <p className="text-xs text-ink/70 text-center py-6">No measurement profile records recorded yet.</p>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {measurements.map((m) => (
@@ -477,7 +477,7 @@ export default function CustomerDetailAdminPage() {
                         <div className="flex justify-between items-start">
                           <div>
                             <span className="font-bold text-ink text-sm block">{m.profileName}</span>
-                            <span className="text-[10px] text-ink/50 block mt-0.5 uppercase tracking-wider font-semibold">
+                            <span className="text-[10px] text-ink/70 block mt-0.5 uppercase tracking-wider font-semibold">
                               {m.productTypeCode}
                             </span>
                           </div>
@@ -485,7 +485,7 @@ export default function CustomerDetailAdminPage() {
                             {m.status}
                           </span>
                         </div>
-                        <div className="flex justify-between text-[10px] text-ink/50 pt-2 border-t border-line">
+                        <div className="flex justify-between text-[10px] text-ink/70 pt-2 border-t border-line">
                           <span>Measured: {new Date(m.measuredAt || m.createdAt).toLocaleDateString('en-IN')}</span>
                           <Link to="/admin/measurements" className="font-bold text-ink hover:underline">
                             Open fitting <Icon name="arrowRight" size={14} className="mr-1 inline align-middle" /> 
@@ -512,7 +512,7 @@ export default function CustomerDetailAdminPage() {
                       {pinnedNotes.map((note, idx) => (
                         <div key={idx} className="border-b border-line pb-2 last:border-b-0 last:pb-0">
                           <p className="text-ink/85 font-medium whitespace-pre-wrap">{note.body}</p>
-                          <span className="text-[9px] text-ink/45 block mt-1">
+                          <span className="text-[9px] text-ink/70 block mt-1">
                             By {note.createdBy} on {new Date(note.createdAt).toLocaleString('en-IN')}
                           </span>
                         </div>
@@ -549,11 +549,11 @@ export default function CustomerDetailAdminPage() {
                 {/* Normal Notes feed */}
                 <div className="space-y-4">
                   {normalNotes.length === 0 && pinnedNotes.length === 0 ? (
-                    <p className="text-xs text-ink/45 text-center py-4">No journal notes logged yet.</p>
+                    <p className="text-xs text-ink/70 text-center py-4">No journal notes logged yet.</p>
                   ) : (
                     [...normalNotes].reverse().map((note, idx) => (
                       <div key={idx} className="p-3 bg-white/40 border border-line rounded text-xs space-y-1.5">
-                        <div className="flex justify-between items-center text-[10px] text-ink/40">
+                        <div className="flex justify-between items-center text-[10px] text-ink/70">
                           <span className="font-semibold">{note.createdBy}</span>
                           <span>{new Date(note.createdAt).toLocaleString('en-IN')}</span>
                         </div>
@@ -595,7 +595,7 @@ export default function CustomerDetailAdminPage() {
             <div className="rounded-lg border border-line bg-surface-raised p-6 space-y-3">
               <h3 className="font-heading text-lg text-ink border-b border-line pb-2">Client portal status</h3>
               <div>
-                <span className="text-ink/45 block">Invitation Status</span>
+                <span className="text-ink/70 block">Invitation Status</span>
                 <span
                   className={cn(
                     'inline-flex items-center rounded-sm px-2 py-0.5 text-[9px] font-bold border uppercase tracking-wider mt-1.5',
@@ -610,11 +610,11 @@ export default function CustomerDetailAdminPage() {
               </div>
               {customer.portalUserId ? (
                 <div>
-                  <span className="text-ink/45 block">Portal User ID</span>
+                  <span className="text-ink/70 block">Portal User ID</span>
                   <span className="font-mono text-[10px] text-ink mt-1 block">{customer.portalUserId}</span>
                 </div>
               ) : (
-                <p className="text-[10px] text-ink/50 leading-relaxed mt-2 bg-surface-sunken p-2 rounded">
+                <p className="text-[10px] text-ink/70 leading-relaxed mt-2 bg-surface-sunken p-2 rounded">
                   Portal access enables the customer to track their orders, view measurements, and receive status reminders. Linked on checkout.
                 </p>
               )}
@@ -627,11 +627,11 @@ export default function CustomerDetailAdminPage() {
               ) : (
                 <div className="max-h-48 space-y-2 overflow-y-auto text-xs">
                   {portalChat.length === 0 ? (
-                    <p className="text-ink/45">No portal messages yet.</p>
+                    <p className="text-ink/70">No portal messages yet.</p>
                   ) : (
                     portalChat.map((m) => (
                       <div key={m.id} className="rounded border border-line bg-white/60 px-2 py-1.5">
-                        <p className="text-[9px] uppercase tracking-wider text-ink/40">
+                        <p className="text-[9px] uppercase tracking-wider text-ink/70">
                           {m.senderRole === 'customer' ? 'Customer' : 'Studio'}
                         </p>
                         <p className="mt-0.5 text-ink/80 whitespace-pre-wrap">{m.body}</p>

@@ -1,4 +1,4 @@
-﻿import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Icon } from '@/components/icons';
 import type { FinanceSummary } from '@/services/finance/financeService';
 
@@ -97,7 +97,7 @@ export function FinanceOverviewTab({ summary }: FinanceOverviewTabProps) {
           </p>
           <Link
             to="/admin/invoices"
-            className="inline-flex items-center gap-1 font-semibold text-brand hover:underline"
+            className="inline-flex items-center gap-1 font-semibold text-brand-strong hover:underline"
           >
             <span>Open Invoices Desk</span>
             <span><Icon name="arrowRight" size={14} className="mr-1 inline align-middle" /> </span>
@@ -116,7 +116,7 @@ export function FinanceOverviewTab({ summary }: FinanceOverviewTabProps) {
           </p>
           <Link
             to="/admin/payments"
-            className="inline-flex items-center gap-1 font-semibold text-brand hover:underline"
+            className="inline-flex items-center gap-1 font-semibold text-brand-strong hover:underline"
           >
             <span>Open Payments Desk</span>
             <span><Icon name="arrowRight" size={14} className="mr-1 inline align-middle" /> </span>

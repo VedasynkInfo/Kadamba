@@ -1,4 +1,4 @@
-﻿import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Icon } from '@/components/icons';
 import { Button, Modal, Spinner } from '@/components/ui';
 import type { MeasurementProfile } from '@/services/measurements/measurementsService';
@@ -35,7 +35,7 @@ export function OrderMeasurementsModal({
               <Spinner size="sm" />
             </div>
           ) : availableProfiles.length === 0 ? (
-            <div className="py-6 text-center text-xs text-ink/45">
+            <div className="py-6 text-center text-xs text-ink/70">
               No profiles recorded for this customer.
               <Link
                 to="/admin/measurements"

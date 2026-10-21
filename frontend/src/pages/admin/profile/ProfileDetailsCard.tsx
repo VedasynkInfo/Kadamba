@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useToast } from '@/components/ui';
 
 interface ProfileDetailsCardProps {
@@ -66,7 +66,7 @@ export function ProfileDetailsCard({
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition bg-surface-sunken border-line"
+            className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition bg-surface-sunken border-line"
           />
         </div>
 

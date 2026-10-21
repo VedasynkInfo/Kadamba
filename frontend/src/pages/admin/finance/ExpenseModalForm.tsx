@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Icon } from '@/components/icons';
 import { financeApi, type ExpenseRecord } from '@/services/finance/financeService';
 
@@ -157,7 +157,7 @@ export function ExpenseModalForm({ open, expense, onClose, onSuccess }: ExpenseM
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Raw Silk Fabric Roll (20m), Zardozi Threads"
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
             />
           </div>
 
@@ -170,7 +170,7 @@ export function ExpenseModalForm({ open, expense, onClose, onSuccess }: ExpenseM
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand cursor-pointer bg-surface-raised border-line"
+                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus cursor-pointer bg-surface-raised border-line"
               >
                 {CATEGORIES.map((cat) => (
                   <option key={cat.value} value={cat.value}>
@@ -192,7 +192,7 @@ export function ExpenseModalForm({ open, expense, onClose, onSuccess }: ExpenseM
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="e.g. 4500"
-                className="w-full rounded-xl border py-2 px-3 text-xs font-bold text-rose-400 focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                className="w-full rounded-xl border py-2 px-3 text-xs font-bold text-rose-400 focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
               />
             </div>
           </div>
@@ -207,7 +207,7 @@ export function ExpenseModalForm({ open, expense, onClose, onSuccess }: ExpenseM
               required
               value={spentAt}
               onChange={(e) => setSpentAt(e.target.value)}
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
             />
           </div>
 
@@ -221,7 +221,7 @@ export function ExpenseModalForm({ open, expense, onClose, onSuccess }: ExpenseM
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Vendor invoice #, merchant name, receipt details..."
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
             />
           </div>
 

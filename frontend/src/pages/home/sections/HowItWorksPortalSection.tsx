@@ -44,7 +44,7 @@ export function HowItWorksPortalSection() {
             viewport={{ once: true, margin: '-40px' }}
             transition={{ duration: 0.45, delay: i * 0.06 }}
           >
-            <p className="text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-ink/40">
+            <p className="text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-ink/70">
               Step {i + 1}
             </p>
             <h3 className="mt-2 font-heading text-2xl text-ink">{step.title}</h3>

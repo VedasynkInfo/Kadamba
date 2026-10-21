@@ -178,7 +178,7 @@ export function MeasurementsTable({
                         <span className="font-semibold block truncate">{p.profileName}</span>
                         <div className="flex items-center gap-1.5 mt-1">
                           <span
-                            className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold border bg-brand/12 border-brand/30 text-brand"
+                            className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold border bg-brand/12 border-brand/30 text-brand-strong"
                           >
                             <Icon name={silhouette.icon} size={13} />
                         {silhouette.name}
@@ -253,7 +253,7 @@ export function MeasurementsTable({
                           className={cn(
                             'inline-flex h-7 w-7 items-center justify-center rounded-lg border transition cursor-pointer',
                             isMenuOpen
-                              ? 'bg-brand/15 text-brand font-bold'
+                              ? 'bg-brand/15 text-brand-strong font-bold'
                               : 'hover:bg-current/[0.08]', isMenuOpen ? 'border-brand' : 'border-line'
                           )}
                           aria-label="Actions menu"

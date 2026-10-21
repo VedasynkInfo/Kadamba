@@ -1,4 +1,4 @@
-﻿import { Button, Input, Modal } from '@/components/ui';
+import { Button, Input, Modal } from '@/components/ui';
 import type { OrderStaff } from '@/services/orders/orderService';
 
 const STAFF_ROLES = [
@@ -48,7 +48,7 @@ export function OrderStaffModal({
           <select
             value={newStaffRole}
             onChange={(e: any) => setNewStaffRole(e.target.value)}
-            className="w-[150px] rounded-md border border-line bg-surface-field px-3 py-2 text-sm text-ink focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
+            className="w-[150px] rounded-md border border-line bg-surface-field px-3 py-2 text-sm text-ink focus:border-focus focus:outline-none focus:ring-2 focus:ring-focus/30"
           >
             {STAFF_ROLES.map((role) => (
               <option key={role.value} value={role.value}>
@@ -66,7 +66,7 @@ export function OrderStaffModal({
             <div key={idx} className="flex justify-between items-center p-2.5 text-xs">
               <div>
                 <span className="font-semibold block">{staff.name}</span>
-                <span className="text-ink/50 text-[10px] uppercase block mt-0.5">{staff.role}</span>
+                <span className="text-ink/70 text-[10px] uppercase block mt-0.5">{staff.role}</span>
               </div>
               <button
                 type="button"
@@ -78,7 +78,7 @@ export function OrderStaffModal({
             </div>
           ))}
           {assignedStaff.length === 0 && (
-            <p className="text-xs text-ink/40 text-center py-4">No assignments added yet.</p>
+            <p className="text-xs text-ink/70 text-center py-4">No assignments added yet.</p>
           )}
         </div>
 

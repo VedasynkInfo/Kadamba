@@ -185,7 +185,7 @@ export default function OrderBoardPage() {
         </span>
         <Link
           to="/admin/orders"
-          className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:underline"
+          className="inline-flex items-center gap-1 text-xs font-semibold text-brand-strong hover:underline"
         >
           <Icon name="list" size={14} />
           List view
@@ -218,7 +218,7 @@ export default function OrderBoardPage() {
           <DragOverlay dropAnimation={null}>
             {dragging ? (
               <div className="w-64 rotate-2 cursor-grabbing rounded-xl border border-brand/40 bg-surface-raised p-3 shadow-2xl">
-                <p className="text-[0.65rem] uppercase tracking-wider text-brand">
+                <p className="text-[0.65rem] uppercase tracking-wider text-brand-strong">
                   #{dragging.orderNumber}
                 </p>
                 <p className="mt-0.5 truncate text-sm font-semibold text-ink-raised">

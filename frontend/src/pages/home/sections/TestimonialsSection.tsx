@@ -52,7 +52,7 @@ export function TestimonialsSection() {
         <Button variant="secondary" size="sm" className="text-ink-inverse" onClick={next}>
           Next
         </Button>
-        <p className="text-xs text-ink-inverse/50" aria-live="polite">
+        <p className="text-xs text-ink-inverse/70" aria-live="polite">
           {index + 1} / {testimonials.length}
         </p>
       </div>

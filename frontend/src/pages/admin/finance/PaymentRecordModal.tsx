@@ -197,7 +197,7 @@ export function PaymentRecordModal({
                   value={orderQuery}
                   onChange={(e) => setOrderQuery(e.target.value)}
                   placeholder="Search by order #, client name, or phone..."
-                  className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                  className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
                 />
                 {searchingOrders ? (
                   <span className="absolute right-3 top-2.5 text-[10px] opacity-50 animate-pulse">
@@ -252,7 +252,7 @@ export function PaymentRecordModal({
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="e.g. 5000"
-                className="w-full rounded-xl border py-2 px-3 text-xs font-bold text-emerald-400 focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                className="w-full rounded-xl border py-2 px-3 text-xs font-bold text-emerald-400 focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
               />
             </div>
 
@@ -263,7 +263,7 @@ export function PaymentRecordModal({
               <select
                 value={method}
                 onChange={(e) => setMethod(e.target.value as any)}
-                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand cursor-pointer bg-surface-raised border-line"
+                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus cursor-pointer bg-surface-raised border-line"
               >
                 <option value="upi">UPI / QR Code</option>
                 <option value="cash">Cash Counter</option>
@@ -285,7 +285,7 @@ export function PaymentRecordModal({
                 required
                 value={paidAt}
                 onChange={(e) => setPaidAt(e.target.value)}
-                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
               />
             </div>
 
@@ -298,7 +298,7 @@ export function PaymentRecordModal({
                 value={reference}
                 onChange={(e) => setReference(e.target.value)}
                 placeholder="e.g. UPI-9982371 or Chq #12"
-                className="w-full rounded-xl border py-2 px-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                className="w-full rounded-xl border py-2 px-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
               />
             </div>
           </div>
@@ -313,7 +313,7 @@ export function PaymentRecordModal({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="e.g. 50% advance for wedding lehenga"
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
             />
           </div>
 
@@ -323,7 +323,7 @@ export function PaymentRecordModal({
               type="checkbox"
               checked={bypassBalanceCheck}
               onChange={(e) => setBypassBalanceCheck(e.target.checked)}
-              className="rounded text-brand focus:ring-0"
+              className="rounded text-brand-strong focus:ring-0"
             />
             <span className="text-[11px] opacity-70">
               Allow payment exceeding current outstanding balance

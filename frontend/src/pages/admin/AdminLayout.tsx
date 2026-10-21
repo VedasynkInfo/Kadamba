@@ -1,7 +1,8 @@
 import { Outlet, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { Button, Drawer, Tooltip } from '@/components/ui';
 import { Icon } from '@/components/icons';
+import { RouteFallback } from '@/components/layout/RouterShell';
 import { useAuth } from '@/hooks/useAuth';
 import { AdminNotifyProvider } from '@/hooks/useAdminNotifySocket';
 import { brand } from '@/pages/home/data';
@@ -73,7 +74,7 @@ export function AdminLayout() {
                   a desk; this is the first tab stop in the console. */}
               <a
                 href="#admin-main"
-                className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-50 focus:rounded-md focus:bg-surface-raised focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-ink-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-50 focus:rounded-md focus:bg-surface-raised focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-ink-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
               >
                 Skip to content
               </a>
@@ -204,7 +205,7 @@ export function AdminLayout() {
                     type="button"
                     onClick={() => setMobileNavOpen(true)}
                     aria-label="Open navigation"
-                    className="flex items-center rounded-md p-1.5 transition-colors hover:bg-ink-inverse/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                    className="flex items-center rounded-md p-1.5 transition-colors hover:bg-ink-inverse/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                   >
                     <Icon name="menu" size={20} />
                   </button>
@@ -212,7 +213,7 @@ export function AdminLayout() {
                     type="button"
                     onClick={() => setPaletteOpen(true)}
                     aria-label="Search the console"
-                    className="flex items-center rounded-md p-1.5 transition-colors hover:bg-ink-inverse/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                    className="flex items-center rounded-md p-1.5 transition-colors hover:bg-ink-inverse/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                   >
                     <Icon name="search" size={18} />
                   </button>
@@ -240,7 +241,9 @@ export function AdminLayout() {
                   tabIndex={-1}
                   className="min-h-screen flex-1 outline-none transition-colors"
                 >
-                  <Outlet />
+                  <Suspense fallback={<RouteFallback />}>
+                    <Outlet />
+                  </Suspense>
                 </main>
               </div>
             </div>

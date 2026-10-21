@@ -1,4 +1,4 @@
-﻿import { Icon } from '@/components/icons';
+import { Icon } from '@/components/icons';
 import { GALLERY_CATEGORIES } from './types';
 
 interface GalleryToolbarProps {
@@ -53,7 +53,7 @@ export function GalleryToolbar({
               value={query}
               onChange={(e) => onQueryChange(e.target.value)}
               placeholder="Search title, slug, alt..."
-              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition border-line"
+              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition border-line"
             />
             {query ? (
               <button
@@ -73,7 +73,7 @@ export function GalleryToolbar({
               value={selectedCategory}
               onChange={(e) => onCategoryChange(e.target.value)}
               aria-label="Filter by category"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="All">All Categories</option>
               {GALLERY_CATEGORIES.map((c) => (
@@ -90,7 +90,7 @@ export function GalleryToolbar({
               value={selectedStatus}
               onChange={(e) => onStatusChange(e.target.value)}
               aria-label="Filter by status"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="All">All Status</option>
               <option value="Published">Published</option>
@@ -104,7 +104,7 @@ export function GalleryToolbar({
               value={selectedMediaType}
               onChange={(e) => onMediaTypeChange(e.target.value)}
               aria-label="Filter by media type"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="All">All Media</option>
               <option value="image">Images</option>
@@ -118,7 +118,7 @@ export function GalleryToolbar({
               value={sortBy}
               onChange={(e) => onSortByChange(e.target.value as 'sortOrder' | 'titleAsc' | 'titleDesc')}
               aria-label="Sort gallery items"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="sortOrder">Sort Order</option>
               <option value="titleAsc">Title (A–Z)</option>

@@ -34,7 +34,7 @@ describe('Sparkline', () => {
     down.unmount();
 
     const flat = render(<Sparkline values={[2, 2, 2]} />);
-    expect(svgOf(flat.container)?.getAttribute('class')).toContain('text-brand');
+    expect(svgOf(flat.container)?.getAttribute('class')).toContain('text-brand-strong');
   });
 
   it('keeps an explicit trend override', () => {

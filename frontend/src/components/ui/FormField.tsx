@@ -21,7 +21,7 @@ export function FormField({
   tone = 'light',
 }: FormFieldProps) {
   const labelColor = tone === 'dark' ? 'text-ink-inverse' : 'text-ink';
-  const hintColor = tone === 'dark' ? 'text-ink-inverse/50' : 'text-ink/50';
+  const hintColor = tone === 'dark' ? 'text-ink-inverse/70' : 'text-ink/70';
   const requiredColor = tone === 'dark' ? 'text-gold' : 'text-gold';
 
   return (

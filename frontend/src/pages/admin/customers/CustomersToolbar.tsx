@@ -1,4 +1,4 @@
-﻿import { Icon } from '@/components/icons';
+import { Icon } from '@/components/icons';
 import { CUSTOMER_SOURCES } from './types';
 
 interface CustomersToolbarProps {
@@ -49,7 +49,7 @@ export function CustomersToolbar({
               value={query}
               onChange={(e) => onQueryChange(e.target.value)}
               placeholder="Search name, phone, email, locality..."
-              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition border-line"
+              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition border-line"
             />
             {query ? (
               <button
@@ -69,7 +69,7 @@ export function CustomersToolbar({
               value={selectedSource}
               onChange={(e) => onSourceChange(e.target.value)}
               aria-label="Filter by source"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="">All Sources</option>
               {CUSTOMER_SOURCES.map((s) => (
@@ -86,7 +86,7 @@ export function CustomersToolbar({
               value={selectedPortal}
               onChange={(e) => onPortalChange(e.target.value)}
               aria-label="Filter by portal status"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="">All Portal Status</option>
               <option value="active">Active Login</option>
@@ -101,7 +101,7 @@ export function CustomersToolbar({
               value={selectedOrders}
               onChange={(e) => onOrdersChange(e.target.value)}
               aria-label="Filter by open orders"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="">All Orders</option>
               <option value="true">In Production (Active)</option>

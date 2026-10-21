@@ -81,7 +81,7 @@ export function LatestBlogsSection() {
                 </div>
                 <time
                   dateTime={post.date}
-                  className="mt-4 block text-xs uppercase tracking-widest text-ink/45"
+                  className="mt-4 block text-xs uppercase tracking-widest text-ink/70"
                 >
                   {new Date(post.date).toLocaleDateString('en-IN', {
                     year: 'numeric',

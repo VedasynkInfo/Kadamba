@@ -84,7 +84,7 @@ export interface OrderLineItemForm {
 
 export interface OrderFormData {
   title: string;
-  priority: string;
+  priority: 'normal' | 'high' | 'rush';
   status: string;
   expectedTrialAt: string;
   expectedDeliveryAt: string;

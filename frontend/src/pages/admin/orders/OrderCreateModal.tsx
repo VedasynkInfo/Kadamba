@@ -1,17 +1,19 @@
-﻿import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { TabStrip } from '@/components/ui/TabStrip';
+import { Button, Input, Modal, Select, Textarea } from '@/components/ui';
 import { Icon } from '@/components/icons';
-import { Button, Input, Select, Textarea } from '@/components/ui';
 import type { CustomerProfile } from '@/services/orders/orderService';
+import { zodResolver } from '@/lib/zodResolver';
 import { ORDER_PRIORITIES, type OrderFormData } from './types';
+import { ORDER_WIZARD_STEPS, orderFormSchema } from './orderFormSchema';
 import { cn } from '@/utils/cn';
 
 interface OrderCreateModalProps {
   open: boolean;
   onClose: () => void;
-  form: OrderFormData;
-  setForm: React.Dispatch<React.SetStateAction<OrderFormData>>;
-  onSave: () => Promise<void>;
+  defaultValues: OrderFormData;
+  onSave: (values: OrderFormData) => Promise<void>;
   submitting: boolean;
   // Customer search helpers
   customerSearch: string;
@@ -20,11 +22,18 @@ interface OrderCreateModalProps {
   searchingCustomers: boolean;
 }
 
+/**
+ * New Order intake, as a gated three-step wizard.
+ *
+ * The steps are not decoration: Continue runs the zod fields for the step it is
+ * leaving, so the answer to “what is missing?” always points at the screen the
+ * user is on. RHF owns the field state; zod owns what a valid order means, and
+ * the schema is the same object the tests exercise.
+ */
 export function OrderCreateModal({
   open,
   onClose,
-  form,
-  setForm,
+  defaultValues,
   onSave,
   submitting,
   customerSearch,
@@ -32,365 +41,419 @@ export function OrderCreateModal({
   customerResults,
   searchingCustomers,
 }: OrderCreateModalProps) {
-  const [activeTab, setActiveTab] = useState<'client' | 'items' | 'pricing'>('client');
+  const [step, setStep] = useState(0);
 
-  if (!open) return null;
+  const {
+    register,
+    control,
+    watch,
+    setValue,
+    trigger,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<OrderFormData>({
+    resolver: zodResolver(orderFormSchema),
+    defaultValues,
+    mode: 'onTouched',
+  });
 
-  function addLineItem() {
-    setForm((f) => ({
-      ...f,
-      lineItems: [...f.lineItems, { name: '', productTypeCode: '', notes: '', qty: 1 }],
-    }));
+  const { fields, append, remove } = useFieldArray({ control, name: 'lineItems' });
+  const customerMode = watch('customerMode');
+  const selectedCustomer = watch('selectedCustomer');
+  const title = watch('title');
+  const activeStep = ORDER_WIZARD_STEPS[step];
+
+  useEffect(() => {
+    if (!open) return;
+    reset(defaultValues);
+    setStep(0);
+  }, [open, reset, defaultValues]);
+
+  async function goNext() {
+    const valid = await trigger(activeStep.fields, { shouldFocus: true });
+    if (valid) setStep((current) => Math.min(current + 1, ORDER_WIZARD_STEPS.length - 1));
   }
 
-  function removeLineItem(index: number) {
-    setForm((f) => ({
-      ...f,
-      lineItems: f.lineItems.filter((_, i) => i !== index),
-    }));
+  async function goToStep(target: number) {
+    if (target <= step) {
+      setStep(target);
+      return;
+    }
+    // Moving forward means passing every step in between, not just this one.
+    for (let index = step; index < target; index += 1) {
+      const valid = await trigger(ORDER_WIZARD_STEPS[index].fields, { shouldFocus: true });
+      if (!valid) {
+        setStep(index);
+        return;
+      }
+    }
+    setStep(target);
   }
 
-  function updateLineItem(index: number, field: string, val: any) {
-    setForm((f) => ({
-      ...f,
-      lineItems: f.lineItems.map((item, i) => (i === index ? { ...item, [field]: val } : item)),
-    }));
-  }
+  const submit = handleSubmit(async (values) => {
+    await onSave(values);
+  });
+
+  const customerError = errors.selectedCustomer?.message;
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
-      onClick={onClose}
-      role="dialog"
-      aria-modal="true"
-    >
-      <div
-        className="relative w-full max-w-2xl rounded-2xl border shadow-2xl overflow-hidden animate-spring-in flex flex-col max-h-[90vh] text-xs bg-surface-raised border-line text-ink-raised"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div
-          className="flex items-center justify-between border-b px-6 py-4 border-line"
-        >
-          <div>
-            <h2 className="font-heading text-lg font-bold text-inherit">Create Atelier Production Order</h2>
-            <p className="opacity-60 text-xs mt-0.5">
-              Register custom bridal couture, assign milestones, and schedule fittings
-            </p>
-          </div>
-
-          <button
+    <Modal
+      open={open}
+      onClose={onClose}
+      title="Create Atelier Production Order"
+      description="Register custom bridal couture, assign milestones, and schedule fittings."
+      size="lg"
+      className="max-h-[92vh]"
+      footer={
+        <>
+          <p className="mr-auto text-xs text-ink/65" aria-live="polite">
+            Step {step + 1} of {ORDER_WIZARD_STEPS.length} · {activeStep.label}
+          </p>
+          <Button
             type="button"
+            variant="secondary"
+            size="sm"
+            disabled={submitting}
             onClick={onClose}
-            className="h-8 w-8 rounded-lg border flex items-center justify-center text-xs opacity-70 hover:opacity-100 hover:bg-current/[0.06] transition cursor-pointer border-line"
-            aria-label="Close dialog"
           >
-            <Icon name="close" size={16} />
-          </button>
-        </div>
-
-        {/* Tab Strip */}
-        <TabStrip
-          items={[
-            { id: 'client', label: '1. Client & Dates', icon: 'user' },
-            { id: 'items', label: `2. Garments (${form.lineItems.length})`, icon: 'stitching' },
-            { id: 'pricing', label: '3. Pricing & Priority', icon: 'premium' },
-          ]}
-          value={activeTab}
-          onChange={(id) => setActiveTab(id as typeof activeTab)}
-          layoutId="order-wizard-tab"
-          className="px-6 gap-2 bg-current/[0.02]"
-          itemClassName="px-3.5"
-        />
-
-        {/* Body */}
-        <div className="p-6 space-y-4 overflow-y-auto flex-1">
-          {activeTab === 'client' ? (
-            <div className="space-y-4">
-              <Input
-                label="Order Project Title *"
-                required
-                placeholder="e.g. Sravani Reddy Bridal Lehenga & Blouse"
-                value={form.title}
-                onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
-              />
-
-              {/* Customer Selector Mode */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <label className="font-semibold opacity-75">Customer Assignment *</label>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setForm((f) => ({ ...f, customerMode: 'search' }))}
-                      className={cn(
-                        'px-2.5 py-1 rounded text-[11px] font-semibold transition',
-                        form.customerMode === 'search'
-                          ? 'bg-brand text-white'
-                          : 'opacity-60 hover:opacity-100',
-                      )}
-                    >
-                      Search Directory
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setForm((f) => ({ ...f, customerMode: 'create' }))}
-                      className={cn(
-                        'px-2.5 py-1 rounded text-[11px] font-semibold transition',
-                        form.customerMode === 'create'
-                          ? 'bg-brand text-white'
-                          : 'opacity-60 hover:opacity-100',
-                      )}
-                    >
-                      + New Customer
-                    </button>
-                  </div>
-                </div>
-
-                {form.customerMode === 'search' ? (
-                  <div className="space-y-2">
-                    {form.selectedCustomer ? (
-                      <div
-                        className="p-3 rounded-xl border flex items-center justify-between bg-emerald-500/[0.08] border-emerald-500/30"
-                      >
-                        <div>
-                          <span className="font-bold text-emerald-400 block">{form.selectedCustomer.name}</span>
-                          <span className="text-[11px] opacity-75">
-                            <Icon name="phoneCall" size={14} className="mr-1 inline align-middle" /> {form.selectedCustomer.phone} · <Icon name="location" size={14} className="mr-1 inline align-middle" /> {form.selectedCustomer.city || 'Kurnool'}
-                          </span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => setForm((f) => ({ ...f, selectedCustomer: null }))}
-                          className="text-xs text-rose-400 hover:underline cursor-pointer"
-                        >
-                          Change
-                        </button>
-                      </div>
-                    ) : (
-                      <div>
-                        <input
-                          type="text"
-                          value={customerSearch}
-                          onChange={(e) => onCustomerSearchChange(e.target.value)}
-                          placeholder="Type name or phone to search customers..."
-                          className="w-full rounded-lg border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand border-line"
-                        />
-                        {searchingCustomers ? (
-                          <div className="py-2 text-[11px] opacity-50 text-center">Searching...</div>
-                        ) : customerResults.length > 0 ? (
-                          <div
-                            className="mt-1 max-h-36 overflow-y-auto rounded-lg border divide-y border-line"
-                          >
-                            {customerResults.map((c) => (
-                              <button
-                                key={c.id}
-                                type="button"
-                                onClick={() => setForm((f) => ({ ...f, selectedCustomer: c }))}
-                                className="w-full text-left p-2 hover:bg-current/[0.05] flex items-center justify-between text-xs cursor-pointer"
-                              >
-                                <div>
-                                  <span className="font-semibold">{c.name}</span>
-                                  <span className="text-[11px] opacity-60 ml-2">{c.phone}</span>
-                                </div>
-                                <span className="text-[10px] opacity-50">{c.city || 'Kurnool'}</span>
-                              </button>
-                            ))}
-                          </div>
-                        ) : customerSearch ? (
-                          <div className="py-2 text-[11px] opacity-50 text-center">
-                            No customers found. Switch to "+ New Customer" above.
-                          </div>
-                        ) : null}
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-2 gap-3 p-3 rounded-xl border bg-current/[0.02] border-line">
-                    <Input
-                      label="Client Name *"
-                      required
-                      placeholder="Full Name"
-                      value={form.newCustName}
-                      onChange={(e) => setForm((f) => ({ ...f, newCustName: e.target.value }))}
-                    />
-                    <Input
-                      label="Phone Number *"
-                      required
-                      placeholder="10-digit mobile"
-                      value={form.newCustPhone}
-                      onChange={(e) => setForm((f) => ({ ...f, newCustPhone: e.target.value }))}
-                    />
-                    <Input
-                      label="Email"
-                      placeholder="client@example.com"
-                      value={form.newCustEmail}
-                      onChange={(e) => setForm((f) => ({ ...f, newCustEmail: e.target.value }))}
-                    />
-                    <Input
-                      label="City"
-                      placeholder="Kurnool, Hyderabad..."
-                      value={form.newCustCity}
-                      onChange={(e) => setForm((f) => ({ ...f, newCustCity: e.target.value }))}
-                    />
-                  </div>
-                )}
-              </div>
-
-              {/* Target Milestone Dates */}
-              <div className="grid grid-cols-2 gap-3 pt-2">
-                <Input
-                  label="Target Trial / Fitting Date"
-                  type="date"
-                  value={form.expectedTrialAt}
-                  onChange={(e) => setForm((f) => ({ ...f, expectedTrialAt: e.target.value }))}
-                />
-                <Input
-                  label="Final Promised Delivery Date"
-                  type="date"
-                  value={form.expectedDeliveryAt}
-                  onChange={(e) => setForm((f) => ({ ...f, expectedDeliveryAt: e.target.value }))}
-                />
-              </div>
-            </div>
-          ) : activeTab === 'items' ? (
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <label className="font-semibold opacity-75">Order Garments & Workload</label>
-                <button
-                  type="button"
-                  onClick={addLineItem}
-                  className="px-2.5 py-1 rounded text-xs font-bold border hover:bg-current/[0.05] cursor-pointer border-line"
-                >
-                  + Add Garment
-                </button>
-              </div>
-
-              <div className="space-y-3">
-                {form.lineItems.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="p-3.5 rounded-xl border space-y-2 relative bg-surface-sunken border-line"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-xs opacity-75">Garment #{idx + 1}</span>
-                      {form.lineItems.length > 1 ? (
-                        <button
-                          type="button"
-                          onClick={() => removeLineItem(idx)}
-                          className="text-rose-400 hover:text-rose-300 text-xs font-semibold cursor-pointer"
-                        >
-                          <Icon name="close" size={14} className="mr-1 inline align-middle" /> Remove
-                        </button>
-                      ) : null}
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-2">
-                      <div className="col-span-2">
-                        <Input
-                          label="Garment Description *"
-                          placeholder="e.g. Zardosi Silk Bridal Blouse"
-                          value={item.name}
-                          onChange={(e) => updateLineItem(idx, 'name', e.target.value)}
-                        />
-                      </div>
-                      <div>
-                        <Input
-                          label="Quantity"
-                          type="number"
-                          min={1}
-                          value={item.qty}
-                          onChange={(e) => updateLineItem(idx, 'qty', Number(e.target.value) || 1)}
-                        />
-                      </div>
-                    </div>
-
-                    <Input
-                      label="Tailoring & Maggam Work Notes"
-                      placeholder="e.g. Heavy aari sleeve border, sweetheart neckline, potli buttons"
-                      value={item.notes}
-                      onChange={(e) => updateLineItem(idx, 'notes', e.target.value)}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <Input
-                  label="Total Quoted Price (₹) *"
-                  type="number"
-                  placeholder="e.g. 35000"
-                  value={form.totalQuoted}
-                  onChange={(e) => setForm((f) => ({ ...f, totalQuoted: e.target.value }))}
-                />
-                <Input
-                  label="Advance Received (₹)"
-                  type="number"
-                  placeholder="e.g. 15000"
-                  value={form.advance}
-                  onChange={(e) => setForm((f) => ({ ...f, advance: e.target.value }))}
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <Select
-                  label="Production Priority"
-                  value={form.priority}
-                  onChange={(e) => setForm((f) => ({ ...f, priority: e.target.value }))}
-                  options={ORDER_PRIORITIES}
-                />
-                <Input
-                  label="Tags (Comma separated)"
-                  placeholder="bridal, silk, zardosi, VIP"
-                  value={form.tagsInput}
-                  onChange={(e) => setForm((f) => ({ ...f, tagsInput: e.target.value }))}
-                />
-              </div>
-
-              <Textarea
-                label="Initial Atelier Consultation Notes"
-                rows={3}
-                placeholder="Fabric brought by client, lining requirements, special fitting instructions..."
-                value={form.initialNotes}
-                onChange={(e) => setForm((f) => ({ ...f, initialNotes: e.target.value }))}
-              />
-            </div>
-          )}
-        </div>
-
-        {/* Footer */}
-        <div
-          className="flex items-center justify-between gap-3 border-t px-6 py-4 border-line"
-        >
-          <div className="text-xs opacity-50">
-            {form.title ? `Order: ${form.title}` : 'Title and customer required (*)'}
-          </div>
-
-          <div className="flex items-center gap-2">
+            Cancel
+          </Button>
+          {step > 0 ? (
             <Button
               type="button"
               variant="secondary"
               size="sm"
               disabled={submitting}
-              onClick={onClose}
+              onClick={() => setStep((current) => Math.max(0, current - 1))}
             >
-              Cancel
+              Back
             </Button>
+          ) : null}
+          {step < ORDER_WIZARD_STEPS.length - 1 ? (
+            <Button type="button" variant="admin" size="sm" onClick={goNext}>
+              Continue
+            </Button>
+          ) : (
             <Button
-              type="button"
-              variant="primary"
+              type="submit"
+              form="order-wizard-form"
+              variant="admin"
               size="sm"
               disabled={submitting}
-              onClick={onSave}
               className="font-bold shadow-xs"
             >
-              {submitting ? 'Creating Order...' : 'Create Production Order'}
+              {submitting ? 'Creating Order…' : 'Create Production Order'}
             </Button>
+          )}
+        </>
+      }
+    >
+      <TabStrip
+        items={ORDER_WIZARD_STEPS.map((item, index) => ({
+          id: item.id,
+          label: `${index + 1}. ${item.label}${item.id === 'items' ? ` (${fields.length})` : ''}`,
+          icon: item.icon,
+        }))}
+        value={activeStep.id}
+        onChange={(id) => {
+          const target = ORDER_WIZARD_STEPS.findIndex((item) => item.id === id);
+          if (target >= 0) void goToStep(target);
+        }}
+        layoutId="order-wizard-tab"
+        className="-mx-1 mb-4"
+        itemClassName="px-3.5"
+      />
+
+      <form
+        id="order-wizard-form"
+        onSubmit={submit}
+        noValidate
+        className="max-h-[52vh] space-y-4 overflow-y-auto pr-1"
+      >
+        {activeStep.id === 'client' ? (
+          <div className="space-y-4">
+            <Input
+              label="Order Project Title *"
+              required
+              placeholder="e.g. Sravani Reddy Bridal Lehenga & Blouse"
+              error={errors.title?.message}
+              {...register('title')}
+            />
+
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-semibold opacity-90">Customer Assignment *</span>
+                <div className="flex items-center gap-2">
+                  {(['search', 'create'] as const).map((mode) => (
+                    <button
+                      key={mode}
+                      type="button"
+                      onClick={() => setValue('customerMode', mode, { shouldValidate: true })}
+                      aria-pressed={customerMode === mode}
+                      className={cn(
+                        'rounded px-2.5 py-1 text-[11px] font-semibold transition',
+                        customerMode === mode
+                          ? 'bg-brand text-ink-on-brand'
+                          : 'text-ink/65 hover:text-ink',
+                      )}
+                    >
+                      {mode === 'search' ? 'Search Directory' : '+ New Customer'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {customerMode === 'search' ? (
+                <div className="space-y-2">
+                  {selectedCustomer ? (
+                    <div className="flex items-center justify-between rounded-xl border border-emerald-500/30 bg-emerald-500/[0.08] p-3">
+                      <div>
+                        <span className="block font-bold text-emerald-400">
+                          {selectedCustomer.name}
+                        </span>
+                        <span className="text-[11px] text-ink/75">
+                          <Icon
+                            name="phoneCall"
+                            size={14}
+                            className="mr-1 inline align-middle"
+                          />{' '}
+                          {selectedCustomer.phone} ·{' '}
+                          <Icon name="location" size={14} className="mr-1 inline align-middle" />{' '}
+                          {selectedCustomer.city || 'Kurnool'}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setValue('selectedCustomer', null, { shouldValidate: true })}
+                        className="rounded-sm text-xs text-rose-400 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                      >
+                        Change
+                      </button>
+                    </div>
+                  ) : (
+                    <div>
+                      <label htmlFor="order-customer-search" className="sr-only">
+                        Search customers by name or phone
+                      </label>
+                      <input
+                        id="order-customer-search"
+                        type="search"
+                        value={customerSearch}
+                        onChange={(event) => onCustomerSearchChange(event.target.value)}
+                        placeholder="Type name or phone to search customers…"
+                        className="w-full rounded-lg border border-line bg-surface-field px-3 py-2 text-xs text-ink-raised placeholder:text-ink/60 focus:border-focus focus:outline-none focus:ring-2 focus:ring-focus"
+                      />
+                      {searchingCustomers ? (
+                        <div className="py-2 text-center text-[11px] text-ink/65">Searching…</div>
+                      ) : customerResults.length > 0 ? (
+                        <ul className="mt-1 max-h-36 divide-y overflow-y-auto rounded-lg border border-line">
+                          {customerResults.map((customer) => (
+                            <li key={customer.id}>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setValue('selectedCustomer', customer, {
+                                    shouldValidate: true,
+                                    shouldDirty: true,
+                                  })
+                                }
+                                className="flex w-full items-center justify-between p-2 text-left text-xs hover:bg-current/[0.05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                              >
+                                <span>
+                                  <span className="font-semibold">{customer.name}</span>
+                                  <span className="ml-2 text-[11px] text-ink/65">
+                                    {customer.phone}
+                                  </span>
+                                </span>
+                                <span className="text-[10px] text-ink/65">
+                                  {customer.city || 'Kurnool'}
+                                </span>
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : customerSearch ? (
+                        <p className="py-2 text-center text-[11px] text-ink/65">
+                          No customers found. Switch to “+ New Customer” above.
+                        </p>
+                      ) : null}
+                    </div>
+                  )}
+                  {customerError ? (
+                    <p role="alert" className="text-xs text-rose-400">
+                      {customerError}
+                    </p>
+                  ) : null}
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-3 rounded-xl border border-line bg-current/[0.02] p-3">
+                  <Input
+                    label="Client Name *"
+                    required
+                    placeholder="Full Name"
+                    error={errors.newCustName?.message}
+                    {...register('newCustName')}
+                  />
+                  <Input
+                    label="Phone Number *"
+                    required
+                    inputMode="tel"
+                    placeholder="10-digit mobile"
+                    error={errors.newCustPhone?.message}
+                    {...register('newCustPhone')}
+                  />
+                  <Input
+                    label="Email"
+                    type="email"
+                    placeholder="client@example.com"
+                    error={errors.newCustEmail?.message}
+                    {...register('newCustEmail')}
+                  />
+                  <Input
+                    label="City"
+                    placeholder="Kurnool, Hyderabad…"
+                    error={errors.newCustCity?.message}
+                    {...register('newCustCity')}
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 pt-2">
+              <Input
+                label="Target Trial / Fitting Date"
+                type="date"
+                error={errors.expectedTrialAt?.message}
+                {...register('expectedTrialAt')}
+              />
+              <Input
+                label="Final Promised Delivery Date"
+                type="date"
+                error={errors.expectedDeliveryAt?.message}
+                {...register('expectedDeliveryAt')}
+              />
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
+        ) : activeStep.id === 'items' ? (
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-semibold opacity-90">Order Garments & Workload</span>
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                onClick={() => append({ name: '', productTypeCode: '', notes: '', qty: 1 })}
+              >
+                + Add Garment
+              </Button>
+            </div>
+
+            {errors.lineItems?.message ? (
+              <p role="alert" className="text-xs text-rose-400">
+                {errors.lineItems.message}
+              </p>
+            ) : null}
+
+            <div className="space-y-3">
+              {fields.map((field, index) => (
+                <div
+                  key={field.id}
+                  className="relative space-y-2 rounded-xl border border-line bg-surface-sunken p-3.5"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold opacity-90">Garment #{index + 1}</span>
+                    {fields.length > 1 ? (
+                      <button
+                        type="button"
+                        onClick={() => remove(index)}
+                        className="inline-flex items-center gap-1 rounded-sm text-xs font-semibold text-rose-400 hover:text-rose-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                      >
+                        <Icon name="close" size={14} /> Remove
+                      </button>
+                    ) : null}
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="col-span-2">
+                      <Input
+                        label="Garment Description *"
+                        placeholder="e.g. Zardosi Silk Bridal Blouse"
+                        error={errors.lineItems?.[index]?.name?.message}
+                        {...register(`lineItems.${index}.name`)}
+                      />
+                    </div>
+                    <div>
+                      <Input
+                        label="Quantity"
+                        type="number"
+                        min={1}
+                        error={errors.lineItems?.[index]?.qty?.message}
+                        {...register(`lineItems.${index}.qty`, { valueAsNumber: true })}
+                      />
+                    </div>
+                  </div>
+
+                  <Input
+                    label="Tailoring & Maggam Work Notes"
+                    placeholder="e.g. Heavy aari sleeve border, sweetheart neckline, potli buttons"
+                    error={errors.lineItems?.[index]?.notes?.message}
+                    {...register(`lineItems.${index}.notes`)}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <Input
+                label="Total Quoted Price (₹) *"
+                type="number"
+                min={0}
+                placeholder="e.g. 35000"
+                error={errors.totalQuoted?.message}
+                {...register('totalQuoted')}
+              />
+              <Input
+                label="Advance Received (₹)"
+                type="number"
+                min={0}
+                placeholder="e.g. 15000"
+                error={errors.advance?.message}
+                {...register('advance')}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <Select
+                label="Production Priority"
+                options={ORDER_PRIORITIES}
+                error={errors.priority?.message}
+                {...register('priority')}
+              />
+              <Input
+                label="Tags (Comma separated)"
+                placeholder="bridal, silk, zardosi, VIP"
+                error={errors.tagsInput?.message}
+                {...register('tagsInput')}
+              />
+            </div>
+
+            <Textarea
+              label="Initial Atelier Consultation Notes"
+              rows={3}
+              placeholder="Fabric brought by client, lining requirements, special fitting instructions…"
+              error={errors.initialNotes?.message}
+              {...register('initialNotes')}
+            />
+
+            <p className="text-xs text-ink/65">
+              {title ? `Creating: ${title}` : 'Title and customer are required to continue.'}
+            </p>
+          </div>
+        )}
+      </form>
+    </Modal>
   );
 }

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { Link } from 'react-router-dom';
 import { Icon } from '@/components/icons';
@@ -19,7 +20,12 @@ export interface OrderBoardColumnProps {
  * `useDraggable` gives each card a transform while it is held, so the card
  * follows the pointer without the board re-rendering on every move.
  */
-export function OrderBoardColumn({ status, label, dotClass, orders }: OrderBoardColumnProps) {
+export const OrderBoardColumn = memo(function OrderBoardColumn({
+  status,
+  label,
+  dotClass,
+  orders,
+}: OrderBoardColumnProps) {
   const { setNodeRef, isOver } = useDroppable({ id: status });
 
   return (
@@ -43,16 +49,16 @@ export function OrderBoardColumn({ status, label, dotClass, orders }: OrderBoard
 
       <div className="flex min-h-24 flex-col gap-2 p-2">
         {orders.length === 0 ? (
-          <p className="px-2 py-6 text-center text-xs text-ink/35">Nothing here</p>
+          <p className="px-2 py-6 text-center text-xs text-ink/70">Nothing here</p>
         ) : (
           orders.map((order) => <OrderBoardCard key={order.id} order={order} />)
         )}
       </div>
     </section>
   );
-}
+});
 
-function OrderBoardCard({ order }: { order: Order }) {
+function OrderBoardCardBase({ order }: { order: Order }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: order.id,
     data: { order },
@@ -82,7 +88,7 @@ function OrderBoardCard({ order }: { order: Order }) {
       )}
     >
       <div className="flex items-start justify-between gap-2">
-        <p className="text-[0.65rem] font-semibold uppercase tracking-wider text-brand">
+        <p className="text-[0.65rem] font-semibold uppercase tracking-wider text-brand-strong">
           #{order.orderNumber}
         </p>
         {order.priority === 'rush' ? (
@@ -100,10 +106,10 @@ function OrderBoardCard({ order }: { order: Order }) {
       <p className="mt-1 line-clamp-2 text-sm font-semibold leading-snug text-ink-raised">
         {order.title}
       </p>
-      <p className="mt-1 truncate text-xs text-ink/55">{order.customerId?.name}</p>
+      <p className="mt-1 truncate text-xs text-ink/70">{order.customerId?.name}</p>
 
       {due ? (
-        <p className="mt-2 inline-flex items-center gap-1 text-[0.65rem] text-ink/45">
+        <p className="mt-2 inline-flex items-center gap-1 text-[0.65rem] text-ink/70">
           <Icon name="calendar" size={11} />
           Due {due}
         </p>
@@ -111,3 +117,10 @@ function OrderBoardCard({ order }: { order: Order }) {
     </Link>
   );
 }
+
+/**
+ * Cards are memoised on the order object. A drag only changes which column is
+ * hovered, and an optimistic move replaces one order object — the other forty
+ * cards have nothing new to draw.
+ */
+const OrderBoardCard = memo(OrderBoardCardBase);

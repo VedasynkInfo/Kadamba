@@ -289,13 +289,13 @@ export default function OrderDetailAdminPage() {
                   </div>
                 </div>
                 <div className="flex flex-col items-end">
-                  <span className="text-[10px] uppercase tracking-wider text-ink/45">Atelier lifecycle</span>
+                  <span className="text-[10px] uppercase tracking-wider text-ink/70">Atelier lifecycle</span>
                   {isOrderStatusTerminal(order.status) ? (
                     <>
                       <span className="mt-1 text-xs font-semibold uppercase text-ink/70">
                         {orderStatusLabel(order.status)}
                       </span>
-                      <span className="text-[10px] text-ink/45">
+                      <span className="text-[10px] text-ink/70">
                         Lifecycle complete — no further stages
                       </span>
                     </>
@@ -304,7 +304,7 @@ export default function OrderDetailAdminPage() {
                       value={order.status}
                       onChange={(e) => handleStatusChangeRequest(e.target.value as OrderStatus)}
                       aria-label="Move the order to its next stage"
-                      className="mt-1 min-w-[150px] uppercase text-xs font-semibold rounded-md border border-line bg-surface-field px-3 py-2 text-ink focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
+                      className="mt-1 min-w-[150px] uppercase text-xs font-semibold rounded-md border border-line bg-surface-field px-3 py-2 text-ink focus:border-focus focus:outline-none focus:ring-2 focus:ring-focus/30"
                     >
                       {/* Only the moves the API will accept are offered, so an
                           impossible stage cannot be chosen and then refused. */}
@@ -323,25 +323,25 @@ export default function OrderDetailAdminPage() {
 
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 border-t border-line pt-4 text-xs">
                 <div>
-                  <span className="text-ink/45 block">Expected trial</span>
+                  <span className="text-ink/70 block">Expected trial</span>
                   <span className="font-medium text-ink mt-0.5 block">
                     {order.expectedTrialAt ? new Date(order.expectedTrialAt).toLocaleDateString('en-IN') : 'Not scheduled'}
                   </span>
                 </div>
                 <div>
-                  <span className="text-ink/45 block">Expected delivery</span>
+                  <span className="text-ink/70 block">Expected delivery</span>
                   <span className="font-medium text-ink mt-0.5 block">
                     {order.expectedDeliveryAt ? new Date(order.expectedDeliveryAt).toLocaleDateString('en-IN') : 'Not scheduled'}
                   </span>
                 </div>
                 <div>
-                  <span className="text-ink/45 block">Created</span>
+                  <span className="text-ink/70 block">Created</span>
                   <span className="font-medium text-ink mt-0.5 block">
                     {new Date(order.createdAt).toLocaleDateString('en-IN')}
                   </span>
                 </div>
                 <div>
-                  <span className="text-ink/45 block">Last update</span>
+                  <span className="text-ink/70 block">Last update</span>
                   <span className="font-medium text-ink mt-0.5 block">
                     {new Date(order.updatedAt).toLocaleDateString('en-IN')}
                   </span>
@@ -362,7 +362,7 @@ export default function OrderDetailAdminPage() {
                       {item.notes && <p className="text-xs text-ink/60 mt-1">{item.notes}</p>}
                     </div>
                     {item.productTypeCode && (
-                      <span className="text-[10px] uppercase font-semibold tracking-wider text-ink/50 bg-surface-sunken px-2.5 py-1 self-start rounded-sm">
+                      <span className="text-[10px] uppercase font-semibold tracking-wider text-ink/70 bg-surface-sunken px-2.5 py-1 self-start rounded-sm">
                         {item.productTypeCode}
                       </span>
                     )}
@@ -388,7 +388,7 @@ export default function OrderDetailAdminPage() {
               </div>
 
               {order.measurementProfileIds.length === 0 ? (
-                <div className="text-center py-6 text-xs text-ink/45">
+                <div className="text-center py-6 text-xs text-ink/70">
                   No measurement profile linked to this order. Linking a profile ensures stitching accuracy.
                   <button
                     type="button"
@@ -474,11 +474,11 @@ export default function OrderDetailAdminPage() {
               {/* Feed */}
               <div className="mt-6 space-y-4">
                 {order.notes.length === 0 ? (
-                  <p className="text-xs text-ink/45 text-center py-4">No internal notes posted yet.</p>
+                  <p className="text-xs text-ink/70 text-center py-4">No internal notes posted yet.</p>
                 ) : (
                   [...order.notes].reverse().map((note, idx) => (
                     <div key={idx} className="p-3 bg-white/45 border border-line rounded text-xs space-y-1.5">
-                      <div className="flex justify-between items-center text-[10px] text-ink/50">
+                      <div className="flex justify-between items-center text-[10px] text-ink/70">
                         <span className="font-semibold">{note.createdBy}</span>
                         <span>{new Date(note.createdAt).toLocaleString('en-IN')}</span>
                       </div>
@@ -505,28 +505,28 @@ export default function OrderDetailAdminPage() {
               <h3 className="font-heading text-lg text-ink mb-4 border-b border-line pb-2">Client profile</h3>
               <div className="space-y-3 text-xs">
                 <div>
-                  <span className="text-ink/45 block">Name</span>
+                  <span className="text-ink/70 block">Name</span>
                   <span className="font-medium text-ink mt-0.5 block">{order.customerId.name}</span>
                 </div>
                 <div>
-                  <span className="text-ink/45 block">Phone</span>
+                  <span className="text-ink/70 block">Phone</span>
                   <span className="font-medium text-ink mt-0.5 block">{order.customerId.phone}</span>
                 </div>
                 {order.customerId.email && (
                   <div>
-                    <span className="text-ink/45 block">Email</span>
+                    <span className="text-ink/70 block">Email</span>
                     <span className="font-medium text-ink mt-0.5 block">{order.customerId.email}</span>
                   </div>
                 )}
                 {order.customerId.city && (
                   <div>
-                    <span className="text-ink/45 block">City</span>
+                    <span className="text-ink/70 block">City</span>
                     <span className="font-medium text-ink mt-0.5 block">{order.customerId.city}</span>
                   </div>
                 )}
                 {order.leadId && (
                   <div>
-                    <span className="text-ink/45 block">Lead Link</span>
+                    <span className="text-ink/70 block">Lead Link</span>
                     <Link to={`/admin/leads/${order.leadId}`} className="font-semibold text-ink hover:underline block mt-0.5">
                       Open original crm lead <Icon name="arrowRight" size={14} className="mr-1 inline align-middle" /> 
                     </Link>
@@ -562,7 +562,7 @@ export default function OrderDetailAdminPage() {
                 <button
                   type="button"
                   onClick={() => { setPaymentMode('adjust'); setPaymentModalOpen(true); }}
-                  className="text-xs font-semibold text-ink/50 hover:underline uppercase tracking-wider"
+                  className="text-xs font-semibold text-ink/70 hover:underline uppercase tracking-wider"
                 >
                   Adjust
                 </button>
@@ -610,13 +610,13 @@ export default function OrderDetailAdminPage() {
               </div>
 
               {order.assignedStaff.length === 0 ? (
-                <p className="text-xs text-ink/45 text-center py-3">No staff assigned to this order.</p>
+                <p className="text-xs text-ink/70 text-center py-3">No staff assigned to this order.</p>
               ) : (
                 <div className="space-y-2">
                   {order.assignedStaff.map((staff, idx) => (
                     <div key={idx} className="flex justify-between items-center p-2 border border-line bg-white/40 rounded text-xs">
                       <span className="font-medium text-ink">{staff.name}</span>
-                      <span className="text-[10px] uppercase font-semibold text-ink/50 tracking-wider">
+                      <span className="text-[10px] uppercase font-semibold text-ink/70 tracking-wider">
                         {staff.role}
                       </span>
                     </div>

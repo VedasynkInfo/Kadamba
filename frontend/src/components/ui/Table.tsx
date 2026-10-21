@@ -74,30 +74,46 @@ export function Table<T>({
     >
       <table className="w-full text-left border-collapse text-sm">
         <thead>
-          <tr className="border-b text-[0.65rem] uppercase tracking-wider font-semibold border-current/10 bg-current/[0.03] opacity-75">
+          <tr className="border-b border-current/10 text-[0.65rem] uppercase tracking-wider font-semibold text-ink/75">
             {columns.map((col) => (
               <th
                 key={col.key}
+                scope="col"
+                aria-sort={
+                  col.sortable
+                    ? sortKey === col.key
+                      ? sortDir === 'asc'
+                        ? 'ascending'
+                        : 'descending'
+                      : 'none'
+                    : undefined
+                }
                 className={cn(
                   'px-4 py-3.5 font-semibold',
-                  col.sortable && 'cursor-pointer select-none hover:text-ink',
                   col.className,
                   col.hide === 'sm' && 'hidden sm:table-cell',
                   col.hide === 'md' && 'hidden md:table-cell',
                   col.hide === 'lg' && 'hidden lg:table-cell',
                 )}
-                onClick={() => col.sortable && toggleSort(col.key)}
               >
-                <span className="inline-flex items-center gap-1">
-                  {col.header ?? col.label}
-                  {col.sortable && sortKey === col.key ? (
-                    <Icon
-                      name={sortDir === 'asc' ? 'sortAsc' : 'sortDesc'}
-                      size={14}
-                      className="text-gold"
-                    />
-                  ) : null}
-                </span>
+                {col.sortable ? (
+                  <button
+                    type="button"
+                    onClick={() => toggleSort(col.key)}
+                    className="inline-flex items-center gap-1 rounded-sm font-semibold uppercase tracking-wider transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                  >
+                    {col.header ?? col.label}
+                    {sortKey === col.key ? (
+                      <Icon
+                        name={sortDir === 'asc' ? 'sortAsc' : 'sortDesc'}
+                        size={14}
+                        className="text-brand-strong"
+                      />
+                    ) : null}
+                  </button>
+                ) : (
+                  <span className="inline-flex items-center gap-1">{col.header ?? col.label}</span>
+                )}
               </th>
             ))}
           </tr>
@@ -118,7 +134,7 @@ export function Table<T>({
               <td colSpan={columns.length} className="px-4 py-12">
                 {emptyState || (
                   <div className="flex flex-col items-center justify-center text-center">
-                    <p className="text-sm opacity-60">
+                    <p className="text-sm text-ink/70">
                       {emptyMessage || 'No data found'}
                     </p>
                   </div>

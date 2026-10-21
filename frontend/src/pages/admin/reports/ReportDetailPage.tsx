@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, memo } from 'react';
 import { Link, useParams, Navigate } from 'react-router-dom';
 import {
   ResponsiveContainer,
@@ -125,7 +125,7 @@ export default function ReportDetailPage() {
         <div className="mb-6">
           <Link
             to="/admin/reports"
-            className="inline-flex items-center gap-1 text-xs font-medium text-ink/50 hover:text-ink"
+            className="inline-flex items-center gap-1 text-xs font-medium text-ink/70 hover:text-ink"
           >
             <Icon name="arrowLeft" size={14} />
             Reports hub
@@ -208,7 +208,7 @@ export default function ReportDetailPage() {
         </div>
 
         {definition && (
-          <p className="mb-6 text-xs text-ink/45 border-l-2 border-gold/60 pl-3">
+          <p className="mb-6 text-xs text-ink/70 border-l-2 border-gold/60 pl-3">
             {definition}
           </p>
         )}
@@ -249,7 +249,7 @@ function ReportBody({
     return (
       <div className="flex min-h-[240px] flex-col items-center justify-center rounded border border-dashed border-line bg-surface-sunken p-10 text-center">
         <p className="font-heading text-lg text-ink">No data for this range</p>
-        <p className="mt-2 text-sm text-ink/50 max-w-md">
+        <p className="mt-2 text-sm text-ink/70 max-w-md">
           Try a wider date range, or record payments and orders first — reports use live boutique data.
         </p>
       </div>
@@ -392,7 +392,7 @@ function SummaryStrip({ data, type }: { data: AnyReport; type: ReportType }) {
     <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
       {cards.map((c) => (
         <div key={c.label} className="border-t border-line pt-3">
-          <p className="text-xs uppercase tracking-wider text-ink/45">{c.label}</p>
+          <p className="text-xs uppercase tracking-wider text-ink/70">{c.label}</p>
           <p className="mt-1 font-heading text-2xl text-ink">{c.value}</p>
         </div>
       ))}
@@ -400,7 +400,13 @@ function SummaryStrip({ data, type }: { data: AnyReport; type: ReportType }) {
   );
 }
 
-function ReportChart({ data, type }: { data: AnyReport; type: ReportType }) {
+const ReportChart = memo(function ReportChart({
+  data,
+  type,
+}: {
+  data: AnyReport;
+  type: ReportType;
+}) {
   if (type === 'orders-by-status' && 'rows' in data) {
     const rows = data.rows as Array<{ status: string; count: number }>;
     return (
@@ -551,7 +557,7 @@ function ReportChart({ data, type }: { data: AnyReport; type: ReportType }) {
   }
 
   return null;
-}
+});
 
 function matchesSearch(row: Record<string, unknown>, search: string): boolean {
   if (!search.trim()) return true;
@@ -566,7 +572,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
     );
     return (
       <table className="min-w-full text-sm">
-        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/50">
+        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/70">
           <tr>
             <th className="px-4 py-3">Status</th>
             <th className="px-4 py-3">Count</th>
@@ -599,7 +605,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
     ).filter((r) => matchesSearch(r as unknown as Record<string, unknown>, search));
     return (
       <table className="min-w-full text-sm">
-        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/50">
+        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/70">
           <tr>
             <th className="px-4 py-3">Order</th>
             <th className="px-4 py-3">Title</th>
@@ -633,7 +639,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
     );
     return (
       <table className="min-w-full text-sm">
-        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/50">
+        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/70">
           <tr>
             <th className="px-4 py-3">Period</th>
             <th className="px-4 py-3">Amount</th>
@@ -668,7 +674,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
     ).filter((r) => matchesSearch(r, search));
     return (
       <table className="min-w-full text-sm">
-        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/50">
+        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/70">
           <tr>
             <th className="px-4 py-3">Product</th>
             <th className="px-4 py-3">Orders</th>
@@ -704,7 +710,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
     ).filter((r) => matchesSearch(r, search));
     return (
       <table className="min-w-full text-sm">
-        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/50">
+        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/70">
           <tr>
             <th className="px-4 py-3">Service</th>
             <th className="px-4 py-3">Orders</th>
@@ -742,7 +748,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
     ).filter((r) => matchesSearch(r as unknown as Record<string, unknown>, search));
     return (
       <table className="min-w-full text-sm">
-        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/50">
+        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/70">
           <tr>
             <th className="px-4 py-3">Order</th>
             <th className="px-4 py-3">Customer</th>
@@ -759,7 +765,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
                 <Link to={`/admin/orders/${r.orderId}`} className="text-gold hover:underline">
                   #{r.orderNumber}
                 </Link>
-                <span className="block text-xs text-ink/45">{r.title}</span>
+                <span className="block text-xs text-ink/70">{r.title}</span>
               </td>
               <td className="px-4 py-2.5">
                 {r.customerId ? (
@@ -791,7 +797,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
     ).filter((r) => matchesSearch({ ...r, type: 'salary' }, search));
     return (
       <table className="min-w-full text-sm">
-        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/50">
+        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/70">
           <tr>
             <th className="px-4 py-3">Type</th>
             <th className="px-4 py-3">Label</th>
@@ -834,7 +840,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
     ].filter((r) => matchesSearch(r, search));
     return (
       <table className="min-w-full text-sm">
-        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/50">
+        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/70">
           <tr>
             <th className="px-4 py-3">Metric</th>
             <th className="px-4 py-3">Amount</th>
@@ -864,7 +870,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
     ).filter((r) => matchesSearch(r, search));
     return (
       <table className="min-w-full text-sm">
-        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/50">
+        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/70">
           <tr>
             <th className="px-4 py-3">Source</th>
             <th className="px-4 py-3">Leads</th>
@@ -894,7 +900,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
     ).filter((r) => matchesSearch(r, search));
     return (
       <table className="min-w-full text-sm">
-        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/50">
+        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/70">
           <tr>
             <th className="px-4 py-3">Staff</th>
             <th className="px-4 py-3">Open</th>
@@ -928,7 +934,7 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
     ).filter((r) => matchesSearch(r, search));
     return (
       <table className="min-w-full text-sm">
-        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/50">
+        <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wider text-ink/70">
           <tr>
             <th className="px-4 py-3">Customer</th>
             <th className="px-4 py-3">Orders in period</th>
@@ -954,5 +960,5 @@ function ReportTable({ data, type, search }: { data: AnyReport; type: ReportType
     );
   }
 
-  return <p className="p-4 text-sm text-ink/50">No table for this report.</p>;
+  return <p className="p-4 text-sm text-ink/70">No table for this report.</p>;
 }

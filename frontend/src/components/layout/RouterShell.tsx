@@ -1,5 +1,5 @@
-import { Suspense } from 'react';
-import { Outlet, ScrollRestoration } from 'react-router-dom';
+import { Suspense, useEffect, useRef } from 'react';
+import { Outlet, ScrollRestoration, useLocation } from 'react-router-dom';
 import { Spinner } from '@/components/ui';
 import { OfflineBanner } from '@/components/feedback/OfflineBanner';
 
@@ -20,6 +20,27 @@ import { OfflineBanner } from '@/components/feedback/OfflineBanner';
  * downloading shows this fallback instead of an empty shell.
  */
 export function RouterShell() {
+  const location = useLocation();
+  const firstRender = useRef(true);
+
+  useEffect(() => {
+    // A client-side route change replaces the page without moving focus, so a
+    // keyboard or screen-reader user stays parked on the old page's link while
+    // the new page renders. Once per real navigation, put focus at the start of
+    // the new content. `preventScroll` leaves `ScrollRestoration` in charge.
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+
+    const main =
+      document.getElementById('admin-main') ??
+      document.getElementById('main-content') ??
+      document.getElementById('portal-main');
+
+    main?.focus({ preventScroll: true });
+  }, [location.pathname]);
+
   return (
     <>
       <OfflineBanner />

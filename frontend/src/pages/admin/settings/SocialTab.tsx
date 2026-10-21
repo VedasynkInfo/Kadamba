@@ -1,4 +1,4 @@
-﻿import { Icon } from '@/components/icons';
+import { Icon } from '@/components/icons';
 import { SocialIcon } from '@/components/icons/social';
 import type { WebsiteSettings } from '../data';
 
@@ -51,7 +51,7 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
                 value={named.instagram}
                 onChange={(e) => updateNamed('instagram', e.target.value)}
                 placeholder="https://www.instagram.com/kadambasdesignerstudio"
-                className="flex-1 rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                className="flex-1 rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
               />
               {named.instagram ? (
                 <a
@@ -78,7 +78,7 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
                 value={named.facebook}
                 onChange={(e) => updateNamed('facebook', e.target.value)}
                 placeholder="https://www.facebook.com/kadambasstudio"
-                className="flex-1 rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                className="flex-1 rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
               />
               {named.facebook ? (
                 <a
@@ -105,7 +105,7 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
                 value={named.youtube}
                 onChange={(e) => updateNamed('youtube', e.target.value)}
                 placeholder="https://www.youtube.com/@kadambasdesignerstudio"
-                className="flex-1 rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                className="flex-1 rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
               />
               {named.youtube ? (
                 <a
@@ -132,7 +132,7 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
                 value={named.googleBusiness}
                 onChange={(e) => updateNamed('googleBusiness', e.target.value)}
                 placeholder="https://maps.google.com/?cid=..."
-                className="flex-1 rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                className="flex-1 rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
               />
               {named.googleBusiness ? (
                 <a
@@ -167,7 +167,7 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
                 social: [...f.social, { label: 'Pinterest', href: 'https://pinterest.com/' }],
               }))
             }
-            className="text-xs font-semibold text-brand hover:underline cursor-pointer"
+            className="text-xs font-semibold text-brand-strong hover:underline cursor-pointer"
           >
             + Add Platform
           </button>
@@ -185,7 +185,7 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
                   patchForm((f) => ({ ...f, social: next }));
                 }}
                 placeholder="Platform Name"
-                className="w-36 rounded-xl border py-1.5 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                className="w-36 rounded-xl border py-1.5 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
               />
               <input
                 type="url"
@@ -196,7 +196,7 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
                   patchForm((f) => ({ ...f, social: next }));
                 }}
                 placeholder="https://..."
-                className="flex-1 rounded-xl border py-1.5 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                className="flex-1 rounded-xl border py-1.5 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
               />
               <button
                 type="button"

@@ -91,7 +91,7 @@ export function MeasurementFormClientTab({
               value={customerSearch}
               onChange={(e) => handleSearchInput(e.target.value)}
               placeholder="Search client directory by name, phone, or email..."
-              className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+              className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
             />
             {searchingCustomers ? (
               <span className="absolute right-3 top-2.5 text-[10px] opacity-50 animate-pulse">
@@ -138,7 +138,7 @@ export function MeasurementFormClientTab({
           <select
             value={form.productTypeCode}
             onChange={(e) => onUpdateField('productTypeCode', e.target.value)}
-            className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand cursor-pointer bg-surface-raised border-line"
+            className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus cursor-pointer bg-surface-raised border-line"
           >
             {productTypes.map((pt) => (
               <option key={pt.value} value={pt.value}>
@@ -161,7 +161,7 @@ export function MeasurementFormClientTab({
               onUpdateField('profileName', e.target.value);
             }}
             placeholder="e.g. Sangeet Bridal Lehenga"
-            className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+            className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
           />
           <p className="text-[10px] opacity-50">Auto-filled from client + silhouette, fully editable</p>
         </div>
@@ -176,7 +176,7 @@ export function MeasurementFormClientTab({
           <select
             value={form.unit}
             onChange={(e) => onUpdateField('unit', e.target.value)}
-            className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand cursor-pointer bg-surface-raised border-line"
+            className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus cursor-pointer bg-surface-raised border-line"
           >
             {MEASUREMENT_UNITS.map((u) => (
               <option key={u.value} value={u.value}>
@@ -195,7 +195,7 @@ export function MeasurementFormClientTab({
             onChange={(e) =>
               onUpdateField('status', e.target.value as MeasurementProfile['status'])
             }
-            className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand cursor-pointer bg-surface-raised border-line"
+            className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus cursor-pointer bg-surface-raised border-line"
           >
             {MEASUREMENT_STATUSES.map((st) => (
               <option key={st.value} value={st.value}>
@@ -213,7 +213,7 @@ export function MeasurementFormClientTab({
             type="date"
             value={form.measuredAt}
             onChange={(e) => onUpdateField('measuredAt', e.target.value)}
-            className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+            className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
           />
         </div>
       </div>

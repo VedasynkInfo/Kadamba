@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { TabStrip } from '@/components/ui/TabStrip';
 import { staffApi, type Staff } from '@/services/staff/staffService';
 import {
@@ -146,7 +146,7 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
           className="flex items-center justify-between border-b px-5 py-4 border-line"
         >
           <div className="flex items-center gap-2.5">
-            <span className="text-brand">
+            <span className="text-brand-strong">
               <Icon name={staff ? 'edit' : 'staff'} size={20} />
             </span>
             <div>
@@ -203,7 +203,7 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                     value={form.fullName}
                     onChange={(e) => updateField('fullName', e.target.value)}
                     placeholder="e.g. Ramesh Kumar"
-                    className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                    className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
                   />
                 </div>
 
@@ -217,7 +217,7 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                     value={form.phone}
                     onChange={(e) => updateField('phone', e.target.value)}
                     placeholder="e.g. 9876543210"
-                    className="w-full rounded-xl border py-2 px-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                    className="w-full rounded-xl border py-2 px-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
                   />
                 </div>
               </div>
@@ -232,7 +232,7 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                     value={form.email}
                     onChange={(e) => updateField('email', e.target.value)}
                     placeholder="e.g. ramesh@gmail.com"
-                    className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                    className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
                   />
                 </div>
 
@@ -246,7 +246,7 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                     value={form.locality}
                     onChange={(e) => updateField('locality', e.target.value)}
                     placeholder="e.g. Jubilee Hills / Old City"
-                    className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                    className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
                   />
                 </div>
               </div>
@@ -260,7 +260,7 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                   value={form.address}
                   onChange={(e) => updateField('address', e.target.value)}
                   placeholder="Street, door no, landmark..."
-                  className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                  className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
                 />
               </div>
 
@@ -274,7 +274,7 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                     value={form.emergencyName}
                     onChange={(e) => updateField('emergencyName', e.target.value)}
                     placeholder="e.g. Spouse / Brother"
-                    className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                    className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
                   />
                 </div>
 
@@ -287,7 +287,7 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                     value={form.emergencyPhone}
                     onChange={(e) => updateField('emergencyPhone', e.target.value)}
                     placeholder="e.g. 9876500000"
-                    className="w-full rounded-xl border py-2 px-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                    className="w-full rounded-xl border py-2 px-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
                   />
                 </div>
               </div>
@@ -305,7 +305,7 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                   <select
                     value={form.employmentType}
                     onChange={(e) => updateField('employmentType', e.target.value as any)}
-                    className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand cursor-pointer bg-surface-raised border-line"
+                    className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus cursor-pointer bg-surface-raised border-line"
                   >
                     {EMPLOYMENT_TYPES.map((t) => (
                       <option key={t.value} value={t.value}>
@@ -323,7 +323,7 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                     type="date"
                     value={form.joiningDate}
                     onChange={(e) => updateField('joiningDate', e.target.value)}
-                    className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                    className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
                   />
                 </div>
               </div>
@@ -344,7 +344,7 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                         className={cn(
                           'p-2.5 rounded-xl border text-left text-xs transition cursor-pointer flex items-center justify-between',
                           isSelected
-                            ? 'bg-brand/15 border-brand text-brand font-bold'
+                            ? 'bg-brand/15 border-brand text-brand-strong font-bold'
                             : 'hover:bg-current/[0.04] opacity-70', isSelected ? 'border-brand' : 'border-line'
                         )}
                       >
@@ -372,7 +372,7 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                     value={form.yearsExperience}
                     onChange={(e) => updateField('yearsExperience', e.target.value)}
                     placeholder="e.g. 8"
-                    className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                    className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
                   />
                 </div>
 
@@ -385,7 +385,7 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                     value={form.languages}
                     onChange={(e) => updateField('languages', e.target.value)}
                     placeholder="e.g. Telugu, Hindi, Urdu"
-                    className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                    className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
                   />
                 </div>
               </div>
@@ -399,7 +399,7 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                   value={form.previousWorkplaces}
                   onChange={(e) => updateField('previousWorkplaces', e.target.value)}
                   placeholder="e.g. Tarun Tahiliani Hyderabad, Self Employed"
-                  className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                  className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
                 />
               </div>
             </div>
@@ -416,7 +416,7 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                   <select
                     value={form.salaryType}
                     onChange={(e) => updateField('salaryType', e.target.value as any)}
-                    className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand cursor-pointer bg-surface-raised border-line"
+                    className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus cursor-pointer bg-surface-raised border-line"
                   >
                     {SALARY_TYPES.map((s) => (
                       <option key={s.value} value={s.value}>
@@ -437,7 +437,7 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                     value={form.salaryAmount}
                     onChange={(e) => updateField('salaryAmount', e.target.value)}
                     placeholder="e.g. 25000"
-                    className="w-full rounded-xl border py-2 px-3 text-xs font-bold text-amber-400 focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                    className="w-full rounded-xl border py-2 px-3 text-xs font-bold text-amber-400 focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
                   />
                 </div>
               </div>
@@ -517,7 +517,7 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                   onClick={() =>
                     setActiveTab(activeTab === 'contact' ? 'craft' : 'payroll')
                   }
-                  className="inline-flex items-center gap-1 rounded-xl px-5 py-2 text-xs font-bold border border-brand hover:bg-brand/10 text-brand transition cursor-pointer"
+                  className="inline-flex items-center gap-1 rounded-xl px-5 py-2 text-xs font-bold border border-brand hover:bg-brand/10 text-brand-strong transition cursor-pointer"
                 >
                   Next Step
                   <Icon name="arrowRight" size={14} />

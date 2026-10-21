@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { Icon } from '@/components/icons';
 import { useToast } from '@/components/ui';
 
@@ -71,7 +71,7 @@ export function ProfileSecurityCard({ onUpdatePassword }: ProfileSecurityCardPro
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
             placeholder="••••••••••••"
-            className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition bg-surface-sunken border-line"
+            className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition bg-surface-sunken border-line"
           />
         </div>
 
@@ -87,7 +87,7 @@ export function ProfileSecurityCard({ onUpdatePassword }: ProfileSecurityCardPro
               value={nextPassword}
               onChange={(e) => setNextPassword(e.target.value)}
               placeholder="Minimum 8 characters"
-              className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition bg-surface-sunken border-line"
+              className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition bg-surface-sunken border-line"
             />
           </div>
 
@@ -102,7 +102,7 @@ export function ProfileSecurityCard({ onUpdatePassword }: ProfileSecurityCardPro
               value={confirm}
               onChange={(e) => setConfirm(e.target.value)}
               placeholder="Re-enter new password"
-              className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition bg-surface-sunken border-line"
+              className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition bg-surface-sunken border-line"
             />
           </div>
         </div>

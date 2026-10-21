@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { ordersApi, customersApi, type Order, type CustomerProfile } from '@/services/orders/orderService';
-import { useToast } from '@/components/ui';
+import { Pagination, useToast } from '@/components/ui';
 import { AdminHorizonBanner } from '../components/AdminHorizonBanner';
+import { EmptyState } from '../components/EmptyState';
 import { OrdersMetrics } from './OrdersMetrics';
 import { OrdersToolbar } from './OrdersToolbar';
 import { OrdersTable } from './OrdersTable';
@@ -9,22 +10,31 @@ import { OrderPreviewModal } from './OrderPreviewModal';
 import { OrderCreateModal } from './OrderCreateModal';
 import { createBlankOrderForm, orderStatusLabel, type OrderFormData, type OrdersMetricsData } from './types';
 import { useCreateIntent } from '../hooks/useCreateIntent';
+import { useSavedFilters } from '@/hooks/useSavedFilters';
+import { downloadOrdersCsv } from './exportOrders';
 import type { OrderStatus } from '@/shared/enums';
 import { toAppError } from '@/lib/apiError';
+
+/** Stable defaults: the saved-filter hook keeps this object as its reset shape. */
+const ORDER_FILTER_DEFAULTS = { q: '', status: 'All', priority: '' };
+
+/** Stable defaults: the wizard resets to this object whenever it opens. */
+const BLANK_ORDER_FORM = createBlankOrderForm();
 
 export default function OrdersAdminPage() {
   const { toast } = useToast();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({ page: 1, limit: 20, total: 0, pages: 1 });
-  const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState('All');
-  const [priorityFilter, setPriorityFilter] = useState('');
+  const { filters, setFilter, reset: resetSavedFilters } = useSavedFilters(
+    'kadamba.orders.filters.v1',
+    ORDER_FILTER_DEFAULTS,
+  );
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
 
   // Modal states
   const [createOpen, setCreateOpen] = useState(false);
   const [previewOrder, setPreviewOrder] = useState<Order | null>(null);
-  const [form, setForm] = useState<OrderFormData>(createBlankOrderForm());
   const [submitting, setSubmitting] = useState(false);
 
   // The palette can ask this desk to open its intake form.
@@ -36,15 +46,15 @@ export default function OrdersAdminPage() {
   const [searchingCustomers, setSearchingCustomers] = useState(false);
   const searchTimeoutRef = useRef<any>(null);
 
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     setLoading(true);
     try {
       const data = await ordersApi.list({
         page: pagination.page,
         limit: pagination.limit,
-        q: searchQuery || undefined,
-        status: statusFilter === 'All' ? undefined : statusFilter,
-        priority: priorityFilter || undefined,
+        q: filters.q || undefined,
+        status: filters.status === 'All' ? undefined : filters.status,
+        priority: filters.priority || undefined,
       });
       setOrders(data.items);
       setPagination(data.pagination);
@@ -53,11 +63,11 @@ export default function OrdersAdminPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [pagination.page, pagination.limit, filters.q, filters.status, filters.priority, toast]);
 
   useEffect(() => {
     void fetchOrders();
-  }, [pagination.page, statusFilter, priorityFilter, searchQuery]);
+  }, [fetchOrders]);
 
   // Debounced customer search
   useEffect(() => {
@@ -90,29 +100,38 @@ export default function OrdersAdminPage() {
     return { total, inProduction, rushOrders, readyForTrial };
   }, [orders, pagination.total]);
 
-  const hasActiveFilters = Boolean(searchQuery || statusFilter !== 'All' || priorityFilter);
+  const hasActiveFilters = Boolean(filters.q || filters.status !== 'All' || filters.priority);
 
-  function resetFilters() {
-    setSearchQuery('');
-    setStatusFilter('All');
-    setPriorityFilter('');
+  function updateFilter(key: keyof typeof ORDER_FILTER_DEFAULTS, value: string) {
+    setFilter(key, value);
+    setPagination((current) => (current.page === 1 ? current : { ...current, page: 1 }));
+    setSelectedKeys([]);
   }
 
-  async function handleCreateOrder() {
-    if (!form.title.trim()) {
-      toast({ title: 'Order title is required', tone: 'error' });
-      return;
-    }
+  function resetFilters() {
+    resetSavedFilters();
+    setPagination((current) => (current.page === 1 ? current : { ...current, page: 1 }));
+    setSelectedKeys([]);
+  }
 
-    let customerId = form.selectedCustomer?.id;
+  function handleBulkExport(keys: string[]) {
+    const selected = orders.filter((order) => keys.includes(order.id));
+    if (selected.length === 0) return;
+    downloadOrdersCsv(selected, `orders-page-${pagination.page}.csv`);
+    toast({
+      title: `Exported ${selected.length} order${selected.length === 1 ? '' : 's'}`,
+      description: 'The CSV is in your downloads.',
+      tone: 'success',
+    });
+    setSelectedKeys([]);
+  }
 
-    if (form.customerMode === 'create') {
-      if (!form.newCustName.trim() || !form.newCustPhone.trim()) {
-        toast({ title: 'Customer name & phone are required', tone: 'error' });
-        return;
-      }
-      setSubmitting(true);
-      try {
+  async function handleCreateOrder(form: OrderFormData) {
+    setSubmitting(true);
+    try {
+      let customerId = form.selectedCustomer?.id;
+
+      if (form.customerMode === 'create') {
         const newCust = await customersApi.create({
           name: form.newCustName.trim(),
           phone: form.newCustPhone.trim(),
@@ -121,24 +140,16 @@ export default function OrdersAdminPage() {
           notes: form.newCustNotes.trim() || undefined,
         });
         customerId = newCust.id;
-      } catch (err: any) {
-        toast({ title: err.response?.data?.message || 'Failed to create customer', tone: 'error' });
-        setSubmitting(false);
+      }
+
+      if (!customerId) {
+        toast({ title: 'Please select or create a customer', tone: 'error' });
         return;
       }
-    }
 
-    if (!customerId) {
-      toast({ title: 'Please select or create a customer', tone: 'error' });
-      return;
-    }
-
-    setSubmitting(true);
-    try {
-      const validItems = form.lineItems.filter((i) => i.name.trim().length > 0);
       const tags = form.tagsInput
         .split(',')
-        .map((t) => t.trim())
+        .map((tag) => tag.trim())
         .filter(Boolean);
 
       await ordersApi.create({
@@ -146,9 +157,18 @@ export default function OrdersAdminPage() {
         title: form.title.trim(),
         priority: form.priority,
         status: form.status,
-        lineItems: validItems.length > 0 ? validItems : [{ name: form.title.trim(), qty: 1 }],
-        expectedTrialAt: form.expectedTrialAt ? new Date(form.expectedTrialAt).toISOString() : undefined,
-        expectedDeliveryAt: form.expectedDeliveryAt ? new Date(form.expectedDeliveryAt).toISOString() : undefined,
+        lineItems: form.lineItems.map((item) => ({
+          name: item.name.trim(),
+          notes: item.notes.trim() || undefined,
+          qty: item.qty,
+          productTypeCode: item.productTypeCode || undefined,
+        })),
+        expectedTrialAt: form.expectedTrialAt
+          ? new Date(form.expectedTrialAt).toISOString()
+          : undefined,
+        expectedDeliveryAt: form.expectedDeliveryAt
+          ? new Date(form.expectedDeliveryAt).toISOString()
+          : undefined,
         paymentSummary: {
           totalQuoted: Number(form.totalQuoted) || 0,
           advance: Number(form.advance) || 0,
@@ -159,7 +179,6 @@ export default function OrdersAdminPage() {
 
       toast({ title: 'Atelier order created successfully', tone: 'success' });
       setCreateOpen(false);
-      setForm(createBlankOrderForm());
       setCustomerSearch('');
       void fetchOrders();
     } catch (err: any) {
@@ -210,12 +229,12 @@ export default function OrdersAdminPage() {
 
         {/* Search, Filter & Action Toolbar */}
         <OrdersToolbar
-          query={searchQuery}
-          onQueryChange={setSearchQuery}
-          selectedStatus={statusFilter}
-          onStatusChange={setStatusFilter}
-          selectedPriority={priorityFilter}
-          onPriorityChange={setPriorityFilter}
+          query={filters.q}
+          onQueryChange={(value) => updateFilter('q', value)}
+          selectedStatus={filters.status}
+          onStatusChange={(value) => updateFilter('status', value)}
+          selectedPriority={filters.priority}
+          onPriorityChange={(value) => updateFilter('priority', value)}
           hasActiveFilters={hasActiveFilters}
           onResetFilters={resetFilters}
           filteredCount={orders.length}
@@ -223,16 +242,43 @@ export default function OrdersAdminPage() {
           onNewOrder={() => setCreateOpen(true)}
         />
 
-        {/* Modern Compact Table Card */}
+        {/* Orders table: virtualised rows, saved filters, selection + bulk export */}
         <OrdersTable
           items={orders}
           loading={loading}
-          hasActiveFilters={hasActiveFilters}
-          onResetFilters={resetFilters}
-          onNewOrder={() => setCreateOpen(true)}
+          selectedKeys={selectedKeys}
+          onSelectionChange={setSelectedKeys}
+          onBulkExport={handleBulkExport}
           onPreview={setPreviewOrder}
-          onStatusChange={handleStatusChange}
+          emptyState={
+            <div className="p-4">
+              <EmptyState
+                title="No orders found"
+                description={
+                  hasActiveFilters
+                    ? 'No studio commissions match the active search or filters.'
+                    : 'Create bridal couture orders, record measurements, and track production workflows.'
+                }
+                actionLabel={hasActiveFilters ? 'Clear Filters' : '+ New Order'}
+                onAction={hasActiveFilters ? resetFilters : () => setCreateOpen(true)}
+              />
+            </div>
+          }
         />
+
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs text-ink/65">
+            Page {pagination.page} of {pagination.pages} · {pagination.total} orders
+          </p>
+          <Pagination
+            page={pagination.page}
+            totalPages={pagination.pages}
+            onPageChange={(page) => {
+              setPagination((current) => ({ ...current, page }));
+              setSelectedKeys([]);
+            }}
+          />
+        </div>
       </div>
 
       {/* Quick Dossier Preview Modal */}
@@ -246,8 +292,7 @@ export default function OrdersAdminPage() {
       <OrderCreateModal
         open={createOpen}
         onClose={() => setCreateOpen(false)}
-        form={form}
-        setForm={setForm}
+        defaultValues={BLANK_ORDER_FORM}
         onSave={handleCreateOrder}
         submitting={submitting}
         customerSearch={customerSearch}

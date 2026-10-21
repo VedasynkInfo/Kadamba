@@ -106,7 +106,7 @@ export function MeasurementsToolbar({
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
                 placeholder="Search client, phone, fit title..."
-                className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition border-line"
+                className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition border-line"
               />
               {searchQuery ? (
                 <button
@@ -126,7 +126,7 @@ export function MeasurementsToolbar({
                 value={silhouetteFilter}
                 onChange={(e) => onSilhouetteChange(e.target.value)}
                 aria-label="Filter by silhouette"
-                className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+                className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
               >
                 <option value="">All Silhouettes</option>
                 {silhouetteOptions.map((t) => (
@@ -143,7 +143,7 @@ export function MeasurementsToolbar({
                 value={statusFilter}
                 onChange={(e) => onStatusChange(e.target.value)}
                 aria-label="Filter by approval status"
-                className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+                className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
               >
                 <option value="all">All Statuses</option>
                 <option value="active">Active Fits</option>

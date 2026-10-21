@@ -23,6 +23,10 @@ if (!Element.prototype.scrollIntoView) {
   Element.prototype.scrollIntoView = () => {};
 }
 
+// jsdom's scrollTo exists but throws "not implemented"; `ScrollRestoration`
+// calls it after navigation. Silence the noise without pretending to scroll.
+window.scrollTo = () => {};
+
 // framer-motion's `useInView` (used by CountUp) constructs one of these. The
 // stub never reports an intersection: a test asserts text, not animation.
 class IntersectionObserverStub {

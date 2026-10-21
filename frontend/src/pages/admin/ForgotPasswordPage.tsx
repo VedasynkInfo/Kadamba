@@ -82,7 +82,7 @@ export default function ForgotPasswordPage() {
               ) : null}
               <Link
                 to="/admin/login"
-                className="inline-block text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/45 transition hover:text-gold"
+                className="inline-block text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/70 transition hover:text-gold"
               >
                 <Icon name="arrowLeft" size={14} className="mr-1 inline align-middle" />
                 Back to sign in
@@ -106,7 +106,7 @@ export default function ForgotPasswordPage() {
               </Button>
               <Link
                 to="/admin/login"
-                className="inline-block text-center text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/45 transition hover:text-gold"
+                className="inline-block text-center text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/70 transition hover:text-gold"
               >
                 <Icon name="arrowLeft" size={14} className="mr-1 inline align-middle" />
                 Back to sign in

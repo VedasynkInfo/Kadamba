@@ -1,4 +1,4 @@
-﻿import { Icon } from '@/components/icons';
+import { Icon } from '@/components/icons';
 import { LEAD_DESK_OPTIONS, LEAD_QUALITY_OPTIONS, LEAD_STATUS_OPTIONS } from './types';
 
 interface LeadsToolbarProps {
@@ -51,7 +51,7 @@ export function LeadsToolbar({
               value={query}
               onChange={(e) => onQueryChange(e.target.value)}
               placeholder="Search name, phone, service, city..."
-              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition border-line"
+              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition border-line"
             />
             {query ? (
               <button
@@ -71,7 +71,7 @@ export function LeadsToolbar({
               value={selectedStatus}
               onChange={(e) => onStatusChange(e.target.value)}
               aria-label="Filter by status"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="All">All Statuses</option>
               {LEAD_STATUS_OPTIONS.map((s) => (
@@ -88,7 +88,7 @@ export function LeadsToolbar({
               value={selectedQuality}
               onChange={(e) => onQualityChange(e.target.value)}
               aria-label="Filter by quality"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="All">All Quality</option>
               {LEAD_QUALITY_OPTIONS.map((q) => (
@@ -105,7 +105,7 @@ export function LeadsToolbar({
               value={selectedDesk}
               onChange={(e) => onDeskChange(e.target.value)}
               aria-label="Filter by desk"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="All">All Desks</option>
               {LEAD_DESK_OPTIONS.map((d) => (

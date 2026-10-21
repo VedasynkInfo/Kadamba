@@ -105,7 +105,7 @@ export default function PortalChatPage() {
 
       <div className="mt-6 flex-1 space-y-3 overflow-y-auto border border-gold/15 bg-black/25 p-4">
         {messages.length === 0 ? (
-          <p className="text-sm text-ink-inverse/45">No messages yet — say hello.</p>
+          <p className="text-sm text-ink-inverse/70">No messages yet — say hello.</p>
         ) : (
           messages.map((m) => (
             <div
@@ -117,12 +117,12 @@ export default function PortalChatPage() {
                   : 'mr-auto bg-white/5 text-ink-inverse/90',
               )}
             >
-              <p className="text-[0.6rem] uppercase tracking-[0.16em] text-ink-inverse/40">
+              <p className="text-[0.6rem] uppercase tracking-[0.16em] text-ink-inverse/70">
                 {m.senderRole === 'customer' ? 'You' : 'Boutique'}
               </p>
               <p className="mt-1 whitespace-pre-wrap">{m.body}</p>
               {m.createdAt ? (
-                <p className="mt-1 text-[0.65rem] text-ink-inverse/35">
+                <p className="mt-1 text-[0.65rem] text-ink-inverse/70">
                   {new Date(m.createdAt).toLocaleString('en-IN', {
                     day: 'numeric',
                     month: 'short',
@@ -142,7 +142,7 @@ export default function PortalChatPage() {
           value={body}
           onChange={(e) => setBody(e.target.value)}
           placeholder="Write a message…"
-          className="flex-1 rounded-sm border border-gold/25 bg-black/40 px-3 py-2.5 text-sm text-ink-inverse outline-none focus:border-gold"
+          className="flex-1 rounded-sm border border-gold/25 bg-black/40 px-3 py-2.5 text-sm text-ink-inverse outline-none focus:border-focus"
           maxLength={4000}
         />
         <Button type="submit" disabled={sending || !body.trim()}>

@@ -1,4 +1,4 @@
-﻿import { CountUp } from '@/components/motion/CountUp';
+import { CountUp } from '@/components/motion/CountUp';
 import type { BlogsMetricsData } from './types';
 
 interface BlogsMetricsProps {
@@ -33,7 +33,7 @@ export function BlogsMetrics({ metrics }: BlogsMetricsProps) {
         className="rounded-xl border p-4 shadow-xs bg-surface-raised border-line text-ink-raised"
       >
         <p className="text-[11px] font-medium opacity-60 uppercase tracking-wider">Featured Stories</p>
-        <p className="mt-1 text-2xl font-bold tracking-tight text-brand">
+        <p className="mt-1 text-2xl font-bold tracking-tight text-brand-strong">
           <CountUp value={metrics.featured} />
         </p>
       </div>

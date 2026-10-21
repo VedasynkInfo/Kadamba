@@ -42,8 +42,8 @@ export function Tabs({ tabs, activeKey, onChange, className }: TabsProps) {
             value={tab.key}
             className={cn(
               'px-5 py-3.5 text-xs font-semibold uppercase tracking-[0.12em] transition-colors whitespace-nowrap',
-              'border-b-2 border-transparent text-ink/45 hover:text-ink/70',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40',
+              'border-b-2 border-transparent text-ink/70 hover:text-ink/70',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus/40',
               'data-[state=active]:border-gold data-[state=active]:text-ink',
             )}
           >

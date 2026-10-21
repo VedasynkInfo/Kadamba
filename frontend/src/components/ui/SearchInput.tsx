@@ -25,8 +25,8 @@ export function SearchInput({
         placeholder={placeholder}
         className={cn(
           'w-full rounded-md border border-line bg-surface-field py-2.5 pl-8 pr-3 text-sm text-ink',
-          'placeholder:text-ink/40',
-          'focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30',
+          'placeholder:text-ink/70',
+          'focus:border-focus focus:outline-none focus:ring-2 focus:ring-focus/30',
           className,
         )}
         {...props}

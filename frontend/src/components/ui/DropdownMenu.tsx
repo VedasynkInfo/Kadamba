@@ -51,7 +51,7 @@ export const DropdownMenuItem = forwardRef<
     className={cn(
       itemClasses,
       'data-[highlighted]:bg-brand/10',
-      destructive ? 'text-danger' : 'text-ink data-[highlighted]:text-brand',
+      destructive ? 'text-danger' : 'text-ink data-[highlighted]:text-brand-strong',
       className,
     )}
     {...props}
@@ -66,7 +66,7 @@ export const DropdownMenuLabel = forwardRef<
   <DropdownMenuPrimitive.Label
     ref={ref}
     className={cn(
-      'px-2.5 py-1.5 text-[0.65rem] font-semibold uppercase tracking-wider text-ink/50',
+      'px-2.5 py-1.5 text-[0.65rem] font-semibold uppercase tracking-wider text-ink/70',
       className,
     )}
     {...props}
@@ -93,7 +93,7 @@ export const DropdownMenuCheckboxItem = forwardRef<
   <DropdownMenuPrimitive.CheckboxItem
     ref={ref}
     checked={checked}
-    className={cn(itemClasses, 'pl-8 text-ink data-[highlighted]:text-brand', className)}
+    className={cn(itemClasses, 'pl-8 text-ink data-[highlighted]:text-brand-strong', className)}
     {...props}
   >
     <span className="pointer-events-none absolute left-2.5 flex size-4 items-center justify-center">

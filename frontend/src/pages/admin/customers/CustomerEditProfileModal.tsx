@@ -1,4 +1,4 @@
-﻿import { Button, Input, Modal } from '@/components/ui';
+import { Button, Input, Modal } from '@/components/ui';
 
 export interface CustomerEditFormState {
   name: string;
@@ -83,7 +83,7 @@ export function CustomerEditProfileModal({
             <select
               value={form.source}
               onChange={(e) => setForm((f) => ({ ...f, source: e.target.value }))}
-              className="w-full rounded-md border border-line bg-surface-field px-3 py-2 text-sm text-ink focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
+              className="w-full rounded-md border border-line bg-surface-field px-3 py-2 text-sm text-ink focus:border-focus focus:outline-none focus:ring-2 focus:ring-focus/30"
             >
               <option value="walk-in">Walk-in / Phone</option>
               <option value="instagram">Instagram</option>
@@ -163,7 +163,7 @@ export function CustomerEditProfileModal({
               onChange={(e: any) =>
                 setForm((f) => ({ ...f, preferredUnit: e.target.value as 'in' | 'cm' }))
               }
-              className="w-full rounded-md border border-line bg-surface-field px-3 py-2 text-sm text-ink focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
+              className="w-full rounded-md border border-line bg-surface-field px-3 py-2 text-sm text-ink focus:border-focus focus:outline-none focus:ring-2 focus:ring-focus/30"
             >
               <option value="in">Inches (in)</option>
               <option value="cm">Centimeters (cm)</option>
@@ -174,7 +174,7 @@ export function CustomerEditProfileModal({
             <select
               value={form.portalStatus}
               onChange={(e) => setForm((f) => ({ ...f, portalStatus: e.target.value }))}
-              className="w-full rounded-md border border-line bg-surface-field px-3 py-2 text-sm text-ink focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
+              className="w-full rounded-md border border-line bg-surface-field px-3 py-2 text-sm text-ink focus:border-focus focus:outline-none focus:ring-2 focus:ring-focus/30"
             >
               <option value="none">None</option>
               <option value="invited">Invited</option>

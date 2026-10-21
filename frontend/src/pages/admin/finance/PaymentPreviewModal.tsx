@@ -1,4 +1,4 @@
-﻿import { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import type { PaymentRecord } from '@/services/finance/financeService';
 import { whatsappDeepLink } from '@/utils/whatsapp';
@@ -141,7 +141,7 @@ export function PaymentPreviewModal({ payment, onClose }: PaymentPreviewModalPro
                 <>
                   <Link
                     to={`/admin/orders/${order.id}`}
-                    className="font-bold text-sm block mt-1 hover:underline text-brand truncate"
+                    className="font-bold text-sm block mt-1 hover:underline text-brand-strong truncate"
                   >
                     #{order.orderNumber}
                   </Link>

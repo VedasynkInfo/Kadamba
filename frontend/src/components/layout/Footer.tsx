@@ -111,7 +111,7 @@ export function Footer() {
             </ul>
           </nav>
         </div>
-        <p className="mt-10 border-t border-gold/10 pt-6 text-xs text-ink-inverse/50">
+        <p className="mt-10 border-t border-gold/10 pt-6 text-xs text-ink-inverse/70">
           &copy; {new Date().getFullYear()} {settings.studioName || brand.name}. All rights
           reserved.
         </p>

@@ -43,7 +43,7 @@
 
   /* ── 2. Semantic tokens — public (light) values ───────────────────────── */
   /* Surfaces */
-  --color-surface: #fffdd0;
+  --color-surface: var(--public-bg);
   --color-surface-raised: var(--public-card);
   --color-surface-sunken: var(--public-surface);
   --color-surface-field: var(--public-card);
@@ -60,13 +60,20 @@
   --color-ink-on-brand: #000000;
 
   /* Borders */
-  --color-line: rgba(0, 0, 0, 0.12);
-  --color-line-strong: rgba(0, 0, 0, 0.22);
+  --color-line: color-mix(in srgb, var(--public-text) 14%, transparent);
+  --color-line-strong: color-mix(in srgb, var(--public-text) 26%, transparent);
 
   /* Brand — the studio's accent, applied to actions and highlights. Soft tints
      are expressed as opacity on this one token (`bg-brand/10`, `border-brand/25`),
      which is why there is no second "soft" colour to drift from it. */
   --color-brand: var(--color-accent);
+
+  /* The same accent, safe as *text*. A gold that reads on espresso is invisible
+     on cream, so text and icons use this token while filled buttons keep
+     `brand`. ThemeContext recomputes it from the studio's accent and page
+     background; the default is the static equivalent for first paint. */
+  --color-brand-strong: #8a6d2f;
+  --color-focus: var(--color-brand-strong);
 
   /* The one status tone promoted to a role. A destructive *action* has to be
      legible wherever it appears, so it is a semantic token with a value per
@@ -115,7 +122,7 @@
   --color-primary-hover: #1a1a1a;
   --color-primary-text: #ffffff;
   --color-accent: #b59410;
-  --public-bg: #ffffff;
+  --public-bg: #fffdd0;
   --public-text: #171717;
   --public-card: #ffffff;
   --public-card-text: #171717;
@@ -166,6 +173,8 @@
   --color-line: var(--admin-border);
   --color-line-strong: rgba(128, 128, 128, 0.4);
   --color-brand: var(--admin-primary);
+  --color-brand-strong: var(--admin-accent);
+  --color-focus: var(--admin-accent);
   --color-danger: #fb7185;
 
   background-color: var(--color-surface);
@@ -193,6 +202,8 @@
   --color-line: rgba(255, 255, 255, 0.14);
   --color-line-strong: rgba(255, 255, 255, 0.28);
   --color-brand: var(--color-gold);
+  --color-brand-strong: var(--color-gold);
+  --color-focus: var(--color-gold);
   --color-danger: #fb7185;
 
   background-color: var(--color-surface);
@@ -220,6 +231,8 @@
   --color-line: rgba(26, 21, 16, 0.14);
   --color-line-strong: rgba(26, 21, 16, 0.28);
   --color-brand: var(--color-gold-dark);
+  --color-brand-strong: var(--color-gold-dark);
+  --color-focus: var(--color-gold-dark);
   --color-danger: #b91c1c;
 }
 
@@ -252,7 +265,7 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-gold);
+  outline: 2px solid var(--color-focus);
   outline-offset: 2px;
 }
 

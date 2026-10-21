@@ -1,4 +1,4 @@
-﻿import { Icon } from '@/components/icons';
+import { Icon } from '@/components/icons';
 interface MonthOption {
   value: string;
   label: string;
@@ -54,7 +54,7 @@ export function PaymentsToolbar({
               value={String(year)}
               onChange={(e) => onYearChange(Number(e.target.value))}
               aria-label="Filter by year"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               {yearOptions.map((y) => (
                 <option key={y.value} value={y.value}>
@@ -70,7 +70,7 @@ export function PaymentsToolbar({
               value={String(month)}
               onChange={(e) => onMonthChange(Number(e.target.value))}
               aria-label="Filter by month"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               {monthOptions.map((m) => (
                 <option key={m.value} value={m.value} disabled={m.disabled}>
@@ -86,7 +86,7 @@ export function PaymentsToolbar({
               value={selectedMethod}
               onChange={(e) => onMethodChange(e.target.value)}
               aria-label="Filter by payment method"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="All">All Methods</option>
               <option value="upi">UPI / QR</option>
@@ -107,7 +107,7 @@ export function PaymentsToolbar({
               value={query}
               onChange={(e) => onQueryChange(e.target.value)}
               placeholder="Search reference, client, notes..."
-              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition border-line"
+              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition border-line"
             />
             {query ? (
               <button

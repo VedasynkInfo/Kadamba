@@ -34,7 +34,7 @@ export function PortfolioClientStorySection({ project }: PortfolioClientStorySec
         <footer className="mt-8">
           <cite className="not-italic">
             <span className="block text-sm font-semibold tracking-wide text-ink">{story.name}</span>
-            <span className="mt-1 block text-xs uppercase tracking-[0.25em] text-ink/45">
+            <span className="mt-1 block text-xs uppercase tracking-[0.25em] text-ink/70">
               {story.occasion}
             </span>
           </cite>

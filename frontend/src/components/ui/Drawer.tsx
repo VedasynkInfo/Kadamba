@@ -62,7 +62,7 @@ export function Drawer({
             )}
           >
             <div className="flex items-center justify-between border-b border-line px-5 py-4">
-              <Dialog.Title className="font-heading text-xl text-brand">{title}</Dialog.Title>
+              <Dialog.Title className="font-heading text-xl text-brand-strong">{title}</Dialog.Title>
               <Dialog.Close asChild>
                 <Button
                   variant="ghost"

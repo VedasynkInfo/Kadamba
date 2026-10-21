@@ -102,7 +102,7 @@ export default function PortalLoginPage() {
                 Activate with Reference ID
               </Link>
             </p>
-            <p className="mt-3 text-sm text-ink-inverse/45">
+            <p className="mt-3 text-sm text-ink-inverse/70">
               Need help ordering?{' '}
               <Link to="/request-service" className="text-ink-inverse/80 hover:underline">
                 Enquire without login

@@ -175,7 +175,7 @@ export function HeroSection() {
                   onClick={() => goTo(i)}
                   className={cn(
                     'relative h-1.5 overflow-hidden rounded-full transition-all duration-300',
-                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-black',
+                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-black',
                     i === index ? 'w-10 bg-gold/30' : 'w-2.5 bg-ink-inverse/35 hover:bg-ink-inverse/55',
                   )}
                 >
@@ -199,7 +199,7 @@ export function HeroSection() {
                 type="button"
                 onClick={prev}
                 aria-label="Previous banner"
-                className="flex size-11 items-center justify-center border border-gold/40 text-ink-inverse transition-colors hover:border-gold hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                className="flex size-11 items-center justify-center border border-gold/40 text-ink-inverse transition-colors hover:border-gold hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
               >
                 <Chevron direction="left" />
               </button>
@@ -207,7 +207,7 @@ export function HeroSection() {
                 type="button"
                 onClick={next}
                 aria-label="Next banner"
-                className="flex size-11 items-center justify-center border border-gold/40 text-ink-inverse transition-colors hover:border-gold hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                className="flex size-11 items-center justify-center border border-gold/40 text-ink-inverse transition-colors hover:border-gold hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
               >
                 <Chevron direction="right" />
               </button>

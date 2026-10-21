@@ -1,4 +1,4 @@
-﻿import { Icon } from '@/components/icons';
+import { Icon } from '@/components/icons';
 
 interface ProfileHeroCardProps {
   name: string;
@@ -34,7 +34,7 @@ export function ProfileHeroCard({ name, email, role }: ProfileHeroCardProps) {
               {name || 'Atelier Administrator'}
             </h2>
             <span
-              className="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider border bg-brand/15 border-brand text-brand"
+              className="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider border bg-brand/15 border-brand text-brand-strong"
             >
               <Icon name="roleAdmin" size={12} />
               {role || 'ADMIN'}

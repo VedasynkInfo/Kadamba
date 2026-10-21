@@ -89,7 +89,7 @@ export function AdminNav({ collapsed = false, onNavigate, scope }: AdminNavProps
             'group relative flex items-center rounded-md text-sm transition-colors',
             collapsed ? 'justify-center px-2 py-2' : 'gap-2.5 px-3 py-2',
             isActive
-              ? 'font-semibold text-brand'
+              ? 'font-semibold text-brand-strong'
               : 'text-ink-inverse/75 hover:bg-ink-inverse/[0.06] hover:text-ink-inverse',
           )
         }
@@ -149,7 +149,7 @@ export function AdminNav({ collapsed = false, onNavigate, scope }: AdminNavProps
               onClick={() => toggleGroup(group.id)}
               aria-expanded={open}
               aria-controls={`admin-nav-group-${group.id}`}
-              className="flex w-full items-center justify-between rounded-md px-3 py-1 text-[0.62rem] uppercase tracking-[0.2em] text-ink-inverse/45 transition-colors hover:text-ink-inverse/80"
+              className="flex w-full items-center justify-between rounded-md px-3 py-1 text-[0.62rem] uppercase tracking-[0.2em] text-ink-inverse/70 transition-colors hover:text-ink-inverse/80"
             >
               <span>{group.label}</span>
               <Icon name={open ? 'chevronDown' : 'chevronRight'} size={12} />

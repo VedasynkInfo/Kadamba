@@ -75,7 +75,7 @@ export function GalleryMasonrySection() {
       </div>
 
       {!loading ? (
-        <p className="mt-6 text-sm text-ink-inverse/50" aria-live="polite">
+        <p className="mt-6 text-sm text-ink-inverse/70" aria-live="polite">
           {filtered.length} {filtered.length === 1 ? 'piece' : 'pieces'}
         </p>
       ) : null}
@@ -154,7 +154,7 @@ function MasonryTile({
         onClick={onOpen}
         className={cn(
           'group relative block w-full overflow-hidden text-left',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
         )}
         style={{ aspectRatio: `${item.width} / ${item.height}` }}
         aria-label={`Open ${item.title}`}

@@ -36,7 +36,7 @@ export const CommandInput = forwardRef<
     <CommandPrimitive.Input
       ref={ref}
       className={cn(
-        'h-11 w-full bg-transparent text-sm text-ink outline-none placeholder:text-ink/40 disabled:cursor-not-allowed disabled:opacity-50',
+        'h-11 w-full bg-transparent text-sm text-ink outline-none placeholder:text-ink/70 disabled:cursor-not-allowed disabled:opacity-50',
         className,
       )}
       {...props}
@@ -63,7 +63,7 @@ export const CommandEmpty = forwardRef<
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.Empty
     ref={ref}
-    className={cn('py-6 text-center text-sm text-ink/50', className)}
+    className={cn('py-6 text-center text-sm text-ink/70', className)}
     {...props}
   />
 ));
@@ -83,7 +83,7 @@ export const CommandGroup = forwardRef<
       '[&_[cmdk-group-heading]]:font-semibold',
       '[&_[cmdk-group-heading]]:uppercase',
       '[&_[cmdk-group-heading]]:tracking-wider',
-      '[&_[cmdk-group-heading]]:text-ink/50',
+      '[&_[cmdk-group-heading]]:text-ink/70',
       className,
     )}
     {...props}
@@ -99,7 +99,7 @@ export const CommandItem = forwardRef<
     ref={ref}
     className={cn(
       'relative flex cursor-pointer select-none items-center gap-2 rounded-md px-2.5 py-2 text-sm text-ink outline-none transition-colors duration-150',
-      'data-[selected=true]:bg-brand/10 data-[selected=true]:text-brand',
+      'data-[selected=true]:bg-brand/10 data-[selected=true]:text-brand-strong',
       'data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50',
       className,
     )}
@@ -123,7 +123,7 @@ CommandSeparator.displayName = 'CommandSeparator';
 /** Right-aligned hint for the key that runs an item, kept out of the a11y name. */
 export const CommandShortcut = ({ className, ...props }: HTMLAttributes<HTMLSpanElement>) => (
   <span
-    className={cn('ml-auto text-[0.65rem] font-medium tracking-widest text-ink/40', className)}
+    className={cn('ml-auto text-[0.65rem] font-medium tracking-widest text-ink/70', className)}
     {...props}
   />
 );

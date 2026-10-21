@@ -117,7 +117,7 @@ export default function PortalOrdersPage() {
       <p className="mt-2 text-sm text-ink-inverse/55">Current and previous boutique work.</p>
       <ul className="mt-8 divide-y divide-gold/10 border border-gold/15">
         {orders.length === 0 ? (
-          <li className="px-4 py-10 text-sm text-ink-inverse/50">No orders yet.</li>
+          <li className="px-4 py-10 text-sm text-ink-inverse/70">No orders yet.</li>
         ) : (
           orders.map((order) => (
             <li key={order.id}>
@@ -127,7 +127,7 @@ export default function PortalOrdersPage() {
               >
                 <div>
                   <p className="text-ink-inverse">{order.title}</p>
-                  <p className="mt-1 text-xs text-ink-inverse/45">
+                  <p className="mt-1 text-xs text-ink-inverse/70">
                     {order.referenceId || `Order #${order.orderNumber}`} · Trial{' '}
                     {formatDate(order.expectedTrialAt)} · Delivery{' '}
                     {formatDate(order.expectedDeliveryAt)}
@@ -211,7 +211,7 @@ export function PortalOrderDetailPage() {
       <div>
         <Link
           to="/portal/orders"
-          className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.18em] text-ink-inverse/50 hover:text-gold"
+          className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.18em] text-ink-inverse/70 hover:text-gold"
         >
           <Icon name="arrowLeft" size={14} />
           Orders
@@ -226,7 +226,7 @@ export function PortalOrderDetailPage() {
                 {order.referenceId || `Order #${order.orderNumber}`}
               </p>
               {order.createdAt ? (
-                <p className="mt-1 text-xs text-ink-inverse/40">Placed {formatDate(order.createdAt)}</p>
+                <p className="mt-1 text-xs text-ink-inverse/70">Placed {formatDate(order.createdAt)}</p>
               ) : null}
             </div>
             <span
@@ -256,7 +256,7 @@ export function PortalOrderDetailPage() {
 
           {order.status !== 'cancelled' ? (
             <div className="mt-8">
-              <div className="mb-3 flex items-center justify-between text-[0.65rem] uppercase tracking-[0.16em] text-ink-inverse/45">
+              <div className="mb-3 flex items-center justify-between text-[0.65rem] uppercase tracking-[0.16em] text-ink-inverse/70">
                 <span>Workshop progress</span>
                 <span>{Math.round(progress.pct)}%</span>
               </div>
@@ -296,7 +296,7 @@ export function PortalOrderDetailPage() {
 
       <div className="grid gap-4 lg:grid-cols-3">
         <div className="border border-gold/15 bg-black/30 px-4 py-4">
-          <p className="text-[0.65rem] uppercase tracking-[0.16em] text-ink-inverse/40">Trial</p>
+          <p className="text-[0.65rem] uppercase tracking-[0.16em] text-ink-inverse/70">Trial</p>
           <p className="mt-2 font-heading text-xl text-ink-inverse">
             {formatDate(order.expectedTrialAt)}
           </p>
@@ -305,11 +305,11 @@ export function PortalOrderDetailPage() {
               Completed {formatDate(order.actualTrialAt)}
             </p>
           ) : (
-            <p className="mt-1 text-xs text-ink-inverse/40">Scheduled / expected</p>
+            <p className="mt-1 text-xs text-ink-inverse/70">Scheduled / expected</p>
           )}
         </div>
         <div className="border border-gold/15 bg-black/30 px-4 py-4">
-          <p className="text-[0.65rem] uppercase tracking-[0.16em] text-ink-inverse/40">Delivery</p>
+          <p className="text-[0.65rem] uppercase tracking-[0.16em] text-ink-inverse/70">Delivery</p>
           <p className="mt-2 font-heading text-xl text-ink-inverse">
             {formatDate(order.expectedDeliveryAt)}
           </p>
@@ -318,15 +318,15 @@ export function PortalOrderDetailPage() {
               Delivered {formatDate(order.actualDeliveryAt)}
             </p>
           ) : (
-            <p className="mt-1 text-xs text-ink-inverse/40">Target date</p>
+            <p className="mt-1 text-xs text-ink-inverse/70">Target date</p>
           )}
         </div>
         <div className="border border-gold/15 bg-black/30 px-4 py-4">
-          <p className="text-[0.65rem] uppercase tracking-[0.16em] text-ink-inverse/40">Balance due</p>
+          <p className="text-[0.65rem] uppercase tracking-[0.16em] text-ink-inverse/70">Balance due</p>
           <p className="mt-2 font-heading text-xl text-gold">
             {inr(order.paymentSummary.balance)}
           </p>
-          <p className="mt-1 text-xs text-ink-inverse/40">{paidPct}% paid of quote</p>
+          <p className="mt-1 text-xs text-ink-inverse/70">{paidPct}% paid of quote</p>
         </div>
       </div>
 
@@ -344,7 +344,7 @@ export function PortalOrderDetailPage() {
                   {item.name}
                 </p>
                 {item.productTypeCode ? (
-                  <p className="mt-1 font-mono text-[0.7rem] text-ink-inverse/40">
+                  <p className="mt-1 font-mono text-[0.7rem] text-ink-inverse/70">
                     {item.productTypeCode}
                   </p>
                 ) : null}
@@ -368,7 +368,7 @@ export function PortalOrderDetailPage() {
             </Link>
             <Link
               to="/portal/payments"
-              className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.16em] text-ink-inverse/45 hover:text-gold"
+              className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.16em] text-ink-inverse/70 hover:text-gold"
             >
               All invoices
               <Icon name="arrowRight" size={14} />
@@ -386,7 +386,7 @@ export function PortalOrderDetailPage() {
             { label: 'Balance', value: inr(order.paymentSummary.balance) },
           ].map((row) => (
             <div key={row.label} className="border border-gold/10 px-3 py-3">
-              <dt className="text-[0.65rem] uppercase tracking-[0.14em] text-ink-inverse/40">
+              <dt className="text-[0.65rem] uppercase tracking-[0.14em] text-ink-inverse/70">
                 {row.label}
               </dt>
               <dd className="mt-1 text-ink-inverse">{row.value}</dd>
@@ -408,7 +408,7 @@ export function PortalOrderDetailPage() {
               />
               <p className="text-ink-inverse">{statusLabel[t.status] || t.status}</p>
               {t.note ? <p className="mt-1 text-sm text-ink-inverse/55">{t.note}</p> : null}
-              <p className="mt-1 text-[0.7rem] text-ink-inverse/35">{formatDateTime(t.at)}</p>
+              <p className="mt-1 text-[0.7rem] text-ink-inverse/70">{formatDateTime(t.at)}</p>
             </li>
           ))}
         </ol>
@@ -422,7 +422,7 @@ export function PortalOrderDetailPage() {
               <li key={i} className="border border-gold/10 bg-black/30 px-4 py-3 text-sm text-ink-inverse/80">
                 <p>{n.body}</p>
                 {n.createdAt ? (
-                  <p className="mt-2 text-[0.7rem] text-ink-inverse/35">{formatDateTime(n.createdAt)}</p>
+                  <p className="mt-2 text-[0.7rem] text-ink-inverse/70">{formatDateTime(n.createdAt)}</p>
                 ) : null}
               </li>
             ))}

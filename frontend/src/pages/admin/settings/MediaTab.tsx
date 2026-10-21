@@ -36,7 +36,7 @@ export function MediaTab({ form, patchForm }: MediaTabProps) {
                   media: { ...f.media, maxUploadBytes: mb * 1024 * 1024 },
                 }));
               }}
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
             />
             <span className="text-[10px] opacity-50 block mt-0.5">
               Applies to lookbook pictures, gallery items, and customer fit photos
@@ -55,7 +55,7 @@ export function MediaTab({ form, patchForm }: MediaTabProps) {
                   media: { ...f.media, defaultUnit: e.target.value as 'in' | 'cm' },
                 }))
               }
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus cursor-pointer bg-surface-raised border-line"
             >
               <option value="in">Inches (Standard Indian Couture)</option>
               <option value="cm">Centimeters (Metric)</option>

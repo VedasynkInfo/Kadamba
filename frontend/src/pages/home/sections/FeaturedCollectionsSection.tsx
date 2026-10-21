@@ -90,7 +90,7 @@ export function FeaturedCollectionsSection() {
               <motion.button
                 key={featured.id}
                 type="button"
-                className="absolute inset-0 block w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gold"
+                className="absolute inset-0 block w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus"
                 onClick={() => setActive(featured)}
                 initial={reduced ? false : { opacity: 0, scale: 1.04 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -138,7 +138,7 @@ export function FeaturedCollectionsSection() {
                   onClick={() => setFeaturedIndex(i)}
                   className={cn(
                     'h-1.5 rounded-full transition-all duration-300',
-                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold',
+                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
                     i === featuredIndex ? 'w-8 bg-gold' : 'w-2.5 bg-ink-inverse/30 hover:bg-ink-inverse/50',
                   )}
                 />
@@ -190,7 +190,7 @@ export function FeaturedCollectionsSection() {
                   'group relative block w-full overflow-hidden text-left',
                   'aspect-[4/3] lg:aspect-auto lg:h-full lg:min-h-[220px]',
                   index === 0 && 'lg:min-h-[460px]',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
                 )}
                 onClick={() => setActive(item)}
               >
@@ -245,7 +245,7 @@ function ControlButton({
       type="button"
       onClick={onClick}
       aria-label={label}
-      className="flex size-10 items-center justify-center border border-gold/40 text-ink-inverse transition-colors hover:border-gold hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+      className="flex size-10 items-center justify-center border border-gold/40 text-ink-inverse transition-colors hover:border-gold hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
     >
       <svg className="size-4" viewBox="0 0 24 24" fill="none" aria-hidden>
         <path

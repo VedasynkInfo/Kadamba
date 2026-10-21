@@ -306,12 +306,12 @@
 | 7.2 | `⌘K` command palette (cmdk) across all entities | ✅ |
 | 7.3 | Motion language (row stagger, count-up, spring modals, tab indicators) | ✅ |
 | 7.4 | **Order Kanban pipeline** (dnd-kit, optimistic + audit) | ✅ |
-| 7.5 | Data table upgrade (sticky, bulk actions, virtualised, saved filters) | ⬜ |
+| 7.5 | Data table upgrade (sticky, bulk actions, virtualised, saved filters) | ✅ |
 | 7.6 | Real dashboard (metrics, sparklines, needs-action queue) | ✅ |
-| 7.7 | react-hook-form + zod; multi-step New Order wizard | ⬜ |
+| 7.7 | react-hook-form + zod; multi-step New Order wizard | ✅ |
 | 7.8 | Sonner toasts, conflict alerts, error boundary | ✅ |
-| 7.9 | AA+ contrast + keyboard audit | ⬜ |
-| 7.10 | Virtualisation + `React.memo` + per-desk chunks | ⬜ |
+| 7.9 | AA+ contrast + keyboard audit | ✅ |
+| 7.10 | Virtualisation + `React.memo` + per-desk chunks | ✅ |
 
 **Gate:** INP <200ms; `⌘K` ≤3 keystrokes to any record; Kanban writes audit row; 100% keyboard; zero emoji nav; zero inline colour styles.
 
@@ -366,6 +366,37 @@
 - Numeric `StatCard` values now arrive through the 7.3 `CountUp` (once, in view, reduced-motion aware). String values — "₹1,23,456" — are printed exactly as given, because a currency string with its own formatting should not be re-parsed to be animated.
 - The attention rail and the production queue share the right-hand column. Dropped in as a fourth child of a three-column grid, the queue wrapped onto an orphan row; the rail is one column, stacked, and the page keeps its 2 + 1 shape.
 - The queue is a pure function (`pages/admin/dashboard/attentionQueue`) so it can be tested without rendering Recharts: the tests cover empty queues, dropped zeroes, priority order, the server-count rule and Indian money grouping. `Sparkline` and `StatCard` carry their own tests, and `src/test/setup.ts` gained the `IntersectionObserver` stub that `useInView` needs in jsdom.
+
+**7.5 — the table stops being a list**
+- `DataTable` had the plumbing (selection, sorting, empty/loading states) but no production call site. It now carries the four things a studio desk needs and the Orders desk is its first real user: a sticky header inside a capped scroll area, row virtualisation, a bulk-action bar, and saved filters.
+- **Virtualisation is opt-in and thresholded.** Below forty rows the plain table is cheaper than measuring; above it, `@tanstack/react-virtual` renders a window and two spacer rows, which keeps the markup a real `<table>` rather than a grid of absolutely positioned divs.
+- **Bulk actions are a prop, not a product decision.** The table offers a bar with the actions the desk supplies; Orders supplies the one action an order list actually needs — export the selected rows as CSV. Selection survives paging, and clears when the filter changes, because a selection you cannot see is a trap.
+- **Saved filters are per desk, per browser.** `useSavedFilters` persists the query, status and priority under a versioned key, restores only keys the current desk knows, and treats corrupt storage as "no preference" rather than a broken page. The defaults object is captured once, so reset cannot drift.
+- Pagination now windows its page numbers (ends + neighbourhood with gaps) instead of rendering one button per page.
+- **The desk's old page bug is gone.** Order filters and the page number are one piece of state: changing a filter resets to page 1, and the table, the footer count and the pager all read the same response.
+
+**7.7 — the form that knows what a valid order is**
+- The New Order modal was three uncontrolled tabs plus a parent that validated by hand after the fact. It is now one `useForm` over one zod schema (`orderFormSchema`), with the schema as the definition of a valid order and the wizard as the order in which to ask.
+- **The steps gate.** Continue runs `trigger()` on the fields that step owns; jumping ahead from the tab strip validates every step in between. The final Create can therefore never fail for something the user could have been told two screens earlier.
+- **No new resolver dependency.** `lib/zodResolver` runs `safeParse`, then rebuilds zod's path arrays into the nested `errors` object RHF reads. It is twenty lines, tested for nested `lineItems[0].name` paths and first-message-wins, and it keeps zod and the form layer on one version.
+- The schema enforces the rules the API would otherwise reject later: title length, an existing *or* new customer, a 10-digit phone, optional email shape, at least one named garment, whole-number quantities, advance ≤ quote, and delivery not before trial.
+- The modal sits on `ui/Modal` now, so the wizard inherits the focus trap, Escape, scroll lock and focus restore that the hand-rolled overlay did not have. Numeric fields keep their string shape (`'50000'`) through the schema so the API payload conversion stays in one place.
+- Schema, resolver and the three-step component each have tests; the component test walks the wizard, proves an invalid step cannot advance, and asserts the submitted values.
+
+**7.9 — contrast is a token problem, not a page problem**
+- **Text and fills are different colours now.** One accent cannot be both a button background and readable text: `#b59410` gives black text 7:1 on a button and 2.7:1 as a link on cream. Text and icons use `--color-brand-strong`; filled actions keep `--color-brand`. `ThemeContext` derives the text-safe variant from the studio's actual accent and page background with `utils/contrast` (`readableOn`), so a custom or dark theme cannot produce an invisible link.
+- **Surfaces follow the theme.** `--color-surface` now resolves from `--public-bg` (default cream, matching the identity) and the line tokens are mixed from `--public-text`, which fixes the dark presets that previously painted cream sections and black hairlines on a near-black page.
+- **Two presets failed AA on their own primary buttons.** Midnight Gold's white on `#b59410` and Royal Emerald's white on `#059669` were both below 4.5:1; both now use black, which passes with room.
+- **Focus is its own token.** The global outline was gold in every shell, which is invisible on cream. `--color-focus` is the readable accent per shell (dark gold in public, gold in the console and portal), and the shared primitives' `ring-gold`/`ring-brand`/`border-gold` focus styles now use it.
+- Muted text stops at a readable floor: every `text-ink/35–50` (and the inverse equivalents) became `/70`, placeholders moved from 40% to 60%, and the shared Table/Tabs/Dropdown/StatusBadge/CommandPalette labels follow. These were the systemic failures; page-level decorative alpha remains where it decorates rather than informs.
+- **Keyboard:** `ConfirmDialog` is now a `Modal`, not a hand-rolled overlay — it gains a focus trap, Escape, initial focus and focus restore, and loses two fixed ids shared by every dialog on the page. The Modal's explicit `aria-describedby={undefined}` (which disabled Radix's automatic description wiring) is gone. `Table` sortable headers are buttons with `aria-sort`, not clickable `<th>`s. `RouterShell` moves focus to the new `main` after a client-side route change without stealing it on first paint.
+- **The audit is executable.** `theme/__tests__/contrast.test.ts` merges every preset over the defaults and fails if body, card, sidebar, primary-button or derived-accent pairs drop below 4.5:1 (3:1 for the focus ring). The token gate remains at zero raw hex.
+
+**7.10 — spend the render where the user is looking**
+- `DashboardCharts` is a memoised subtree: a live notification or an expanded queue row re-renders the dashboard, but not four Recharts panels whose series have not changed. `ReportChart` is memoised for the same reason while the table search types, and the board's columns and cards are memoised so a drag repaints the hovered column rather than forty cards.
+- Row virtualisation from 7.5 is the table half of the budget: a studio with thousands of orders keeps a constant DOM.
+- **The shell stays while a desk loads.** `AdminLayout`, `MainLayout` and `PortalLayout` each own a `Suspense` boundary around their outlet, so a lazy page chunk shows the spinner inside the existing nav rather than replacing the whole frame. `RouterShell` keeps the outer boundary as the backstop for a layout chunk.
+- **Vendor chunks are explicit.** Vite's rolldown output groups React, charts, motion, forms, dnd-kit and realtime libraries separately. The entry chunk fell from ~698 kB to ~134 kB; charts (399 kB) and realtime (41 kB) are only fetched by the desks that use them, and a dependency upgrade invalidates one vendor chunk instead of the entry.
 
 
 ---

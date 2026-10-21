@@ -276,7 +276,7 @@ const websiteSettingsSchema = new Schema<IWebsiteSettings>(
           primaryHover: { type: String, default: '#1a1a1a' },
           primaryText: { type: String, default: '#ffffff' },
           accent: { type: String, default: '#b59410' },
-          publicBg: { type: String, default: '#ffffff' },
+          publicBg: { type: String, default: '#fffdd0' },
           publicText: { type: String, default: '#171717' },
           publicCard: { type: String, default: '#ffffff' },
           publicCardText: { type: String, default: '#171717' },

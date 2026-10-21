@@ -1,4 +1,4 @@
-﻿import type { Customer } from '@/services/customers/customerService';
+import type { Customer } from '@/services/customers/customerService';
 
 interface CustomerOverviewTabProps {
   customer: Customer;
@@ -15,31 +15,31 @@ export function CustomerOverviewTab({ customer }: CustomerOverviewTabProps) {
 
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-3">
           <div>
-            <span className="text-ink/45 block mb-1">Full name</span>
+            <span className="text-ink/70 block mb-1">Full name</span>
             <span className="font-medium text-ink text-sm block">{customer.name}</span>
           </div>
           <div>
-            <span className="text-ink/45 block mb-1">Primary phone</span>
+            <span className="text-ink/70 block mb-1">Primary phone</span>
             <span className="font-medium text-ink text-sm block">{customer.phone}</span>
           </div>
           <div>
-            <span className="text-ink/45 block mb-1">WhatsApp number</span>
+            <span className="text-ink/70 block mb-1">WhatsApp number</span>
             <span className="font-medium text-ink text-sm block">
               {customer.whatsapp || customer.phone}
             </span>
           </div>
           <div>
-            <span className="text-ink/45 block mb-1">Email address</span>
+            <span className="text-ink/70 block mb-1">Email address</span>
             <span className="font-medium text-ink text-sm block">
               {customer.email || 'None recorded'}
             </span>
           </div>
           <div>
-            <span className="text-ink/45 block mb-1">Client source</span>
+            <span className="text-ink/70 block mb-1">Client source</span>
             <span className="font-medium text-ink text-sm block capitalize">{customer.source}</span>
           </div>
           <div>
-            <span className="text-ink/45 block mb-1">Preferred Unit</span>
+            <span className="text-ink/70 block mb-1">Preferred Unit</span>
             <span className="font-medium text-ink text-sm block uppercase">
               {customer.preferredUnit || 'in'}
             </span>
@@ -55,22 +55,22 @@ export function CustomerOverviewTab({ customer }: CustomerOverviewTabProps) {
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
-            <span className="text-ink/45 block">Address lines</span>
+            <span className="text-ink/70 block">Address lines</span>
             <span className="font-medium text-ink mt-1 block">
               {customer.address?.line1 || 'No address lines recorded'}
               {customer.address?.line2 && <span className="block mt-0.5">{customer.address.line2}</span>}
             </span>
           </div>
           <div>
-            <span className="text-ink/45 block">Landmark</span>
+            <span className="text-ink/70 block">Landmark</span>
             <span className="font-medium text-ink mt-1 block">{customer.address?.landmark || '—'}</span>
           </div>
           <div>
-            <span className="text-ink/45 block">Locality area</span>
+            <span className="text-ink/70 block">Locality area</span>
             <span className="font-medium text-ink mt-1 block">{customer.address?.locality || '—'}</span>
           </div>
           <div>
-            <span className="text-ink/45 block">City / Pincode</span>
+            <span className="text-ink/70 block">City / Pincode</span>
             <span className="font-medium text-ink mt-1 block">
               {customer.address?.city || 'Kurnool'} - {customer.address?.pincode || '—'}
             </span>

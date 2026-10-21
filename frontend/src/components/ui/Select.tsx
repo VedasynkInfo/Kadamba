@@ -51,9 +51,9 @@ export function Select({
           className={cn(
             'peer w-full appearance-none rounded-lg border py-2 pl-3.5 pr-9 text-sm transition-all',
             'bg-surface-field text-ink-raised border-line',
-            'focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30',
+            'focus:border-focus focus:outline-none focus:ring-2 focus:ring-focus/30',
             'disabled:cursor-not-allowed disabled:opacity-50',
-            error ? 'border-red-600' : undefined,
+            error ? 'border-danger' : undefined,
             className,
           )}
           {...props}
@@ -77,13 +77,13 @@ export function Select({
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-ink-raised/50 peer-disabled:opacity-50"
+          className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-ink-raised/70 peer-disabled:opacity-50"
         >
           <path d="M19 9l-7 7-7-7" />
         </svg>
       </div>
       {error ? (
-        <p role="alert" className="text-xs text-red-700">
+        <p role="alert" className="text-xs text-danger">
           {error}
         </p>
       ) : null}

@@ -316,7 +316,7 @@ export function MeasurementModalForm({
                   onClick={() =>
                     setActiveTab(activeTab === 'identity' ? 'dimensions' : 'notes')
                   }
-                  className="rounded-xl px-5 py-2 text-xs font-bold border border-brand hover:bg-brand/10 text-brand transition cursor-pointer"
+                  className="rounded-xl px-5 py-2 text-xs font-bold border border-brand hover:bg-brand/10 text-brand-strong transition cursor-pointer"
                 >
                   Next Step <Icon name="arrowRight" size={14} className="mr-1 inline align-middle" /> 
                 </button>

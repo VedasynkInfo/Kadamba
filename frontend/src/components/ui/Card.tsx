@@ -41,7 +41,7 @@ export function Card({
       <Comp
         className={cn(
           'group relative overflow-hidden rounded-xl bg-surface-inverse text-ink-inverse shadow-md transition-all duration-300',
-          'focus-within:ring-2 focus-within:ring-gold',
+          'focus-within:ring-2 focus-within:ring-focus',
           className,
         )}
         style={style}

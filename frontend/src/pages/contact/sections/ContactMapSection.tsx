@@ -47,7 +47,7 @@ export function ContactMapSection() {
           allowFullScreen
         />
         <div
-          className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-gold/15"
+          className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-focus/15"
           aria-hidden
         />
       </div>

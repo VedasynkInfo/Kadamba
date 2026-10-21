@@ -62,10 +62,9 @@ export function Modal({
           <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4">
             <Dialog.Content
               aria-modal="true"
-              // Without a description there is nothing to point at, and Radix
-              // would warn about a missing `aria-describedby` on every dialog
-              // that does not have one.
-              aria-describedby={description ? undefined : undefined}
+              // Radix wires `aria-describedby` to Dialog.Description itself
+              // when one is rendered, so there is nothing to declare here. The
+              // old explicit `undefined` disabled that automatic wiring.
               // Radix fires this just before it moves focus into the dialog, so
               // the active element here is still the opener we must return to.
               onOpenAutoFocus={() => {

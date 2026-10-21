@@ -1,4 +1,4 @@
-﻿import { Icon } from '@/components/icons';
+import { Icon } from '@/components/icons';
 import { Link } from 'react-router-dom';
 
 const BILL_STATUS_OPTIONS = [
@@ -47,7 +47,7 @@ export function InvoicesToolbar({
               value={query}
               onChange={(e) => onQueryChange(e.target.value)}
               placeholder="Search invoice, client, order #, phone..."
-              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition border-line"
+              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition border-line"
             />
             {query ? (
               <button
@@ -67,7 +67,7 @@ export function InvoicesToolbar({
               value={selectedStatus}
               onChange={(e) => onStatusChange(e.target.value)}
               aria-label="Filter by billing status"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               {BILL_STATUS_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>

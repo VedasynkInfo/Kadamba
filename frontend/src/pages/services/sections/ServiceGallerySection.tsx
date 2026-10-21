@@ -41,7 +41,7 @@ export function ServiceGallerySection({ service }: ServiceGallerySectionProps) {
               onClick={() => setActive(item)}
               className={cn(
                 'group relative block aspect-[4/5] w-full overflow-hidden text-left',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gold',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus',
               )}
             >
               <OptimizedImage

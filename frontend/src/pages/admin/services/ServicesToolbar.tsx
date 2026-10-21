@@ -1,4 +1,4 @@
-﻿import { Icon } from '@/components/icons';
+import { Icon } from '@/components/icons';
 import { SERVICE_CATEGORIES } from './types';
 
 interface ServicesToolbarProps {
@@ -53,7 +53,7 @@ export function ServicesToolbar({
               value={query}
               onChange={(e) => onQueryChange(e.target.value)}
               placeholder="Search service title, slug, summary..."
-              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition border-line"
+              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition border-line"
             />
             {query ? (
               <button
@@ -73,7 +73,7 @@ export function ServicesToolbar({
               value={selectedCategory}
               onChange={(e) => onCategoryChange(e.target.value)}
               aria-label="Filter by category"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="All">All Categories</option>
               {SERVICE_CATEGORIES.map((c) => (
@@ -90,7 +90,7 @@ export function ServicesToolbar({
               value={selectedStatus}
               onChange={(e) => onStatusChange(e.target.value)}
               aria-label="Filter by status"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="All">All Status</option>
               <option value="Published">Published</option>
@@ -104,7 +104,7 @@ export function ServicesToolbar({
               value={selectedFulfillable}
               onChange={(e) => onFulfillableChange(e.target.value)}
               aria-label="Filter by fulfillment"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="All">All Fulfillment</option>
               <option value="Linked">Catalog Linked</option>
@@ -118,7 +118,7 @@ export function ServicesToolbar({
               value={sortBy}
               onChange={(e) => onSortByChange(e.target.value as 'titleAsc' | 'titleDesc' | 'category')}
               aria-label="Sort services"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="titleAsc">Title (A–Z)</option>
               <option value="titleDesc">Title (Z–A)</option>

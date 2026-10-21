@@ -125,7 +125,7 @@ export default function PortalDashboardPage() {
           },
         ].map((item) => (
           <div key={item.label} className="border border-gold/15 bg-black/30 px-4 py-5">
-            <p className="text-[0.65rem] uppercase tracking-[0.2em] text-ink-inverse/45">{item.label}</p>
+            <p className="text-[0.65rem] uppercase tracking-[0.2em] text-ink-inverse/70">{item.label}</p>
             <p className="mt-2 font-heading text-xl text-ink-inverse sm:text-2xl">{item.value}</p>
           </div>
         ))}
@@ -160,7 +160,7 @@ export default function PortalDashboardPage() {
         </div>
         <ul className="divide-y divide-gold/10 border border-gold/15">
           {data.recentOrders.length === 0 ? (
-            <li className="px-4 py-8 text-sm text-ink-inverse/50">No orders yet.</li>
+            <li className="px-4 py-8 text-sm text-ink-inverse/70">No orders yet.</li>
           ) : (
             data.recentOrders.map((order) => (
               <li key={order.id}>
@@ -170,11 +170,11 @@ export default function PortalDashboardPage() {
                 >
                   <div>
                     <p className="text-ink-inverse">{order.title}</p>
-                    <p className="mt-0.5 font-mono text-[0.7rem] text-ink-inverse/45">
+                    <p className="mt-0.5 font-mono text-[0.7rem] text-ink-inverse/70">
                       {order.referenceId || `#${order.orderNumber}`}
                     </p>
                     {order.statusNextHint ? (
-                      <p className="mt-1 max-w-md text-xs text-ink-inverse/50">{order.statusNextHint}</p>
+                      <p className="mt-1 max-w-md text-xs text-ink-inverse/70">{order.statusNextHint}</p>
                     ) : null}
                   </div>
                   <span className="rounded-sm border border-gold/25 px-2 py-1 text-[0.65rem] uppercase tracking-[0.14em] text-gold/90">

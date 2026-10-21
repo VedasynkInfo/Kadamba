@@ -29,7 +29,7 @@ export default function ReportsAdminPage() {
             const items = REPORT_CATALOG.filter((r) => r.category === category);
             return (
               <section key={category}>
-                <h3 className="text-xs font-medium uppercase tracking-wider text-ink/45 mb-4">
+                <h3 className="text-xs font-medium uppercase tracking-wider text-ink/70 mb-4">
                   {category}
                 </h3>
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

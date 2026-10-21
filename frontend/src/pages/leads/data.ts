@@ -103,7 +103,7 @@ export function statusTone(status: LeadStatus): string {
     case 'Completed':
       return 'border-line bg-surface-sunken text-ink/70';
     case 'Rejected':
-      return 'border-line bg-transparent text-ink/45';
+      return 'border-line bg-transparent text-ink/70';
     default:
       return 'border-line text-ink';
   }

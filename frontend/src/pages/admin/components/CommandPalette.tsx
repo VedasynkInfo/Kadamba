@@ -176,7 +176,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
               className="border-0"
             >
               <div className="flex items-center gap-2 border-b border-line px-3">
-                <Icon name="search" size={16} className="text-ink/40" />
+                <Icon name="search" size={16} className="text-ink/70" />
                 <CommandInput
                   value={query}
                   onValueChange={setQuery}
@@ -188,7 +188,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
 
               <CommandList className="max-h-[60vh]">
                 <CommandEmpty>
-                  <span className="block py-6 text-center text-sm text-ink/50">
+                  <span className="block py-6 text-center text-sm text-ink/70">
                     Nothing matches “{query}”.
                   </span>
                 </CommandEmpty>
@@ -200,7 +200,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                       value={`${desk.label} ${desk.to}`}
                       onSelect={() => go(desk.to)}
                     >
-                      <Icon name={desk.icon} size={16} className="text-ink/50" />
+                      <Icon name={desk.icon} size={16} className="text-ink/70" />
                       <span>{desk.label}</span>
                     </CommandItem>
                   ))}
@@ -215,7 +215,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                       value={`${action.label} ${action.hint}`}
                       onSelect={() => go(action.to)}
                     >
-                      <Icon name={action.icon} size={16} className="text-ink/50" />
+                      <Icon name={action.icon} size={16} className="text-ink/70" />
                       <span>{action.label}</span>
                       <CommandShortcut>{action.hint}</CommandShortcut>
                     </CommandItem>
@@ -223,7 +223,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                 </CommandGroup>
 
                 {searching ? (
-                  <div className="px-2.5 py-3 text-xs text-ink/45">Searching the studio…</div>
+                  <div className="px-2.5 py-3 text-xs text-ink/70">Searching the studio…</div>
                 ) : null}
 
                 {results.leads.length > 0 ? (
@@ -234,7 +234,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                         value={`${lead.label} ${lead.hint ?? ''} lead`}
                         onSelect={() => go(lead.to)}
                       >
-                        <Icon name="leads" size={16} className="text-ink/50" />
+                        <Icon name="leads" size={16} className="text-ink/70" />
                         <span className="truncate">{lead.label}</span>
                         {lead.hint ? (
                           <CommandShortcut className="truncate">{lead.hint}</CommandShortcut>
@@ -252,7 +252,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                         value={`${order.label} ${order.hint ?? ''} order`}
                         onSelect={() => go(order.to)}
                       >
-                        <Icon name="orders" size={16} className="text-ink/50" />
+                        <Icon name="orders" size={16} className="text-ink/70" />
                         <span className="truncate">{order.label}</span>
                         {order.hint ? (
                           <CommandShortcut className="truncate">{order.hint}</CommandShortcut>
@@ -270,7 +270,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                         value={`${customer.label} ${customer.hint ?? ''} customer`}
                         onSelect={() => go(customer.to)}
                       >
-                        <Icon name="customers" size={16} className="text-ink/50" />
+                        <Icon name="customers" size={16} className="text-ink/70" />
                         <span className="truncate">{customer.label}</span>
                         {customer.hint ? (
                           <CommandShortcut className="truncate">{customer.hint}</CommandShortcut>
@@ -281,7 +281,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                 ) : null}
 
                 {!hasRecords && query.trim().length >= 2 && !searching ? (
-                  <div className="px-2.5 py-3 text-xs text-ink/45">
+                  <div className="px-2.5 py-3 text-xs text-ink/70">
                     No lead, order or customer matches “{query.trim()}”.
                   </div>
                 ) : null}

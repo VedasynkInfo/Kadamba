@@ -1,6 +1,6 @@
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { useState } from 'react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { DataTable, type Column } from '@/components/ui';
 
 afterEach(cleanup);
@@ -99,5 +99,37 @@ describe('DataTable', () => {
 
     expect(container.querySelectorAll('tbody tr')).toHaveLength(5);
     expect(screen.queryByText('Beta')).toBeNull();
+  });
+
+  it('offers bulk actions while rows are selected, and clears the selection', () => {
+    const onBulk = vi.fn();
+    const onSelectionChange = vi.fn();
+
+    render(
+      <DataTable
+        columns={columns}
+        data={rows}
+        rowKey={(row) => row.id}
+        selectedKeys={['a']}
+        onSelectionChange={onSelectionChange}
+        bulkActions={[{ label: 'Export CSV', onClick: onBulk }]}
+      />,
+    );
+
+    expect(screen.getByRole('region', { name: 'Bulk actions' }).textContent).toContain(
+      '1 selected',
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /export csv/i }));
+    expect(onBulk).toHaveBeenCalledWith(['a']);
+
+    fireEvent.click(screen.getByRole('button', { name: /^clear$/i }));
+    expect(onSelectionChange).toHaveBeenCalledWith([]);
+  });
+
+  it('keeps the bulk bar out of the way when nothing is selected', () => {
+    render(<DataTable columns={columns} data={rows} rowKey={(row) => row.id} />);
+
+    expect(screen.queryByRole('region', { name: 'Bulk actions' })).toBeNull();
   });
 });

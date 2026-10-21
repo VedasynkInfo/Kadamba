@@ -30,7 +30,7 @@ export function MeasurementFormDimensionsTab({
   function renderFieldInput(def: MeasurementFieldDef) {
     const val = form.values?.[def.key];
     const baseInputClass =
-      'w-full rounded-lg border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition';
+      'w-full rounded-lg border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition';
     const inputStyle = {
       backgroundColor: 'rgba(128, 128, 128, 0.05)',
       borderColor: 'var(--admin-border)',
@@ -112,7 +112,7 @@ export function MeasurementFormDimensionsTab({
             All dimensions recorded in {form.unit}. Maintain uniform tape tightness.
           </span>
         </div>
-        <span className="text-[10px] px-2 py-0.5 rounded font-mono font-bold bg-brand/15 text-brand">
+        <span className="text-[10px] px-2 py-0.5 rounded font-mono font-bold bg-brand/15 text-brand-strong">
           {Object.keys(form.values).length} values logged
         </span>
       </div>
@@ -123,7 +123,7 @@ export function MeasurementFormDimensionsTab({
             key={groupName}
             className="rounded-xl border p-4 space-y-3.5 transition border-line bg-surface-sunken"
           >
-            <legend className="px-2 font-heading text-xs font-bold uppercase tracking-[0.14em] text-brand">
+            <legend className="px-2 font-heading text-xs font-bold uppercase tracking-[0.14em] text-brand-strong">
               {groupName}
             </legend>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">

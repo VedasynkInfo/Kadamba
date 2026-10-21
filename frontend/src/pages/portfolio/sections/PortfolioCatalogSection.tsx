@@ -138,7 +138,7 @@ function ProjectTile({
       onClick={onOpen}
       className={cn(
         'group w-full cursor-pointer text-left',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-cream',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-cream',
       )}
     >
       <div className="relative aspect-[3/4] overflow-hidden bg-surface-sunken">
@@ -158,7 +158,7 @@ function ProjectTile({
           {project.category}
         </span>
       </div>
-      <p className="mt-4 text-[0.65rem] uppercase tracking-[0.22em] text-ink/45">
+      <p className="mt-4 text-[0.65rem] uppercase tracking-[0.22em] text-ink/70">
         {project.year} · {project.location}
       </p>
       <h3 className="mt-2 font-heading text-2xl leading-snug text-ink">{project.title}</h3>

@@ -91,7 +91,7 @@ export function RequestBannerSection() {
           <motion.button
             type="button"
             onClick={scrollToForm}
-            className="relative mt-8 inline-flex w-fit items-center gap-3 text-left text-xs font-medium uppercase tracking-[0.28em] text-gold/90 transition-colors hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40"
+            className="relative mt-8 inline-flex w-fit items-center gap-3 text-left text-xs font-medium uppercase tracking-[0.28em] text-gold/90 transition-colors hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus/40"
             initial={reduced ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: reduced ? 0 : 0.48 }}

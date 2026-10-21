@@ -78,7 +78,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
                 }))
               }
               placeholder="smtp.gmail.com or smtp.sendgrid.net"
-              className="w-full rounded-xl border py-2 px-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+              className="w-full rounded-xl border py-2 px-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
             />
           </div>
 
@@ -96,7 +96,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
                 }))
               }
               placeholder="587"
-              className="w-full rounded-xl border py-2 px-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+              className="w-full rounded-xl border py-2 px-3 text-xs font-mono focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
             />
           </div>
         </div>
@@ -116,7 +116,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
                 }))
               }
               placeholder="apikey or concierge@kadamba.com"
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
             />
           </div>
 
@@ -135,7 +135,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
                 }))
               }
               placeholder={cfg.passSet ? '••••••••••••' : 'Enter app password'}
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
             />
           </div>
         </div>
@@ -155,7 +155,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
                 }))
               }
               placeholder="Kadamba's Designer Studio"
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
             />
           </div>
 
@@ -173,7 +173,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
                 }))
               }
               placeholder="notifications@kadambadesigner.com"
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
             />
           </div>
 
@@ -191,7 +191,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
                 }))
               }
               placeholder="owner@kadambadesigner.com"
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
             />
           </div>
         </div>
@@ -203,7 +203,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
             value={testTo}
             onChange={(e) => setTestTo(e.target.value)}
             placeholder="Send verification test email to..."
-            className="flex-1 rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+            className="flex-1 rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
           />
           <button
             type="button"
@@ -242,7 +242,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
                 className={`rounded-xl border p-3.5 cursor-pointer transition hover:border-brand ${isEditing ? 'border-brand bg-brand/[0.06]' : 'border-line bg-surface-sunken'}`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-[10px] uppercase font-bold text-brand">
+                  <span className="font-mono text-[10px] uppercase font-bold text-brand-strong">
                     {t.key.replace(/_/g, ' ')}
                   </span>
                   <span className="text-[11px] opacity-60">{isEditing ? 'Close ▲' : 'Edit ▼'}</span>
@@ -274,7 +274,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
                     emailConfig: { ...cfg, templates: updated },
                   }));
                 }}
-                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
               />
             </div>
 
@@ -297,7 +297,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
                   }));
                 }}
                 placeholder="Template text. Supported placeholders: {{referenceId}}, {{clientName}}, {{totalAmount}}"
-                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
               />
             </div>
           </div>

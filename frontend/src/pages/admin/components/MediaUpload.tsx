@@ -153,7 +153,7 @@ export function MediaUpload({
       ) : (
         <div
           className={cn(
-            'flex min-h-28 items-center justify-center rounded-md border border-dashed border-line bg-surface-sunken px-3 py-6 text-center text-sm text-ink/45',
+            'flex min-h-28 items-center justify-center rounded-md border border-dashed border-line bg-surface-sunken px-3 py-6 text-center text-sm text-ink/70',
           )}
         >
           No media selected
@@ -206,10 +206,10 @@ export function MediaUpload({
       </div>
 
       {hint && !error && !localError ? (
-        <p className="text-xs text-ink/50">{hint}</p>
+        <p className="text-xs text-ink/70">{hint}</p>
       ) : null}
       {(error || localError) && (
-        <p role="alert" className="text-xs text-red-700">
+        <p role="alert" className="text-xs text-danger">
           {error || localError}
         </p>
       )}

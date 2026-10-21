@@ -157,7 +157,7 @@ export default function PortalRequestsPage() {
               <button
                 type="button"
                 onClick={backToList}
-                className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.18em] text-ink-inverse/50 hover:text-gold"
+                className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.18em] text-ink-inverse/70 hover:text-gold"
               >
                 <Icon name="arrowLeft" size={14} />
                 All garments
@@ -198,7 +198,7 @@ export default function PortalRequestsPage() {
                 <>
                   <div className="mt-6 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
                     <div className="space-y-3 border border-gold/15 bg-black/30 p-5">
-                      <p className="text-[0.62rem] uppercase tracking-[0.24em] text-ink-inverse/40">
+                      <p className="text-[0.62rem] uppercase tracking-[0.24em] text-ink-inverse/70">
                         {selected.categoryName || 'Garment'}
                       </p>
                       <h2 className="font-heading text-3xl text-ink-inverse">{selected.name}</h2>
@@ -208,7 +208,7 @@ export default function PortalRequestsPage() {
                           {selected.publicDescription}
                         </p>
                       ) : (
-                        <p className="text-sm text-ink-inverse/50">
+                        <p className="text-sm text-ink-inverse/70">
                           Custom tailoring with measurements, trials, and finishing at the studio.
                         </p>
                       )}
@@ -297,7 +297,7 @@ export default function PortalRequestsPage() {
             className="grid gap-3 sm:grid-cols-2"
           >
             {catalog.length === 0 ? (
-              <li className="col-span-full border border-gold/15 px-4 py-8 text-sm text-ink-inverse/50">
+              <li className="col-span-full border border-gold/15 px-4 py-8 text-sm text-ink-inverse/70">
                 No published products yet. Message the boutique from Chat instead.
               </li>
             ) : (
@@ -313,7 +313,7 @@ export default function PortalRequestsPage() {
                     onClick={() => selectItem(item)}
                     className="group h-full w-full border border-gold/15 bg-black/25 px-4 py-5 text-left transition hover:border-gold/45 hover:bg-white/[0.04]"
                   >
-                    <p className="text-[0.65rem] uppercase tracking-[0.16em] text-ink-inverse/40">
+                    <p className="text-[0.65rem] uppercase tracking-[0.16em] text-ink-inverse/70">
                       {item.categoryName || item.categoryCode || 'Garment'}
                     </p>
                     <p className="mt-1 font-heading text-xl text-ink-inverse group-hover:text-gold">
@@ -325,7 +325,7 @@ export default function PortalRequestsPage() {
                         {item.publicDescription}
                       </p>
                     ) : null}
-                    <p className="mt-4 inline-flex items-center gap-1 text-[0.65rem] uppercase tracking-[0.18em] text-ink-inverse/40 group-hover:text-gold/80">
+                    <p className="mt-4 inline-flex items-center gap-1 text-[0.65rem] uppercase tracking-[0.18em] text-ink-inverse/70 group-hover:text-gold/80">
                       Request this
                       <Icon name="arrowRight" size={14} />
                     </p>

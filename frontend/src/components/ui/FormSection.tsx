@@ -17,7 +17,7 @@ export function FormSection({
   tone = 'light',
 }: FormSectionProps) {
   const titleColor = tone === 'dark' ? 'text-ink-inverse' : 'text-ink';
-  const descColor = tone === 'dark' ? 'text-ink-inverse/50' : 'text-ink/50';
+  const descColor = tone === 'dark' ? 'text-ink-inverse/70' : 'text-ink/70';
 
   return (
     <div className={cn('space-y-4', className)}>

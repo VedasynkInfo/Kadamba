@@ -198,7 +198,7 @@ function ServiceCard({
         onClick={onOpen}
         className={cn(
           'group flex w-full flex-col text-left focus-visible:outline-none',
-          'focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-cream',
+          'focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-cream',
         )}
       >
         <div className="relative aspect-[16/11] w-full overflow-hidden">

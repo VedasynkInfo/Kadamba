@@ -1,4 +1,4 @@
-﻿import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Icon } from '@/components/icons';
 import type { ExpenseRecord } from '@/services/finance/financeService';
 import { EmptyState } from '../components/EmptyState';
@@ -110,7 +110,7 @@ export function FinanceExpensesTab({
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search expenses..."
-              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition border-line"
+              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition border-line"
             />
           </div>
 
@@ -119,7 +119,7 @@ export function FinanceExpensesTab({
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
               aria-label="Filter expenses by category"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="All">All Categories</option>
               <option value="fabric">Fabric</option>
@@ -217,7 +217,7 @@ export function FinanceExpensesTab({
                           className={cn(
                             'inline-flex h-8 w-8 items-center justify-center rounded-lg border transition cursor-pointer',
                             isMenuOpen
-                              ? 'bg-brand/15 text-brand font-bold'
+                              ? 'bg-brand/15 text-brand-strong font-bold'
                               : 'hover:bg-current/[0.08]', isMenuOpen ? 'border-brand' : 'border-line'
                           )}
                           aria-label="Actions menu"

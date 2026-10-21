@@ -1,4 +1,4 @@
-﻿import { CountUp } from '@/components/motion/CountUp';
+import { CountUp } from '@/components/motion/CountUp';
 import { Icon, type GlyphName } from '@/components/icons';
 
 function formatINR(v: number) {
@@ -30,7 +30,7 @@ export function StaffMetrics({
       label: 'Total Artisans',
       value: totalStaff,
       subtext: 'Registered workshop profiles',
-      accent: 'text-brand',
+      accent: 'text-brand-strong',
       borderAccent: 'border-l-brand',
       icon: 'staff',
     },

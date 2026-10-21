@@ -93,7 +93,7 @@ export function GalleryLightbox({
                 className={cn(
                   'shrink-0 border border-cream/20 px-3 py-1.5 text-sm text-ink-inverse/80',
                   'transition-colors hover:border-gold hover:text-gold',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
                 )}
                 aria-label="Close viewer"
               >
@@ -180,7 +180,7 @@ function NavButton({
       type="button"
       onClick={onClick}
       aria-label={label}
-      className="flex size-11 items-center justify-center border border-gold/35 text-ink-inverse transition-colors hover:border-gold hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+      className="flex size-11 items-center justify-center border border-gold/35 text-ink-inverse transition-colors hover:border-gold hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
     >
       <svg className="size-4" viewBox="0 0 24 24" fill="none" aria-hidden>
         <path

@@ -1,4 +1,4 @@
-﻿import type { PortfolioProject } from '@/pages/portfolio/data';
+import type { PortfolioProject } from '@/pages/portfolio/data';
 import { Icon } from '@/components/icons';
 import { cn } from '@/utils/cn';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
@@ -39,7 +39,7 @@ export function PortfolioPreviewModal({
         >
           <div className="flex items-center gap-2">
             <span
-              className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-brand/15 text-brand"
+              className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-brand/15 text-brand-strong"
             >
               {item.category}
             </span>

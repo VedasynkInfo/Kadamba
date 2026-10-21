@@ -1,4 +1,4 @@
-import { cn } from '@/utils/cn';
+import { Button, Modal } from '@/components/ui';
 
 interface ConfirmDialogProps {
   open: boolean;
@@ -12,6 +12,15 @@ interface ConfirmDialogProps {
   isLoading?: boolean;
 }
 
+/**
+ * A destructive decision, asked once.
+ *
+ * This used to be a hand-rolled overlay: no focus trap, no Escape, no initial
+ * focus, and two fixed element ids shared by every dialog on the page. It now
+ * sits on `Modal`, so Radix owns the keyboard contract — focus moves in, Escape
+ * cancels, focus returns to the button that opened it — and the only thing left
+ * here is the question and the shape of the answer.
+ */
 export function ConfirmDialog({
   open,
   title,
@@ -23,59 +32,39 @@ export function ConfirmDialog({
   variant = 'danger',
   isLoading = false,
 }: ConfirmDialogProps) {
-  if (!open) return null;
-
-  const variants = {
-    danger: 'bg-surface-sunken border-rose-200 text-ink',
-    warning: 'bg-surface-sunken border-amber-200 text-ink',
-    info: 'bg-surface-sunken border-line text-ink',
-  };
-
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onCancel();
-      }}
-    >
-      <div
-        className={cn('w-full max-w-md rounded-lg border p-6 shadow-lg', variants[variant])}
-        role="dialog"
-        aria-labelledby="confirm-title"
-        aria-describedby="confirm-description"
-      >
-        <h2 id="confirm-title" className="font-heading text-lg text-ink">
-          {title}
-        </h2>
-        <p id="confirm-description" className="mt-2 text-sm text-ink/70">
-          {description}
-        </p>
-        <div className="mt-6 flex justify-end gap-3">
-          <button
+    <Modal
+      open={open}
+      onClose={onCancel}
+      title={title}
+      description={description}
+      size="sm"
+      footer={
+        <>
+          <Button
             type="button"
+            variant="secondary"
+            size="sm"
             onClick={onCancel}
-            className="rounded-sm border border-line px-4 py-2 text-sm font-medium transition hover:bg-surface-sunken"
             disabled={isLoading}
           >
             {cancelLabel}
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
+            variant={variant === 'danger' ? 'danger' : 'primary'}
+            size="sm"
             onClick={() => {
               void onConfirm();
             }}
-            className={cn(
-              'rounded-sm border px-4 py-2 text-sm font-medium transition',
-              variant === 'danger'
-                ? 'border-rose-700 bg-rose-700 text-white hover:bg-rose-800'
-                : 'border-line bg-black text-white hover:bg-black/90',
-            )}
             disabled={isLoading}
           >
             {isLoading ? 'Processing…' : confirmLabel}
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </>
+      }
+    >
+      <span className="sr-only">Confirmation required.</span>
+    </Modal>
   );
 }

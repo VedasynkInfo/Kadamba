@@ -1,9 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  ResponsiveContainer, BarChart, Bar, XAxis, YAxis,
-  CartesianGrid, Tooltip, PieChart, Pie, Cell, Legend,
-} from 'recharts';
 import { AdminHorizonBanner } from './components/AdminHorizonBanner';
 import { adminBanners } from './data';
 import { dashboardApi, type DashboardSummary } from '@/services/dashboard/dashboardService';
@@ -12,7 +8,7 @@ import { Icon, type GlyphName } from '@/components/icons';
 import { Spinner, Button, StatCard, StatusBadge, Table, type Column } from '@/components/ui';
 import { cn } from '@/utils/cn';
 import { buildAttentionQueue, formatAttentionValue } from './dashboard/attentionQueue';
-import { CHART_COLORS, CHART_REVENUE } from '@/theme/palettes';
+import { DashboardCharts } from './dashboard/DashboardCharts';
 
 const QUICK_ACTIONS: { to: string; icon: GlyphName; label: string }[] = [
   { to: '/admin/services', icon: 'services', label: 'Add Service' },
@@ -211,7 +207,7 @@ export default function AdminDashboardPage() {
                     to={item.to}
                     className="flex flex-col items-center justify-center p-3 rounded-lg border border-current/10 bg-current/[0.02] text-center transition hover:border-brand hover:bg-current/[0.05] hover:shadow-xs text-inherit"
                   >
-                    <span className="mb-1.5 text-brand">
+                    <span className="mb-1.5 text-brand-strong">
                       <Icon name={item.icon} size={20} />
                     </span>
                     <span className="text-xs font-semibold text-inherit">{item.label}</span>
@@ -220,149 +216,8 @@ export default function AdminDashboardPage() {
               </div>
             </div>
 
-            {/* Visual Analytics Bento Grid */}
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-              {/* Monthly leads pipeline */}
-              <div
-                className="rounded-xl border p-5 transition-colors shadow-xs bg-surface-raised border-line text-ink-raised"
-              >
-                <div className="mb-2">
-                  <h3 className="text-sm font-semibold tracking-wide text-inherit">Monthly Leads Pipeline</h3>
-                  <p className="text-[11px] opacity-60">Tailoring & bridal enquiries volume</p>
-                </div>
-                <div className="h-[220px] w-full mt-4">
-                  {summary.series.leadsByMonth.length === 0 ? (
-                    <div className="flex h-full items-center justify-center text-xs opacity-50">No lead data available</div>
-                  ) : (
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={summary.series.leadsByMonth} margin={{ left: -25, bottom: -5 }}>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="currentColor" opacity={0.08} />
-                        <XAxis dataKey="month" stroke="currentColor" opacity={0.65} fontSize={11} tickLine={false} axisLine={{ stroke: 'currentColor', opacity: 0.2 }} />
-                        <YAxis stroke="currentColor" opacity={0.65} fontSize={11} tickLine={false} axisLine={{ stroke: 'currentColor', opacity: 0.2 }} />
-                        <Tooltip
-                          contentStyle={{
-                            backgroundColor: 'var(--admin-card)',
-                            border: '1px solid var(--admin-border)',
-                            borderRadius: '8px',
-                            color: 'var(--admin-card-text)',
-                            fontSize: '12px',
-                            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-                          }}
-                        />
-                        <Bar dataKey="count" name="Leads" fill="var(--admin-primary)" radius={[4, 4, 0, 0]} maxBarSize={36} />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  )}
-                </div>
-              </div>
-
-              {/* Lead channel breakdown */}
-              <div
-                className="rounded-xl border p-5 transition-colors shadow-xs bg-surface-raised border-line text-ink-raised"
-              >
-                <div className="mb-2">
-                  <h3 className="text-sm font-semibold tracking-wide text-inherit">Lead Channel Breakdown</h3>
-                  <p className="text-[11px] opacity-60">Referral & direct marketing touchpoints</p>
-                </div>
-                <div className="h-[220px] w-full mt-4">
-                  {summary.series.leadsBySource.length === 0 ? (
-                    <div className="flex h-full items-center justify-center text-xs opacity-50">No source data available</div>
-                  ) : (
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart margin={{ bottom: -5 }}>
-                        <Pie data={summary.series.leadsBySource} cx="50%" cy="50%" innerRadius={55} outerRadius={80} paddingAngle={4} dataKey="count" nameKey="source">
-                          {summary.series.leadsBySource.map((_, index) => (
-                            <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} stroke="rgba(0,0,0,0.2)" />
-                          ))}
-                        </Pie>
-                        <Tooltip
-                          contentStyle={{
-                            backgroundColor: 'var(--admin-card)',
-                            border: '1px solid var(--admin-border)',
-                            borderRadius: '8px',
-                            color: 'var(--admin-card-text)',
-                            fontSize: '12px',
-                            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-                          }}
-                        />
-                        <Legend verticalAlign="bottom" iconSize={8} formatter={(value) => <span className="text-xs opacity-80">{value}</span>} />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  )}
-                </div>
-              </div>
-
-              {/* Revenue analytics */}
-              <div
-                className="rounded-xl border p-5 transition-colors shadow-xs bg-surface-raised border-line text-ink-raised"
-              >
-                <div className="mb-2">
-                  <h3 className="text-sm font-semibold tracking-wide text-inherit">Revenue Analytics</h3>
-                  <p className="text-[11px] opacity-60">Boutique income recognized by month</p>
-                </div>
-                <div className="h-[220px] w-full mt-4">
-                  {summary.series.revenueByMonth.length === 0 ? (
-                    <div className="flex h-full items-center justify-center text-xs opacity-50">No payment data recorded</div>
-                  ) : (
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={summary.series.revenueByMonth} margin={{ left: -20, bottom: -5 }}>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="currentColor" opacity={0.08} />
-                        <XAxis dataKey="month" stroke="currentColor" opacity={0.65} fontSize={11} tickLine={false} axisLine={{ stroke: 'currentColor', opacity: 0.2 }} />
-                        <YAxis stroke="currentColor" opacity={0.65} fontSize={11} tickLine={false} axisLine={{ stroke: 'currentColor', opacity: 0.2 }} />
-                        <Tooltip
-                          contentStyle={{
-                            backgroundColor: 'var(--admin-card)',
-                            border: '1px solid var(--admin-border)',
-                            borderRadius: '8px',
-                            color: 'var(--admin-card-text)',
-                            fontSize: '12px',
-                            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-                          }}
-                          formatter={(value) => [`₹${Number(value ?? 0).toLocaleString('en-IN')}`, 'Revenue']}
-                        />
-                        <Bar dataKey="amount" name="Revenue" fill={CHART_REVENUE} radius={[4, 4, 0, 0]} maxBarSize={36} />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  )}
-                </div>
-              </div>
-
-              {/* Atelier production mix */}
-              <div
-                className="rounded-xl border p-5 transition-colors shadow-xs bg-surface-raised border-line text-ink-raised"
-              >
-                <div className="mb-2">
-                  <h3 className="text-sm font-semibold tracking-wide text-inherit">Workshop Production Mix</h3>
-                  <p className="text-[11px] opacity-60">Active orders by stage</p>
-                </div>
-                <div className="h-[220px] w-full mt-4">
-                  {summary.series.ordersByStatus.length === 0 ? (
-                    <div className="flex h-full items-center justify-center text-xs opacity-50">No orders in production</div>
-                  ) : (
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart margin={{ bottom: -5 }}>
-                        <Pie data={summary.series.ordersByStatus} cx="50%" cy="50%" innerRadius={55} outerRadius={80} paddingAngle={4} dataKey="count" nameKey="status">
-                          {summary.series.ordersByStatus.map((_, index) => (
-                            <Cell key={`ost-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} stroke="rgba(0,0,0,0.2)" />
-                          ))}
-                        </Pie>
-                        <Tooltip
-                          contentStyle={{
-                            backgroundColor: 'var(--admin-card)',
-                            border: '1px solid var(--admin-border)',
-                            borderRadius: '8px',
-                            color: 'var(--admin-card-text)',
-                            fontSize: '12px',
-                            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-                          }}
-                        />
-                        <Legend verticalAlign="bottom" iconSize={8} formatter={(value) => <span className="text-xs opacity-80">{value}</span>} />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  )}
-                </div>
-              </div>
-            </div>
+            {/* Visual Analytics Bento Grid — memoised, so a notification update never repaints four charts */}
+            <DashboardCharts series={summary.series} />
 
             {/* Bottom Section: Recent Consultations & the right-hand rail */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -374,7 +229,7 @@ export default function AdminDashboardPage() {
                   </div>
                   <Link
                     to="/admin/leads/list"
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:underline"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-brand-strong hover:underline"
                   >
                     All Leads
                     <Icon name="arrowRight" size={14} />
@@ -444,7 +299,7 @@ export default function AdminDashboardPage() {
                     </div>
                     <Link
                       to="/admin/orders"
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:underline"
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-brand-strong hover:underline"
                     >
                       Orders
                       <Icon name="arrowRight" size={14} />
@@ -468,7 +323,7 @@ export default function AdminDashboardPage() {
                               #{o.orderNumber} · {o.customerName}
                             </p>
                             {o.expectedDeliveryAt ? (
-                              <span className="mt-1.5 inline-block rounded bg-brand/15 px-1.5 py-0.5 text-[10px] font-medium text-brand">
+                              <span className="mt-1.5 inline-block rounded bg-brand/15 px-1.5 py-0.5 text-[10px] font-medium text-brand-strong">
                                 Due {new Date(o.expectedDeliveryAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
                               </span>
                             ) : null}

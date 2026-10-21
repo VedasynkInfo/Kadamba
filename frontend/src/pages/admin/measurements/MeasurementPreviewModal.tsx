@@ -239,7 +239,7 @@ export function MeasurementPreviewModal({
                         {friendlyLabel}
                       </span>
                       <div className="flex items-baseline gap-1 mt-0.5">
-                        <span className="font-heading text-sm font-bold tracking-tight text-brand">
+                        <span className="font-heading text-sm font-bold tracking-tight text-brand-strong">
                           {displayVal}
                         </span>
                         <span className="text-[9px] opacity-50 font-mono">{displayUnit}</span>

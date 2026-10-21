@@ -1,4 +1,4 @@
-﻿import { Icon } from '@/components/icons';
+import { Icon } from '@/components/icons';
 import { BLOG_CATEGORIES } from './types';
 
 interface BlogsToolbarProps {
@@ -53,7 +53,7 @@ export function BlogsToolbar({
               value={query}
               onChange={(e) => onQueryChange(e.target.value)}
               placeholder="Search article title, slug, excerpt..."
-              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition border-line"
+              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition border-line"
             />
             {query ? (
               <button
@@ -73,7 +73,7 @@ export function BlogsToolbar({
               value={selectedCategory}
               onChange={(e) => onCategoryChange(e.target.value)}
               aria-label="Filter by category"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="All">All Categories</option>
               {BLOG_CATEGORIES.map((c) => (
@@ -90,7 +90,7 @@ export function BlogsToolbar({
               value={selectedStatus}
               onChange={(e) => onStatusChange(e.target.value)}
               aria-label="Filter by status"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="All">All Status</option>
               <option value="Published">Published</option>
@@ -104,7 +104,7 @@ export function BlogsToolbar({
               value={selectedFeatured}
               onChange={(e) => onFeaturedChange(e.target.value)}
               aria-label="Filter by featured"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="All">All Stories</option>
               <option value="Featured">Featured Only</option>
@@ -118,7 +118,7 @@ export function BlogsToolbar({
               value={sortBy}
               onChange={(e) => onSortByChange(e.target.value as 'dateDesc' | 'titleAsc' | 'titleDesc')}
               aria-label="Sort blogs"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="dateDesc">Newest Date</option>
               <option value="titleAsc">Title (A–Z)</option>

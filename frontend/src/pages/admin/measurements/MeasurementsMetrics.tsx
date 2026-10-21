@@ -1,4 +1,4 @@
-﻿import { CountUp } from '@/components/motion/CountUp';
+import { CountUp } from '@/components/motion/CountUp';
 import { Icon } from '@/components/icons';
 interface MeasurementsMetricsProps {
   totalCount: number;
@@ -18,7 +18,7 @@ export function MeasurementsMetrics({
       label: 'Total Fit Cards',
       value: totalCount,
       subtext: 'Client anatomical records',
-      accent: 'text-brand',
+      accent: 'text-brand-strong',
       borderAccent: 'border-l-brand',
       icon: 'measurements',
     },

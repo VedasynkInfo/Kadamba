@@ -55,7 +55,7 @@ export function TagsInput({
             <button
               type="button"
               onClick={() => removeTag(tag)}
-              className="ml-1.5 text-ink/40 hover:text-ink"
+              className="ml-1.5 text-ink/70 hover:text-ink"
               aria-label={`Remove ${tag}`}
             >
               ×
@@ -68,7 +68,7 @@ export function TagsInput({
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
-          className="min-w-0 flex-1 bg-transparent text-sm text-ink outline-none placeholder:text-ink/40"
+          className="min-w-0 flex-1 bg-transparent text-sm text-ink outline-none placeholder:text-ink/70"
         />
       </div>
     </div>

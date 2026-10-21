@@ -1,4 +1,4 @@
-﻿import { Icon } from '@/components/icons';
+import { Icon } from '@/components/icons';
 import { PORTFOLIO_CATEGORIES } from './types';
 
 interface PortfolioToolbarProps {
@@ -49,7 +49,7 @@ export function PortfolioToolbar({
               value={query}
               onChange={(e) => onQueryChange(e.target.value)}
               placeholder="Search portfolio title, slug, summary..."
-              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition border-line"
+              className="w-full rounded-lg border py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition border-line"
             />
             {query ? (
               <button
@@ -69,7 +69,7 @@ export function PortfolioToolbar({
               value={selectedCategory}
               onChange={(e) => onCategoryChange(e.target.value)}
               aria-label="Filter by category"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="All">All Categories</option>
               {PORTFOLIO_CATEGORIES.map((c) => (
@@ -86,7 +86,7 @@ export function PortfolioToolbar({
               value={selectedStatus}
               onChange={(e) => onStatusChange(e.target.value)}
               aria-label="Filter by status"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="All">All Status</option>
               <option value="Published">Published</option>
@@ -100,7 +100,7 @@ export function PortfolioToolbar({
               value={sortBy}
               onChange={(e) => onSortByChange(e.target.value as 'titleAsc' | 'titleDesc' | 'yearDesc')}
               aria-label="Sort portfolio"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand transition cursor-pointer bg-surface-raised border-line"
+              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
             >
               <option value="yearDesc">Latest Year</option>
               <option value="titleAsc">Title (A–Z)</option>

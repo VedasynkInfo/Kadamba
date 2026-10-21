@@ -9,6 +9,7 @@ import {
 } from 'react';
 import { usePublicSettings } from '@/hooks/useCmsContent';
 import { DEFAULT_THEME_TOKENS } from '@/theme/palettes';
+import { readableOn } from '@/utils/contrast';
 import type { WebsiteSettings } from '@/pages/admin/data';
 
 interface ThemeContextType {
@@ -52,6 +53,15 @@ export function applyThemeVariables(theme: WebsiteSettings['theme']) {
   }
   if (theme.publicSurface) {
     root.style.setProperty('--public-surface', theme.publicSurface);
+  }
+  if (theme.accent) {
+    // Text and icons cannot use the raw accent: a studio's gold may read on
+    // espresso and vanish on cream. Derive the text-safe variant from the pair
+    // actually in use, so every theme change keeps links legible.
+    root.style.setProperty(
+      '--color-brand-strong',
+      readableOn(theme.publicBg || DEFAULT_THEME_TOKENS.publicBg, theme.accent),
+    );
   }
   if (theme.adminBg) {
     root.style.setProperty('--admin-bg', theme.adminBg);

@@ -1,4 +1,4 @@
-﻿import { useEffect } from 'react';
+import { useEffect } from 'react';
 import type { Staff } from '@/services/staff/staffService';
 import { Icon } from '@/components/icons';
 import { SPECIALIZATIONS } from './types';
@@ -117,7 +117,7 @@ export function StaffPreviewModal({ staff, onClose, onEdit }: StaffPreviewModalP
                 return (
                   <span
                     key={spec}
-                    className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold border bg-brand/12 border-brand/30 text-brand"
+                    className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold border bg-brand/12 border-brand/30 text-brand-strong"
                   >
                     <Icon name="couture" size={12} />
                     {label}

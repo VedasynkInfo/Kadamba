@@ -63,7 +63,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
           </Button>
         </div>
         {this.state.error ? (
-          <details className="mt-2 max-w-md text-left text-xs text-ink/50">
+          <details className="mt-2 max-w-md text-left text-xs text-ink/70">
             <summary className="cursor-pointer select-none">Technical detail</summary>
             <pre className="mt-2 overflow-x-auto whitespace-pre-wrap break-words rounded-md border border-line bg-surface-sunken p-3 text-[0.7rem]">
               {this.state.error.message}

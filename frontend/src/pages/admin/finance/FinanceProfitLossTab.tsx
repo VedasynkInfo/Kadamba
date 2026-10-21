@@ -1,4 +1,4 @@
-﻿import type { ProfitLossReport } from '@/services/finance/financeService';
+import type { ProfitLossReport } from '@/services/finance/financeService';
 import { Skeleton } from '../components/Skeleton';
 
 function formatINR(v: number) {
@@ -46,7 +46,7 @@ export function FinanceProfitLossTab({
               type="date"
               value={fromDate}
               onChange={(e) => onFromChange(e.target.value)}
-              className="rounded-lg border py-1.5 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+              className="rounded-lg border py-1.5 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
             />
           </div>
 
@@ -56,7 +56,7 @@ export function FinanceProfitLossTab({
               type="date"
               value={toDate}
               onChange={(e) => onToChange(e.target.value)}
-              className="rounded-lg border py-1.5 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-brand bg-surface-sunken border-line"
+              className="rounded-lg border py-1.5 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
             />
           </div>
 

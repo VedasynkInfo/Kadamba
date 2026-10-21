@@ -18,6 +18,8 @@ export async function sendEmail(options: {
   subject: string;
   html: string;
   text?: string;
+  /** Stable Message-ID for retry-aware receivers (outbox uses this). */
+  messageId?: string;
 }): Promise<void> {
   let smtp: {
     host: string;
@@ -84,6 +86,7 @@ export async function sendEmail(options: {
     subject: options.subject,
     html: options.html,
     text: options.text,
+    messageId: options.messageId,
   });
 }
 

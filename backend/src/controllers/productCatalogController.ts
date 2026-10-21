@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { asyncHandler } from '../utils/asyncHandler';
+import { bulkJobPool } from '../services/jobPool';
 import { parsePagination, buildPaginationMeta } from '../utils/pagination';
 import * as catalogService from '../services/productCatalogService';
 
@@ -105,7 +106,9 @@ export const updateProductTypeHandler = asyncHandler(async (req: Request, res: R
 });
 
 export const reorderProductTypesHandler = asyncHandler(async (req: Request, res: Response) => {
-  const result = await catalogService.reorderProductTypes(req.body.ids);
+  const result = await bulkJobPool.run('catalog-reorder', () =>
+    catalogService.reorderProductTypes(req.body.ids),
+  );
   res.status(200).json({
     success: true,
     message: 'Product order saved',
@@ -114,7 +117,9 @@ export const reorderProductTypesHandler = asyncHandler(async (req: Request, res:
 });
 
 export const bulkUpdateProductTypesHandler = asyncHandler(async (req: Request, res: Response) => {
-  const result = await catalogService.bulkUpdateProductTypes(req.body.ids, req.body.updates);
+  const result = await bulkJobPool.run('catalog-bulk-update', () =>
+    catalogService.bulkUpdateProductTypes(req.body.ids, req.body.updates),
+  );
   res.status(200).json({
     success: true,
     message: 'Products updated',
@@ -131,7 +136,9 @@ export const getProductUsageHandler = asyncHandler(async (req: Request, res: Res
 });
 
 export const importProductTypesHandler = asyncHandler(async (req: Request, res: Response) => {
-  const result = await catalogService.importProductTypes(req.body.rows);
+  const result = await bulkJobPool.run('catalog-csv-import', () =>
+    catalogService.importProductTypes(req.body.rows),
+  );
   res.status(200).json({
     success: true,
     message: 'CSV import processed',

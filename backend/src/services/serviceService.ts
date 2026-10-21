@@ -7,6 +7,7 @@ import { parseBooleanQuery, searchRegex } from '../utils/query';
 import { toDto } from '../utils/serialize';
 import { resolveClientSlug } from '../utils/slugify';
 import { generateSeoWithSettings } from '../utils/generateSeo';
+import { CACHE_KEYS, CACHE_TTL, cacheKey, cached, invalidateCache } from './cacheService';
 
 export type ServiceDto = Record<string, unknown> & { id: string; slug: string; title: string };
 
@@ -51,6 +52,17 @@ export async function listServices(
   query: Record<string, unknown>,
   options: { admin: boolean },
 ) {
+  return cached(
+    cacheKey(CACHE_KEYS.cmsService, 'list', options.admin ? 'admin' : 'public', query),
+    CACHE_TTL.cmsMs,
+    () => queryServices(query, options),
+  );
+}
+
+async function queryServices(
+  query: Record<string, unknown>,
+  options: { admin: boolean },
+) {
   const { page, limit, skip } = parsePagination(query);
   const filter: Record<string, unknown> = {};
 
@@ -92,6 +104,14 @@ export async function listServices(
 }
 
 export async function getService(idOrSlug: string, options: { admin: boolean }) {
+  return cached(
+    cacheKey(CACHE_KEYS.cmsService, 'item', options.admin ? 'admin' : 'public', idOrSlug),
+    CACHE_TTL.cmsMs,
+    () => queryService(idOrSlug, options),
+  );
+}
+
+async function queryService(idOrSlug: string, options: { admin: boolean }) {
   const filter: Record<string, unknown> = mongoose.isValidObjectId(idOrSlug)
       ? { $or: [{ _id: idOrSlug }, { slug: idOrSlug }] }
       : { slug: idOrSlug };
@@ -101,6 +121,11 @@ export async function getService(idOrSlug: string, options: { admin: boolean }) 
   const doc = await Service.findOne(filter).lean();
   if (!doc) throw new ApiError(404, 'Service not found');
   return serialize(doc);
+}
+
+/** Drop cached service reads after a write. */
+export function invalidateServiceCache(): void {
+  invalidateCache(CACHE_KEYS.cmsService);
 }
 
 export async function createService(input: Record<string, unknown> & { title: string }) {
@@ -163,6 +188,7 @@ export async function createService(input: Record<string, unknown> & { title: st
   await applySeoDefaults(rawDoc);
 
   const doc = await Service.create(rawDoc);
+  invalidateServiceCache();
   return serialize(doc);
 }
 
@@ -226,6 +252,7 @@ export async function updateService(id: string, input: Record<string, unknown>) 
   }
 
   await existing.save();
+  invalidateServiceCache();
   return serialize(existing);
 }
 
@@ -243,5 +270,6 @@ export async function deleteService(id: string) {
 
   const doc = await Service.findByIdAndDelete(id);
   if (!doc) throw new ApiError(404, 'Service not found');
+  invalidateServiceCache();
   return serialize(doc);
 }

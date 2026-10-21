@@ -18,6 +18,7 @@ import {
   getCustomerRepeatReport,
   exportReportCsv,
 } from '../services/reportService';
+import { exportJobPool } from '../services/jobPool';
 
 function parseGroupBy(value?: string): GroupBy {
   if (value === 'day' || value === 'week' || value === 'month') return value;
@@ -101,12 +102,14 @@ export const exportReportHandler = asyncHandler(async (req: Request, res: Respon
     asOf?: string;
     groupBy?: string;
   };
-  const { filename, csv } = await exportReportCsv(type, {
-    from,
-    to,
-    asOf,
-    groupBy: parseGroupBy(groupBy),
-  });
+  const { filename, csv } = await exportJobPool.run(`report-csv:${type}`, () =>
+    exportReportCsv(type, {
+      from,
+      to,
+      asOf,
+      groupBy: parseGroupBy(groupBy),
+    }),
+  );
   res.setHeader('Content-Type', 'text/csv; charset=utf-8');
   res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
   res.status(200).send(csv);

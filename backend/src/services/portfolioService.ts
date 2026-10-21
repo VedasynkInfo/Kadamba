@@ -13,6 +13,7 @@ import { parseBooleanQuery, searchRegex } from '../utils/query';
 import { toDto } from '../utils/serialize';
 import { resolveClientSlug } from '../utils/slugify';
 import { generateSeoWithSettings } from '../utils/generateSeo';
+import { CACHE_KEYS, CACHE_TTL, cacheKey, cached, invalidateCache } from './cacheService';
 
 export type PortfolioDto = Record<string, unknown> & { id: string; slug: string; title: string };
 
@@ -29,6 +30,17 @@ async function slugExists(slug: string, excludeId?: string): Promise<boolean> {
 }
 
 export async function listPortfolio(
+  query: Record<string, unknown>,
+  options: { admin: boolean },
+) {
+  return cached(
+    cacheKey(CACHE_KEYS.cmsPortfolio, 'list', options.admin ? 'admin' : 'public', query),
+    CACHE_TTL.cmsMs,
+    () => queryPortfolio(query, options),
+  );
+}
+
+async function queryPortfolio(
   query: Record<string, unknown>,
   options: { admin: boolean },
 ) {
@@ -68,6 +80,14 @@ export async function listPortfolio(
 }
 
 export async function getPortfolio(idOrSlug: string, options: { admin: boolean }) {
+  return cached(
+    cacheKey(CACHE_KEYS.cmsPortfolio, 'item', options.admin ? 'admin' : 'public', idOrSlug),
+    CACHE_TTL.cmsMs,
+    () => queryPortfolioItem(idOrSlug, options),
+  );
+}
+
+async function queryPortfolioItem(idOrSlug: string, options: { admin: boolean }) {
   const filter: Record<string, unknown> = mongoose.isValidObjectId(idOrSlug)
     ? { $or: [{ _id: idOrSlug }, { slug: idOrSlug }] }
     : { slug: idOrSlug };
@@ -77,6 +97,11 @@ export async function getPortfolio(idOrSlug: string, options: { admin: boolean }
   const doc = await Portfolio.findOne(filter).lean();
   if (!doc) throw new ApiError(404, 'Portfolio project not found');
   return serialize(doc);
+}
+
+/** Drop cached portfolio reads after a write. */
+export function invalidatePortfolioCache(): void {
+  invalidateCache(CACHE_KEYS.cmsPortfolio);
 }
 
 export async function createPortfolio(input: Record<string, unknown> & { title: string }) {
@@ -127,6 +152,7 @@ export async function createPortfolio(input: Record<string, unknown> & { title: 
     twitterDescription: String(input.twitterDescription || seo.twitterDescription),
     twitterImage: String(input.twitterImage || seo.twitterImage),
   });
+  invalidatePortfolioCache();
   return serialize(doc);
 }
 
@@ -168,6 +194,7 @@ export async function updatePortfolio(id: string, input: Record<string, unknown>
   }
 
   await existing.save();
+  invalidatePortfolioCache();
   return serialize(existing);
 }
 
@@ -175,5 +202,6 @@ export async function deletePortfolio(id: string) {
   if (!mongoose.isValidObjectId(id)) throw new ApiError(400, 'Invalid portfolio id');
   const doc = await Portfolio.findByIdAndDelete(id);
   if (!doc) throw new ApiError(404, 'Portfolio project not found');
+  invalidatePortfolioCache();
   return serialize(doc);
 }

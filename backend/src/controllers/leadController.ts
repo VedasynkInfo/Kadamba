@@ -10,6 +10,7 @@ import {
   completeLeadFollowUp,
 } from '../services/leadService';
 import { notifyRequestReceived } from '../services/notificationService';
+import { exportJobPool } from '../services/jobPool';
 import { asyncHandler } from '../utils/asyncHandler';
 
 /**
@@ -64,7 +65,10 @@ export const createLead = asyncHandler(async (req: Request, res: Response) => {
 
   const leadId = String(lead._id);
 
-  void notifyRequestReceived({
+  // Awaited on purpose: the outbox row must exist before the request
+  // returns, otherwise a process killed immediately afterwards would lose the
+  // enquiry's notifications. The socket emits inside are fire-and-forget.
+  await notifyRequestReceived({
     leadId,
     name,
     phone,
@@ -132,7 +136,9 @@ export const completeFollowUpHandler = asyncHandler(async (req: Request, res: Re
 });
 
 export const exportLeadsHandler = asyncHandler(async (req: Request, res: Response) => {
-  const csv = await exportLeadsCsv(req.query as Record<string, unknown>);
+  const csv = await exportJobPool.run('leads-csv', () =>
+    exportLeadsCsv(req.query as Record<string, unknown>),
+  );
   res.setHeader('Content-Type', 'text/csv; charset=utf-8');
   res.setHeader('Content-Disposition', 'attachment; filename="kadamba-leads.csv"');
   res.status(200).send(csv);

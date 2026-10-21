@@ -513,13 +513,53 @@
 
 | # | Task | Status |
 |---|------|--------|
-| 10.1 | `EmailOutbox` + cron drain w/ exponential backoff | ⬜ |
-| 10.2 | Cron: follow-ups, trial/delivery reminders, orphan cleanup, nightly backup | ⬜ |
-| 10.3 | In-process job pool for images/exports/bulk | ⬜ |
-| 10.4 | `lru-cache` for settings/dashboard/CMS + invalidation on write | ⬜ |
-| 10.5 | `rate-limit-mongo` store + per-account login lockout | ⬜ |
+| 10.1 | `EmailOutbox` + cron drain w/ exponential backoff | ✅ |
+| 10.2 | Cron: follow-ups, trial/delivery reminders, orphan cleanup, nightly backup | ✅ |
+| 10.3 | In-process job pool for images/exports/bulk | ✅ |
+| 10.4 | `lru-cache` for settings/dashboard/CMS + invalidation on write | ✅ |
+| 10.5 | `rate-limit-mongo` store + per-account login lockout | ✅ |
 
 **Gate:** kill process mid-queue → all emails eventually send exactly once; cron de-dupes via lock; login counts survive redeploy.
+
+**10.1 - email leaves the request path**
+- `EmailOutbox` (`backend/src/models/EmailOutbox.ts`) is a durable queue in Mongo. A notification writes a row and returns; the request never touches SMTP.
+- Every producer was moved onto the outbox: lead requests, contact form, order confirmation, measurement pending/approved, payment receipt, password reset. The `Settings → Send test email` button still sends inline on purpose — it is a connectivity probe, not a notification.
+- The producers `await` their enqueue. A fire-and-forget enqueue would leave a window where a process killed right after the response loses the message, which is exactly what the gate forbids.
+- `enqueueEmail()` takes an optional `dedupeKey` backed by a **unique sparse index**, so a retried request cannot create a second row. `request-admin`, `request-customer`, `measurement-*`, `payment-receipt` and `order-confirmed-*` are all keyed by the entity they describe.
+- The drainer (`services/emailOutboxService.ts`) claims rows with `findOneAndUpdate` — `status: 'sending'` plus a lease token — so two workers can never send the same row. A row whose lease expired (a `kill -9` between the claim and the result) is reclaimed after `EMAIL_OUTBOX_LEASE_MS`.
+- Failures retry with exponential backoff and jitter (`60s → 30m`, capped) up to `EMAIL_OUTBOX_MAX_ATTEMPTS`, then the row is marked `failed` and kept for `EMAIL_OUTBOX_RETENTION_DAYS` as an audit trail.
+- Each send carries a stable `Message-ID` (`<outbox-<id>@kadamba.local>`). SMTP has no cross-process idempotency key, so delivery is at-least-once by nature; the Message-ID lets a receiving system collapse a retry that followed a crash, and the dedupe key means the application never creates the duplicate in the first place.
+
+**10.2 - the scheduler and its jobs**
+- `services/cronService.ts` is a plain timer in the API process. There is no external cron service and no Redis.
+- `services/cronLockService.ts` provides the lease. The unique index on `CronLock.name` is what makes it race-free: the loser of an `upsert` race gets a duplicate-key error and reads it as "someone else holds the lock". A crashed holder's lease simply expires.
+- Every job body runs under `runWithCronLock`, so two instances (or an overlapping deploy) execute each job once per window. `isJobDue()` gives interval jobs a plain period and the daily jobs a wall-clock time.
+- Jobs: `email-outbox` (every 30s), `lead-followups` (15m), `order-reminders` (1h), `orphan-cleanup` (03:00), `nightly-backup` (02:00). Daily jobs run once per calendar day, not once per process start.
+- `lead-followups` reminds the studio about an open lead with a pending follow-up in the past, keyed per lead+follow-up+day.
+- `order-reminders` emails the customer about an upcoming fitting trial or delivery, keyed per order+milestone+date.
+- `orphan-cleanup` prunes expired refresh tokens, portal messages whose customer or order no longer exists, and media rows whose original file is gone. It **never** deletes a file from `uploads/` — existing originals are canonical and are never removed.
+- `nightly-backup` writes a gzipped newline-delimited JSON archive of the working collections to `BACKUP_DIR` and prunes archives older than `BACKUP_RETENTION_DAYS`. `npm run data:backup` runs the same code on demand.
+- `GET /api/health` now reports the outbox depth, the scheduler state, the job-pool stats and the cache size.
+
+**10.3 - bounded in-process work**
+- `services/jobPool.ts` is a bounded queue with three pools: `images` (2), `exports` (2), `bulk` (1). A full backlog rejects with 503 rather than growing without bound.
+- Image encoding (`registerUploadedFile`, `regenerateVariants`), CSV/report exports (leads, reports) and catalogue bulk operations (reorder, bulk update, CSV import) now run through a pool, so one large upload cannot starve the event loop.
+- The pool is request-scoped, not durable — losing the process loses the request too. Durable work (email) lives in the outbox.
+
+**10.4 - LRU cache**
+- `services/cacheService.ts` wraps `lru-cache` (1000 entries, 60s default TTL). Values are cloned in and out, because the dashboard controller redacts finance fields for staff users and a shared object would leak that redaction into the next admin request.
+- Cached: public/admin settings, the resolved SMTP config, the dashboard summary, and the CMS list/detail reads (blog, portfolio, services, gallery, public catalogue and public product).
+- Invalidation is a **Mongoose plugin** (`models/cacheInvalidation.ts`) applied to the schemas at compile time, mapping each model to the cache namespace it feeds. Doing it as a plugin rather than as a call in every service is the difference between "the cache is invalidated on write" and "on the writes somebody remembered to touch" — and it was the only way to make it work on Mongoose 9, which ignores `post` middleware registered after a model is compiled.
+- Settings writes additionally invalidate explicitly, so the service is correct even outside the model layer.
+
+**10.5 - durable rate limiting and lockout**
+- `services/rateLimitMongoStore.ts` is a Mongo-backed `express-rate-limit` store. It replaces the default MemoryStore, whose counters vanish on every deploy and hand an attacker a fresh budget.
+- The counters are written with a single atomic aggregation pipeline, so two instances cannot lose an increment to a read-then-write race, and each limiter has its own prefix so the global, auth, write, reset and per-account budgets stay separate.
+- The per-account login throttle is keyed on the submitted email and survives a redeploy, because the counter lives in Mongo.
+- The per-account **lockout** now increments with a single atomic `$inc` and locks with a targeted `$set`, instead of a read-modify-write on a whole document. A successful sign-in clears the counter with a targeted `$set`/`$unset` so it cannot clobber a concurrent failed attempt.
+- **Deviation from the plan wording:** the plan said "`rate-limit-mongo` store". That package (v2.3.2) depends on `mongodb@3` and implements the pre-v7 callback `Store` interface, which `express-rate-limit` v8 no longer accepts; installing it would have added a second, six-year-old driver to the tree. The store here is written against the v8 `Store` interface and keeps the same behaviour the plan asked for: Mongo-backed counters that survive a redeploy.
+
+**Verification:** backend `npm run lint`, `npx tsc --noEmit`, `npm run build` and Vitest (200 tests) pass — 80 new tests across `emailOutbox`, `cron`, `cache`, `jobPool`, `rateLimit`, `backup`, `phase10Gate` and `outboxIntegration`. `check:contract` stays in sync. The gate is covered directly: `phase10Gate.test.ts` simulates a mid-queue kill (three of ten emails sent, then the process dies) and asserts that the restart delivers the remaining seven with no duplicate, that a row claimed but never completed is reclaimed once its lease expires, and that a cron job runs once when two instances race for the lock. `rateLimit.test.ts` asserts the failed-login count is still in Mongo after a "restart" and that two more failures reach the lockout threshold. Frontend is untouched by this phase; its `npm run lint`, `npm run typecheck`, Vite production build and Vitest (227 tests) still pass.
 
 ---
 

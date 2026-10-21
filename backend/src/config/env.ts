@@ -155,4 +155,39 @@ export const env = {
     /** Inbox for contact-form notifications (falls back to EMAIL_USER). */
     to: optional('EMAIL_TO', process.env.EMAIL_USER || ''),
   },
+  /**
+   * Durable outbox drain policy. Rows are retried with exponential backoff and
+   * a lease, so a process killed mid-send is recovered on the next boot.
+   */
+  emailOutbox: {
+    enabled: optional('EMAIL_OUTBOX_ENABLED', 'true') === 'true',
+    batchSize: Number(process.env.EMAIL_OUTBOX_BATCH_SIZE || 20),
+    maxAttempts: Number(process.env.EMAIL_OUTBOX_MAX_ATTEMPTS || 5),
+    /** First retry delay; doubles per attempt up to `maxBackoffMs`. */
+    baseBackoffMs: Number(process.env.EMAIL_OUTBOX_BASE_BACKOFF_MS || 60_000),
+    maxBackoffMs: Number(process.env.EMAIL_OUTBOX_MAX_BACKOFF_MS || 60 * 60_000),
+    /** How long a drainer owns a row before another worker may reclaim it. */
+    leaseMs: Number(process.env.EMAIL_OUTBOX_LEASE_MS || 5 * 60_000),
+    /** Terminal rows are retained for this many days, then Mongo TTL removes them. */
+    retentionDays: Number(process.env.EMAIL_OUTBOX_RETENTION_DAYS || 30),
+  },
+  /** In-process scheduler. Tests never start it; `CRON_ENABLED=false` disables it. */
+  cron: {
+    enabled: optional('CRON_ENABLED', 'true') === 'true',
+    /** How often the scheduler wakes to check for due jobs. */
+    tickMs: Number(process.env.CRON_TICK_MS || 30_000),
+    emailDrainIntervalMs: Number(process.env.CRON_EMAIL_INTERVAL_MS || 30_000),
+    followUpIntervalMs: Number(process.env.CRON_FOLLOWUP_INTERVAL_MS || 15 * 60_000),
+    reminderIntervalMs: Number(process.env.CRON_REMINDER_INTERVAL_MS || 60 * 60_000),
+    /** Local server time for the daily jobs. */
+    cleanupHour: Number(process.env.CRON_CLEANUP_HOUR || 3),
+    cleanupMinute: Number(process.env.CRON_CLEANUP_MINUTE || 0),
+    backupHour: Number(process.env.CRON_BACKUP_HOUR || 2),
+    backupMinute: Number(process.env.CRON_BACKUP_MINUTE || 0),
+  },
+  backup: {
+    /** Defaults to `<cwd>/backups`; point at the Persistent Disk in production. */
+    dir: optional('BACKUP_DIR'),
+    retentionDays: Number(process.env.BACKUP_RETENTION_DAYS || 14),
+  },
 };

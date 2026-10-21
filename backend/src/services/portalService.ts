@@ -1,7 +1,6 @@
 import jwt, { type SignOptions } from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import { env } from '../config/env';
-import { sendEmail } from '../config/email';
 import { Customer } from '../models/Customer';
 import { MeasurementProfile } from '../models/MeasurementProfile';
 import { MeasurementTemplate } from '../models/MeasurementTemplate';
@@ -13,6 +12,7 @@ import { User } from '../models/User';
 import { ApiError } from '../utils/ApiError';
 import { escapeRegex } from '../utils/query';
 import { createProfile } from './measurementProfileService';
+import { enqueueEmail } from './emailOutboxService';
 import { invalidateUserState } from './tokenService';
 
 const REFERENCE_ID_RE = /^KDS-\d{4}-\d{4}$/;
@@ -537,7 +537,7 @@ export async function submitPortalMeasurement(
   try {
     const customer = await Customer.findById(customerId).lean();
     const { notifyMeasurementPending } = await import('./notificationService');
-    void notifyMeasurementPending({
+    await notifyMeasurementPending({
       profileId: String(profile.id),
       customerId: String(customerId),
       customerName: customer?.name,
@@ -790,7 +790,7 @@ export async function createPortalRequest(
 
   try {
     const { notifyRequestReceived } = await import('./notificationService');
-    void notifyRequestReceived({
+    await notifyRequestReceived({
       leadId: String(lead._id),
       name: customer.name,
       phone: customer.phone,
@@ -917,7 +917,7 @@ export async function approveMeasurementProfile(id: string) {
 
   try {
     const { notifyMeasurementApproved } = await import('./notificationService');
-    void notifyMeasurementApproved({
+    await notifyMeasurementApproved({
       profileId: result.id,
       customerId: result.customerId,
       customerName: customerName,
@@ -976,8 +976,10 @@ export async function notifyOrderConfirmed(orderId: string) {
   ].join('\n');
 
   if (customer.email && !customer.email.includes('@kadamba.local')) {
-    await sendEmail({
+    await enqueueEmail({
       to: customer.email,
+      kind: 'order-confirmed-customer',
+      dedupeKey: `order-confirmed-customer:${String(order._id)}`,
       subject: `Order confirmed — Reference ${order.referenceId} · Kadamba's Designer Studio`,
       text: customerText,
       html: `
@@ -994,8 +996,10 @@ export async function notifyOrderConfirmed(orderId: string) {
   }
 
   if (adminTo && !String(adminTo).startsWith('your_')) {
-    await sendEmail({
+    await enqueueEmail({
       to: adminTo,
+      kind: 'order-confirmed-admin',
+      dedupeKey: `order-confirmed-admin:${String(order._id)}`,
       subject: `Order confirmed — ${order.referenceId}`,
       text: `Order ${order.orderNumber} confirmed. Reference ${order.referenceId}. Customer: ${customer.name} (${customer.phone}). Activate: ${activateUrl}`,
       html: `<p>Order <strong>#${order.orderNumber}</strong> confirmed.</p>

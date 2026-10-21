@@ -6,6 +6,7 @@ import { parseBooleanQuery, searchRegex } from '../utils/query';
 import { toDto } from '../utils/serialize';
 import { resolveClientSlug } from '../utils/slugify';
 import { generateSeoWithSettings } from '../utils/generateSeo';
+import { CACHE_KEYS, CACHE_TTL, cacheKey, cached, invalidateCache } from './cacheService';
 
 export type BlogDto = Record<string, unknown> & {
   id: string;
@@ -32,6 +33,17 @@ async function slugExists(slug: string, excludeId?: string): Promise<boolean> {
 }
 
 export async function listBlogs(
+  query: Record<string, unknown>,
+  options: { admin: boolean },
+) {
+  return cached(
+    cacheKey(CACHE_KEYS.cmsBlog, 'list', options.admin ? 'admin' : 'public', query),
+    CACHE_TTL.cmsMs,
+    () => queryBlogs(query, options),
+  );
+}
+
+async function queryBlogs(
   query: Record<string, unknown>,
   options: { admin: boolean },
 ) {
@@ -72,6 +84,14 @@ export async function listBlogs(
 }
 
 export async function getBlog(idOrSlug: string, options: { admin: boolean }) {
+  return cached(
+    cacheKey(CACHE_KEYS.cmsBlog, 'item', options.admin ? 'admin' : 'public', idOrSlug),
+    CACHE_TTL.cmsMs,
+    () => queryBlog(idOrSlug, options),
+  );
+}
+
+async function queryBlog(idOrSlug: string, options: { admin: boolean }) {
   const filter: Record<string, unknown> = mongoose.isValidObjectId(idOrSlug)
     ? { $or: [{ _id: idOrSlug }, { slug: idOrSlug }] }
     : { slug: idOrSlug };
@@ -81,6 +101,11 @@ export async function getBlog(idOrSlug: string, options: { admin: boolean }) {
   const doc = await Blog.findOne(filter).lean();
   if (!doc) throw new ApiError(404, 'Blog post not found');
   return serialize(doc);
+}
+
+/** Drop cached blog reads after a write. */
+export function invalidateBlogCache(): void {
+  invalidateCache(CACHE_KEYS.cmsBlog);
 }
 
 export async function createBlog(input: Record<string, unknown> & { title: string }) {
@@ -119,6 +144,7 @@ export async function createBlog(input: Record<string, unknown> & { title: strin
     twitterDescription: String(input.twitterDescription || seo.twitterDescription),
     twitterImage: String(input.twitterImage || seo.twitterImage),
   });
+  invalidateBlogCache();
   return serialize(doc);
 }
 
@@ -163,6 +189,7 @@ export async function updateBlog(id: string, input: Record<string, unknown>) {
   }
 
   await existing.save();
+  invalidateBlogCache();
   return serialize(existing);
 }
 
@@ -170,5 +197,6 @@ export async function deleteBlog(id: string) {
   if (!mongoose.isValidObjectId(id)) throw new ApiError(400, 'Invalid blog id');
   const doc = await Blog.findByIdAndDelete(id);
   if (!doc) throw new ApiError(404, 'Blog post not found');
+  invalidateBlogCache();
   return serialize(doc);
 }

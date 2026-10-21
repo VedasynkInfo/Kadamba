@@ -6,6 +6,7 @@ import { parseBooleanQuery, searchRegex } from '../utils/query';
 import { toDto } from '../utils/serialize';
 import { resolveClientSlug } from '../utils/slugify';
 import { generateSeoWithSettings } from '../utils/generateSeo';
+import { CACHE_KEYS, CACHE_TTL, cacheKey, cached, invalidateCache } from './cacheService';
 
 export type GalleryDto = {
   id: string;
@@ -46,6 +47,17 @@ export async function listGalleryItems(
   query: Record<string, unknown>,
   options: { admin: boolean },
 ) {
+  return cached(
+    cacheKey(CACHE_KEYS.cmsGallery, 'list', options.admin ? 'admin' : 'public', query),
+    CACHE_TTL.cmsMs,
+    () => queryGalleryItems(query, options),
+  );
+}
+
+async function queryGalleryItems(
+  query: Record<string, unknown>,
+  options: { admin: boolean },
+) {
   const { page, limit, skip } = parsePagination(query);
   const filter: Record<string, unknown> = {};
 
@@ -82,6 +94,14 @@ export async function listGalleryItems(
 }
 
 export async function getGalleryItem(idOrSlug: string, options: { admin: boolean }) {
+  return cached(
+    cacheKey(CACHE_KEYS.cmsGallery, 'item', options.admin ? 'admin' : 'public', idOrSlug),
+    CACHE_TTL.cmsMs,
+    () => queryGalleryItem(idOrSlug, options),
+  );
+}
+
+async function queryGalleryItem(idOrSlug: string, options: { admin: boolean }) {
   const filter: Record<string, unknown> = mongoose.isValidObjectId(idOrSlug)
     ? { $or: [{ _id: idOrSlug }, { slug: idOrSlug }] }
     : { slug: idOrSlug };
@@ -91,6 +111,11 @@ export async function getGalleryItem(idOrSlug: string, options: { admin: boolean
   const doc = await GalleryItem.findOne(filter).lean();
   if (!doc) throw new ApiError(404, 'Gallery item not found');
   return serialize(doc);
+}
+
+/** Drop cached gallery reads after a write. */
+export function invalidateGalleryCache(): void {
+  invalidateCache(CACHE_KEYS.cmsGallery);
 }
 
 export async function createGalleryItem(input: Partial<GalleryDto> & { title: string }) {
@@ -127,6 +152,7 @@ export async function createGalleryItem(input: Partial<GalleryDto> & { title: st
     twitterDescription: input.twitterDescription || seo.twitterDescription,
     twitterImage: input.twitterImage || seo.twitterImage || input.src || '',
   });
+  invalidateGalleryCache();
   return serialize(doc);
 }
 
@@ -187,6 +213,7 @@ export async function updateGalleryItem(id: string, input: Partial<GalleryDto>) 
   }
 
   await existing.save();
+  invalidateGalleryCache();
   return serialize(existing);
 }
 
@@ -194,5 +221,6 @@ export async function deleteGalleryItem(id: string) {
   if (!mongoose.isValidObjectId(id)) throw new ApiError(400, 'Invalid gallery id');
   const doc = await GalleryItem.findByIdAndDelete(id);
   if (!doc) throw new ApiError(404, 'Gallery item not found');
+  invalidateGalleryCache();
   return serialize(doc);
 }

@@ -99,29 +99,53 @@ function isLocked(user: IUser): boolean {
   return Boolean(user.lockedUntil && user.lockedUntil.getTime() > Date.now());
 }
 
+/**
+ * Record a failed sign-in.
+ *
+ * The counter lives in Mongo, not in memory, so it survives a redeploy and a
+ * crash — a restarted process cannot be used to reset an attacker's budget.
+ * The increment is a single atomic `$inc` and the document is never
+ * re-saved afterwards, so parallel attempts cannot clobber each other.
+ */
 async function registerFailedLogin(user: IUser): Promise<void> {
-  const attempts = (user.failedLoginAttempts ?? 0) + 1;
-  user.failedLoginAttempts = attempts;
+  const userId = user._id;
+
+  const updated = await User.findOneAndUpdate(
+    { _id: userId },
+    { $inc: { failedLoginAttempts: 1 } },
+    { new: true },
+  ).select('failedLoginAttempts');
+
+  const attempts = updated?.failedLoginAttempts ?? (user.failedLoginAttempts ?? 0) + 1;
 
   if (attempts >= env.security.maxFailedLogins) {
-    user.lockedUntil = new Date(Date.now() + env.security.lockoutMinutes * 60_000);
+    const lockedUntil = new Date(Date.now() + env.security.lockoutMinutes * 60_000);
+    await User.updateOne(
+      { _id: userId },
+      { $set: { lockedUntil, failedLoginAttempts: 0 } },
+    );
+    user.lockedUntil = lockedUntil;
     user.failedLoginAttempts = 0;
-    await user.save();
     logger.warn(
-      { userId: String(user._id), email: user.email },
+      { userId: String(userId), email: user.email },
       'Account locked after repeated failed logins',
     );
-    return;
   }
-
-  await user.save();
 }
 
 async function registerSuccessfulLogin(user: IUser): Promise<void> {
+  // An atomic `$set` rather than `user.save()`: a save would write the whole
+  // document back and could clobber a concurrent failed-attempt increment.
+  await User.updateOne(
+    { _id: user._id },
+    {
+      $set: { failedLoginAttempts: 0, lastLoginAt: new Date() },
+      $unset: { lockedUntil: 1 },
+    },
+  );
   user.failedLoginAttempts = 0;
   user.lockedUntil = undefined;
   user.lastLoginAt = new Date();
-  await user.save();
   cacheUserState(user);
 }
 
@@ -381,6 +405,8 @@ export async function requestPasswordReset(email: string): Promise<{
   /** Only returned outside production so local dev can complete the flow. */
   devToken?: string;
   user?: IUser;
+  /** Id of the reset-token row — used to key the outbox entry. */
+  tokenId?: string;
 }> {
   const user = await User.findOne({ email: email.toLowerCase(), status: 'active' });
   if (!user) return {};
@@ -388,14 +414,18 @@ export async function requestPasswordReset(email: string): Promise<{
   const raw = crypto.randomBytes(32).toString('base64url');
   const hash = crypto.createHash('sha256').update(raw).digest('hex');
 
-  await PasswordResetToken.create({
+  const record = await PasswordResetToken.create({
     userId: user._id,
     tokenHash: hash,
     expiresAt: new Date(Date.now() + 30 * 60_000),
     requestedIp: undefined,
   });
 
-  return { devToken: env.isProduction ? undefined : raw, user };
+  return {
+    devToken: env.isProduction ? undefined : raw,
+    user,
+    tokenId: String(record._id),
+  };
 }
 
 export async function resetPassword(input: {

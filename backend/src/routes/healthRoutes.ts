@@ -1,5 +1,10 @@
 import { Router } from 'express';
 import mongoose from 'mongoose';
+import { schedulerStatus } from '../services/cronService';
+import { getEmailOutboxStats } from '../services/emailOutboxService';
+import { allJobPoolStats } from '../services/jobPool';
+import { cacheStats } from '../services/cacheService';
+import { asyncHandler } from '../utils/asyncHandler';
 
 const router = Router();
 
@@ -23,13 +28,37 @@ router.get('/ready', (_req, res) => {
   });
 });
 
-/** Back-compatible summary endpoint. */
-router.get('/', (_req, res) => {
-  res.status(200).json({
-    success: true,
-    message: 'Kadamba API is healthy',
-    data: { status: 'ok', database: dbStatus(), timestamp: new Date().toISOString() },
-  });
-});
+/**
+ * Back-compat summary plus the Phase 10 background-work view: the email
+ * outbox depth, the scheduler, the in-process job pools and the LRU cache.
+ */
+router.get(
+  '/',
+  asyncHandler(async (_req, res) => {
+    let outbox = null;
+    try {
+      outbox = await getEmailOutboxStats();
+    } catch {
+      // The database may be down; liveness must not depend on it.
+      outbox = null;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Kadamba API is healthy',
+      data: {
+        status: 'ok',
+        database: dbStatus(),
+        timestamp: new Date().toISOString(),
+        background: {
+          outbox,
+          scheduler: schedulerStatus(),
+          jobs: allJobPoolStats(),
+          cache: cacheStats(),
+        },
+      },
+    });
+  }),
+);
 
 export default router;

@@ -1,6 +1,6 @@
-import { sendEmail } from '../config/email';
 import { env } from '../config/env';
 import { logger } from '../config/logger';
+import { enqueueEmail } from './emailOutboxService';
 import {
   emitNotifyBadge,
   emitNotifyLead,
@@ -21,27 +21,37 @@ function escapeHtml(value: string): string {
     .replace(/'/g, '&#39;');
 }
 
-/** Always attempt send; sendEmail logs+skips when SMTP unset. Also console.info for ops visibility. */
+/**
+ * Queue an email in the durable outbox.
+ *
+ * Delivery is asynchronous: the request that triggered the notification only
+ * writes a row, and the cron drainer sends it. A failed SMTP call therefore
+ * never surfaces to the user, and a process killed mid-queue loses nothing.
+ */
 async function deliver(options: {
   to: string;
   subject: string;
   html: string;
   text: string;
   kind: string;
+  /** Makes the notification idempotent across retries of the same event. */
+  dedupeKey?: string;
 }): Promise<void> {
   console.info(`[notify:${options.kind}]`, {
     to: options.to,
     subject: options.subject,
   });
   try {
-    await sendEmail({
+    await enqueueEmail({
       to: options.to,
       subject: options.subject,
       html: options.html,
       text: options.text,
+      kind: options.kind,
+      dedupeKey: options.dedupeKey,
     });
   } catch (err) {
-    logger.warn({ err, kind: options.kind }, 'Notification email failed');
+    logger.warn({ err, kind: options.kind }, 'Notification email could not be queued');
   }
 }
 
@@ -104,6 +114,7 @@ export async function notifyRequestReceived(input: {
     await deliver({
       kind: 'request-admin',
       to: adminTo,
+      dedupeKey: `request-admin:${input.leadId}`,
       subject: `New service request — ${input.name}`,
       text: [
         `New request from ${input.name}`,
@@ -134,6 +145,7 @@ export async function notifyRequestReceived(input: {
     await deliver({
       kind: 'request-customer',
       to: input.email,
+      dedupeKey: `request-customer:${input.leadId}`,
       subject: "We received your consultation request — Kadamba's Designer Studio",
       text: `Hi ${input.name},\n\nThank you for requesting a consultation with Kadamba's Designer Studio in Kurnool. We will review your details and get back to you shortly.${
         input.orderNumber ? `\n\nYour enquiry order is #${input.orderNumber}.` : ''
@@ -183,6 +195,7 @@ export async function notifyMeasurementPending(input: {
     await deliver({
       kind: 'measurement-pending',
       to: adminTo,
+      dedupeKey: `measurement-pending:${input.profileId}`,
       subject: `Measurement pending approval — ${input.customerName || 'Customer'}`,
       text: `Customer ${input.customerName || input.customerId} submitted measurements for ${label}. Profile ${input.profileId}.`,
       html: `
@@ -227,6 +240,7 @@ export async function notifyMeasurementApproved(input: {
     await deliver({
       kind: 'measurement-approved',
       to: input.customerEmail,
+      dedupeKey: `measurement-approved:${input.profileId}`,
       subject: `Measurements approved — Kadamba's Designer Studio`,
       text: `Hi ${input.customerName || 'there'},\n\nYour measurements for "${label}" have been approved by Kadamba's Designer Studio in Kurnool. You can view them in your customer portal.\n\n— Kadamba's Designer Studio`,
       html: `
@@ -272,6 +286,7 @@ export async function notifyPaymentRecorded(input: {
     await deliver({
       kind: 'payment-receipt',
       to: input.customerEmail,
+      dedupeKey: `payment-receipt:${input.paymentId}`,
       subject: `Payment received — ₹${input.amount}${input.orderNumber ? ` · Order #${input.orderNumber}` : ''}`,
       text: `Hi ${input.customerName || 'there'},\n\nWe recorded a payment of ₹${input.amount}${
         input.method ? ` via ${input.method}` : ''

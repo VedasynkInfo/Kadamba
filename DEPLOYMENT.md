@@ -45,6 +45,31 @@ in production if they are missing or weak.
 | `EMAIL_FROM` | no | `Kadamba Studio <studio@example.com>` |
 | `EMAIL_TO` | no | Inbox that receives contact/lead notifications |
 
+**Background work (Phase 10) — all optional, sensible defaults apply:**
+
+| Variable | Required | Example / Notes |
+| --- | --- | --- |
+| `UPLOAD_DIR` | recommended | `/var/data/uploads` — the Render Persistent Disk mount. Originals live here and are never deleted |
+| `BACKUP_DIR` | recommended | `/var/data/backups` — where the nightly database archive is written. **Must be on the Persistent Disk**, otherwise the archive dies with the container |
+| `BACKUP_RETENTION_DAYS` | no | `14` — archives older than this are pruned |
+| `CRON_ENABLED` | no | `true` — set `false` to switch the in-process scheduler off entirely |
+| `CRON_TICK_MS` | no | `30000` — how often the scheduler wakes |
+| `CRON_EMAIL_INTERVAL_MS` | no | `30000` — how often the email outbox is drained |
+| `CRON_FOLLOWUP_INTERVAL_MS` | no | `900000` (15 min) — lead follow-up reminders |
+| `CRON_REMINDER_INTERVAL_MS` | no | `3600000` (1 h) — trial and delivery reminders |
+| `CRON_CLEANUP_HOUR` / `CRON_CLEANUP_MINUTE` | no | `3` / `0` — local server time for the orphan cleanup |
+| `CRON_BACKUP_HOUR` / `CRON_BACKUP_MINUTE` | no | `2` / `0` — local server time for the nightly backup |
+| `EMAIL_OUTBOX_ENABLED` | no | `true` — set `false` to stop the drainer (rows still queue) |
+| `EMAIL_OUTBOX_MAX_ATTEMPTS` | no | `5` — attempts before a message is marked failed |
+| `EMAIL_OUTBOX_BASE_BACKOFF_MS` | no | `60000` — first retry delay; doubles per attempt |
+| `EMAIL_OUTBOX_LEASE_MS` | no | `300000` — how long a drainer owns a row before another may reclaim it |
+| `EMAIL_OUTBOX_RETENTION_DAYS` | no | `30` — how long sent/failed rows are kept for audit |
+
+> **One instance, or many?** The scheduler is safe to run on several
+> instances: every job takes a Mongo lease (`CronLock`) first, and the email
+> outbox claims rows atomically. A Render service that scales to more than one
+> instance will still send each reminder once.
+
 **Admin bootstrap (temporary — set, run once, then remove):**
 
 | Variable | Notes |
@@ -128,7 +153,12 @@ Set in Vercel → Project → **Settings → Environment Variables** (Production
 | --- | --- |
 | `GET /api/health/live` | Process is up (always 200 when responsive) |
 | `GET /api/health/ready` | 200 only when MongoDB is connected (used by Render) |
-| `GET /api/health` | Human-readable summary |
+| `GET /api/health` | Summary plus the Phase 10 background view: outbox depth, scheduler state, job pools and cache size |
+
+> The outbox depth is the first thing to look at when mail seems to be stuck.
+> A growing `pending` count with a non-zero `due` means the drainer is not
+> running (check `CRON_ENABLED`); a growing `failed` count means SMTP is
+> rejecting the messages.
 
 ---
 
@@ -141,9 +171,11 @@ Set in Vercel → Project → **Settings → Environment Variables** (Production
 - [ ] Unknown URL shows the branded 404
 - [ ] Admin login works with the seeded account; `/admin` redirects to login when logged out
 - [ ] Contact form submits and a notification email arrives
-- [ ] An image upload in the admin lands in Cloudinary
+- [ ] An image upload in the admin lands on the Persistent Disk (`UPLOAD_DIR`)
 - [ ] `robots.txt` and `sitemap.xml` resolve and reference the production domain
 - [ ] No CORS errors in the browser console (Render `FRONTEND_URL` matches the site origin)
+- [ ] `GET /api/health` shows `background.outbox.pending` at 0 after a few minutes
+- [ ] A backup archive appears in `BACKUP_DIR` (`kadamba-backup-*.jsonl.gz`), or run `npm run data:backup` once to confirm
 
 ---
 

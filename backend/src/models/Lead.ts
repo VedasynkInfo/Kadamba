@@ -1,3 +1,4 @@
+import './cacheInvalidation';
 import mongoose, { Document, Schema } from 'mongoose';
 import { LEAD_STATUSES, LEAD_SOURCES } from '../shared/enums';
 import type { LeadStatus, LeadSource } from '../shared/enums';

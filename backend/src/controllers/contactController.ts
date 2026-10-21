@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
-import { sendEmail } from '../config/email';
 import { env } from '../config/env';
+import { enqueueEmail } from '../services/emailOutboxService';
 import { asyncHandler } from '../utils/asyncHandler';
 
 function escapeHtml(value: string): string {
@@ -33,8 +33,11 @@ export const submitContact = asyncHandler(async (req: Request, res: Response) =>
     console.warn('Contact form received — EMAIL_TO / EMAIL_USER not set; skipping outbound mail');
     console.info({ name, email, phone, message });
   } else {
-    await sendEmail({
+    // Queued, not sent inline: a slow or broken SMTP server must not hold the
+    // public contact form open, and a crash must not lose the message.
+    await enqueueEmail({
       to,
+      kind: 'contact-admin',
       subject: `Contact form — ${name}`,
       text: `New contact message from ${name}\nEmail: ${email}\nPhone: ${phone}\n\n${message}`,
       html: `
@@ -47,8 +50,9 @@ export const submitContact = asyncHandler(async (req: Request, res: Response) =>
     `,
     });
 
-    await sendEmail({
+    await enqueueEmail({
       to: email,
+      kind: 'contact-customer',
       subject: "We received your message — Kadamba's Designer Studio",
       text: `Hi ${name},\n\nThank you for writing to Kadamba's Designer Studio in Kurnool. We will get back to you shortly.\n\n— Kadamba's Designer Studio`,
       html: `

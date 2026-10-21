@@ -117,7 +117,9 @@ export async function recordPayment(input: RecordPaymentInput) {
     const customer = await import('../models/Customer').then((m) =>
       m.Customer.findById(order.customerId).lean(),
     );
-    void notifyPaymentRecorded({
+    // Awaited: the receipt is queued in the durable outbox, so the row must
+    // be written before the request returns.
+    await notifyPaymentRecorded({
       paymentId: String((dto as { id?: string }).id || ''),
       orderId: String(order._id),
       orderNumber: order.orderNumber,

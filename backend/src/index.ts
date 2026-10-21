@@ -4,9 +4,13 @@ import { connectDB, disconnectDB } from './config/database';
 import { env } from './config/env';
 import { logger } from './config/logger';
 import { initPortalSocket } from './realtime/portalSocket';
+import { startScheduler, stopScheduler } from './services/cronService';
+import { drainJobPools } from './services/jobPool';
+import { ensurePhase10Indexes } from './services/phase10Bootstrap';
 
 async function bootstrap() {
   await connectDB();
+  await ensurePhase10Indexes();
 
   const app = createApp();
   const server: Server = app.listen(env.port, () => {
@@ -14,6 +18,7 @@ async function bootstrap() {
   });
 
   initPortalSocket(server);
+  startScheduler();
   setupGracefulShutdown(server);
 }
 
@@ -34,6 +39,11 @@ function setupGracefulShutdown(server: Server) {
 
     server.close(async () => {
       try {
+        // Stop accepting new scheduled work, then let in-flight jobs finish.
+        // Anything still queued lives in Mongo (email outbox, job rows), so a
+        // hard kill here loses nothing.
+        stopScheduler();
+        await drainJobPools(5_000);
         await disconnectDB();
         clearTimeout(forceExit);
         process.exit(0);

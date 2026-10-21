@@ -1,3 +1,4 @@
+import './cacheInvalidation';
 import mongoose, { Document, Schema } from 'mongoose';
 import { MEASUREMENT_STATUSES } from '../shared/enums';
 import type { MeasurementStatus } from '../shared/enums';

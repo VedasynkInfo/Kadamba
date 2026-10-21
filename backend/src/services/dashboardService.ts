@@ -2,6 +2,7 @@ import { Lead } from '../models/Lead';
 import { MeasurementProfile } from '../models/MeasurementProfile';
 import { Order } from '../models/Order';
 import { Payment } from '../models/Payment';
+import { CACHE_KEYS, CACHE_TTL, cacheKey, cached, invalidateCache } from './cacheService';
 import { serializeLead, type LeadDto } from './leadService';
 
 export interface DashboardSummaryDto {
@@ -34,6 +35,23 @@ export interface DashboardSummaryDto {
  * Fetch aggregated dashboard metrics and trends, using live database stats for all modules.
  */
 export async function getDashboardSummary(from?: string, to?: string): Promise<DashboardSummaryDto> {
+  return cached(
+    cacheKey(CACHE_KEYS.dashboard, from ?? '', to ?? ''),
+    CACHE_TTL.dashboardMs,
+    () => computeDashboardSummary(from, to),
+  );
+}
+
+/**
+ * Drop the cached dashboard. Called whenever a lead, order, payment or
+ * measurement changes, so the console reflects writes immediately instead of
+ * after the cache TTL.
+ */
+export function invalidateDashboardCache(): void {
+  invalidateCache(CACHE_KEYS.dashboard);
+}
+
+async function computeDashboardSummary(from?: string, to?: string): Promise<DashboardSummaryDto> {
   const toDate = to ? new Date(to) : new Date();
   let fromDate: Date;
   

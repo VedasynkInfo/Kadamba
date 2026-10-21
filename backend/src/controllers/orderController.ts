@@ -68,8 +68,9 @@ export const transitionOrderStatusHandler = asyncHandler(async (req: Request, re
 
   if (status === 'confirmed' && order.referenceId) {
     const { notifyOrderConfirmed } = await import('../services/portalService');
-    // Fire-and-forget email + portal invite; do not block status response.
-    void notifyOrderConfirmed(order.id).catch((err) => {
+    // Awaited: the confirmation email is queued in the durable outbox, and
+    // that row must exist before the response is sent.
+    await notifyOrderConfirmed(order.id).catch((err) => {
       console.warn('notifyOrderConfirmed failed', err);
     });
   }

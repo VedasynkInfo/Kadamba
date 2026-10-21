@@ -1,3 +1,4 @@
+import './cacheInvalidation';
 import mongoose, { Document, Schema } from 'mongoose';
 import { PAYMENT_METHODS } from '../shared/enums';
 import type { PaymentMethod } from '../shared/enums';

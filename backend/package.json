@@ -18,7 +18,8 @@
     "test:watch": "vitest",
     "check:contract": "node ../scripts/sync-shared.mjs --check",
     "data:backfill-product-slugs": "tsx src/scripts/backfillProductSlugs.ts",
-    "data:backfill-product-template-refs": "tsx src/scripts/backfillProductTemplateRefs.ts"
+    "data:backfill-product-template-refs": "tsx src/scripts/backfillProductTemplateRefs.ts",
+    "data:backup": "tsx src/scripts/backupDatabase.ts"
   },
   "keywords": [
     "kadamba",
@@ -39,6 +40,7 @@
     "express-validator": "^7.3.2",
     "helmet": "^8.3.0",
     "jsonwebtoken": "^9.0.3",
+    "lru-cache": "^11.5.3",
     "mongoose": "^9.7.4",
     "multer": "^2.2.0",
     "nodemailer": "^9.0.3",

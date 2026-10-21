@@ -37,3 +37,4 @@ coverage/
 # Uploads / local data
 uploads/
 db/backups/
+backups/

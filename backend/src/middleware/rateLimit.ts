@@ -1,5 +1,6 @@
-import rateLimit, { type Options } from 'express-rate-limit';
+import rateLimit, { ipKeyGenerator, type Options } from 'express-rate-limit';
 import { env } from '../config/env';
+import { MongoRateLimitStore } from '../services/rateLimitMongoStore';
 
 /** Shared validation config so limiters behave correctly behind a proxy. */
 const validate: Options['validate'] = { trustProxy: env.trustProxy > 0 };
@@ -19,6 +20,7 @@ export const globalApiRateLimiter = rateLimit({
   legacyHeaders: false,
   validate,
   skip: skipInTest,
+  store: new MongoRateLimitStore('global'),
   message: { success: false, code: 'RATE_LIMITED', message: 'Too many requests. Try again later.' },
 });
 
@@ -30,6 +32,7 @@ export const authRateLimiter = rateLimit({
   legacyHeaders: false,
   validate,
   skip: skipInTest,
+  store: new MongoRateLimitStore('auth'),
   message: { success: false, code: 'RATE_LIMITED', message: 'Too many auth attempts. Try again later.' },
 });
 
@@ -41,6 +44,7 @@ export const publicWriteRateLimiter = rateLimit({
   legacyHeaders: false,
   validate,
   skip: skipInTest,
+  store: new MongoRateLimitStore('public-write'),
   message: { success: false, code: 'RATE_LIMITED', message: 'Too many submissions. Try again later.' },
 });
 
@@ -55,6 +59,7 @@ export const passwordResetRateLimiter = rateLimit({
   legacyHeaders: false,
   validate,
   skip: skipInTest,
+  store: new MongoRateLimitStore('password-reset'),
   message: { success: false, code: 'RATE_LIMITED', message: 'Too many reset attempts. Try again later.' },
 });
 
@@ -70,9 +75,12 @@ export const loginAccountRateLimiter = rateLimit({
   legacyHeaders: false,
   validate,
   skip: skipInTest,
+  store: new MongoRateLimitStore('login-account'),
   keyGenerator: (req) => {
     const email = (req.body as { email?: string } | undefined)?.email;
-    return `login:${String(email ?? '').toLowerCase() || req.ip}`;
+    // `ipKeyGenerator` normalises IPv6 to a /64 subnet so a single client
+    // cannot rotate through its address block to reset the budget.
+    return `login:${String(email ?? '').toLowerCase() || ipKeyGenerator(req.ip || '')}`;
   },
   message: {
     success: false,

@@ -1,3 +1,4 @@
+import './cacheInvalidation';
 import mongoose, { Document, Schema } from 'mongoose';
 
 export const SERVICE_CATEGORIES = ['Bridal', 'Traditional', 'Tailoring', 'Boutique'] as const;

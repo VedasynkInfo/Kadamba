@@ -13,6 +13,7 @@ import { WebsiteSettings } from '../models/WebsiteSettings';
 import { logger } from '../config/logger';
 import { assetVariantDir, isInsideUploads, publicUploadUrl, uploadsDir } from '../config/storage';
 import { hashFile, processImageFile } from '../utils/imagePipeline';
+import { imageJobPool } from './jobPool';
 import { ALLOWED_UPLOAD_MIMES, detectFileType } from '../utils/fileSignature';
 import { ApiError } from '../utils/ApiError';
 
@@ -276,10 +277,12 @@ export async function registerUploadedFile(input: RegisterUploadInput): Promise<
   const isVideo = input.mimeType.startsWith('video/');
   const processed = isVideo
     ? { hash, kind: 'video' as const, bytes: stat.size, variants: [] }
-    : await processImageFile(input.absPath, hash).catch((error) => {
-        logger.error({ err: error, absPath: input.absPath }, 'Image processing failed');
-        return { hash, kind: 'image' as const, bytes: stat.size, variants: [] };
-      });
+    : await imageJobPool
+        .run(`process:${filename}`, () => processImageFile(input.absPath, hash))
+        .catch((error) => {
+          logger.error({ err: error, absPath: input.absPath }, 'Image processing failed');
+          return { hash, kind: 'image' as const, bytes: stat.size, variants: [] };
+        });
 
   // Identical bytes already stored → reuse the existing variants, just record
   // this occurrence (the file on disk is a distinct copy with its own URL).
@@ -518,7 +521,9 @@ export async function regenerateVariants(id: string) {
     /* fine */
   }
 
-  const processed = await processImageFile(abs, asset.hash);
+  const processed = await imageJobPool.run(`regenerate:${asset.hash}`, () =>
+    processImageFile(abs, asset.hash),
+  );
   return ImageAsset.findByIdAndUpdate(
     id,
     {

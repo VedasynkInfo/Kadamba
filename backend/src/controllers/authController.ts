@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { env } from '../config/env';
-import { sendEmail } from '../config/email';
 import { logger } from '../config/logger';
+import { enqueueEmail } from '../services/emailOutboxService';
 import {
   confirmMfaEnrollment,
   disableMfa,
@@ -206,7 +206,7 @@ export const profile = asyncHandler(async (req: Request, res: Response) => {
 
 export const forgotPassword = asyncHandler(async (req: Request, res: Response) => {
   const email = String(req.body?.email ?? '');
-  const { devToken, user } = await requestPasswordReset(email);
+  const { devToken, user, tokenId } = await requestPasswordReset(email);
 
   if (user) {
     const resetUrl = `${env.frontendUrl}/admin/reset-password?token=${encodeURIComponent(devToken ?? '')}`;
@@ -226,8 +226,12 @@ export const forgotPassword = asyncHandler(async (req: Request, res: Response) =
       logger.info({ resetUrl }, 'Password reset link (development)');
     } else {
       try {
-        await sendEmail({
+        // Queued through the outbox: the reset link must survive a crash and
+        // is retried with backoff if the SMTP server is briefly unavailable.
+        await enqueueEmail({
           to: user.email,
+          kind: 'password-reset',
+          dedupeKey: tokenId ? `password-reset:${tokenId}` : undefined,
           subject: 'Reset your Kadamba Studio password',
           text: [
             `Hello ${user.name},`,
@@ -246,7 +250,7 @@ export const forgotPassword = asyncHandler(async (req: Request, res: Response) =
           `,
         });
       } catch (error) {
-        logger.error({ err: error }, 'Password reset email failed');
+        logger.error({ err: error }, 'Password reset email could not be queued');
       }
     }
   }

@@ -4,6 +4,8 @@ import path from 'path';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import { afterAll, afterEach, beforeAll } from 'vitest';
+import { clearCache } from '../../services/cacheService';
+import { ensurePhase10Indexes } from '../../services/phase10Bootstrap';
 
 // Ensure a test environment before any app module reads config.
 process.env.NODE_ENV = 'test';
@@ -29,6 +31,9 @@ beforeAll(async () => {
   fs.mkdirSync(path.join(testUploadsDir, 'optimized'), { recursive: true });
   mongo = await MongoMemoryServer.create();
   await mongoose.connect(mongo.getUri());
+  // The Phase 10 unique indexes back notification de-duplication and the cron
+  // lease, so they must exist before any test relies on them.
+  await ensurePhase10Indexes();
 });
 
 afterEach(async () => {
@@ -36,6 +41,9 @@ afterEach(async () => {
   for (const key of Object.keys(collections)) {
     await collections[key].deleteMany({});
   }
+  // The rows are gone, so the cached reads of them must go too. Wiping the
+  // collections directly bypasses the model hooks that normally invalidate.
+  clearCache();
 });
 
 afterAll(async () => {

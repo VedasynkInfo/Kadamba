@@ -1,3 +1,4 @@
+import './cacheInvalidation';
 import mongoose, { Document, Schema } from 'mongoose';
 
 export const GALLERY_CATEGORIES = [

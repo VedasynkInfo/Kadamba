@@ -3,6 +3,7 @@ import { env } from '../config/env';
 import { logger } from '../config/logger';
 import { ApiError } from '../utils/ApiError';
 import { toDto } from '../utils/serialize';
+import { CACHE_KEYS, CACHE_TTL, cached, invalidateCache } from './cacheService';
 import {
   DEFAULT_BANNER_PRESETS,
   DEFAULT_EMAIL_TEMPLATES,
@@ -219,8 +220,10 @@ function toAdminDto(doc: IWebsiteSettings): SettingsDto {
 }
 
 export async function getPublicSettings(): Promise<SettingsDto> {
-  const doc = await getOrCreateDoc();
-  return toPublicDto(doc);
+  return cached(CACHE_KEYS.settingsPublic, CACHE_TTL.settingsMs, async () => {
+    const doc = await getOrCreateDoc();
+    return toPublicDto(doc);
+  });
 }
 
 /** Alias used by existing public consumers */
@@ -229,8 +232,22 @@ export async function getSettings(): Promise<SettingsDto> {
 }
 
 export async function getAdminSettings(): Promise<SettingsDto> {
-  const doc = await getOrCreateDoc();
-  return toAdminDto(doc);
+  return cached(CACHE_KEYS.settingsAdmin, CACHE_TTL.settingsMs, async () => {
+    const doc = await getOrCreateDoc();
+    return toAdminDto(doc);
+  });
+}
+
+/**
+ * Drop every cached view of the settings.
+ *
+ * Called after every write. Without this, an admin who changes the studio
+ * name would keep seeing the old one until the TTL expired.
+ */
+export function invalidateSettingsCache(): void {
+  invalidateCache(CACHE_KEYS.settingsPublic);
+  invalidateCache(CACHE_KEYS.settingsAdmin);
+  invalidateCache(CACHE_KEYS.settingsSmtp);
 }
 
 const GENERAL_KEYS = [
@@ -315,6 +332,7 @@ export async function updateSettings(input: Record<string, unknown>): Promise<Se
   }
 
   await doc.save();
+  invalidateSettingsCache();
   return toAdminDto(doc);
 }
 
@@ -393,39 +411,41 @@ export async function resolveSmtpConfig(): Promise<{
   adminTo: string;
   fromName: string;
 } | null> {
-  try {
-    const doc = await WebsiteSettings.findOne({ key: 'site' }).lean();
-    const cfg = doc?.emailConfig;
-    if (cfg?.host && cfg?.user && cfg?.pass) {
-      return {
-        host: cfg.host,
-        port: cfg.port || 587,
-        secure: Boolean(cfg.secure) || cfg.port === 465,
-        user: cfg.user,
-        pass: cfg.pass,
-        from: cfg.fromEmail || cfg.user,
-        adminTo: cfg.adminTo || cfg.fromEmail || cfg.user,
-        fromName: cfg.fromName || "Kadamba's Designer Studio",
-      };
+  return cached(CACHE_KEYS.settingsSmtp, CACHE_TTL.settingsMs, async () => {
+    try {
+      const doc = await WebsiteSettings.findOne({ key: 'site' }).lean();
+      const cfg = doc?.emailConfig;
+      if (cfg?.host && cfg?.user && cfg?.pass) {
+        return {
+          host: cfg.host,
+          port: cfg.port || 587,
+          secure: Boolean(cfg.secure) || cfg.port === 465,
+          user: cfg.user,
+          pass: cfg.pass,
+          from: cfg.fromEmail || cfg.user,
+          adminTo: cfg.adminTo || cfg.fromEmail || cfg.user,
+          fromName: cfg.fromName || "Kadamba's Designer Studio",
+        };
+      }
+    } catch {
+      // fall through to env
     }
-  } catch {
-    // fall through to env
-  }
 
-  const { user, pass, host, port, from, to } = env.email;
-  if (!user || !pass || user.startsWith('your_') || pass.startsWith('your_')) {
-    return null;
-  }
-  return {
-    host,
-    port,
-    secure: port === 465,
-    user,
-    pass,
-    from: from || user,
-    adminTo: to || user,
-    fromName: "Kadamba's Designer Studio",
-  };
+    const { user, pass, host, port, from, to } = env.email;
+    if (!user || !pass || user.startsWith('your_') || pass.startsWith('your_')) {
+      return null;
+    }
+    return {
+      host,
+      port,
+      secure: port === 465,
+      user,
+      pass,
+      from: from || user,
+      adminTo: to || user,
+      fromName: "Kadamba's Designer Studio",
+    };
+  });
 }
 
 export async function sendTestEmail(to?: string): Promise<{ sent: boolean; to: string }> {

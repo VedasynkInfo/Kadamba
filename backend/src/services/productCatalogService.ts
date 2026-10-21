@@ -15,6 +15,7 @@ import { ApiError } from '../utils/ApiError';
 import { searchRegex } from '../utils/query';
 import { slugify, uniqueSlug } from '../utils/slugify';
 import { toDto } from '../utils/serialize';
+import { CACHE_KEYS, CACHE_TTL, cacheKey, cached } from './cacheService';
 
 /* ------------------------------- categories ------------------------------- */
 
@@ -818,6 +819,17 @@ export async function getPublicCatalog(filters: { featured?: boolean } = {}): Pr
   categories: PublicCategoryDto[];
   products: PublicProductDto[];
 }> {
+  return cached(
+    cacheKey(CACHE_KEYS.cmsCatalog, 'public', filters.featured),
+    CACHE_TTL.cmsMs,
+    () => queryPublicCatalog(filters),
+  );
+}
+
+async function queryPublicCatalog(filters: { featured?: boolean }): Promise<{
+  categories: PublicCategoryDto[];
+  products: PublicProductDto[];
+}> {
   const categories = await ProductCategory.find({ active: true }).sort({ sortOrder: 1, name: 1 });
   const categoryIds = categories.map((category) => category._id);
 
@@ -842,6 +854,14 @@ export async function getPublicCatalog(filters: { featured?: boolean } = {}): Pr
 }
 
 export async function getPublicProduct(slug: string): Promise<PublicProductDto | null> {
+  return cached(
+    cacheKey(CACHE_KEYS.cmsCatalog, 'product', slug),
+    CACHE_TTL.cmsMs,
+    () => queryPublicProduct(slug),
+  );
+}
+
+async function queryPublicProduct(slug: string): Promise<PublicProductDto | null> {
   const normalized = slugify(slug);
 
   const direct = await ProductType.findOne({ slug: normalized, active: true }).populate(

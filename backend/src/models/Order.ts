@@ -1,3 +1,4 @@
+import './cacheInvalidation';
 import mongoose, { Document, Schema } from 'mongoose';
 import { ORDER_STATUSES, ORDER_PRIORITIES } from '../shared/enums';
 import type { OrderStatus, OrderPriority } from '../shared/enums';

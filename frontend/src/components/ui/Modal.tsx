@@ -62,6 +62,7 @@ export function Modal({
           <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4">
             <Dialog.Content
               aria-modal="true"
+              data-lenis-prevent
               // Radix wires `aria-describedby` to Dialog.Description itself
               // when one is rendered, so there is nothing to declare here. The
               // old explicit `undefined` disabled that automatic wiring.

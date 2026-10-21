@@ -61,6 +61,7 @@ export function ImageLightbox({ open, onClose, title, image, alt }: ImageLightbo
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      data-lenis-prevent
       role="presentation"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
@@ -99,6 +100,7 @@ export function ImageLightbox({ open, onClose, title, image, alt }: ImageLightbo
           className="max-h-[80vh] w-full object-contain"
           width={1600}
           height={1200}
+          style={{ viewTransitionName: 'lightbox-media' }}
         />
       </div>
     </div>

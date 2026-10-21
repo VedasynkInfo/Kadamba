@@ -6,6 +6,7 @@ import { ContentEmpty, ContentError, ContentLoading } from '@/components/feedbac
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { usePublicContent } from '@/hooks/usePublicContent';
 import { cn } from '@/utils/cn';
+import { openWithSharedElement } from '@/utils/viewTransition';
 import {
   galleryCategories,
   getPublishedGalleryItems,
@@ -26,8 +27,7 @@ export function GalleryMasonrySection() {
   const published = useMemo(() => getPublishedGalleryItems(gallery), [gallery]);
 
   const filtered = useMemo(
-    () =>
-      filter === 'All' ? published : published.filter((item) => item.category === filter),
+    () => (filter === 'All' ? published : published.filter((item) => item.category === filter)),
     [filter, published],
   );
 
@@ -51,11 +51,7 @@ export function GalleryMasonrySection() {
           </p>
         </div>
 
-        <div
-          className="flex flex-wrap gap-2"
-          role="group"
-          aria-label="Gallery categories"
-        >
+        <div className="flex flex-wrap gap-2" role="group" aria-label="Gallery categories">
           {galleryCategories.map((category) => (
             <Button
               key={category}
@@ -88,7 +84,11 @@ export function GalleryMasonrySection() {
         <ContentEmpty
           className="mt-8"
           tone="dark"
-          title={published.length === 0 ? 'The lookbook is being updated' : 'Nothing in this category yet'}
+          title={
+            published.length === 0
+              ? 'The lookbook is being updated'
+              : 'Nothing in this category yet'
+          }
           description={
             published.length === 0
               ? 'New work is photographed and published regularly. Please check back soon.'
@@ -96,7 +96,12 @@ export function GalleryMasonrySection() {
           }
           action={
             published.length > 0 ? (
-              <Button size="sm" variant="secondary" className="text-ink-inverse" onClick={() => setFilter('All')}>
+              <Button
+                size="sm"
+                variant="secondary"
+                className="text-ink-inverse"
+                onClick={() => setFilter('All')}
+              >
                 Show everything
               </Button>
             ) : undefined
@@ -112,7 +117,12 @@ export function GalleryMasonrySection() {
                 item={item}
                 index={index}
                 reduced={reduced}
-                onOpen={() => setActiveIndex(index)}
+                onOpen={(element) =>
+                  openWithSharedElement(element, () => setActiveIndex(index), {
+                    name: 'gallery-lightbox-media',
+                    enabled: !reduced && item.mediaType !== 'video',
+                  })
+                }
               />
             ))}
           </AnimatePresence>
@@ -138,7 +148,7 @@ function MasonryTile({
   item: GalleryItem;
   index: number;
   reduced: boolean;
-  onOpen: () => void;
+  onOpen: (element: HTMLElement) => void;
 }) {
   return (
     <motion.li
@@ -151,7 +161,7 @@ function MasonryTile({
     >
       <button
         type="button"
-        onClick={onOpen}
+        onClick={(event) => onOpen(event.currentTarget)}
         className={cn(
           'group relative block w-full overflow-hidden text-left',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',

@@ -16,7 +16,8 @@
     "format": "prettier --write .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check:contract": "node ../scripts/sync-shared.mjs --check"
+    "check:contract": "node ../scripts/sync-shared.mjs --check",
+    "data:backfill-product-slugs": "tsx src/scripts/backfillProductSlugs.ts"
   },
   "keywords": [
     "kadamba",

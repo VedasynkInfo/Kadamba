@@ -15,6 +15,8 @@ import { lazy } from 'react';
 export const HomePage = lazy(() => import('@/pages/home/HomePage'));
 export const AboutPage = lazy(() => import('@/pages/about/AboutPage'));
 export const ServicesPage = lazy(() => import('@/pages/services/ServicesPage'));
+export const ProductsPage = lazy(() => import('@/pages/products/ProductsPage'));
+export const ProductDetailPage = lazy(() => import('@/pages/products/ProductDetailPage'));
 export const ServiceDetailPage = lazy(() => import('@/pages/services/ServiceDetailPage'));
 export const GalleryPage = lazy(() => import('@/pages/gallery/GalleryPage'));
 export const PortfolioPage = lazy(() => import('@/pages/portfolio/PortfolioPage'));
@@ -34,7 +36,9 @@ export const PortfolioAdminPage = lazy(() => import('@/pages/admin/portfolio/Por
 export const BlogsAdminPage = lazy(() => import('@/pages/admin/blogs/BlogsAdminPage'));
 export const SettingsAdminPage = lazy(() => import('@/pages/admin/settings/SettingsAdminPage'));
 export const ProfileAdminPage = lazy(() => import('@/pages/admin/profile/ProfileAdminPage'));
-export const AdminLeadsDashboardPage = lazy(() => import('@/pages/admin/leads/AdminLeadsDashboardPage'));
+export const AdminLeadsDashboardPage = lazy(
+  () => import('@/pages/admin/leads/AdminLeadsDashboardPage'),
+);
 export const AdminLeadsListPage = lazy(() => import('@/pages/admin/leads/AdminLeadsListPage'));
 export const AdminLeadDetailPage = lazy(() => import('@/pages/admin/leads/AdminLeadDetailPage'));
 export const OrdersAdminPage = lazy(() => import('@/pages/admin/orders/OrdersAdminPage'));

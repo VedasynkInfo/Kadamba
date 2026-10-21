@@ -1,13 +1,20 @@
 import { Suspense } from 'react';
-import { Outlet } from 'react-router-dom';
+import { useOutlet } from 'react-router-dom';
 import { PublicContentProvider } from '@/hooks/usePublicContent';
 import { RouteFallback } from '@/components/layout/RouterShell';
+import { SitePreloader } from '@/components/motion/SitePreloader';
 import { Footer } from './Footer';
 import { Navbar } from './Navbar';
+import { RouteTransition } from './RouteTransition';
+import { SmoothScroll } from './SmoothScroll';
 
 export function MainLayout() {
+  const outlet = useOutlet();
+
   return (
     <PublicContentProvider>
+      <SmoothScroll />
+      <SitePreloader />
       <div className="flex min-h-screen flex-col bg-surface">
         <a
           href="#main-content"
@@ -18,7 +25,7 @@ export function MainLayout() {
         <Navbar />
         <main id="main-content" tabIndex={-1} className="flex-1">
           <Suspense fallback={<RouteFallback />}>
-            <Outlet />
+            <RouteTransition>{outlet}</RouteTransition>
           </Suspense>
         </main>
         <Footer />

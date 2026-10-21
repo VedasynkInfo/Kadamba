@@ -9,6 +9,7 @@ import {
   prefetchPublicServices,
   prefetchPublicSettings,
 } from '@/hooks/useCmsContent';
+import { prefetchPublicProduct, prefetchPublicProducts } from '@/hooks/usePublicProducts';
 import { AdminLayout } from '@/pages/admin/AdminLayout';
 import { PortalLayout } from '@/pages/portal/PortalLayout';
 import {
@@ -53,7 +54,9 @@ import {
   PortalOrdersPage,
   PortalPaymentsPage,
   PortalRequestsPage,
+  ProductDetailPage,
   ProductsAdminPage,
+  ProductsPage,
   ProfileAdminPage,
   ReportDetailPage,
   ReportsAdminPage,
@@ -86,6 +89,12 @@ const servicesLoader = () => Promise.all([prefetchPublicSettings(), prefetchPubl
 const galleryLoader = () => Promise.all([prefetchPublicSettings(), prefetchPublicGallery()]);
 const portfolioLoader = () => Promise.all([prefetchPublicSettings(), prefetchPublicPortfolio()]);
 const blogsLoader = () => Promise.all([prefetchPublicSettings(), prefetchPublicBlogs()]);
+const productsLoader = () => Promise.all([prefetchPublicSettings(), prefetchPublicProducts()]);
+const productDetailLoader = ({ params }: { params: { slug?: string } }) =>
+  Promise.all([
+    prefetchPublicSettings(),
+    params.slug ? prefetchPublicProduct(params.slug) : prefetchPublicProducts(),
+  ]);
 const settingsLoader = () => prefetchPublicSettings();
 
 /* ---------------------------------- routes --------------------------------- */
@@ -184,6 +193,8 @@ export const router = createBrowserRouter([
           { path: 'about', element: <AboutPage />, loader: settingsLoader },
           { path: 'services', element: <ServicesPage />, loader: servicesLoader },
           { path: 'services/:slug', element: <ServiceDetailPage />, loader: servicesLoader },
+          { path: 'products', element: <ProductsPage />, loader: productsLoader },
+          { path: 'products/:slug', element: <ProductDetailPage />, loader: productDetailLoader },
           { path: 'gallery', element: <GalleryPage />, loader: galleryLoader },
           { path: 'portfolio', element: <PortfolioPage />, loader: portfolioLoader },
           { path: 'portfolio/:slug', element: <PortfolioDetailPage />, loader: portfolioLoader },

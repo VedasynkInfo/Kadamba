@@ -23,14 +23,7 @@ export interface DrawerProps {
  * hand-rolled. As with `Modal`, focus restore is ours because the controlled
  * `open` prop has no `Dialog.Trigger` to return to.
  */
-export function Drawer({
-  open,
-  onClose,
-  title,
-  children,
-  side = 'right',
-  className,
-}: DrawerProps) {
+export function Drawer({ open, onClose, title, children, side = 'right', className }: DrawerProps) {
   const previouslyFocused = useRef<HTMLElement | null>(null);
 
   return (
@@ -45,6 +38,7 @@ export function Drawer({
           <Dialog.Overlay className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm" />
           <Dialog.Content
             aria-modal="true"
+            data-lenis-prevent
             // Radix fires this just before it moves focus into the drawer, so
             // the active element here is still the opener we must return to.
             onOpenAutoFocus={() => {
@@ -62,7 +56,9 @@ export function Drawer({
             )}
           >
             <div className="flex items-center justify-between border-b border-line px-5 py-4">
-              <Dialog.Title className="font-heading text-xl text-brand-strong">{title}</Dialog.Title>
+              <Dialog.Title className="font-heading text-xl text-brand-strong">
+                {title}
+              </Dialog.Title>
               <Dialog.Close asChild>
                 <Button
                   variant="ghost"

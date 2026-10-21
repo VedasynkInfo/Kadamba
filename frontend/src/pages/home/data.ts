@@ -1,6 +1,8 @@
 export interface HeroSlide {
   id: string;
   image: string;
+  /** Optional cinematic loop. `image` is the poster and reduced-motion fallback. */
+  video?: string;
   alt: string;
   headline: string;
   copy: string;
@@ -77,32 +79,24 @@ export const brand = {
 
 /** Fashion / bridal placeholders until gallery API is wired. */
 const img = {
-  bridal:
-    '/media/placeholders/bridal.jpg',
-  lehenga:
-    '/media/placeholders/lehenga.jpg',
-  saree:
-    '/media/placeholders/saree.jpg',
-  fabric:
-    '/media/placeholders/fabric.jpg',
-  stitching:
-    '/media/placeholders/stitching.jpg',
-  jewelry:
-    '/media/placeholders/jewelry.jpg',
-  boutique:
-    '/media/placeholders/boutique.jpg',
-  detail:
-    '/media/placeholders/fabric.jpg',
-  embroidery:
-    '/media/placeholders/embroidery.jpg',
+  bridal: '/media/placeholders/bridal.jpg',
+  lehenga: '/media/placeholders/lehenga.jpg',
+  saree: '/media/placeholders/saree.jpg',
+  fabric: '/media/placeholders/fabric.jpg',
+  stitching: '/media/placeholders/stitching.jpg',
+  jewelry: '/media/placeholders/jewelry.jpg',
+  boutique: '/media/placeholders/boutique.jpg',
+  detail: '/media/placeholders/fabric.jpg',
+  embroidery: '/media/placeholders/embroidery.jpg',
 };
 
 export const heroSlides: HeroSlide[] = [
   {
     id: 'h1',
     image: img.bridal,
+    video: '/media/hero-atelier.mp4',
     alt: 'Bridal attire with rich traditional detailing',
-    headline: "Designer Studio · Kurnool",
+    headline: 'Designer Studio · Kurnool',
     copy: "A trusted local boutique and tailoring house for women's traditional and bridal wear.",
   },
   {
@@ -230,7 +224,8 @@ export const whyChooseUs = [
   {
     id: 'w3',
     title: 'True custom tailoring',
-    description: 'Measurements, trials, and finishing handled in-house for a confident personal fit.',
+    description:
+      'Measurements, trials, and finishing handled in-house for a confident personal fit.',
   },
 ];
 
@@ -239,7 +234,8 @@ export const processSteps: ProcessStep[] = [
     id: 'p1',
     step: '01',
     title: 'Enquire',
-    description: 'Request a consultation online or visit the Kurnool boutique with your occasion in mind.',
+    description:
+      'Request a consultation online or visit the Kurnool boutique with your occasion in mind.',
   },
   {
     id: 'p2',

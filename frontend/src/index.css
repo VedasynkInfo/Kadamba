@@ -337,6 +337,78 @@ body {
   }
 }
 
+@keyframes route-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* The public route entrance. See `RouteTransition`. */
+.route-enter {
+  animation: route-enter 0.45s var(--ease-luxury) both;
+}
+
+/*
+ * A link whose underline grows from the start rather than appearing all at
+ * once. The background is the current text colour, so it follows the theme.
+ */
+.link-sweep {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition:
+    background-size 0.3s var(--ease-luxury),
+    color 0.2s ease;
+}
+.link-sweep:hover,
+.link-sweep:focus-visible {
+  background-size: 100% 1px;
+}
+
+/*
+ * Lenis adds these classes to the document. Its scroll must be authoritative,
+ * so the native `scroll-behavior` above is disabled only while it is active.
+ */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.is-preloading,
+.is-preloading body {
+  overflow: hidden;
+}
+
+/*
+ * Native View Transitions, used by React Router's `viewTransition` links where
+ * supported. Browsers without the API simply run `.route-enter`.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) {
+    animation: fade-out 0.2s ease both;
+  }
+  ::view-transition-new(root) {
+    animation: route-enter 0.35s var(--ease-luxury) both;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
 @keyframes fade-in-up {
   from {
     opacity: 0;
@@ -447,29 +519,53 @@ body {
 }
 
 .stagger-rows > tr:nth-child(1),
-.stagger-items > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-items > *:nth-child(1) {
+  animation-delay: 0ms;
+}
 .stagger-rows > tr:nth-child(2),
-.stagger-items > *:nth-child(2) { animation-delay: 20ms; }
+.stagger-items > *:nth-child(2) {
+  animation-delay: 20ms;
+}
 .stagger-rows > tr:nth-child(3),
-.stagger-items > *:nth-child(3) { animation-delay: 40ms; }
+.stagger-items > *:nth-child(3) {
+  animation-delay: 40ms;
+}
 .stagger-rows > tr:nth-child(4),
-.stagger-items > *:nth-child(4) { animation-delay: 60ms; }
+.stagger-items > *:nth-child(4) {
+  animation-delay: 60ms;
+}
 .stagger-rows > tr:nth-child(5),
-.stagger-items > *:nth-child(5) { animation-delay: 80ms; }
+.stagger-items > *:nth-child(5) {
+  animation-delay: 80ms;
+}
 .stagger-rows > tr:nth-child(6),
-.stagger-items > *:nth-child(6) { animation-delay: 100ms; }
+.stagger-items > *:nth-child(6) {
+  animation-delay: 100ms;
+}
 .stagger-rows > tr:nth-child(7),
-.stagger-items > *:nth-child(7) { animation-delay: 120ms; }
+.stagger-items > *:nth-child(7) {
+  animation-delay: 120ms;
+}
 .stagger-rows > tr:nth-child(8),
-.stagger-items > *:nth-child(8) { animation-delay: 140ms; }
+.stagger-items > *:nth-child(8) {
+  animation-delay: 140ms;
+}
 .stagger-rows > tr:nth-child(9),
-.stagger-items > *:nth-child(9) { animation-delay: 160ms; }
+.stagger-items > *:nth-child(9) {
+  animation-delay: 160ms;
+}
 .stagger-rows > tr:nth-child(10),
-.stagger-items > *:nth-child(10) { animation-delay: 180ms; }
+.stagger-items > *:nth-child(10) {
+  animation-delay: 180ms;
+}
 .stagger-rows > tr:nth-child(11),
-.stagger-items > *:nth-child(11) { animation-delay: 200ms; }
+.stagger-items > *:nth-child(11) {
+  animation-delay: 200ms;
+}
 .stagger-rows > tr:nth-child(n + 12),
-.stagger-items > *:nth-child(n + 12) { animation-delay: 220ms; }
+.stagger-items > *:nth-child(n + 12) {
+  animation-delay: 220ms;
+}
 
 /*
   Reduced motion.
@@ -484,6 +580,7 @@ body {
   .animate-fade-in-up,
   .animate-spring-in,
   .animate-toast-in,
+  .route-enter,
   .stagger-rows > tr,
   .stagger-items > * {
     animation: none !important;

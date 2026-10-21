@@ -106,3 +106,25 @@ export const seedCatalogHandler = asyncHandler(async (req: Request, res: Respons
     data: results,
   });
 });
+
+/* ----------------------------- public storefront ---------------------------- */
+
+export const getPublicCatalogHandler = asyncHandler(async (_req: Request, res: Response) => {
+  const catalog = await catalogService.getPublicCatalog();
+  res.status(200).json({
+    success: true,
+    data: catalog,
+  });
+});
+
+export const getPublicProductHandler = asyncHandler(async (req: Request, res: Response) => {
+  const product = await catalogService.getPublicProduct(String(req.params.slug));
+  if (!product) {
+    res.status(404).json({ success: false, message: 'Product not found' });
+    return;
+  }
+  res.status(200).json({
+    success: true,
+    data: product,
+  });
+});

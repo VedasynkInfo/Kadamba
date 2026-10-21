@@ -1,6 +1,5 @@
-import { motion } from 'framer-motion';
 import { Section, SectionIntro } from '@/components/ui';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 import type { PortfolioProject } from '../data';
 
 interface PortfolioStorySectionProps {
@@ -9,28 +8,36 @@ interface PortfolioStorySectionProps {
 
 /**
  * Project narrative — one job: tell the atelier story.
+ *
+ * ScrollTrigger gives the three paragraphs a shared cadence; a framer
+ * `whileInView` on the wrapper could only move them as one block.
  */
 export function PortfolioStorySection({ project }: PortfolioStorySectionProps) {
-  const reduced = usePrefersReducedMotion();
+  const revealRef = useScrollReveal<HTMLDivElement>({ y: 22, stagger: 0.1 });
 
   return (
     <Section tone="light" className="py-16 md:py-24">
-      <motion.div
-        initial={reduced ? false : { opacity: 0, y: 18 }}
-        whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-8%' }}
-        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-      >
-        <SectionIntro title="The story" description={project.summary} />
+      <div ref={revealRef}>
+        <div data-reveal>
+          <SectionIntro title="The story" description={project.summary} />
+        </div>
         <div className="mt-10 max-w-2xl space-y-5">
           {project.story.map((paragraph) => (
-            <p key={paragraph.slice(0, 24)} className="text-base leading-relaxed text-ink/75 md:text-lg">
+            <p
+              key={paragraph.slice(0, 24)}
+              data-reveal
+              className="text-base leading-relaxed text-ink/75 md:text-lg"
+            >
               {paragraph}
             </p>
           ))}
         </div>
         {project.tags.length > 0 ? (
-          <ul className="mt-10 flex list-none flex-wrap gap-2" aria-label="Project tags">
+          <ul
+            className="mt-10 flex list-none flex-wrap gap-2"
+            aria-label="Project tags"
+            data-reveal
+          >
             {project.tags.map((tag) => (
               <li
                 key={tag}
@@ -41,7 +48,7 @@ export function PortfolioStorySection({ project }: PortfolioStorySectionProps) {
             ))}
           </ul>
         ) : null}
-      </motion.div>
+      </div>
     </Section>
   );
 }

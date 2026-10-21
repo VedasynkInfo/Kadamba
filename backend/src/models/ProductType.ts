@@ -2,6 +2,8 @@ import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IProductType extends Document {
   code: string;
+  /** Public, human-readable URL segment (`/products/:slug`). */
+  slug?: string;
   name: string;
   categoryId: mongoose.Types.ObjectId;
   description?: string;
@@ -24,7 +26,19 @@ const productTypeSchema = new Schema<IProductType>(
       unique: true,
       trim: true,
       uppercase: true,
-      match: [/^[A-Z0-9-]+$/, 'Product type code can only contain uppercase alphanumeric characters and dashes'],
+      match: [
+        /^[A-Z0-9-]+$/,
+        'Product type code can only contain uppercase alphanumeric characters and dashes',
+      ],
+    },
+    slug: {
+      type: String,
+      trim: true,
+      lowercase: true,
+      maxlength: 100,
+      // Sparse keeps documents created before Phase 8 valid while the new
+      // public route backfills them lazily.
+      index: { unique: true, sparse: true },
     },
     name: {
       type: String,
@@ -73,7 +87,7 @@ const productTypeSchema = new Schema<IProductType>(
       trim: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 productTypeSchema.index({ categoryId: 1, active: -1 });

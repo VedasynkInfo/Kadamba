@@ -24,7 +24,7 @@ export function CountUp({ value, duration = 0.9, format, className }: CountUpPro
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: '-10% 0px' });
   const reducedMotion = usePrefersReducedMotion();
-  const motionValue = useMotionValue(0);
+  const motionValue = useMotionValue(reducedMotion ? value : 0);
 
   const text = useTransform(motionValue, (latest) => {
     const rounded = Math.round(latest);

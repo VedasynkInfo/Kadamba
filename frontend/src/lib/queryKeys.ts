@@ -40,6 +40,8 @@ export const qk = {
     portfolio: (filters: QueryFilters = {}) => ['public-content', 'portfolio', filters] as const,
     blogs: (filters: QueryFilters = {}) => ['public-content', 'blogs', filters] as const,
     settings: () => ['public-content', 'settings'] as const,
+    products: () => ['public-content', 'products', 'list'] as const,
+    product: (slug: string) => ['public-content', 'products', 'detail', slug] as const,
   },
 
   /** CMS collections as managed from the admin console. */

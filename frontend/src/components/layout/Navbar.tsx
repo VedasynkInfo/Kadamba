@@ -10,6 +10,7 @@ const links = [
   { to: '/', label: 'Home' },
   { to: '/about', label: 'About' },
   { to: '/services', label: 'Services' },
+  { to: '/products', label: 'Collections' },
   { to: '/gallery', label: 'Gallery' },
   { to: '/portfolio', label: 'Portfolio' },
   { to: '/blogs', label: 'Blogs' },
@@ -47,6 +48,7 @@ export function Navbar() {
         >
           <NavLink
             to="/"
+            viewTransition
             className="flex items-center gap-2 font-heading text-xl tracking-wide text-gold transition-opacity hover:opacity-90"
           >
             {activeLogo ? (
@@ -62,14 +64,15 @@ export function Navbar() {
             )}
           </NavLink>
 
-          <ul className="hidden flex-wrap items-center gap-5 text-sm lg:flex">
+          <ul className="hidden flex-wrap items-center gap-4 text-sm lg:flex">
             {links.map((link) => (
               <li key={link.to}>
                 <NavLink
                   to={link.to}
+                  viewTransition
                   className={({ isActive }) =>
                     cn(
-                      'transition-colors duration-200',
+                      'link-sweep transition-colors duration-200',
                       isActive ? 'text-gold' : 'text-ink-inverse/80 hover:text-gold',
                     )
                   }
@@ -98,6 +101,7 @@ export function Navbar() {
             <li key={link.to}>
               <NavLink
                 to={link.to}
+                viewTransition
                 onClick={() => setMenuOpen(false)}
                 className={({ isActive }) =>
                   cn(

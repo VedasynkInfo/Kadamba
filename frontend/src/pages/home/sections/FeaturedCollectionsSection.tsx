@@ -4,13 +4,11 @@ import { OptimizedImage } from '@/components/media/OptimizedImage';
 import { Icon } from '@/components/icons';
 import { Button, Section, SectionIntro } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 import { fadeUp, staggerChildren } from '@/motion/variants';
 import { cn } from '@/utils/cn';
-import {
-  collectionCategories,
-  collections,
-  type CollectionItem,
-} from '../data';
+import { openWithSharedElement } from '@/utils/viewTransition';
+import { collectionCategories, collections, type CollectionItem } from '../data';
 import { ImageLightbox } from './ImageLightbox';
 
 /**
@@ -18,14 +16,14 @@ import { ImageLightbox } from './ImageLightbox';
  */
 export function FeaturedCollectionsSection() {
   const reduced = usePrefersReducedMotion();
+  const revealRef = useScrollReveal<HTMLDivElement>({ y: 28, stagger: 0.12 });
   const [filter, setFilter] = useState<(typeof collectionCategories)[number]>('All');
   const [active, setActive] = useState<CollectionItem | null>(null);
   const [featuredIndex, setFeaturedIndex] = useState(0);
   const [paused, setPaused] = useState(false);
 
   const filtered = useMemo(
-    () =>
-      filter === 'All' ? collections : collections.filter((c) => c.category === filter),
+    () => (filter === 'All' ? collections : collections.filter((c) => c.category === filter)),
     [filter],
   );
 
@@ -46,179 +44,196 @@ export function FeaturedCollectionsSection() {
 
   return (
     <Section tone="dark" className="overflow-hidden py-16 md:py-24">
-      <SectionIntro
-        tone="dark"
-        title="Featured collections"
-        description="Bridal, traditional, festive, and tailored looks from our Kurnool boutique — filter by occasion."
-        actions={
-          <div className="flex flex-wrap gap-2" role="group" aria-label="Collection categories">
-            {collectionCategories.map((category) => (
-              <Button
-                key={category}
-                size="sm"
-                variant={filter === category ? 'primary' : 'secondary'}
-                className={cn(
-                  'min-h-10',
-                  filter !== category && 'text-ink-inverse hover:border-gold hover:text-gold',
-                )}
-                onClick={() => setFilter(category)}
-                aria-pressed={filter === category}
-              >
-                {category}
-              </Button>
-            ))}
-          </div>
-        }
-      />
+      <div ref={revealRef}>
+        <div data-reveal>
+          <SectionIntro
+            tone="dark"
+            title="Featured collections"
+            description="Bridal, traditional, festive, and tailored looks from our Kurnool boutique — filter by occasion."
+            actions={
+              <div className="flex flex-wrap gap-2" role="group" aria-label="Collection categories">
+                {collectionCategories.map((category) => (
+                  <Button
+                    key={category}
+                    size="sm"
+                    variant={filter === category ? 'primary' : 'secondary'}
+                    className={cn(
+                      'min-h-10',
+                      filter !== category && 'text-ink-inverse hover:border-gold hover:text-gold',
+                    )}
+                    onClick={() => setFilter(category)}
+                    aria-pressed={filter === category}
+                  >
+                    {category}
+                  </Button>
+                ))}
+              </div>
+            }
+          />
+        </div>
 
-      {featured ? (
-        <div
-          className="relative mt-10"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-          onFocusCapture={() => setPaused(true)}
-          onBlurCapture={(e) => {
-            if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setPaused(false);
-          }}
-        >
+        {featured ? (
           <div
-            className="relative aspect-[16/11] w-full overflow-hidden sm:aspect-[21/10] md:aspect-[21/9]"
-            aria-roledescription="carousel"
-            aria-label="Featured collection highlight"
+            className="relative mt-10"
+            data-reveal
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+            onFocusCapture={() => setPaused(true)}
+            onBlurCapture={(e) => {
+              if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setPaused(false);
+            }}
           >
-            <AnimatePresence mode="wait">
-              <motion.button
-                key={featured.id}
-                type="button"
-                className="absolute inset-0 block w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus"
-                onClick={() => setActive(featured)}
-                initial={reduced ? false : { opacity: 0, scale: 1.04 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={reduced ? undefined : { opacity: 0 }}
-                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            <div
+              className="relative aspect-[16/11] w-full overflow-hidden sm:aspect-[21/10] md:aspect-[21/9]"
+              aria-roledescription="carousel"
+              aria-label="Featured collection highlight"
+            >
+              <AnimatePresence mode="wait">
+                <motion.button
+                  key={featured.id}
+                  type="button"
+                  className="absolute inset-0 block w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus"
+                  onClick={(event) =>
+                    openWithSharedElement(event.currentTarget, () => setActive(featured), {
+                      enabled: !reduced,
+                    })
+                  }
+                  initial={reduced ? false : { opacity: 0, scale: 1.04 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={reduced ? undefined : { opacity: 0 }}
+                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <OptimizedImage
+                    sizes="(min-width: 1200px) 1104px, 100vw"
+                    src={featured.image}
+                    alt={featured.alt}
+                    className="h-full w-full object-cover"
+                    width={1600}
+                    height={720}
+                    priority
+                  />
+                  <div
+                    className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent"
+                    aria-hidden
+                  />
+                  <div className="absolute inset-x-0 bottom-0 flex flex-col gap-2 p-5 sm:flex-row sm:items-end sm:justify-between sm:p-8">
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.2em] text-gold">
+                        {featured.category}
+                      </p>
+                      <p className="mt-2 font-heading text-2xl text-ink-inverse sm:text-3xl md:text-4xl">
+                        {featured.title}
+                      </p>
+                    </div>
+                    <span className="inline-flex items-center gap-1 text-sm text-ink-inverse/80">
+                      Open preview
+                      <Icon name="arrowRight" size={14} />
+                    </span>
+                  </div>
+                </motion.button>
+              </AnimatePresence>
+            </div>
+
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex flex-wrap gap-2" role="tablist" aria-label="Featured slides">
+                {filtered.map((item, i) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={i === featuredIndex}
+                    aria-label={`Show ${item.title}`}
+                    onClick={() => setFeaturedIndex(i)}
+                    className={cn(
+                      'h-1.5 rounded-full transition-all duration-300',
+                      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
+                      i === featuredIndex
+                        ? 'w-8 bg-gold'
+                        : 'w-2.5 bg-ink-inverse/30 hover:bg-ink-inverse/50',
+                    )}
+                  />
+                ))}
+              </div>
+              <div className="flex gap-2">
+                <ControlButton
+                  label="Previous featured collection"
+                  onClick={() => setFeaturedIndex((i) => (i === 0 ? filtered.length - 1 : i - 1))}
+                  direction="left"
+                />
+                <ControlButton
+                  label="Next featured collection"
+                  onClick={() => setFeaturedIndex((i) => (i + 1) % filtered.length)}
+                  direction="right"
+                />
+              </div>
+            </div>
+          </div>
+        ) : null}
+
+        <motion.ul
+          layout
+          className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4"
+          variants={reduced ? undefined : staggerChildren}
+          initial={reduced ? false : 'hidden'}
+          whileInView={reduced ? undefined : 'visible'}
+          viewport={{ once: true, amount: 0.12 }}
+        >
+          <AnimatePresence mode="popLayout">
+            {gridItems.map((item, index) => (
+              <motion.li
+                key={item.id}
+                layout
+                variants={reduced ? undefined : fadeUp}
+                initial={reduced ? false : { opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={reduced ? undefined : { opacity: 0, scale: 0.96 }}
+                transition={{ duration: reduced ? 0 : 0.4 }}
+                className={cn(
+                  index === 0 && 'sm:col-span-2 sm:row-span-1 lg:col-span-1 lg:row-span-2',
+                )}
               >
-                <OptimizedImage
-                  sizes="(min-width: 1200px) 1104px, 100vw"
-                  src={featured.image}
-                  alt={featured.alt}
-                  className="h-full w-full object-cover"
-                  width={1600}
-                  height={720}
-                  priority
-                />
-                <div
-                  className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent"
-                  aria-hidden
-                />
-                <div className="absolute inset-x-0 bottom-0 flex flex-col gap-2 p-5 sm:flex-row sm:items-end sm:justify-between sm:p-8">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.2em] text-gold">{featured.category}</p>
-                    <p className="mt-2 font-heading text-2xl text-ink-inverse sm:text-3xl md:text-4xl">
-                      {featured.title}
+                <button
+                  type="button"
+                  className={cn(
+                    'group relative block w-full overflow-hidden text-left',
+                    'aspect-[4/3] lg:aspect-auto lg:h-full lg:min-h-[220px]',
+                    index === 0 && 'lg:min-h-[460px]',
+                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
+                  )}
+                  onClick={(event) =>
+                    openWithSharedElement(event.currentTarget, () => setActive(item), {
+                      enabled: !reduced,
+                    })
+                  }
+                >
+                  <OptimizedImage
+                    sizes="(min-width: 1200px) 368px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    src={item.image}
+                    alt={item.alt}
+                    className="h-full w-full object-cover transition-transform duration-700 ease-luxury group-hover:scale-110 group-focus-visible:scale-105"
+                    width={900}
+                    height={700}
+                  />
+                  <div
+                    className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-100"
+                    aria-hidden
+                  />
+                  <div className="absolute inset-x-0 bottom-0 translate-y-1 p-4 transition-transform duration-300 group-hover:translate-y-0 sm:p-5">
+                    <p className="font-heading text-lg text-ink-inverse sm:text-xl">{item.title}</p>
+                    <p className="mt-1 text-xs uppercase tracking-[0.18em] text-gold">
+                      {item.category}
                     </p>
                   </div>
-                  <span className="inline-flex items-center gap-1 text-sm text-ink-inverse/80">
-                    Open preview
-                    <Icon name="arrowRight" size={14} />
-                  </span>
-                </div>
-              </motion.button>
-            </AnimatePresence>
-          </div>
-
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-            <div className="flex flex-wrap gap-2" role="tablist" aria-label="Featured slides">
-              {filtered.map((item, i) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  role="tab"
-                  aria-selected={i === featuredIndex}
-                  aria-label={`Show ${item.title}`}
-                  onClick={() => setFeaturedIndex(i)}
-                  className={cn(
-                    'h-1.5 rounded-full transition-all duration-300',
-                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
-                    i === featuredIndex ? 'w-8 bg-gold' : 'w-2.5 bg-ink-inverse/30 hover:bg-ink-inverse/50',
-                  )}
-                />
-              ))}
-            </div>
-            <div className="flex gap-2">
-              <ControlButton
-                label="Previous featured collection"
-                onClick={() =>
-                  setFeaturedIndex((i) => (i === 0 ? filtered.length - 1 : i - 1))
-                }
-                direction="left"
-              />
-              <ControlButton
-                label="Next featured collection"
-                onClick={() => setFeaturedIndex((i) => (i + 1) % filtered.length)}
-                direction="right"
-              />
-            </div>
-          </div>
-        </div>
-      ) : null}
-
-      <motion.ul
-        layout
-        className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4"
-        variants={reduced ? undefined : staggerChildren}
-        initial={reduced ? false : 'hidden'}
-        whileInView={reduced ? undefined : 'visible'}
-        viewport={{ once: true, amount: 0.12 }}
-      >
-        <AnimatePresence mode="popLayout">
-          {gridItems.map((item, index) => (
-            <motion.li
-              key={item.id}
-              layout
-              variants={reduced ? undefined : fadeUp}
-              initial={reduced ? false : { opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96 }}
-              transition={{ duration: 0.4 }}
-              className={cn(
-                index === 0 && 'sm:col-span-2 sm:row-span-1 lg:col-span-1 lg:row-span-2',
-              )}
-            >
-              <button
-                type="button"
-                className={cn(
-                  'group relative block w-full overflow-hidden text-left',
-                  'aspect-[4/3] lg:aspect-auto lg:h-full lg:min-h-[220px]',
-                  index === 0 && 'lg:min-h-[460px]',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
-                )}
-                onClick={() => setActive(item)}
-              >
-                <OptimizedImage
-                  sizes="(min-width: 1200px) 368px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                  src={item.image}
-                  alt={item.alt}
-                  className="h-full w-full object-cover transition-transform duration-700 ease-luxury group-hover:scale-110 group-focus-visible:scale-105"
-                  width={900}
-                  height={700}
-                />
-                <div
-                  className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-100"
-                  aria-hidden
-                />
-                <div className="absolute inset-x-0 bottom-0 translate-y-1 p-4 transition-transform duration-300 group-hover:translate-y-0 sm:p-5">
-                  <p className="font-heading text-lg text-ink-inverse sm:text-xl">{item.title}</p>
-                  <p className="mt-1 text-xs uppercase tracking-[0.18em] text-gold">{item.category}</p>
-                </div>
-                <span
-                  className="pointer-events-none absolute inset-0 border border-transparent transition-colors duration-300 group-hover:border-gold/50"
-                  aria-hidden
-                />
-              </button>
-            </motion.li>
-          ))}
-        </AnimatePresence>
-      </motion.ul>
+                  <span
+                    className="pointer-events-none absolute inset-0 border border-transparent transition-colors duration-300 group-hover:border-gold/50"
+                    aria-hidden
+                  />
+                </button>
+              </motion.li>
+            ))}
+          </AnimatePresence>
+        </motion.ul>
+      </div>
 
       <ImageLightbox
         open={Boolean(active)}

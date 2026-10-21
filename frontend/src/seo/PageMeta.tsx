@@ -8,7 +8,7 @@ import {
   DEFAULT_OG_IMAGE,
   resolveSeoFromSettings,
 } from './site';
-import type { SeoMeta } from './pageMeta';
+import type { SeoMeta } from './staticPageMeta';
 
 export type PageMetaProps = SeoMeta;
 
@@ -27,15 +27,11 @@ export function PageMeta({
   titleAbsolute = false,
 }: PageMetaProps) {
   const publicContent = usePublicContentOptional();
-  const seo = publicContent
-    ? resolveSeoFromSettings(publicContent.settings.seo)
-    : undefined;
+  const seo = publicContent ? resolveSeoFromSettings(publicContent.settings.seo) : undefined;
 
   const siteName: string = seo?.siteName || SITE_NAME;
   const fullTitle =
-    titleAbsolute && title
-      ? title
-      : seo?.formatTitle(title) || pageTitle(title, siteName);
+    titleAbsolute && title ? title : seo?.formatTitle(title) || pageTitle(title, siteName);
   const desc = description || seo?.defaultDescription || defaultDescription;
   const canonical = absoluteUrl(path);
   const ogImage = absoluteUrl(image || seo?.defaultOgImage || DEFAULT_OG_IMAGE);
@@ -61,12 +57,8 @@ export function PageMeta({
       <meta name="twitter:description" content={desc} />
       <meta name="twitter:image" content={ogImage} />
 
-      {publishedTime ? (
-        <meta property="article:published_time" content={publishedTime} />
-      ) : null}
-      {modifiedTime ? (
-        <meta property="article:modified_time" content={modifiedTime} />
-      ) : null}
+      {publishedTime ? <meta property="article:published_time" content={publishedTime} /> : null}
+      {modifiedTime ? <meta property="article:modified_time" content={modifiedTime} /> : null}
     </Helmet>
   );
 }

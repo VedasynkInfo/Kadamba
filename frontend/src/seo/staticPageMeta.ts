@@ -31,6 +31,11 @@ export const staticPageMeta = {
     path: '/services',
     description: `Bridal wear, traditional ethnic, custom tailoring, and boutique styling at ${brand.name}, ${brand.location}.`,
   },
+  products: {
+    title: 'Collections',
+    path: '/products',
+    description: `Explore bridal lehengas, designer blouses, kurtis, gowns, and custom tailoring from ${brand.name} in ${brand.location}.`,
+  },
   gallery: {
     title: 'Gallery',
     path: '/gallery',

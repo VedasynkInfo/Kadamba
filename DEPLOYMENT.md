@@ -101,13 +101,21 @@ Set in Vercel → Project → **Settings → Environment Variables** (Production
    ```
 6. **Render (frontend Static Site)**
    - Root Directory: `frontend`
-   - Build: `npm ci && npm run build` (or `npm install && npm run build`)
+   - Build: `npm ci && npm run build:prerender` (or `npm install && npm run build:prerender`)
    - Publish: `dist`
-   - Env (must redeploy after changing — Vite bakes these in):
+   - Env (must redeploy after changing - Vite bakes these in):
      - `VITE_API_URL=https://kadamba-api.onrender.com/api`
      - `VITE_SITE_URL=https://kadamba-3lc7.onrender.com`
      - `VITE_APP_NAME=Kadamba's Designer Studio`
-   - Add SPA rewrite: `/*` → `/index.html`
+     - `PRERENDER_API_URL=https://kadamba-api.onrender.com` (origin only; the script proxies `/api` and `/uploads`)
+   - Add SPA rewrite: `/*` → `/index.html`. The rewrite must serve an existing
+     `dist/<route>/index.html` before falling back to the shell; otherwise the
+     prerendered files are ignored.
+   - `build:prerender` is best-effort. If Chromium is unavailable or the API is
+     asleep, it warns and leaves the normal client-rendered build in place.
+   - After the first deploy with a seeded catalogue, run
+     `npm run data:backfill-product-slugs` in `backend/` once so existing
+     ProductType records have canonical `/products/:slug` URLs.
 7. **CORS check**
    - Backend `FRONTEND_URL` must exactly match the browser origin (scheme + host, no path/slash).
    - Open the site, DevTools → Network: API calls should succeed with no CORS errors.
@@ -127,7 +135,9 @@ Set in Vercel → Project → **Settings → Environment Variables** (Production
 ## 6. Post-deploy QA checklist
 
 - [ ] `/api/health/ready` returns 200 on Render
-- [ ] Public pages load: `/`, `/about`, `/services`, `/gallery`, `/portfolio`, `/blogs`, `/contact`
+- [ ] Public pages load: `/`, `/about`, `/services`, `/products`, `/gallery`, `/portfolio`, `/blogs`, `/contact`
+- [ ] A product detail opens at `/products/:slug` and its JSON-LD is present in page source
+- [ ] `sitemap.xml` includes `/products` and the published product slugs
 - [ ] Unknown URL shows the branded 404
 - [ ] Admin login works with the seeded account; `/admin` redirects to login when logged out
 - [ ] Contact form submits and a notification email arrives

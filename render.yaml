@@ -32,11 +32,11 @@ services:
         value: info
       # PORT is provided automatically by Render.
       - key: FRONTEND_URL
-        sync: false          # e.g. https://kadamba-3lc7.onrender.com
+        sync: false # e.g. https://kadamba-3lc7.onrender.com
       - key: MONGODB_URI
-        sync: false          # MongoDB Atlas SRV connection string
+        sync: false # MongoDB Atlas SRV connection string
       - key: JWT_SECRET
-        generateValue: true  # Render generates a strong secret
+        generateValue: true # Render generates a strong secret
       # Short-lived access token; the httpOnly refresh cookie renews it.
       - key: JWT_EXPIRES_IN
         value: 15m
@@ -54,7 +54,7 @@ services:
       - key: LOCKOUT_MINUTES
         value: "15"
       - key: REQUIRE_ADMIN_MFA
-        value: "false"       # flip to true only after the admin has enrolled
+        value: "false" # flip to true only after the admin has enrolled
       - key: UPLOAD_STORAGE
         value: local
       # Persistent Disk mount (see `disk:` above). Uploads — originals and the
@@ -80,18 +80,20 @@ services:
       # First-admin bootstrap. Fill these in the dashboard, deploy, open the
       # Render Shell and run `npm run seed:admin`, then delete them again.
       - key: ADMIN_NAME
-        sync: false          # e.g. Studio Admin
+        sync: false # e.g. Studio Admin
       - key: ADMIN_EMAIL
-        sync: false          # e.g. admin@kadambastudio.com
+        sync: false # e.g. admin@kadambastudio.com
       - key: ADMIN_PASSWORD
-        sync: false          # strong password, >= 8 chars
+        sync: false # strong password, >= 8 chars
 
   # Frontend SPA — rewrite all paths to index.html so /admin/login etc. work.
   - type: web
     name: kadamba
     runtime: static
     rootDir: frontend
-    buildCommand: npm install && npm run build
+    # `build:prerender` falls back to the normal client-rendered build when the
+    # API is asleep or Chromium is unavailable, so it is safe as the default.
+    buildCommand: npm install && npm run build:prerender
     staticPublishPath: dist
     autoDeploy: true
     routes:
@@ -107,8 +109,10 @@ services:
         value: no-cache
     envVars:
       - key: VITE_API_URL
-        sync: false          # https://kadamba-api.onrender.com/api
+        sync: false # https://kadamba-api.onrender.com/api
+      - key: PRERENDER_API_URL
+        sync: false # origin only: https://kadamba-api.onrender.com
       - key: VITE_SITE_URL
-        sync: false          # https://kadamba-3lc7.onrender.com
+        sync: false # https://kadamba-3lc7.onrender.com
       - key: VITE_APP_NAME
         value: "Kadamba's Designer Studio"

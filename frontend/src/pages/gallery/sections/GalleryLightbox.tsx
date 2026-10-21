@@ -15,12 +15,7 @@ export interface GalleryLightboxProps {
 /**
  * Fullscreen gallery viewer — keyboard nav, image + video.
  */
-export function GalleryLightbox({
-  items,
-  activeIndex,
-  onClose,
-  onNavigate,
-}: GalleryLightboxProps) {
+export function GalleryLightbox({ items, activeIndex, onClose, onNavigate }: GalleryLightboxProps) {
   const titleId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
   const open = activeIndex !== null;
@@ -59,6 +54,7 @@ export function GalleryLightbox({
       {open && item ? (
         <motion.div
           className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6"
+          data-lenis-prevent
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
@@ -126,6 +122,7 @@ export function GalleryLightbox({
                   className="max-h-[78vh] w-full object-contain"
                   width={item.width}
                   height={item.height}
+                  style={{ viewTransitionName: 'gallery-lightbox-media' }}
                 />
               )}
             </div>

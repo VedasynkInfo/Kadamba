@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
+import { ClipReveal } from '@/components/motion/ClipReveal';
 import { Button, Input, Section, SectionIntro } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { usePublicContent } from '@/hooks/usePublicContent';
@@ -69,12 +70,7 @@ export function PortfolioCatalogSection() {
       </div>
 
       {loading ? (
-        <ContentLoading
-          className="mt-12"
-          count={6}
-          columns={3}
-          label="Loading portfolio"
-        />
+        <ContentLoading className="mt-12" count={6} columns={3} label="Loading portfolio" />
       ) : error ? (
         <ContentError className="mt-12" error={error} onRetry={refresh} />
       ) : portfolio.length === 0 ? (
@@ -125,13 +121,7 @@ export function PortfolioCatalogSection() {
   );
 }
 
-function ProjectTile({
-  project,
-  onOpen,
-}: {
-  project: PortfolioProject;
-  onOpen: () => void;
-}) {
+function ProjectTile({ project, onOpen }: { project: PortfolioProject; onOpen: () => void }) {
   return (
     <button
       type="button"
@@ -141,7 +131,7 @@ function ProjectTile({
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-cream',
       )}
     >
-      <div className="relative aspect-[3/4] overflow-hidden bg-surface-sunken">
+      <ClipReveal className="relative aspect-[3/4] bg-surface-sunken">
         <OptimizedImage
           sizes="(min-width: 1200px) 368px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
           src={project.coverImage}
@@ -157,7 +147,7 @@ function ProjectTile({
         <span className="absolute bottom-4 left-4 font-heading text-[0.65rem] uppercase tracking-[0.28em] text-gold">
           {project.category}
         </span>
-      </div>
+      </ClipReveal>
       <p className="mt-4 text-[0.65rem] uppercase tracking-[0.22em] text-ink/70">
         {project.year} · {project.location}
       </p>

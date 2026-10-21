@@ -7,6 +7,7 @@ import { OptimizedImage } from '@/components/media/OptimizedImage';
 const footerLinks = [
   { to: '/about', label: 'About' },
   { to: '/services', label: 'Services' },
+  { to: '/products', label: 'Collections' },
   { to: '/gallery', label: 'Gallery' },
   { to: '/portfolio', label: 'Portfolio' },
   { to: '/blogs', label: 'Blogs' },
@@ -41,9 +42,7 @@ export function Footer() {
                 className="mb-3 h-10 w-auto object-contain"
               />
             ) : null}
-            <p className="font-heading text-2xl text-gold">
-              {settings.studioName || brand.name}
-            </p>
+            <p className="font-heading text-2xl text-gold">{settings.studioName || brand.name}</p>
             <p className="mt-3 text-measure text-sm leading-relaxed text-ink-inverse/70">
               {settings.tagline || brand.summary}
             </p>
@@ -52,9 +51,7 @@ export function Footer() {
                 <p key={line}>{line}</p>
               ))}
               {settings.landmark || settings.locality ? (
-                <p>
-                  {[settings.landmark, settings.locality].filter(Boolean).join(' · ')}
-                </p>
+                <p>{[settings.landmark, settings.locality].filter(Boolean).join(' · ')}</p>
               ) : null}
               {(settings.city || settings.state || settings.pincode) &&
               !settings.addressLines.some((l) => l.includes(settings.city || '')) ? (
@@ -69,7 +66,10 @@ export function Footer() {
               </p>
               {settings.phoneAltDisplay ? (
                 <p>
-                  <a href={`tel:${settings.phoneAltTel || settings.phoneAltDisplay}`} className="transition hover:text-gold">
+                  <a
+                    href={`tel:${settings.phoneAltTel || settings.phoneAltDisplay}`}
+                    className="transition hover:text-gold"
+                  >
                     {settings.phoneAltDisplay}
                   </a>
                 </p>
@@ -102,7 +102,8 @@ export function Footer() {
                 <li key={link.to}>
                   <NavLink
                     to={link.to}
-                    className="text-ink-inverse/70 transition-colors hover:text-gold"
+                    viewTransition
+                    className="link-sweep text-ink-inverse/70 transition-colors hover:text-gold"
                   >
                     {link.label}
                   </NavLink>

@@ -405,17 +405,63 @@
 
 | # | Task | Status |
 |---|------|--------|
-| 8.1 | GSAP ScrollTrigger storytelling (timeline, collections, portfolio) | ⬜ |
-| 8.2 | Lenis smooth scroll (reduced-motion aware) | ⬜ |
-| 8.3 | Route transitions (`AnimatePresence` / view-transition API) | ⬜ |
-| 8.4 | Layered parallax hero + char-reveal + preloader | ⬜ |
-| 8.5 | Magnetic buttons, link sweeps, clip-path image reveals | ⬜ |
-| 8.6 | Rich media: video hero, lightbox shared-element, before/after inertia | ⬜ |
-| 8.7 | Scroll-velocity marquee + unified counters | ⬜ |
-| 8.8 | Public `/products` + `/products/:slug` from ProductType | ⬜ |
-| 8.9 | Prerender public routes; Product/LocalBusiness/FAQ structured data | ⬜ |
+| 8.1 | GSAP ScrollTrigger storytelling (timeline, collections, portfolio) | ✅ |
+| 8.2 | Lenis smooth scroll (reduced-motion aware) | ✅ |
+| 8.3 | Route transitions (`AnimatePresence` / view-transition API) | ✅ |
+| 8.4 | Layered parallax hero + char-reveal + preloader | ✅ |
+| 8.5 | Magnetic buttons, link sweeps, clip-path image reveals | ✅ |
+| 8.6 | Rich media: video hero, lightbox shared-element, before/after inertia | ✅ |
+| 8.7 | Scroll-velocity marquee + unified counters | ✅ |
+| 8.8 | Public `/products` + `/products/:slug` from ProductType | ✅ |
+| 8.9 | Prerender public routes; Product/LocalBusiness/FAQ structured data | ✅ |
 
-**Gate:** Lighthouse Perf/SEO/A11y ≥95; LCP <1.8s; INP <200ms; CLS <0.05; 60fps mid-range Android.
+**Gate:** Lighthouse Perf/SEO/A11y ≥95; LCP <1.8s; INP <200ms; CLS <0.05; 60fps mid-range Android. Build, type and unit gates are green; Lighthouse must be re-measured on a deployment with a live API and seeded catalogue (the local prerender path needs both).
+
+**8.1 - GSAP, but only where the scroll is the story**
+- `motion/gsap.ts` is the single registration point for `ScrollTrigger`; `hooks/useScrollReveal` scopes animations with `gsap.context()` and reverts them, so route changes and StrictMode cannot leave orphaned triggers.
+- The process timeline now draws its connective line while the four stages arrive in sequence - one shared scroll position rather than four independent `whileInView` guesses. Collections and portfolio stories use the same primitive for their entrance cadence.
+- Reduced motion returns the unanimated tree. Nothing is hidden first and then revealed by a hook that might not run.
+
+**8.2 - Lenis is a public-site decision**
+- `layout/SmoothScroll` mounts only inside `MainLayout`, so the admin console and customer portal keep direct, precise scrolling for tables, boards and forms.
+- The wheel easing is disabled entirely under reduced motion. Dialogs, drawers and both lightboxes carry `data-lenis-prevent` (plus a `[role="dialog"]` fallback), so an open overlay owns its own scroll.
+- `html.lenis` gets the small CSS reset Lenis requires; the native `scroll-behavior` is authoritative again the moment it unmounts.
+
+**8.3 - route transitions without owning the outlet**
+- Navigation links use React Router's `viewTransition` prop, which gives supporting browsers a native old/new snapshot without the router having to keep both routes mounted.
+- A keyed `.route-enter` fade/rise is the fallback for every other browser. Both paths collapse under `prefers-reduced-motion`.
+
+**8.4 - depth, type, and one short curtain**
+- The hero photograph moves on a slower scroll transform than the copy, with a second gold-glow layer and a small pointer drift on fine pointers. The image is pre-scaled so parallax cannot expose an edge.
+- `SplitText` animates characters but keeps the sentence as the heading's accessible name; it is decorative inside an already-labelled `<h1>`.
+- `SitePreloader` is capped at 700ms, appears once per session, and is skipped for reduced motion. It covers font/theme settling without delaying first content.
+
+**8.5 - small, deliberate interaction primitives**
+- `Magnetic` is pointer-only and does not clone or re-wrap the action, so keyboard semantics stay unchanged.
+- `ClipReveal` uncovers an image with `clip-path` instead of fading a card; it is used by portfolio tiles, product cards and the product banner.
+- `.link-sweep` grows an underline from the start on nav/footer links, in the current text colour, so it follows a studio theme.
+
+**8.6 - rich media that still has a fallback**
+- The first hero slide has a 202 kB, six-second H.264 loop (`public/media/hero-atelier.mp4`) generated from the bridal still. The poster image remains the reduced-motion and failed-video fallback; the video is muted, looping, inline, metadata-preload and decorative.
+- Collection, marquee and gallery lightboxes share an element with their thumbnail through the View Transitions API (`utils/viewTransition`); unsupported browsers simply open the overlay.
+- The before/after comparison is a draggable divider with `dragMomentum`, keyboard arrows and a 0-100 accessible slider value. Reduced motion shows both photographs side by side.
+
+**8.7 - the ribbon is attached to the page**
+- The marquee reads scroll delta, briefly multiplies its `timeScale` (capped at 4x) and eases back after 160ms of quiet. It no longer runs on an unrelated 40-second clock.
+- Home statistics and About achievements now use the shared `CountUp`; the two bespoke counter implementations are gone.
+
+**8.8 - the workshop catalogue becomes a storefront**
+- `GET /api/products` returns only active categories and products; `GET /api/products/:slug` resolves by canonical slug, computed slug, or workshop code. Neither route sits behind the admin router's blanket authentication.
+- `ProductType.slug` is unique and sparse. New/renamed records derive a slug from the garment name (not the workshop code), and `npm run data:backfill-product-slugs` fills older documents. Public reads also backfill lazily, so deploying does not need a migration window.
+- `/products` filters by category from the API; `/products/:slug` shows the piece, price range, process stages, FAQ, related pieces and consultation CTA. Both receive loaders that prefetch settings and catalogue data and are linked from the navbar, footer and sitemap.
+- Public DTOs deliberately omit measurement-template codes and inactive records.
+
+**8.9 - crawlable, even before hydration**
+- `productJsonLd`, `faqJsonLd` and `itemListJsonLd` join the existing LocalBusiness/Service/Article helpers. Product pages emit Product + FAQ, the index emits ItemList, and the detail copy is the same copy rendered in the DOM.
+- `frontend/scripts/prerender.mjs` runs the built SPA in Chromium against a local static server, proxies `/api`/`/uploads` to `PRERENDER_API_URL`, enumerates service/portfolio/blog/product slugs from the API, writes `dist/<route>/index.html`, and regenerates a route-complete `sitemap.xml`. It is best-effort: no API, no Chromium, or a sleeping API leaves the normal client-rendered build untouched and exits successfully.
+- Enable it in deployment with `PRERENDER_API_URL=https://kadamba-api.onrender.com npm run build:prerender`. Static hosts must serve the generated directory indexes before the SPA rewrite.
+
+**Verification:** frontend `tsc -b`, Vitest (218 tests), Vite build and backend `tsc --noEmit`, Vitest (116 tests) all pass; `check:tokens` and `check:emoji` remain at their zero baselines. The prerenderer was exercised against a mock API: it wrote all static routes plus a Product/FAQ detail page and regenerated `sitemap.xml`.
 
 ---
 

@@ -33,6 +33,7 @@ export { Alert, type AlertProps, type AlertTone } from './Alert';
 export { StatCard, type StatCardProps } from './StatCard';
 export { Tabs, type TabsProps, type Tab } from './Tabs';
 export { TabStrip, type TabStripProps, type TabStripItem } from './TabStrip';
+export { Sparkline, type SparklineProps } from './Sparkline';
 export {
   DropdownMenu,
   DropdownMenuTrigger,

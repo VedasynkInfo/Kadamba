@@ -17,6 +17,7 @@ export interface DashboardSummaryDto {
     revenueMtd: number | null;
     outstandingBalance: number | null;
     pendingMeasurementApprovals: number;
+    overdueOrders: number;
   };
   series: {
     leadsByMonth: Array<{ month: string; count: number }>;
@@ -195,9 +196,18 @@ export async function getDashboardSummary(from?: string, to?: string): Promise<D
     expectedDeliveryAt: o.expectedDeliveryAt ? o.expectedDeliveryAt.toISOString() : undefined,
   }));
 
-  const pendingMeasurementApprovals = await MeasurementProfile.countDocuments({
-    status: 'pending_approval',
-  });
+  // A count, not a sample: `actionOrders` is capped at five, so counting
+  // overdue orders out of that array would report the size of the queue only
+  // while the queue is small.
+  const [pendingMeasurementApprovals, overdueOrders] = await Promise.all([
+    MeasurementProfile.countDocuments({
+      status: 'pending_approval',
+    }),
+    Order.countDocuments({
+      status: { $nin: ['delivery', 'cancelled'] },
+      expectedDeliveryAt: { $lt: new Date() },
+    }),
+  ]);
 
   return {
     range: {
@@ -212,6 +222,7 @@ export async function getDashboardSummary(from?: string, to?: string): Promise<D
       revenueMtd,
       outstandingBalance,
       pendingMeasurementApprovals,
+      overdueOrders,
     },
     series: {
       leadsByMonth,

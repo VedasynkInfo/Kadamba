@@ -307,7 +307,7 @@
 | 7.3 | Motion language (row stagger, count-up, spring modals, tab indicators) | ✅ |
 | 7.4 | **Order Kanban pipeline** (dnd-kit, optimistic + audit) | ✅ |
 | 7.5 | Data table upgrade (sticky, bulk actions, virtualised, saved filters) | ⬜ |
-| 7.6 | Real dashboard (metrics, sparklines, needs-action queue) | ⬜ |
+| 7.6 | Real dashboard (metrics, sparklines, needs-action queue) | ✅ |
 | 7.7 | react-hook-form + zod; multi-step New Order wizard | ⬜ |
 | 7.8 | Sonner toasts, conflict alerts, error boundary | ✅ |
 | 7.9 | AA+ contrast + keyboard audit | ⬜ |
@@ -353,6 +353,19 @@
 - **Cancelling, pausing and reworking ask for a reason**, because the audit trail should say *why*, not just *that*. The reason travels with the transition and lands in the audit row the API writes.
 - Every move is a status change, and every status change is written to the audit log by the API: dragging a card is a recorded act, not a visual trick.
 - dnd-kit gives each card a transform while it is held, so the card follows the pointer without the board re-rendering on every move.
+
+**7.6 — the real dashboard**
+- A dashboard of totals answers *how is the studio doing*. It does not answer *what do I do next*, and that is the question someone opens the console with. The desk now has a **Needs attention** rail: overdue orders, fits waiting for approval, unanswered enquiries, outstanding balance — the queues where a person, not a machine, is the blocker.
+- Only queues with something in them appear. Four zeroes are not a to-do list; an empty rail says the studio is clear, once.
+- **The ordering is urgency, not size.** Sorting the rail by its numbers would compare two overdue orders with three fit approvals and ₹1,00,000 of balance as if they shared a unit. The priority is fixed and the rows say why they are in that order: a broken delivery promise, then work that cannot start, then a client waiting, then money owed.
+- **`overdueOrders` is a server count.** The first cut filtered `actionOrders`, which is capped at five and sorted by delivery date — so the metric would have read "5" forever once a backlog existed. The summary endpoint now counts open orders (`not delivered`, `not cancelled`) whose `expectedDeliveryAt` has passed, and `on_hold` still counts because a paused order is still a promise. The backend test seeds overdue, upcoming, delivered, cancelled and paused orders and asserts the count is two.
+- **`deliverablesDue` is not in the rail.** It counts every open order that has a delivery date, which is a plan, not a wait. The stat card keeps it as context ("N with delivery dates"); a queue that includes the whole workshop is not a queue.
+- **Sparklines are drawn, not charted.** `ui/Sparkline` is thirty pixels of path in a 100×26 viewBox — a charting library would bring axes, a responsive container and a layout pass to render a decoration for a figure that is already on the page. The stroke uses `non-scaling-stroke`, so stretching the line to any card width does not thicken it, and it is `aria-hidden` because the number it decorates is right above it.
+- The trend colour is read from the series (`utils/trend`), not supplied by each call site: up is emerald, down is rose, flat is brand. A 2% deadband keeps a flat month with a rupee of rounding from claiming a trend.
+- **Only real time series get a sparkline.** Open leads and revenue have monthly series; Active Orders and Pending Fits are snapshots, and a by-status distribution is not a trend — an earlier cut drew one under Active Orders anyway, which would have been a lie drawn in a straight line. Those two cards keep their numbers and their subs.
+- Numeric `StatCard` values now arrive through the 7.3 `CountUp` (once, in view, reduced-motion aware). String values — "₹1,23,456" — are printed exactly as given, because a currency string with its own formatting should not be re-parsed to be animated.
+- The attention rail and the production queue share the right-hand column. Dropped in as a fourth child of a three-column grid, the queue wrapped onto an orphan row; the rail is one column, stacked, and the page keeps its 2 + 1 shape.
+- The queue is a pure function (`pages/admin/dashboard/attentionQueue`) so it can be tested without rendering Recharts: the tests cover empty queues, dropped zeroes, priority order, the server-count rule and Indian money grouping. `Sparkline` and `StatCard` carry their own tests, and `src/test/setup.ts` gained the `IntersectionObserver` stub that `useInView` needs in jsdom.
 
 
 ---

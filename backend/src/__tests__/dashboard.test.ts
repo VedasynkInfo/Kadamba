@@ -1,8 +1,10 @@
 import request from 'supertest';
 import { describe, expect, it } from 'vitest';
+import { Types } from 'mongoose';
 import { createApp } from '../app';
 import { registerAdminAndGetToken } from './helpers/auth';
 import { Lead } from '../models/Lead';
+import { Order, type OrderStatus } from '../models/Order';
 
 const app = createApp();
 
@@ -104,6 +106,7 @@ describe('admin dashboard API', () => {
     // Orders/revenue metrics (0 when no finance/order seed data in this test)
     expect(data.metrics.ordersActive).toBe(0);
     expect(data.metrics.revenueMtd).toBe(0);
+    expect(data.metrics.overdueOrders).toBe(0);
     
     // Verify recent leads contains the latest leads (latest first)
     expect(data.recentLeads.length).toBe(4);
@@ -120,6 +123,39 @@ describe('admin dashboard API', () => {
     // Verify monthly lead trends
     const trends = data.series.leadsByMonth;
     expect(trends.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('counts overdue orders without counting delivered, cancelled or future ones', async () => {
+    const token = await registerAdminAndGetToken(app);
+    const customerId = new Types.ObjectId();
+    const yesterday = new Date(Date.now() - 86_400_000);
+    const tomorrow = new Date(Date.now() + 86_400_000);
+    const lineItems = [{ name: 'Bridal blouse', qty: 1 }];
+
+    const order = (orderNumber: number, status: OrderStatus, expectedDeliveryAt: Date) => ({
+      orderNumber,
+      customerId,
+      title: `Order ${orderNumber}`,
+      status,
+      expectedDeliveryAt,
+      lineItems,
+    });
+
+    await Order.create([
+      order(9001, 'stitching', yesterday),
+      order(9002, 'stitching', tomorrow),
+      order(9003, 'delivery', yesterday),
+      order(9004, 'cancelled', yesterday),
+      // A paused order is still a promise to the client, so it still counts.
+      order(9005, 'on_hold', yesterday),
+    ]);
+
+    const res = await request(app)
+      .get('/api/admin/dashboard/summary')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body.data.metrics.overdueOrders).toBe(2);
   });
 
   it('filters dashboard metrics correctly by from/to parameters', async () => {

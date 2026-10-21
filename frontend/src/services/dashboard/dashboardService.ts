@@ -14,7 +14,8 @@ export interface DashboardSummary {
     deliverablesDue: number | null;
     revenueMtd: number | null;
     outstandingBalance: number | null;
-    pendingMeasurementApprovals?: number;
+    pendingMeasurementApprovals: number;
+    overdueOrders: number;
   };
   series: {
     leadsByMonth: Array<{ month: string; count: number }>;

@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Icon, type GlyphName } from '@/components/icons';
+import { CountUp } from '@/components/motion/CountUp';
+import { Sparkline } from '@/components/ui/Sparkline';
 import { cn } from '@/utils/cn';
 
 export interface StatCardProps {
@@ -10,6 +12,8 @@ export interface StatCardProps {
   tone?: 'default' | 'success' | 'warning' | 'danger';
   className?: string;
   icon?: GlyphName;
+  /** The recent shape of the figure, drawn under it. */
+  sparkline?: number[];
 }
 
 export function StatCard({
@@ -20,6 +24,7 @@ export function StatCard({
   tone = 'default',
   className,
   icon,
+  sparkline,
 }: StatCardProps) {
   const toneClasses = {
     default: 'text-inherit',
@@ -51,12 +56,17 @@ export function StatCard({
         ) : null}
       </div>
       <p className={cn('mt-2 text-2xl font-extrabold tracking-tight sm:text-3xl', toneClasses)}>
-        {value}
+        {typeof value === 'number' ? <CountUp value={value} /> : value}
       </p>
       {sub ? (
         <p className="mt-1.5 text-xs opacity-60 truncate">
           {sub}
         </p>
+      ) : null}
+      {sparkline && sparkline.length > 1 ? (
+        <div className="mt-3 -mb-1">
+          <Sparkline values={sparkline} />
+        </div>
       ) : null}
     </div>
   );

@@ -11,6 +11,7 @@ import { useAdminNotifyOptional } from '@/hooks/useAdminNotifySocket';
 import { Icon, type GlyphName } from '@/components/icons';
 import { Spinner, Button, StatCard, StatusBadge, Table, type Column } from '@/components/ui';
 import { cn } from '@/utils/cn';
+import { buildAttentionQueue, formatAttentionValue } from './dashboard/attentionQueue';
 import { CHART_COLORS, CHART_REVENUE } from '@/theme/palettes';
 
 const QUICK_ACTIONS: { to: string; icon: GlyphName; label: string }[] = [
@@ -70,6 +71,8 @@ export default function AdminDashboardPage() {
   }, [notify]);
 
   const recentLeads = summary?.recentLeads || [];
+
+  const attention = summary ? buildAttentionQueue(summary) : [];
 
   const columns: Column<any>[] = [
     {
@@ -160,6 +163,7 @@ export default function AdminDashboardPage() {
                 href="/admin/leads/list"
                 sub={`${summary.metrics.enquiriesPending} pending review`}
                 icon="leads"
+                sparkline={summary.series.leadsByMonth.map((point) => point.count)}
               />
               <StatCard
                 label="Active Orders"
@@ -175,6 +179,7 @@ export default function AdminDashboardPage() {
                 sub={`Balance ₹${Math.round(summary.metrics.outstandingBalance ?? 0).toLocaleString('en-IN')}`}
                 icon="revenue"
                 tone="success"
+                sparkline={summary.series.revenueByMonth.map((point) => point.amount)}
               />
               <StatCard
                 label="Pending Fits"
@@ -359,7 +364,7 @@ export default function AdminDashboardPage() {
               </div>
             </div>
 
-            {/* Bottom Section: Recent Consultations & Production Queue */}
+            {/* Bottom Section: Recent Consultations & the right-hand rail */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
               <div className="lg:col-span-2 space-y-3">
                 <div className="flex items-center justify-between">
@@ -384,47 +389,95 @@ export default function AdminDashboardPage() {
                 />
               </div>
 
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-sm font-semibold tracking-wide text-inherit">Production Queue</h3>
-                    <p className="text-[11px] opacity-60">Upcoming trials & client handovers</p>
+              <div className="space-y-6">
+                <div className="rounded-2xl border p-5 shadow-xs transition-colors bg-surface-raised border-line text-ink-raised">
+                  <div className="mb-3 flex items-center justify-between gap-3">
+                    <div>
+                      <h3 className="text-sm font-semibold tracking-wide text-inherit">
+                        Needs attention
+                      </h3>
+                      <p className="text-[11px] opacity-60">
+                        What is waiting on a person, not on a machine
+                      </p>
+                    </div>
+                    {attention.length > 0 ? (
+                      <span className="shrink-0 rounded-md bg-rose-500/15 px-2 py-0.5 text-[0.65rem] font-bold uppercase text-rose-400">
+                        {attention.length} waiting
+                      </span>
+                    ) : null}
                   </div>
-                  <Link
-                    to="/admin/orders"
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:underline"
-                  >
-                    Orders
-                    <Icon name="arrowRight" size={14} />
-                  </Link>
+
+                  {attention.length === 0 ? (
+                    <p className="py-6 text-center text-xs opacity-50">
+                      Nothing is waiting. The studio is clear.
+                    </p>
+                  ) : (
+                    <ul className="divide-y divide-current/[0.06]">
+                      {attention.map((item) => (
+                        <li key={item.id}>
+                          <Link
+                            to={item.to}
+                            className="flex items-center gap-3 py-2.5 transition hover:bg-current/[0.03]"
+                          >
+                            <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-current/[0.06] text-ink/60">
+                              <Icon name={item.icon} size={14} />
+                            </span>
+                            <span className="flex-1 truncate text-xs font-semibold">
+                              {item.label}
+                            </span>
+                            <span className="text-sm font-bold tabular-nums">
+                              {formatAttentionValue(item)}
+                            </span>
+                            <Icon name="arrowRight" size={14} className="opacity-40" />
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
 
-                <ul
-                  className="divide-y rounded-xl border overflow-hidden shadow-xs bg-surface-raised border-line text-ink-raised"
-                >
-                  {(summary.actionOrders || []).length === 0 ? (
-                    <li className="px-4 py-8 text-center text-xs opacity-50">No open orders with delivery dates.</li>
-                  ) : (
-                    (summary.actionOrders || []).map((o) => (
-                      <li
-                        key={o.id}
-                        className="transition hover:bg-current/[0.04] border-line"
-                      >
-                        <Link to={`/admin/orders/${o.id}`} className="block px-4 py-3 text-inherit">
-                          <p className="font-semibold text-inherit text-xs truncate">{o.title}</p>
-                          <p className="mt-0.5 text-[10px] opacity-60">
-                            #{o.orderNumber} · {o.customerName}
-                          </p>
-                          {o.expectedDeliveryAt ? (
-                            <span className="mt-1.5 inline-block rounded bg-brand/15 px-1.5 py-0.5 text-[10px] font-medium text-brand">
-                              Due {new Date(o.expectedDeliveryAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
-                            </span>
-                          ) : null}
-                        </Link>
-                      </li>
-                    ))
-                  )}
-                </ul>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-sm font-semibold tracking-wide text-inherit">Production Queue</h3>
+                      <p className="text-[11px] opacity-60">Upcoming trials & client handovers</p>
+                    </div>
+                    <Link
+                      to="/admin/orders"
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:underline"
+                    >
+                      Orders
+                      <Icon name="arrowRight" size={14} />
+                    </Link>
+                  </div>
+
+                  <ul
+                    className="divide-y rounded-xl border overflow-hidden shadow-xs bg-surface-raised border-line text-ink-raised"
+                  >
+                    {(summary.actionOrders || []).length === 0 ? (
+                      <li className="px-4 py-8 text-center text-xs opacity-50">No open orders with delivery dates.</li>
+                    ) : (
+                      (summary.actionOrders || []).map((o) => (
+                        <li
+                          key={o.id}
+                          className="transition hover:bg-current/[0.04] border-line"
+                        >
+                          <Link to={`/admin/orders/${o.id}`} className="block px-4 py-3 text-inherit">
+                            <p className="font-semibold text-inherit text-xs truncate">{o.title}</p>
+                            <p className="mt-0.5 text-[10px] opacity-60">
+                              #{o.orderNumber} · {o.customerName}
+                            </p>
+                            {o.expectedDeliveryAt ? (
+                              <span className="mt-1.5 inline-block rounded bg-brand/15 px-1.5 py-0.5 text-[10px] font-medium text-brand">
+                                Due {new Date(o.expectedDeliveryAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
+                              </span>
+                            ) : null}
+                          </Link>
+                        </li>
+                      ))
+                    )}
+                  </ul>
+                </div>
               </div>
             </div>
           </div>

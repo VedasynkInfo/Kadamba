@@ -85,7 +85,29 @@ const DEFAULT_SETTINGS = {
 
 export type SettingsDto = Record<string, unknown> & { id?: string };
 
+/**
+ * Fields the schema marks as required.
+ *
+ * A row written by an older version of the app — or by a partial write that
+ * only set the section being edited — is missing some of them. Filling them
+ * in here means the document can still be saved, instead of failing
+ * validation on every read and taking the whole settings desk (and the
+ * public site, which reads it) down with it.
+ */
+const REQUIRED_FIELDS = [
+  'studioName',
+  'location',
+  'phoneDisplay',
+  'phoneTel',
+  'email',
+] as const;
+
 function ensureDefaults(doc: IWebsiteSettings): IWebsiteSettings {
+  for (const field of REQUIRED_FIELDS) {
+    if (!doc[field]) {
+      (doc as unknown as Record<string, unknown>)[field] = DEFAULT_SETTINGS[field];
+    }
+  }
   if (!doc.shortName) doc.shortName = DEFAULT_SETTINGS.shortName;
   if (!doc.tagline) doc.tagline = DEFAULT_SETTINGS.tagline;
   if (!doc.seo?.siteName) {
@@ -141,7 +163,13 @@ async function getOrCreateDoc(): Promise<IWebsiteSettings> {
     theme: doc.theme?.primary,
   });
   if (before !== after) {
-    await doc.save();
+    try {
+      await doc.save();
+    } catch (error) {
+      // A read must not fail because the row cannot be written back. The
+      // in-memory document is still complete enough to serve.
+      logger.warn({ err: error }, 'Could not persist the settings defaults');
+    }
   }
   return doc;
 }

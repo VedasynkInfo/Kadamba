@@ -42,11 +42,11 @@ export async function listTemplates(query: Record<string, unknown>) {
 
   const q = searchRegex(typeof query.q === 'string' ? query.q : undefined);
   if (q) {
-    filter.$or = [
-      { code: { $regex: q, $options: 'i' } },
-      { name: { $regex: q, $options: 'i' } },
-      { description: { $regex: q, $options: 'i' } },
-    ];
+    // The regex is passed as-is: `searchRegex` already carries the
+    // case-insensitive flag, and adding `$options` alongside a RegExp makes
+    // MongoDB reject the query with "options set in both $regex and
+    // $options".
+    filter.$or = [{ code: q }, { name: q }, { description: q }];
   }
 
   const sort: Record<string, 1 | -1> =

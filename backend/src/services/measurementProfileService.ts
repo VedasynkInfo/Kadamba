@@ -59,10 +59,11 @@ export async function listProfiles(query: Record<string, unknown>) {
 
   const q = searchRegex(typeof query.q === 'string' ? query.q : undefined);
   if (q) {
-    filter.$or = [
-      { profileName: { $regex: q, $options: 'i' } },
-      { 'values.*': { $regex: q, $options: 'i' } },
-    ];
+    // The regex is passed as-is: `searchRegex` already carries the
+    // case-insensitive flag, and adding `$options` alongside a RegExp makes
+    // MongoDB reject the query with "options set in both $regex and
+    // $options".
+    filter.$or = [{ profileName: q }, { notes: q }];
   }
 
   const sort: Record<string, 1 | -1> =
@@ -187,9 +188,17 @@ export async function getProfileHistory(id: string) {
   const existing = await findByIdOrThrow(id);
   return {
     profile: serialize(existing),
+    // Version entries are embedded documents without their own `_id`, so they
+    // are identified by their position in the history rather than by a key.
+    // They must be converted with `toObject()`: spreading a Mongoose
+    // sub-document yields its internals, not its fields.
     versions: existing.versions.map((v) => {
-      const r = v as unknown as Record<string, unknown>;
-      return { ...r, id: String(r._id || '') };
+      const doc = v as unknown as {
+        toObject?: () => Record<string, unknown>;
+      };
+      return doc.toObject
+        ? doc.toObject()
+        : ({ ...(v as unknown as Record<string, unknown>) } as Record<string, unknown>);
     }),
   };
 }

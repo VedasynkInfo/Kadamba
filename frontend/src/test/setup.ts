@@ -6,6 +6,17 @@
  * stubs are the smallest thing that satisfies them: they never fire, and
  * nothing in the suite depends on a real measurement.
  */
+import { cleanup } from '@testing-library/react';
+import '@testing-library/jest-dom/vitest';
+import { afterEach } from 'vitest';
+
+// The suite does not run with `globals: true`, so Testing Library's automatic
+// cleanup (which hooks the global `afterEach`) never registers. Without this,
+// one test's rendered tree stays in the document and the next test finds two
+// elements where it expected one.
+afterEach(() => {
+  cleanup();
+});
 
 class ResizeObserverStub {
   observe() {}

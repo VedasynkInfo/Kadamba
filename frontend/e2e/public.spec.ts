@@ -25,8 +25,12 @@ test.describe('public site smoke', () => {
     // Keyboard tab focus is a desktop concern; mobile devices have no Tab key.
     test.skip(testInfo.project.name !== 'desktop-chromium', 'desktop-only keyboard flow');
     await page.goto('/');
+    // The home route waits on its content loader before it renders, so the
+    // skip link is not in the DOM yet when `goto` resolves.
+    const skipLink = page.getByRole('link', { name: /skip to content/i });
+    await expect(skipLink).toBeAttached();
     await page.keyboard.press('Tab');
-    await expect(page.getByRole('link', { name: /skip to content/i })).toBeFocused();
+    await expect(skipLink).toBeFocused();
   });
 });
 

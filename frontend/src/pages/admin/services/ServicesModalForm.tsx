@@ -52,7 +52,7 @@ export function ServicesModalForm({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -126,8 +126,8 @@ export function ServicesModalForm({
                 <Select
                   label="Category *"
                   value={form.category}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, category: e.target.value as ServiceCategory }))
+                  onChange={(value) =>
+                    setForm((f) => ({ ...f, category: value as ServiceCategory }))
                   }
                   options={SERVICE_CATEGORIES.map((c) => ({ value: c, label: c }))}
                 />
@@ -135,8 +135,8 @@ export function ServicesModalForm({
                 <Select
                   label="Icon Motif"
                   value={form.icon}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, icon: e.target.value as ServiceIcon }))
+                  onChange={(value) =>
+                    setForm((f) => ({ ...f, icon: value as ServiceIcon }))
                   }
                   options={SERVICE_ICONS.map((ic) => ({ value: ic, label: ic }))}
                 />

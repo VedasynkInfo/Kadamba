@@ -2,7 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Icon } from '@/components/icons';
-import { Button, Select, Textarea } from '@/components/ui';
+import { Button, DateTimeField, Select, Textarea } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { cn } from '@/utils/cn';
 import { whatsappDeepLink } from '@/utils/whatsapp';
@@ -183,14 +183,14 @@ export function LeadDetailPanel({
               id="lead-status"
               label="Pipeline status"
               value={lead.status}
-              onChange={(e) => onStatus(e.target.value as LeadStatus)}
+              onChange={(value) => onStatus(value as LeadStatus)}
               options={LEAD_STATUSES.map((s) => ({ value: s, label: s }))}
             />
             <Select
               id="lead-assignee"
               label="Assigned desk"
               value={lead.assignee}
-              onChange={(e) => onAssignee(e.target.value)}
+              onChange={(value) => onAssignee(value)}
               options={leadAssignees.map((a) => ({ value: a, label: a }))}
             />
           </div>
@@ -221,22 +221,15 @@ export function LeadDetailPanel({
             <div className="mt-4 space-y-3 rounded border border-line bg-surface-raised p-3">
               <p className="text-xs font-bold uppercase tracking-wider text-ink/60">Schedule Follow-Up Touchpoint</p>
               <div className="grid gap-3 sm:grid-cols-2">
-                <input
-                  type="datetime-local"
+                <DateTimeField
                   value={followUpDate}
-                  onChange={(e) => setFollowUpDate(e.target.value)}
-                  className="rounded border border-line px-3 py-1.5 text-xs text-ink"
+                  onChange={(value) => setFollowUpDate(value)}
                 />
-                <select
+                <Select
                   value={followUpType}
-                  onChange={(e) => setFollowUpType(e.target.value as any)}
-                  className="rounded border border-line px-3 py-1.5 text-xs text-ink"
-                >
-                  <option value="call">Phone Call</option>
-                  <option value="whatsapp">WhatsApp Touchpoint</option>
-                  <option value="in_person_consultation">In-Person Consultation</option>
-                  <option value="email">Email</option>
-                </select>
+                  onChange={(value) => setFollowUpType(value as any)}
+                  options={[{ value: 'call', label: 'Phone Call' }, { value: 'whatsapp', label: 'WhatsApp Touchpoint' }, { value: 'in_person_consultation', label: 'In-Person Consultation' }, { value: 'email', label: 'Email' }]}
+                />
               </div>
               <input
                 type="text"

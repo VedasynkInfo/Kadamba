@@ -15,24 +15,27 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
+  /* Gold is the action colour across the whole product: a filled button is
+     gold with dark ink on it, which is the only pairing that stays legible
+     on the light surfaces the console and the public site now share. */
   primary:
-    'bg-[var(--color-primary)] text-[var(--color-primary-text)] border border-white/10 hover:opacity-90 shadow-sm focus-visible:ring-focus',
+    'bg-[var(--color-primary)] text-[var(--color-primary-text)] border border-black/10 hover:bg-[var(--color-primary-hover)] shadow-sm focus-visible:ring-focus',
   admin:
-    'bg-brand text-ink-on-brand border border-white/20 hover:brightness-105 shadow-sm font-semibold focus-visible:ring-focus',
+    'bg-brand text-ink-on-brand border border-black/10 hover:brightness-[0.97] shadow-sm font-semibold focus-visible:ring-focus',
   secondary:
-    'bg-transparent text-inherit border border-line hover:border-gold/50 hover:bg-surface-sunken shadow-xs',
+    'bg-surface-raised text-ink border border-line hover:border-brand/45 hover:bg-surface-sunken shadow-xs',
   danger:
-    'bg-danger/10 text-danger border border-danger/40 hover:bg-danger/20 shadow-xs',
+    'bg-danger/10 text-danger border border-danger/30 hover:bg-danger/15 shadow-xs',
   ghost:
-    'bg-transparent text-inherit hover:bg-current/[0.08] border border-transparent',
+    'bg-transparent text-ink hover:bg-current/[0.06] border border-transparent',
   luxury:
-    'bg-black text-gold border border-gold/40 hover:border-gold hover:shadow-[0_0_20px_rgba(255,215,0,0.2)] relative overflow-hidden',
+    'bg-espresso text-gold border border-gold/40 hover:border-gold hover:shadow-[0_0_20px_rgba(227,178,60,0.22)] relative overflow-hidden',
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
-  sm: 'px-3 py-1.5 text-xs rounded-md',
+  sm: 'px-3 py-1.5 text-xs rounded-lg',
   md: 'px-4 py-2 text-sm rounded-lg',
-  lg: 'px-6 py-3 text-base rounded-lg',
+  lg: 'px-6 py-2.5 text-base rounded-xl',
 };
 
 /**

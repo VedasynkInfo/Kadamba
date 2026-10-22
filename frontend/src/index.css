@@ -34,10 +34,10 @@
 @theme {
   /* ── 1. Palette (raw) ─────────────────────────────────────────────────── */
   --color-black: #000000;
-  --color-gold: #ffd700;
+  --color-gold: #e3b23c;
   --color-gold-dark: #8a6d2f;
-  --color-cream: #fffdd0;
-  --color-espresso: #0c0a08;
+  --color-cream: #fdf8ee;
+  --color-espresso: #17140f;
   --color-ember: #2a2118;
   --color-elevated: #111111;
 
@@ -48,20 +48,26 @@
   --color-surface-sunken: var(--public-surface);
   --color-surface-field: var(--public-card);
   --color-surface-inverse: var(--color-espresso);
+  /* The navigation rail. Its own pair, because the console's rail is a
+     different surface from the cards — a studio picks its own tint for it —
+     and because "inverse" already means the brand's dark, which is what a
+     dark card uses. */
+  --color-sidebar: var(--public-card);
+  --color-sidebar-ink: var(--public-text);
 
   /* Text. `ink` is "the readable colour for this shell"; `ink-inverse` is the
      readable colour for a *dark* panel (dark hero sections, the black footer).
      `ink-raised` is text on `bg-surface-raised` specifically, which is separate
-     on purpose: a studio can choose a light card inside the dark console, and
+     on purpose: a studio can choose a light card inside the console, and
      then the card's text is not the page's. */
   --color-ink: var(--public-text);
   --color-ink-raised: var(--public-card-text);
-  --color-ink-inverse: #fffdd0;
-  --color-ink-on-brand: #000000;
+  --color-ink-inverse: #fdf8ee;
+  --color-ink-on-brand: #17140f;
 
   /* Borders */
-  --color-line: color-mix(in srgb, var(--public-text) 14%, transparent);
-  --color-line-strong: color-mix(in srgb, var(--public-text) 26%, transparent);
+  --color-line: color-mix(in srgb, var(--public-text) 12%, transparent);
+  --color-line-strong: color-mix(in srgb, var(--public-text) 22%, transparent);
 
   /* Brand — the studio's accent, applied to actions and highlights. Soft tints
      are expressed as opacity on this one token (`bg-brand/10`, `border-brand/25`),
@@ -69,10 +75,10 @@
   --color-brand: var(--color-accent);
 
   /* The same accent, safe as *text*. A gold that reads on espresso is invisible
-     on cream, so text and icons use this token while filled buttons keep
+     on a light page, so text and icons use this token while filled buttons keep
      `brand`. ThemeContext recomputes it from the studio's accent and page
      background; the default is the static equivalent for first paint. */
-  --color-brand-strong: #8a6d2f;
+  --color-brand-strong: #7a5c15;
   --color-focus: var(--color-brand-strong);
 
   /* The one status tone promoted to a role. A destructive *action* has to be
@@ -80,12 +86,16 @@
      shell. The status palettes proper (the rose/emerald/amber utilities on
      alerts and badges) stay a separate axis: there, the tone is data the desk
      reads, not a decision the shell makes. */
-  --color-danger: #b91c1c;
+  --color-danger: #b42318;
 
   /* ── Typography ───────────────────────────────────────────────────────── */
-  --font-heading: 'Playfair Display', Georgia, serif;
-  --font-body: 'Manrope', 'Inter', system-ui, sans-serif;
-  --font-admin: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* One family for the whole product — the public site, the console and the
+     portal. Syne carries both the display sizes and the running text, which
+     is what makes the three shells look like one application rather than
+     three. */
+  --font-heading: 'Syne', 'Georgia', serif;
+  --font-body: 'Syne', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-admin: 'Syne', ui-sans-serif, system-ui, -apple-system, sans-serif;
 
   --text-h1: 3rem;
   --text-h2: 2.25rem;
@@ -93,12 +103,13 @@
   --text-body: 1.0625rem;
 
   /* ── Shape & elevation ────────────────────────────────────────────────── */
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 0.875rem;
 
-  --shadow-gold: 0 8px 32px rgba(255, 215, 0, 0.15);
-  --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.2);
+  --shadow-gold: 0 10px 30px rgba(179, 138, 43, 0.16);
+  --shadow-soft: 0 1px 2px rgba(23, 20, 15, 0.04), 0 8px 24px rgba(23, 20, 15, 0.06);
+  --shadow-raised: 0 1px 2px rgba(23, 20, 15, 0.05), 0 12px 32px rgba(23, 20, 15, 0.08);
 
   /* ── Readable measures (classic typography) ───────────────────────────── */
   --container-measure: 38rem;
@@ -118,25 +129,25 @@
   built from them, which is why changing the theme changes the whole app.
 */
 :root {
-  --color-primary: #000000;
-  --color-primary-hover: #1a1a1a;
-  --color-primary-text: #ffffff;
-  --color-accent: #b59410;
-  --public-bg: #fffdd0;
-  --public-text: #171717;
+  --color-primary: #b8892b;
+  --color-primary-hover: #a67a20;
+  --color-primary-text: #17140f;
+  --color-accent: #b8892b;
+  --public-bg: #faf7f1;
+  --public-text: #17140f;
   --public-card: #ffffff;
-  --public-card-text: #171717;
-  --public-surface: #fafafa;
-  --admin-bg: #0b0f17;
-  --admin-sidebar: #111827;
-  --admin-sidebar-text: #f3f4f6;
-  --admin-text: #f3f4f6;
-  --admin-card: #1f2937;
-  --admin-card-text: #f3f4f6;
-  --admin-primary: #b59410;
-  --admin-primary-text: #000000;
-  --admin-accent: #ffd700;
-  --admin-border: rgba(128, 128, 128, 0.2);
+  --public-card-text: #17140f;
+  --public-surface: #f3efe7;
+  --admin-bg: #f6f4f0;
+  --admin-text: #1b1815;
+  --admin-card: #ffffff;
+  --admin-card-text: #1b1815;
+  --admin-sidebar: #ffffff;
+  --admin-sidebar-text: #1b1815;
+  --admin-primary: #b8892b;
+  --admin-primary-text: #17140f;
+  --admin-accent: #c9a227;
+  --admin-border: rgba(27, 24, 21, 0.12);
 
   /* Value-only tokens (no utilities are generated from these) */
   --space-xs: 0.5rem;
@@ -153,29 +164,32 @@
 /*
   The console shell.
 
-  One override block, and the entire admin console inverts: every component that
-  asked for `bg-surface-raised` / `text-ink` / `border-line` gets the dark values
-  without knowing it is in the admin. This replaces the old `.admin-scope`, which
-  instead rewrote utility *classes* (`.admin-scope .text-black { … }`) and in doing
-  so made `text-black` mean "light text" inside the console — which turned every
-  light panel in the admin (`bg-cream text-black`) into light-on-cream.
+  One override block, and the entire admin console re-points its semantic
+  tokens: every component that asked for `bg-surface-raised` / `text-ink` /
+  `border-line` gets the console's values without knowing it is in the admin.
+
+  The console is light, like the public site. A dark console inside a light
+  product was the reason the two felt like separate applications; the shells
+  now differ by accent and density, not by being different products.
 */
 .admin-shell {
   --color-surface: var(--admin-bg);
   --color-surface-raised: var(--admin-card);
-  --color-surface-sunken: rgba(128, 128, 128, 0.08);
+  --color-surface-sunken: rgba(27, 24, 21, 0.035);
   --color-surface-field: var(--admin-card);
-  --color-surface-inverse: var(--admin-sidebar);
+  --color-surface-inverse: var(--color-espresso);
+  --color-sidebar: var(--admin-sidebar);
+  --color-sidebar-ink: var(--admin-sidebar-text);
   --color-ink: var(--admin-text);
   --color-ink-raised: var(--admin-card-text);
-  --color-ink-inverse: var(--admin-text);
+  --color-ink-inverse: #fdf8ee;
   --color-ink-on-brand: var(--admin-primary-text);
   --color-line: var(--admin-border);
-  --color-line-strong: rgba(128, 128, 128, 0.4);
+  --color-line-strong: rgba(27, 24, 21, 0.24);
   --color-brand: var(--admin-primary);
-  --color-brand-strong: var(--admin-accent);
+  --color-brand-strong: #7a5c15;
   --color-focus: var(--admin-accent);
-  --color-danger: #fb7185;
+  --color-danger: #b42318;
 
   background-color: var(--color-surface);
   color: var(--color-ink);
@@ -184,27 +198,29 @@
 /*
   The customer portal.
 
-  Dark as well, but with the studio's warm black rather than the console's
-  blue-grey: the portal is a branded experience, not an internal tool. It needed
-  its own block rather than `.admin-shell` because the two share a *temperature*
-  of decision (invert the ink, keep the surfaces dark) but not a palette.
+  Light as well, and warmer than the console: the portal is a branded
+  experience for a customer, not an internal tool. It keeps the console's
+  rhythm (the same tokens, the same density) but sits on the studio's paper
+  tone so the two never look like different products.
 */
 .portal-shell {
-  --color-surface: var(--color-espresso);
-  --color-surface-raised: rgba(0, 0, 0, 0.4);
-  --color-surface-sunken: rgba(255, 255, 255, 0.04);
-  --color-surface-field: rgba(255, 255, 255, 0.06);
-  --color-surface-inverse: var(--color-black);
-  --color-ink: #f3f4f6;
-  --color-ink-raised: #f3f4f6;
-  --color-ink-inverse: var(--color-cream);
-  --color-ink-on-brand: var(--color-black);
-  --color-line: rgba(255, 255, 255, 0.14);
-  --color-line-strong: rgba(255, 255, 255, 0.28);
+  --color-surface: #f7f3ec;
+  --color-surface-raised: #ffffff;
+  --color-surface-sunken: rgba(27, 24, 21, 0.04);
+  --color-surface-field: #ffffff;
+  --color-surface-inverse: var(--color-espresso);
+  --color-sidebar: #ffffff;
+  --color-sidebar-ink: #17140f;
+  --color-ink: #17140f;
+  --color-ink-raised: #17140f;
+  --color-ink-inverse: #fdf8ee;
+  --color-ink-on-brand: #17140f;
+  --color-line: rgba(27, 24, 21, 0.12);
+  --color-line-strong: rgba(27, 24, 21, 0.24);
   --color-brand: var(--color-gold);
-  --color-brand-strong: var(--color-gold);
+  --color-brand-strong: #7a5c15;
   --color-focus: var(--color-gold);
-  --color-danger: #fb7185;
+  --color-danger: #b42318;
 
   background-color: var(--color-surface);
   color: var(--color-ink);
@@ -214,26 +230,29 @@
   The invoice is a document, not a screen.
 
   A PDF has to look like the page it was printed from, so it keeps its own paper
-  palette in every shell instead of following the console into the dark. That is
-  a third deliberate palette (the public site's cream, the console's blue-grey,
-  the portal's warm black) rather than an accident of fallback order.
+  palette in every shell instead of following the console into the light. That is
+  a third deliberate palette (the public site's warm paper, the console's
+  cooler paper, the invoice's printed sheet) rather than an accident of
+  fallback order.
 */
 .invoice-paper {
-  --color-surface: #f1ece4;
-  --color-surface-raised: #faf7f2;
-  --color-surface-sunken: #f1ece4;
+  --color-surface: #ffffff;
+  --color-surface-raised: #fdfbf7;
+  --color-surface-sunken: #f6f2ea;
   --color-surface-field: #ffffff;
-  --color-surface-inverse: #1a1510;
-  --color-ink: #1a1510;
-  --color-ink-raised: #1a1510;
-  --color-ink-inverse: #faf7f2;
-  --color-ink-on-brand: #ffffff;
-  --color-line: rgba(26, 21, 16, 0.14);
-  --color-line-strong: rgba(26, 21, 16, 0.28);
-  --color-brand: var(--color-gold-dark);
-  --color-brand-strong: var(--color-gold-dark);
-  --color-focus: var(--color-gold-dark);
-  --color-danger: #b91c1c;
+  --color-surface-inverse: #17140f;
+  --color-sidebar: #fdfbf7;
+  --color-sidebar-ink: #17140f;
+  --color-ink: #17140f;
+  --color-ink-raised: #17140f;
+  --color-ink-inverse: #fdf8ee;
+  --color-ink-on-brand: #17140f;
+  --color-line: rgba(23, 20, 15, 0.12);
+  --color-line-strong: rgba(23, 20, 15, 0.24);
+  --color-brand: #b8892b;
+  --color-brand-strong: #7a5c15;
+  --color-focus: #7a5c15;
+  --color-danger: #b42318;
 }
 
 *,
@@ -300,6 +319,61 @@ body {
   background-color: currentColor;
   mask-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='none' stroke='%23000' stroke-width='0.6'/%3E%3Ccircle cx='30' cy='30' r='3' fill='none' stroke='%23000' stroke-width='0.5'/%3E%3C/svg%3E");
   mask-size: 60px 60px;
+}
+
+/*
+  A table that reads as a printed ledger, not a spreadsheet.
+
+  The old table was padded for a data grid, so a desk of twenty orders filled
+  the screen with air and the numbers were hard to scan. The rules below make
+  a row a single comfortable line, give the header a quiet ground, and let a
+  numeric column line up on the decimal.
+*/
+.table-modern {
+  border-collapse: separate;
+  border-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.table-modern thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: var(--color-surface-sunken);
+  border-bottom: 1px solid var(--color-line);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-ink) 62%, transparent);
+  white-space: nowrap;
+}
+
+.table-modern tbody td {
+  border-bottom: 1px solid var(--color-line);
+  vertical-align: middle;
+}
+
+.table-modern tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.table-modern tbody tr {
+  transition: background-color var(--duration-fast) ease;
+}
+
+.table-modern tbody tr:hover {
+  background-color: color-mix(in srgb, var(--color-brand) 6%, transparent);
+}
+
+.table-modern .cell-numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.table-modern .cell-primary {
+  font-weight: 600;
+  color: var(--color-ink);
 }
 
 /* Classic section copy — always full-width of parent up to a readable measure */

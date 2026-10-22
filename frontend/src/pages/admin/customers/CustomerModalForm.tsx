@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { TabStrip } from '@/components/ui/TabStrip';
 import { Icon } from '@/components/icons';
 import { Button, Input, Select, Textarea } from '@/components/ui';
@@ -27,7 +27,7 @@ export function CustomerModalForm({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -113,7 +113,7 @@ export function CustomerModalForm({
                 <Select
                   label="Acquisition Channel"
                   value={form.source}
-                  onChange={(e) => setForm((f) => ({ ...f, source: e.target.value }))}
+                  onChange={(value) => setForm((f) => ({ ...f, source: value }))}
                   options={CUSTOMER_SOURCES}
                 />
 

@@ -400,7 +400,7 @@ export default function ProductsAdminPage() {
         <Select
           aria-label="Filter by category"
           value={categoryFilter}
-          onChange={(event) => setCategoryFilter(event.target.value)}
+          onChange={(value) => setCategoryFilter(value)}
           options={[
             { value: 'All', label: 'All categories' },
             ...categories.map((category) => ({ value: category.id, label: category.name })),
@@ -410,7 +410,7 @@ export default function ProductsAdminPage() {
         <Select
           aria-label="Filter by status"
           value={statusFilter}
-          onChange={(event) => setStatusFilter(event.target.value as StatusFilter)}
+          onChange={(value) => setStatusFilter(value as StatusFilter)}
           options={[
             { value: 'all', label: 'All statuses' },
             { value: 'active', label: 'Live only' },

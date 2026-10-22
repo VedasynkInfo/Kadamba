@@ -1,5 +1,6 @@
 import { Icon } from '@/components/icons';
 import { LEAD_DESK_OPTIONS, LEAD_QUALITY_OPTIONS, LEAD_STATUS_OPTIONS } from './types';
+import { Select } from '@/components/ui';
 
 interface LeadsToolbarProps {
   query: string;
@@ -67,53 +68,32 @@ export function LeadsToolbar({
 
           {/* Status Filter */}
           <div className="w-[125px] shrink-0">
-            <select
+            <Select
               value={selectedStatus}
-              onChange={(e) => onStatusChange(e.target.value)}
               aria-label="Filter by status"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="All">All Statuses</option>
-              {LEAD_STATUS_OPTIONS.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </select>
+              onChange={(value) => onStatusChange(value)}
+              options={[{ value: 'All', label: 'All Statuses' }, ...LEAD_STATUS_OPTIONS.map((s) => ({ value: s, label: s }))]}
+            />
           </div>
 
           {/* Quality Filter */}
           <div className="w-[125px] shrink-0">
-            <select
+            <Select
               value={selectedQuality}
-              onChange={(e) => onQualityChange(e.target.value)}
               aria-label="Filter by quality"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="All">All Quality</option>
-              {LEAD_QUALITY_OPTIONS.map((q) => (
-                <option key={q} value={q}>
-                  {q === 'hot' ? 'Hot' : q === 'warm' ? 'Warm' : 'Cold'}
-                </option>
-              ))}
-            </select>
+              onChange={(value) => onQualityChange(value)}
+              options={[{ value: 'All', label: 'All Quality' }, ...LEAD_QUALITY_OPTIONS.map((q) => ({ value: q, label: q === 'hot' ? 'Hot' : q === 'warm' ? 'Warm' : 'Cold' }))]}
+            />
           </div>
 
           {/* Desk / Assignee Filter */}
           <div className="w-[140px] shrink-0">
-            <select
+            <Select
               value={selectedDesk}
-              onChange={(e) => onDeskChange(e.target.value)}
               aria-label="Filter by desk"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="All">All Desks</option>
-              {LEAD_DESK_OPTIONS.map((d) => (
-                <option key={d} value={d}>
-                  {d}
-                </option>
-              ))}
-            </select>
+              onChange={(value) => onDeskChange(value)}
+              options={[{ value: 'All', label: 'All Desks' }, ...LEAD_DESK_OPTIONS.map((d) => ({ value: d, label: d }))]}
+            />
           </div>
 
           {/* Active Filter Clear Button */}

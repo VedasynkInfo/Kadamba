@@ -256,8 +256,8 @@ export function ProductMasterList({
           <Select
             aria-label="Move selected products to category"
             value=""
-            onChange={(event) => {
-              if (event.target.value) onBulk({ categoryId: event.target.value });
+            onChange={(value) => {
+              if (value) onBulk({ categoryId: value });
             }}
             options={categories.map((category) => ({
               value: category.id,

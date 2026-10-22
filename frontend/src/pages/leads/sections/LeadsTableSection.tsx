@@ -77,7 +77,7 @@ export function LeadsTableSection({
             id="leads-status"
             label="Status"
             value={status}
-            onChange={(e) => setStatus(e.target.value as LeadStatus | 'All')}
+            onChange={(value) => setStatus(value as LeadStatus | 'All')}
             options={[
               { value: 'All', label: 'All statuses' },
               ...LEAD_STATUSES.map((s) => ({ value: s, label: s })),
@@ -87,7 +87,7 @@ export function LeadsTableSection({
             id="leads-assignee"
             label="Assignee"
             value={assignee}
-            onChange={(e) => setAssignee(e.target.value)}
+            onChange={(value) => setAssignee(value)}
             options={[
               { value: 'All', label: 'All desks' },
               ...leadAssignees.map((a) => ({ value: a, label: a })),

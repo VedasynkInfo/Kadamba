@@ -17,6 +17,7 @@ import { OrderTimelineSection } from './OrderTimelineSection';
 import { isOrderStatusTerminal, type OrderStatus } from '@/shared/enums';
 import { orderStatusChoices, orderStatusLabel, transitionNeedsNote } from './types';
 import { toAppError } from '@/lib/apiError';
+import { Select } from '@/components/ui';
 
 export default function OrderDetailAdminPage() {
   const { toast } = useToast();
@@ -300,23 +301,12 @@ export default function OrderDetailAdminPage() {
                       </span>
                     </>
                   ) : (
-                    <select
+                    <Select
                       value={order.status}
-                      onChange={(e) => handleStatusChangeRequest(e.target.value as OrderStatus)}
                       aria-label="Move the order to its next stage"
-                      className="mt-1 min-w-[150px] uppercase text-xs font-semibold rounded-md border border-line bg-surface-field px-3 py-2 text-ink focus:border-focus focus:outline-none focus:ring-2 focus:ring-focus/30"
-                    >
-                      {/* Only the moves the API will accept are offered, so an
-                          impossible stage cannot be chosen and then refused. */}
-                      <option value={order.status} disabled>
-                        {orderStatusLabel(order.status)} (current)
-                      </option>
-                      {orderStatusChoices(order.status).map((choice) => (
-                        <option key={choice.value} value={choice.value}>
-                          {choice.label}
-                        </option>
-                      ))}
-                    </select>
+                      onChange={(value) => handleStatusChangeRequest(value as OrderStatus)}
+                      options={orderStatusChoices(order.status).map((choice) => ({ value: choice.value, label: choice.label }))}
+                    />
                   )}
                 </div>
               </div>

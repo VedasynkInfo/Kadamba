@@ -33,7 +33,7 @@ export function MeasurementFormDirectivesTab({
                     form.referenceImages.filter((_, i) => i !== idx),
                   )
                 }
-                className="absolute right-1 top-1 h-5 w-5 rounded-full bg-black/75 text-white text-xs flex items-center justify-center opacity-80 hover:opacity-100 hover:bg-rose-600 transition cursor-pointer"
+                className="absolute right-1 top-1 h-5 w-5 rounded-full bg-espresso/75 text-white text-xs flex items-center justify-center opacity-80 hover:opacity-100 hover:bg-rose-600 transition cursor-pointer"
                 title="Remove sketch"
               >
                 ×

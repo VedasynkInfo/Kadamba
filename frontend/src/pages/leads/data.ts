@@ -95,9 +95,9 @@ export function statusTone(status: LeadStatus): string {
     case 'New':
       return 'border-gold/50 bg-gold/15 text-ink';
     case 'Contacted':
-      return 'border-line bg-black/[0.04] text-ink';
+      return 'border-line bg-espresso/[0.04] text-ink';
     case 'Qualified':
-      return 'border-line-strong bg-black text-ink-inverse';
+      return 'border-line-strong bg-espresso text-ink-inverse';
     case 'Appointment':
       return 'border-gold bg-gold text-ink';
     case 'Completed':

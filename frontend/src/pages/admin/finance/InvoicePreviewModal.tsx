@@ -1,11 +1,11 @@
-﻿import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Icon } from '@/components/icons';
 import type { InvoiceRecord } from '@/services/finance/financeService';
 import { whatsappDeepLink } from '@/utils/whatsapp';
 import { cn } from '@/utils/cn';
 
 function formatINR(v: number) {
-  return `₹${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
+  return `?${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
 }
 
 interface InvoicePreviewModalProps {
@@ -25,13 +25,13 @@ export function InvoicePreviewModal({ invoice, onClose }: InvoicePreviewModalPro
   const waHref = invoice.customer?.phone
     ? whatsappDeepLink(
         invoice.customer.phone,
-        `Dear ${invoice.customer.name}, regarding order #${invoice.orderNumber}, your invoice balance is ₹${balance}. You can contact us for any billing enquiries. Kadamba's Designer Studio.`,
+        `Dear ${invoice.customer.name}, regarding order #${invoice.orderNumber}, your invoice balance is ?${balance}. You can contact us for any billing enquiries. Kadamba's Designer Studio.`,
       )
     : undefined;
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
       role="dialog"
       aria-modal="true"

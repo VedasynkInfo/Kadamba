@@ -50,7 +50,7 @@ export function PortfolioHeroSection() {
   return (
     <section
       ref={rootRef}
-      className="relative isolate w-full overflow-hidden bg-black text-ink-inverse"
+      className="relative isolate w-full overflow-hidden bg-espresso text-ink-inverse"
       aria-label="Portfolio of Kadamba's Designer Studio"
     >
       <div className="relative min-h-[min(94svh,960px)] w-full md:min-h-[calc(100svh-4.25rem)]">

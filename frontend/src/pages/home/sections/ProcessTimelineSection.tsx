@@ -31,7 +31,7 @@ export function ProcessTimelineSection() {
         <ol className="grid gap-8 md:grid-cols-4">
           {processSteps.map((step) => (
             <li key={step.id} className="relative" data-reveal>
-              <span className="inline-flex size-10 items-center justify-center rounded-full border border-gold/50 bg-black font-heading text-sm text-gold">
+              <span className="inline-flex size-10 items-center justify-center rounded-full border border-gold/50 bg-espresso font-heading text-sm text-gold">
                 {step.step}
               </span>
               <h3 className="mt-4 font-heading text-xl text-ink-inverse">{step.title}</h3>

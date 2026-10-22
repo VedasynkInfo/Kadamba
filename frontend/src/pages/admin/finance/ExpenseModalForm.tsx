@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Icon } from '@/components/icons';
 import { financeApi, type ExpenseRecord } from '@/services/finance/financeService';
+import { DateField, Select } from '@/components/ui';
 
 interface ExpenseModalFormProps {
   open: boolean;
@@ -167,17 +168,11 @@ export function ExpenseModalForm({ open, expense, onClose, onSuccess }: ExpenseM
               <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">
                 Category *
               </label>
-              <select
+              <Select
                 value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus cursor-pointer bg-surface-raised border-line"
-              >
-                {CATEGORIES.map((cat) => (
-                  <option key={cat.value} value={cat.value}>
-                    {cat.label}
-                  </option>
-                ))}
-              </select>
+                onChange={(value) => setCategory(value)}
+                options={CATEGORIES.map((cat) => ({ value: cat.value, label: cat.label }))}
+              />
             </div>
 
             <div className="space-y-1">
@@ -202,13 +197,11 @@ export function ExpenseModalForm({ open, expense, onClose, onSuccess }: ExpenseM
             <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">
               Date Incurred *
             </label>
-            <input
-              type="date"
+            <DateField
               required
               value={spentAt}
-              onChange={(e) => setSpentAt(e.target.value)}
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
-            />
+              onChange={(value) => setSpentAt(value)}
+              />
           </div>
 
           {/* Notes */}

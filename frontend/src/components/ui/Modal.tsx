@@ -56,7 +56,7 @@ export function Modal({
     >
       <Dialog.Portal>
         <PortalShell>
-          <Dialog.Overlay className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm" />
+          <Dialog.Overlay className="fixed inset-0 z-50 bg-espresso/60 backdrop-blur-sm" />
           {/* The panel is centred by a flex parent rather than by translate, so
               that the entrance animation's transform cannot fight the centring. */}
           <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4">

@@ -77,7 +77,7 @@ export default function PortalPaymentsPage() {
         </p>
       </div>
 
-      <div className="border border-gold/20 bg-black/30 px-5 py-6">
+      <div className="border border-gold/20 bg-espresso/30 px-5 py-6">
         <p className="text-[0.65rem] uppercase tracking-[0.2em] text-ink-inverse/70">Outstanding balance</p>
         <p className="mt-2 font-heading text-3xl text-gold">{formatINR(data.outstandingBalance)}</p>
       </div>

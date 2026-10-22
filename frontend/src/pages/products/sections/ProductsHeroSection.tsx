@@ -1,4 +1,4 @@
-﻿import { OptimizedImage } from '@/components/media/OptimizedImage';
+import { OptimizedImage } from '@/components/media/OptimizedImage';
 import { Button } from '@/components/ui';
 import { useNavigate } from 'react-router-dom';
 import { productsHero } from '../data';
@@ -11,7 +11,7 @@ export function ProductsHeroSection() {
   const navigate = useNavigate();
 
   return (
-    <section className="relative isolate overflow-hidden bg-black text-ink-inverse">
+    <section className="relative isolate overflow-hidden bg-espresso text-ink-inverse">
       <OptimizedImage
         src={productsHero.image}
         alt={productsHero.alt}

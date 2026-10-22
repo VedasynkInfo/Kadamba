@@ -134,7 +134,7 @@ export function MediaUpload({
       </label>
 
       {value ? (
-        <div className="overflow-hidden rounded-md border border-line bg-black/[0.03]">
+        <div className="overflow-hidden rounded-md border border-line bg-espresso/[0.03]">
           {showVideo ? (
             <video
               src={previewSrc}
@@ -283,7 +283,7 @@ function LibraryPickerButton({
       </Button>
 
       {open ? (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 p-4">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-espresso/70 p-4">
           <div
             className="max-h-[85vh] w-full max-w-3xl overflow-y-auto rounded-2xl border p-5 bg-surface-raised border-line text-ink-raised"
           >

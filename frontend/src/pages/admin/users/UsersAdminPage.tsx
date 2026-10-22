@@ -8,6 +8,7 @@ import {
   type ConsoleUser,
 } from '@/services/users/usersService';
 import { cn } from '@/utils/cn';
+import { Select } from '@/components/ui';
 
 /**
  * Users & Roles desk: who can sign in, what they can do, and whether their
@@ -183,18 +184,14 @@ export default function UsersAdminPage() {
                         <p className="opacity-55">{user.email}</p>
                       </td>
                       <td className="px-4 py-3">
-                        <select
+                        <Select
                           value={user.role}
-                          onChange={(e) =>
-                            void changeRole(user, e.target.value as 'admin' | 'staff' | 'user')
-                          }
                           disabled={savingId === user.id}
-                          className="rounded-lg border px-2 py-1 text-[11px] capitalize border-line bg-current/[0.06]"
-                        >
-                          <option value="admin">Admin</option>
-                          <option value="staff">Staff</option>
-                          <option value="user">User</option>
-                        </select>
+                          onChange={(value) =>
+                            void changeRole(user, value as 'admin' | 'staff' | 'user')
+                          }
+                          options={[{ value: 'admin', label: 'Admin' }, { value: 'staff', label: 'Staff' }, { value: 'user', label: 'User' }]}
+                        />
                       </td>
                       <td className="px-4 py-3">
                         <span

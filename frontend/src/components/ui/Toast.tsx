@@ -49,7 +49,7 @@ const ToastContext = createContext<ToastContextValue | null>(null);
  * list: stacking, swipe-to-dismiss, a promise API, action buttons, and a
  * focus-managed close control.
  *
- * The colours are the same ones the old viewport used (`bg-black` with a gold
+ * The colours are the same ones the old viewport used (`bg-espresso` with a gold
  * title), which is deliberate: a toast sits on top of whatever shell is
  * behind it, and `ink-inverse` on black reads in all three.
  */
@@ -101,7 +101,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         toastOptions={{
           classNames: {
             toast: cn(
-              'font-admin rounded-lg border border-gold/30 bg-black text-ink-inverse shadow-soft',
+              'font-admin rounded-lg border border-gold/30 bg-espresso text-ink-inverse shadow-soft',
             ),
             title: 'font-heading text-sm text-gold',
             description: 'text-xs text-ink-inverse/70',

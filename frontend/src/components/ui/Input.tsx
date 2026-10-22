@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes } from 'react';
+import { useId, type InputHTMLAttributes } from 'react';
 import { cn } from '@/utils/cn';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -19,7 +19,12 @@ export function Input({
   disabled,
   ...props
 }: InputProps) {
-  const inputId = id ?? props.name;
+  // A generated id keeps the label associated with the field even when the
+  // caller gives neither an `id` nor a `name`. Without it the `<label>` has
+  // no `for`, the input is announced with no name at all, and clicking the
+  // label does not focus the field.
+  const generatedId = useId();
+  const inputId = id ?? props.name ?? generatedId;
 
   return (
     <div className="flex w-full flex-col gap-1.5">

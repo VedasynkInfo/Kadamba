@@ -7,11 +7,11 @@ import { ORDER_STATUS_CONFIG } from './types';
 import { cn } from '@/utils/cn';
 
 function formatINR(value: number) {
-  return `₹${value.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
+  return `â¹${value.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
 }
 
 function formatDate(iso?: string) {
-  if (!iso) return '—';
+  if (!iso) return 'â';
   try {
     return new Date(iso).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
   } catch {
@@ -32,8 +32,8 @@ interface OrdersTableProps {
 /**
  * The orders desk, as a `DataTable`.
  *
- * Selection is for the one bulk action an orders list actually needs — handing
- * a filtered set to a spreadsheet — and the table stays virtualised because a
+ * Selection is for the one bulk action an orders list actually needs â handing
+ * a filtered set to a spreadsheet â and the table stays virtualised because a
  * studio's order history only grows.
  */
 export function OrdersTable({
@@ -69,7 +69,7 @@ export function OrdersTable({
             <div className="mt-1 flex items-center gap-1 text-[11px] text-ink/65">
               <span>{order.lineItems?.length || 1} garment(s)</span>
               {order.lineItems?.[0]?.name ? (
-                <span className="max-w-[150px] truncate">· {order.lineItems[0].name}</span>
+                <span className="max-w-[150px] truncate">Â· {order.lineItems[0].name}</span>
               ) : null}
             </div>
           </div>
@@ -86,7 +86,7 @@ export function OrdersTable({
               {order.customerId?.name || 'Walk-in Client'}
             </span>
             <span className="mt-0.5 block text-[11px] text-ink/65">
-              {order.customerId?.phone || '—'}
+              {order.customerId?.phone || 'â'}
             </span>
           </div>
         ),

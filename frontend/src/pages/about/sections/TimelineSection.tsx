@@ -32,7 +32,7 @@ export function TimelineSection() {
         >
           {timeline.map((item) => (
             <motion.li key={item.id} variants={reduced ? undefined : fadeUp} className="relative">
-              <span className="inline-flex min-w-10 items-center justify-center rounded-full border border-gold/50 bg-black px-3 py-2 font-heading text-xs tracking-wide text-gold">
+              <span className="inline-flex min-w-10 items-center justify-center rounded-full border border-gold/50 bg-espresso px-3 py-2 font-heading text-xs tracking-wide text-gold">
                 {item.year}
               </span>
               <h3 className="mt-4 font-heading text-xl text-ink-inverse">{item.title}</h3>

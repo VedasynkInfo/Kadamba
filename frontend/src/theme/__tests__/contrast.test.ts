@@ -47,17 +47,27 @@ for (const { name, theme } of themes) {
 }
 
 describe('default semantic tokens', () => {
-  it('keeps the static first-paint accent text-safe on cream', () => {
-    expect(contrastRatio('#8a6d2f', DEFAULT_THEME_TOKENS.publicBg)).toBeGreaterThanOrEqual(AA);
+  it('keeps the static first-paint accent text-safe on the page', () => {
+    expect(contrastRatio('#7a5c15', DEFAULT_THEME_TOKENS.publicBg)).toBeGreaterThanOrEqual(AA);
   });
 
-  it('keeps the public focus ring visible on cream', () => {
-    expect(contrastRatio('#8a6d2f', DEFAULT_THEME_TOKENS.publicBg)).toBeGreaterThanOrEqual(UI);
+  it('keeps the public focus ring visible on the page', () => {
+    expect(contrastRatio('#7a5c15', DEFAULT_THEME_TOKENS.publicBg)).toBeGreaterThanOrEqual(UI);
   });
 
   it('keeps danger text at AA in both shells', () => {
-    expect(contrastRatio('#b91c1c', DEFAULT_THEME_TOKENS.publicBg)).toBeGreaterThanOrEqual(AA);
-    expect(contrastRatio('#fb7185', DEFAULT_THEME_TOKENS.adminBg)).toBeGreaterThanOrEqual(AA);
-    expect(contrastRatio('#fb7185', DEFAULT_THEME_TOKENS.adminCard)).toBeGreaterThanOrEqual(AA);
+    // One danger tone, used on every light surface.
+    expect(contrastRatio('#b42318', DEFAULT_THEME_TOKENS.publicBg)).toBeGreaterThanOrEqual(AA);
+    expect(contrastRatio('#b42318', DEFAULT_THEME_TOKENS.adminBg)).toBeGreaterThanOrEqual(AA);
+    expect(contrastRatio('#b42318', DEFAULT_THEME_TOKENS.adminCard)).toBeGreaterThanOrEqual(AA);
+  });
+
+  it('keeps the gold action legible as a filled button on both shells', () => {
+    expect(contrastRatio(DEFAULT_THEME_TOKENS.primaryText, DEFAULT_THEME_TOKENS.primary)).toBeGreaterThanOrEqual(
+      AA,
+    );
+    expect(
+      contrastRatio(DEFAULT_THEME_TOKENS.adminPrimaryText, DEFAULT_THEME_TOKENS.adminPrimary),
+    ).toBeGreaterThanOrEqual(AA);
   });
 });

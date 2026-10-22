@@ -22,7 +22,7 @@ export function BlogsHeroBanner() {
 
   return (
     <section
-      className="relative isolate w-full overflow-hidden bg-black text-ink-inverse"
+      className="relative isolate w-full overflow-hidden bg-espresso text-ink-inverse"
       aria-label="Kadamba Journal"
     >
       <div className="grid min-h-[min(78svh,820px)] w-full lg:min-h-[min(80svh,860px)] lg:grid-cols-12">

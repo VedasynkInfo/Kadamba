@@ -68,6 +68,8 @@ const SEMANTIC_TOKENS = [
   '--color-surface-sunken:',
   '--color-surface-field:',
   '--color-surface-inverse:',
+  '--color-sidebar:',
+  '--color-sidebar-ink:',
   '--color-ink:',
   '--color-ink-raised:',
   '--color-ink-inverse:',
@@ -94,7 +96,7 @@ describe('the shell override', () => {
     }
   });
 
-  it('re-points every semantic token in each dark shell', () => {
+  it('re-points every semantic token in each shell', () => {
     for (const selector of ['.admin-shell {', '.portal-shell {', '.invoice-paper {']) {
       const declarations = blockDeclarations(selector);
       for (const token of SEMANTIC_TOKENS) {
@@ -116,6 +118,7 @@ describe('the shell override', () => {
       'var(--admin-border)',
       'var(--admin-primary)',
       'var(--admin-sidebar)',
+      'var(--admin-sidebar-text)',
     ]) {
       expect(shell, `.admin-shell does not consume ${token}`).toContain(token);
     }

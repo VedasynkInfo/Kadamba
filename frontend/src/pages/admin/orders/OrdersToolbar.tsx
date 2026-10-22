@@ -1,6 +1,7 @@
 import { Icon } from '@/components/icons';
 import { Link } from 'react-router-dom';
-import { ORDER_PRIORITIES, ORDER_STATUS_CONFIG } from './types';
+import { ORDER_PRIORITIES } from './types';
+import { Select } from '@/components/ui';
 
 interface OrdersToolbarProps {
   query: string;
@@ -62,36 +63,22 @@ export function OrdersToolbar({
 
           {/* Status Filter */}
           <div className="w-[145px] shrink-0">
-            <select
+            <Select
               value={selectedStatus}
-              onChange={(e) => onStatusChange(e.target.value)}
               aria-label="Filter by order status"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="All">All Statuses</option>
-              {Object.entries(ORDER_STATUS_CONFIG).map(([key, cfg]) => (
-                <option key={key} value={key}>
-                  {cfg.label}
-                </option>
-              ))}
-            </select>
+              onChange={(value) => onStatusChange(value)}
+              options={[{ value: 'All', label: 'All Statuses' }]}
+            />
           </div>
 
           {/* Priority Filter */}
           <div className="w-[130px] shrink-0">
-            <select
+            <Select
               value={selectedPriority}
-              onChange={(e) => onPriorityChange(e.target.value)}
               aria-label="Filter by priority"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="">All Priorities</option>
-              {ORDER_PRIORITIES.map((p) => (
-                <option key={p.value} value={p.value}>
-                  {p.label}
-                </option>
-              ))}
-            </select>
+              onChange={(value) => onPriorityChange(value)}
+              options={[{ value: '', label: 'All Priorities' }, ...ORDER_PRIORITIES.map((p) => ({ value: p.value, label: p.label }))]}
+            />
           </div>
 
           {/* Reset Filters */}

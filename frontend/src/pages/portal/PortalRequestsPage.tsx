@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '@/components/icons';
-import { Button, Input, Select, Spinner, Textarea, useToast } from '@/components/ui';
+import { Button, DateField, Input, Select, Spinner, Textarea, useToast } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { brand } from '@/pages/home/data';
 import { portalApi, type PortalCatalogItem } from '@/services/portal/portalService';
@@ -197,7 +197,7 @@ export default function PortalRequestsPage() {
               ) : (
                 <>
                   <div className="mt-6 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-                    <div className="space-y-3 border border-gold/15 bg-black/30 p-5">
+                    <div className="space-y-3 border border-gold/15 bg-espresso/30 p-5">
                       <p className="text-[0.62rem] uppercase tracking-[0.24em] text-ink-inverse/70">
                         {selected.categoryName || 'Garment'}
                       </p>
@@ -223,21 +223,20 @@ export default function PortalRequestsPage() {
                       </p>
 
                       <div className="grid gap-4 sm:grid-cols-2">
-                        <Input
+                        <DateField
                           label="Preferred date *"
-                          type="date"
                           required
                           min={todayIso()}
                           value={preferredDate}
-                          onChange={(e) => setPreferredDate(e.target.value)}
-                        />
+                          onChange={(value) => setPreferredDate(value)}
+                          />
                         <Select
                           label="Preferred time *"
                           required
                           placeholder="Choose a slot"
                           options={timeOptions}
                           value={preferredTime}
-                          onChange={(e) => setPreferredTime(e.target.value)}
+                          onChange={(value) => setPreferredTime(value)}
                         />
                       </div>
 
@@ -247,7 +246,7 @@ export default function PortalRequestsPage() {
                         placeholder="Select budget"
                         options={budgetOptions}
                         value={budget}
-                        onChange={(e) => setBudget(e.target.value)}
+                        onChange={(value) => setBudget(value)}
                       />
 
                       <Input
@@ -262,7 +261,7 @@ export default function PortalRequestsPage() {
                         placeholder="Optional"
                         options={fabricOptions}
                         value={fabricStatus}
-                        onChange={(e) => setFabricStatus(e.target.value)}
+                        onChange={(value) => setFabricStatus(value)}
                       />
 
                       <Textarea
@@ -311,7 +310,7 @@ export default function PortalRequestsPage() {
                   <button
                     type="button"
                     onClick={() => selectItem(item)}
-                    className="group h-full w-full border border-gold/15 bg-black/25 px-4 py-5 text-left transition hover:border-gold/45 hover:bg-white/[0.04]"
+                    className="group h-full w-full border border-gold/15 bg-espresso/25 px-4 py-5 text-left transition hover:border-gold/45 hover:bg-white/[0.04]"
                   >
                     <p className="text-[0.65rem] uppercase tracking-[0.16em] text-ink-inverse/70">
                       {item.categoryName || item.categoryCode || 'Garment'}

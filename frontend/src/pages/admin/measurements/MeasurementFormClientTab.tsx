@@ -7,6 +7,7 @@ import {
   type ProfileFormData,
 } from './types';
 import type { MeasurementProfile } from '@/services/measurements/measurementsService';
+import { DateField, Select } from '@/components/ui';
 
 interface MeasurementFormClientTabProps {
   form: ProfileFormData;
@@ -135,17 +136,11 @@ export function MeasurementFormClientTab({
           <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">
             Garment Silhouette / Template *
           </label>
-          <select
+          <Select
             value={form.productTypeCode}
-            onChange={(e) => onUpdateField('productTypeCode', e.target.value)}
-            className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus cursor-pointer bg-surface-raised border-line"
-          >
-            {productTypes.map((pt) => (
-              <option key={pt.value} value={pt.value}>
-                {pt.label}
-              </option>
-            ))}
-          </select>
+            onChange={(value) => onUpdateField('productTypeCode', value)}
+            options={productTypes.map((pt) => ({ value: pt.value, label: pt.label }))}
+          />
         </div>
 
         <div className="space-y-1">
@@ -173,48 +168,34 @@ export function MeasurementFormClientTab({
           <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">
             Measurement Unit *
           </label>
-          <select
+          <Select
             value={form.unit}
-            onChange={(e) => onUpdateField('unit', e.target.value)}
-            className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus cursor-pointer bg-surface-raised border-line"
-          >
-            {MEASUREMENT_UNITS.map((u) => (
-              <option key={u.value} value={u.value}>
-                {u.label}
-              </option>
-            ))}
-          </select>
+            onChange={(value) => onUpdateField('unit', value)}
+            options={MEASUREMENT_UNITS.map((u) => ({ value: u.value, label: u.label }))}
+          />
         </div>
 
         <div className="space-y-1">
           <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">
             Approval Status *
           </label>
-          <select
+          <Select
             value={form.status}
-            onChange={(e) =>
-              onUpdateField('status', e.target.value as MeasurementProfile['status'])
+            onChange={(value) =>
+              onUpdateField('status', value as MeasurementProfile['status'])
             }
-            className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus cursor-pointer bg-surface-raised border-line"
-          >
-            {MEASUREMENT_STATUSES.map((st) => (
-              <option key={st.value} value={st.value}>
-                {st.label}
-              </option>
-            ))}
-          </select>
+            options={MEASUREMENT_STATUSES.map((st) => ({ value: st.value, label: st.label }))}
+          />
         </div>
 
         <div className="space-y-1">
           <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">
             Sitting / Measured Date
           </label>
-          <input
-            type="date"
+          <DateField
             value={form.measuredAt}
-            onChange={(e) => onUpdateField('measuredAt', e.target.value)}
-            className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
-          />
+            onChange={(value) => onUpdateField('measuredAt', value)}
+            />
         </div>
       </div>
     </div>

@@ -27,6 +27,7 @@ export default function DesignSystemPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [service, setService] = useState('bridal');
+  const [demoService, setDemoService] = useState('');
 
   return (
     <>
@@ -116,6 +117,8 @@ export default function DesignSystemPage() {
             label="Service"
             name="service"
             placeholder="Select a service"
+            value={demoService}
+            onChange={setDemoService}
             options={[
               { value: 'bridal', label: 'Bridal Wear' },
               { value: 'traditional', label: 'Traditional Wear' },

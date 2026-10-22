@@ -3,6 +3,7 @@ import { Icon } from '@/components/icons';
 import type { ExpenseRecord } from '@/services/finance/financeService';
 import { EmptyState } from '../components/EmptyState';
 import { cn } from '@/utils/cn';
+import { Select } from '@/components/ui';
 
 function formatINR(v: number) {
   return `₹${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
@@ -115,20 +116,12 @@ export function FinanceExpensesTab({
           </div>
 
           <div className="w-[160px] shrink-0">
-            <select
+            <Select
               value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
               aria-label="Filter expenses by category"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="All">All Categories</option>
-              <option value="fabric">Fabric</option>
-              <option value="embroidery materials">Embroidery</option>
-              <option value="rent">Rent</option>
-              <option value="utilities">Utilities</option>
-              <option value="marketing">Marketing</option>
-              <option value="misc">Misc</option>
-            </select>
+              onChange={(value) => setCategoryFilter(value)}
+              options={[{ value: 'All', label: 'All Categories' }, { value: 'fabric', label: 'Fabric' }, { value: 'embroidery materials', label: 'Embroidery' }, { value: 'rent', label: 'Rent' }, { value: 'utilities', label: 'Utilities' }, { value: 'marketing', label: 'Marketing' }, { value: 'misc', label: 'Misc' }]}
+            />
           </div>
         </div>
 

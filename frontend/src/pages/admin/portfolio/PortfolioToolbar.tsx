@@ -1,5 +1,6 @@
 import { Icon } from '@/components/icons';
 import { PORTFOLIO_CATEGORIES } from './types';
+import { Select } from '@/components/ui';
 
 interface PortfolioToolbarProps {
   query: string;
@@ -65,47 +66,32 @@ export function PortfolioToolbar({
 
           {/* Category Filter */}
           <div className="w-[140px] shrink-0">
-            <select
+            <Select
               value={selectedCategory}
-              onChange={(e) => onCategoryChange(e.target.value)}
               aria-label="Filter by category"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="All">All Categories</option>
-              {PORTFOLIO_CATEGORIES.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
+              onChange={(value) => onCategoryChange(value)}
+              options={[{ value: 'All', label: 'All Categories' }, ...PORTFOLIO_CATEGORIES.map((c) => ({ value: c, label: c }))]}
+            />
           </div>
 
           {/* Status Filter */}
           <div className="w-[125px] shrink-0">
-            <select
+            <Select
               value={selectedStatus}
-              onChange={(e) => onStatusChange(e.target.value)}
               aria-label="Filter by status"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="All">All Status</option>
-              <option value="Published">Published</option>
-              <option value="Draft">Draft</option>
-            </select>
+              onChange={(value) => onStatusChange(value)}
+              options={[{ value: 'All', label: 'All Status' }, { value: 'Published', label: 'Published' }, { value: 'Draft', label: 'Draft' }]}
+            />
           </div>
 
           {/* Sort By Filter */}
           <div className="w-[135px] shrink-0">
-            <select
+            <Select
               value={sortBy}
-              onChange={(e) => onSortByChange(e.target.value as 'titleAsc' | 'titleDesc' | 'yearDesc')}
               aria-label="Sort portfolio"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="yearDesc">Latest Year</option>
-              <option value="titleAsc">Title (A–Z)</option>
-              <option value="titleDesc">Title (Z–A)</option>
-            </select>
+              onChange={(value) => onSortByChange(value as 'titleAsc' | 'titleDesc' | 'yearDesc')}
+              options={[{ value: 'yearDesc', label: 'Latest Year' }, { value: 'titleAsc', label: 'Title (A–Z)' }, { value: 'titleDesc', label: 'Title (Z–A)' }]}
+            />
           </div>
 
           {/* Active Filter Clear Button */}

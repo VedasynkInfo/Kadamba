@@ -122,8 +122,8 @@ export function GalleryModalForm({
                 <Select
                   label="Category *"
                   value={form.category}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, category: e.target.value as GalleryCategory }))
+                  onChange={(value) =>
+                    setForm((f) => ({ ...f, category: value as GalleryCategory }))
                   }
                   options={GALLERY_CATEGORIES.map((c) => ({ value: c, label: c }))}
                 />
@@ -131,8 +131,8 @@ export function GalleryModalForm({
                 <Select
                   label="Media Type *"
                   value={form.mediaType}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, mediaType: e.target.value as GalleryMediaType }))
+                  onChange={(value) =>
+                    setForm((f) => ({ ...f, mediaType: value as GalleryMediaType }))
                   }
                   options={[
                     { value: 'image', label: 'Image' },
@@ -179,7 +179,7 @@ export function GalleryModalForm({
                 <Select
                   label="Visibility Status"
                   value={form.published ? 'yes' : 'no'}
-                  onChange={(e) => setForm((f) => ({ ...f, published: e.target.value === 'yes' }))}
+                  onChange={(value) => setForm((f) => ({ ...f, published: value === 'yes' }))}
                   options={[
                     { value: 'yes', label: 'Published (Live)' },
                     { value: 'no', label: 'Draft (Hidden)' },

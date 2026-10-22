@@ -30,7 +30,7 @@ export function Footer() {
   const logo = settings.logoDarkUrl || settings.logoUrl;
 
   return (
-    <footer className="mt-auto border-t border-gold/20 bg-black py-12 text-ink-inverse">
+    <footer className="mt-auto border-t border-gold/20 bg-espresso py-12 text-ink-inverse">
       <Container>
         <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
           <div>

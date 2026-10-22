@@ -1,5 +1,6 @@
 import { Icon } from '@/components/icons';
 import { SERVICE_CATEGORIES } from './types';
+import { Select } from '@/components/ui';
 
 interface ServicesToolbarProps {
   query: string;
@@ -69,61 +70,42 @@ export function ServicesToolbar({
 
           {/* Category Filter */}
           <div className="w-[140px] shrink-0">
-            <select
+            <Select
               value={selectedCategory}
-              onChange={(e) => onCategoryChange(e.target.value)}
               aria-label="Filter by category"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="All">All Categories</option>
-              {SERVICE_CATEGORIES.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
+              onChange={(value) => onCategoryChange(value)}
+              options={[{ value: 'All', label: 'All Categories' }, ...SERVICE_CATEGORIES.map((c) => ({ value: c, label: c }))]}
+            />
           </div>
 
           {/* Status Filter */}
           <div className="w-[125px] shrink-0">
-            <select
+            <Select
               value={selectedStatus}
-              onChange={(e) => onStatusChange(e.target.value)}
               aria-label="Filter by status"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="All">All Status</option>
-              <option value="Published">Published</option>
-              <option value="Draft">Draft</option>
-            </select>
+              onChange={(value) => onStatusChange(value)}
+              options={[{ value: 'All', label: 'All Status' }, { value: 'Published', label: 'Published' }, { value: 'Draft', label: 'Draft' }]}
+            />
           </div>
 
           {/* Catalog Fulfillment Filter */}
           <div className="w-[140px] shrink-0">
-            <select
+            <Select
               value={selectedFulfillable}
-              onChange={(e) => onFulfillableChange(e.target.value)}
               aria-label="Filter by fulfillment"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="All">All Fulfillment</option>
-              <option value="Linked">Catalog Linked</option>
-              <option value="Bespoke">Bespoke / Custom</option>
-            </select>
+              onChange={(value) => onFulfillableChange(value)}
+              options={[{ value: 'All', label: 'All Fulfillment' }, { value: 'Linked', label: 'Catalog Linked' }, { value: 'Bespoke', label: 'Bespoke / Custom' }]}
+            />
           </div>
 
           {/* Sort By Filter */}
           <div className="w-[130px] shrink-0">
-            <select
+            <Select
               value={sortBy}
-              onChange={(e) => onSortByChange(e.target.value as 'titleAsc' | 'titleDesc' | 'category')}
               aria-label="Sort services"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="titleAsc">Title (A–Z)</option>
-              <option value="titleDesc">Title (Z–A)</option>
-              <option value="category">Category</option>
-            </select>
+              onChange={(value) => onSortByChange(value as 'titleAsc' | 'titleDesc' | 'category')}
+              options={[{ value: 'titleAsc', label: 'Title (A–Z)' }, { value: 'titleDesc', label: 'Title (Z–A)' }, { value: 'category', label: 'Category' }]}
+            />
           </div>
 
           {/* Active Filter Clear Button */}

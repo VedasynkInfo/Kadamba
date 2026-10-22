@@ -23,7 +23,7 @@ export function SeoTab({ form, patchForm }: SeoTabProps) {
         </div>
 
         <div
-          className="rounded-xl border p-4 max-w-xl space-y-1.5 bg-black/25 border-line"
+          className="rounded-xl border p-4 max-w-xl space-y-1.5 bg-espresso/25 border-line"
         >
           <div className="flex items-center gap-2">
             <span className="h-4 w-4 rounded-full bg-brand flex items-center justify-center text-[9px] text-white font-bold">

@@ -17,7 +17,7 @@ export function BlogMastheadBanner({ post }: BlogMastheadBannerProps) {
 
   return (
     <section
-      className="relative isolate w-full overflow-hidden bg-black text-ink-inverse"
+      className="relative isolate w-full overflow-hidden bg-espresso text-ink-inverse"
       aria-label={post.title}
     >
       <div className="relative min-h-[min(58svh,620px)] w-full md:min-h-[min(64svh,700px)]">

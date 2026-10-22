@@ -143,7 +143,7 @@ export function GalleryTable({
                           className="h-full w-full object-cover transition-transform duration-300 group-hover/thumb:scale-110"
                         />
                         {isVideo ? (
-                          <span className="absolute inset-0 flex items-center justify-center bg-black/45 text-white text-xs">
+                          <span className="absolute inset-0 flex items-center justify-center bg-espresso/45 text-white text-xs">
                             <Icon name="play" size={16} />
                           </span>
                         ) : null}

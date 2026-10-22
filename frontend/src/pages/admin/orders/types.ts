@@ -48,7 +48,7 @@ export function orderStatusChoices(from: string): { value: OrderStatus; label: s
  * Whether the order may move straight from one stage to another.
  *
  * Read from the shared machine, so the board cannot offer a move the API would
- * refuse with a 409 — and so the desk, the board and the server agree on what
+ * refuse with a 409 â and so the desk, the board and the server agree on what
  * the pipeline is.
  */
 export function canMoveOrder(from: string, to: OrderStatus): boolean {
@@ -59,7 +59,7 @@ export function canMoveOrder(from: string, to: OrderStatus): boolean {
  * Whether a transition should ask for a reason before it happens.
  *
  * Cancelling or pausing always deserves one, and so does moving *backwards*
- * along the production flow — a finished garment sent back to trial is rework,
+ * along the production flow â a finished garment sent back to trial is rework,
  * and the audit trail should record who asked for it and why.
  */
 export function transitionNeedsNote(from: string, to: OrderStatus): boolean {

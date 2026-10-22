@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { financeApi } from '@/services/finance/financeService';
 import { ordersApi, type Order } from '@/services/orders/orderService';
+import { DateField, Select } from '@/components/ui';
 
 interface PaymentRecordModalProps {
   open: boolean;
@@ -260,17 +261,11 @@ export function PaymentRecordModal({
               <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">
                 Method *
               </label>
-              <select
+              <Select
                 value={method}
-                onChange={(e) => setMethod(e.target.value as any)}
-                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus cursor-pointer bg-surface-raised border-line"
-              >
-                <option value="upi">UPI / QR Code</option>
-                <option value="cash">Cash Counter</option>
-                <option value="card">Credit/Debit Card</option>
-                <option value="bank">Bank Transfer (IMPS/NEFT)</option>
-                <option value="other">Other Method</option>
-              </select>
+                onChange={(value) => setMethod(value as any)}
+                options={[{ value: 'upi', label: 'UPI / QR Code' }, { value: 'cash', label: 'Cash Counter' }, { value: 'card', label: 'Credit/Debit Card' }, { value: 'bank', label: 'Bank Transfer (IMPS/NEFT)' }, { value: 'other', label: 'Other Method' }]}
+              />
             </div>
           </div>
 
@@ -280,13 +275,11 @@ export function PaymentRecordModal({
               <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">
                 Payment Date *
               </label>
-              <input
-                type="date"
+              <DateField
                 required
                 value={paidAt}
-                onChange={(e) => setPaidAt(e.target.value)}
-                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
-              />
+                onChange={(value) => setPaidAt(value)}
+                />
             </div>
 
             <div className="space-y-1">

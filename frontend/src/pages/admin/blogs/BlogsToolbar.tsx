@@ -1,5 +1,6 @@
 import { Icon } from '@/components/icons';
 import { BLOG_CATEGORIES } from './types';
+import { Select } from '@/components/ui';
 
 interface BlogsToolbarProps {
   query: string;
@@ -69,61 +70,42 @@ export function BlogsToolbar({
 
           {/* Category Filter */}
           <div className="w-[140px] shrink-0">
-            <select
+            <Select
               value={selectedCategory}
-              onChange={(e) => onCategoryChange(e.target.value)}
               aria-label="Filter by category"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="All">All Categories</option>
-              {BLOG_CATEGORIES.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
+              onChange={(value) => onCategoryChange(value)}
+              options={[{ value: 'All', label: 'All Categories' }, ...BLOG_CATEGORIES.map((c) => ({ value: c, label: c }))]}
+            />
           </div>
 
           {/* Status Filter */}
           <div className="w-[125px] shrink-0">
-            <select
+            <Select
               value={selectedStatus}
-              onChange={(e) => onStatusChange(e.target.value)}
               aria-label="Filter by status"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="All">All Status</option>
-              <option value="Published">Published</option>
-              <option value="Draft">Draft</option>
-            </select>
+              onChange={(value) => onStatusChange(value)}
+              options={[{ value: 'All', label: 'All Status' }, { value: 'Published', label: 'Published' }, { value: 'Draft', label: 'Draft' }]}
+            />
           </div>
 
           {/* Featured Filter */}
           <div className="w-[130px] shrink-0">
-            <select
+            <Select
               value={selectedFeatured}
-              onChange={(e) => onFeaturedChange(e.target.value)}
               aria-label="Filter by featured"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="All">All Stories</option>
-              <option value="Featured">Featured Only</option>
-              <option value="Standard">Standard</option>
-            </select>
+              onChange={(value) => onFeaturedChange(value)}
+              options={[{ value: 'All', label: 'All Stories' }, { value: 'Featured', label: 'Featured Only' }, { value: 'Standard', label: 'Standard' }]}
+            />
           </div>
 
           {/* Sort By Filter */}
           <div className="w-[130px] shrink-0">
-            <select
+            <Select
               value={sortBy}
-              onChange={(e) => onSortByChange(e.target.value as 'dateDesc' | 'titleAsc' | 'titleDesc')}
               aria-label="Sort blogs"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="dateDesc">Newest Date</option>
-              <option value="titleAsc">Title (A–Z)</option>
-              <option value="titleDesc">Title (Z–A)</option>
-            </select>
+              onChange={(value) => onSortByChange(value as 'dateDesc' | 'titleAsc' | 'titleDesc')}
+              options={[{ value: 'dateDesc', label: 'Newest Date' }, { value: 'titleAsc', label: 'Title (A–Z)' }, { value: 'titleDesc', label: 'Title (Z–A)' }]}
+            />
           </div>
 
           {/* Active Filter Clear Button */}

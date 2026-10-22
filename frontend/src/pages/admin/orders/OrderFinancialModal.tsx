@@ -1,5 +1,6 @@
 import { Icon } from '@/components/icons';
-import { Button, Input, Modal } from '@/components/ui';
+import { Button, DateField, Input, Modal } from '@/components/ui';
+import { Select } from '@/components/ui';
 
 interface OrderFinancialModalProps {
   open: boolean;
@@ -65,28 +66,21 @@ export function OrderFinancialModal({
             </div>
             <div>
               <label className="block text-xs text-ink/55 mb-1.5">Date *</label>
-              <Input
+              <DateField
                 id="record-payment-date"
-                type="date"
                 value={paymentDate}
-                onChange={(e) => setPaymentDate(e.target.value)}
-              />
+                onChange={(value) => setPaymentDate(value)}
+                />
             </div>
           </div>
           <div>
             <label className="block text-xs text-ink/55 mb-1.5">Method *</label>
-            <select
+            <Select
               id="record-payment-method"
               value={paymentMethod}
-              onChange={(e) => setPaymentMethod(e.target.value as any)}
-              className="w-full rounded border border-line bg-surface-raised px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
-            >
-              <option value="cash">Cash</option>
-              <option value="upi">UPI</option>
-              <option value="bank">Bank Transfer</option>
-              <option value="card">Card</option>
-              <option value="other">Other</option>
-            </select>
+              onChange={(value) => setPaymentMethod(value as any)}
+              options={[{ value: 'cash', label: 'Cash' }, { value: 'upi', label: 'UPI' }, { value: 'bank', label: 'Bank Transfer' }, { value: 'card', label: 'Card' }, { value: 'other', label: 'Other' }]}
+            />
           </div>
           <div>
             <label className="block text-xs text-ink/55 mb-1.5">Reference / UPI ID</label>

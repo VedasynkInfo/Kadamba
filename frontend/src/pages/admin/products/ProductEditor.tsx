@@ -192,7 +192,7 @@ export function ProductEditor({
               <Select
                 label="Category"
                 value={form.categoryId}
-                onChange={(event) => patch('categoryId', event.target.value)}
+                onChange={(value) => patch('categoryId', value)}
                 options={categories.map((category) => ({
                   value: category.id,
                   label: `${category.name} (${category.code})`,
@@ -297,7 +297,7 @@ export function ProductEditor({
               </div>
               <Select
                 value={form.measurementTemplateId}
-                onChange={(event) => patch('measurementTemplateId', event.target.value)}
+                onChange={(value) => patch('measurementTemplateId', value)}
                 options={templateOptions}
               />
               <TemplatePreview template={previewTemplate} className="mt-3" />

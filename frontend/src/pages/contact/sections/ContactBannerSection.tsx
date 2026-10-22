@@ -21,7 +21,7 @@ export function ContactBannerSection() {
 
   return (
     <section
-      className="relative isolate w-full overflow-hidden bg-black text-ink-inverse"
+      className="relative isolate w-full overflow-hidden bg-espresso text-ink-inverse"
       aria-label="Contact Kadamba's Designer Studio"
     >
       <div className="relative min-h-[min(90svh,900px)] w-full md:min-h-[calc(100svh-4.25rem)]">

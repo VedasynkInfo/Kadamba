@@ -3,7 +3,7 @@ import { Icon } from '@/components/icons';
 import type { FinanceSummary } from '@/services/finance/financeService';
 
 function formatINR(v: number) {
-  return `₹${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
+  return `â¹${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
 }
 
 interface FinanceMetricsProps {

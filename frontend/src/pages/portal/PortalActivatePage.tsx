@@ -77,7 +77,7 @@ export default function PortalActivatePage() {
         <motion.div
           initial={reduced ? false : { opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-md border border-gold/20 bg-black/50 p-8 backdrop-blur"
+          className="w-full max-w-md border border-gold/20 bg-espresso/50 p-8 backdrop-blur"
         >
           <p className="text-[0.62rem] uppercase tracking-[0.4em] text-gold/80">Activate account</p>
           <h1 className="mt-3 font-heading text-3xl text-ink-inverse">

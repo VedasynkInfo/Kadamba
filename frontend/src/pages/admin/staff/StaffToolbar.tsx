@@ -1,5 +1,6 @@
 import { Icon } from '@/components/icons';
 import { SPECIALIZATIONS, EMPLOYMENT_TYPES } from './types';
+import { Select } from '@/components/ui';
 
 interface StaffToolbarProps {
   searchQuery: string;
@@ -69,50 +70,32 @@ export function StaffToolbar({
 
           {/* Status filter */}
           <div className="w-[125px] shrink-0">
-            <select
+            <Select
               value={statusFilter}
-              onChange={(e) => onStatusChange(e.target.value)}
               aria-label="Filter by status"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="">All Statuses</option>
-              <option value="active">Active Only</option>
-              <option value="inactive">Inactive</option>
-            </select>
+              onChange={(value) => onStatusChange(value)}
+              options={[{ value: '', label: 'All Statuses' }, { value: 'active', label: 'Active Only' }, { value: 'inactive', label: 'Inactive' }]}
+            />
           </div>
 
           {/* Employment filter */}
           <div className="w-[130px] shrink-0">
-            <select
+            <Select
               value={employmentFilter}
-              onChange={(e) => onEmploymentChange(e.target.value)}
               aria-label="Filter by employment type"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="">All Types</option>
-              {EMPLOYMENT_TYPES.map((t) => (
-                <option key={t.value} value={t.value}>
-                  {t.label}
-                </option>
-              ))}
-            </select>
+              onChange={(value) => onEmploymentChange(value)}
+              options={[{ value: '', label: 'All Types' }, ...EMPLOYMENT_TYPES.map((t) => ({ value: t.value, label: t.label }))]}
+            />
           </div>
 
           {/* Specialization filter */}
           <div className="w-[155px] shrink-0">
-            <select
+            <Select
               value={specializationFilter}
-              onChange={(e) => onSpecializationChange(e.target.value)}
               aria-label="Filter by craft specialization"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="">All Crafts & Skills</option>
-              {SPECIALIZATIONS.map((s) => (
-                <option key={s.value} value={s.value}>
-                  {s.label}
-                </option>
-              ))}
-            </select>
+              onChange={(value) => onSpecializationChange(value)}
+              options={[{ value: '', label: 'All Crafts & Skills' }, ...SPECIALIZATIONS.map((s) => ({ value: s.value, label: s.label }))]}
+            />
           </div>
 
           {/* Reset button */}

@@ -1,4 +1,5 @@
 import type { WebsiteSettings } from '../data';
+import { Select } from '@/components/ui';
 
 interface MediaTabProps {
   form: WebsiteSettings;
@@ -47,19 +48,16 @@ export function MediaTab({ form, patchForm }: MediaTabProps) {
             <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">
               Default Dimension Unit
             </label>
-            <select
+            <Select
               value={form.media?.defaultUnit || 'in'}
-              onChange={(e) =>
+              onChange={(value) =>
                 patchForm((f) => ({
                   ...f,
-                  media: { ...f.media, defaultUnit: e.target.value as 'in' | 'cm' },
+                  media: { ...f.media, defaultUnit: value as 'in' | 'cm' },
                 }))
               }
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="in">Inches (Standard Indian Couture)</option>
-              <option value="cm">Centimeters (Metric)</option>
-            </select>
+              options={[{ value: 'in', label: 'Inches (Standard Indian Couture)' }, { value: 'cm', label: 'Centimeters (Metric)' }]}
+            />
           </div>
         </div>
       </div>

@@ -423,7 +423,7 @@ export default function CustomerDetailAdminPage() {
                       </thead>
                       <tbody className="stagger-rows divide-y divide-black/5 bg-white/30">
                         {orders.map((order) => (
-                          <tr key={order._id || order.id} className="hover:bg-black/[0.01]">
+                          <tr key={order._id || order.id} className="hover:bg-espresso/[0.01]">
                             <td className="p-3 font-mono font-bold">
                               {order.referenceId || `Enq #${order.orderNumber}`}
                             </td>

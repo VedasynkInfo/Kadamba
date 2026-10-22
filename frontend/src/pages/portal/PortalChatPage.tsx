@@ -103,7 +103,7 @@ export default function PortalChatPage() {
         </span>
       </div>
 
-      <div className="mt-6 flex-1 space-y-3 overflow-y-auto border border-gold/15 bg-black/25 p-4">
+      <div className="mt-6 flex-1 space-y-3 overflow-y-auto border border-gold/15 bg-espresso/25 p-4">
         {messages.length === 0 ? (
           <p className="text-sm text-ink-inverse/70">No messages yet — say hello.</p>
         ) : (
@@ -142,7 +142,7 @@ export default function PortalChatPage() {
           value={body}
           onChange={(e) => setBody(e.target.value)}
           placeholder="Write a message…"
-          className="flex-1 rounded-sm border border-gold/25 bg-black/40 px-3 py-2.5 text-sm text-ink-inverse outline-none focus:border-focus"
+          className="flex-1 rounded-sm border border-gold/25 bg-espresso/40 px-3 py-2.5 text-sm text-ink-inverse outline-none focus:border-focus"
           maxLength={4000}
         />
         <Button type="submit" disabled={sending || !body.trim()}>

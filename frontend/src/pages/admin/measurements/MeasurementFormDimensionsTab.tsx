@@ -4,6 +4,7 @@ import type {
   MeasurementFieldDef,
 } from '@/services/measurements/measurementsService';
 import type { ProfileFormData } from './types';
+import { Select } from '@/components/ui';
 
 interface MeasurementFormDimensionsTabProps {
   form: ProfileFormData;
@@ -70,19 +71,12 @@ export function MeasurementFormDimensionsTab({
         );
       case 'enum':
         return (
-          <select
+          <Select
             id={def.key}
             value={typeof val === 'string' ? val : ''}
-            onChange={(e) => onDimensionChange(def.key, e.target.value)}
-            className={`${baseInputClass} bg-surface-raised border-line`}
-          >
-            <option value="">— Select Option —</option>
-            {(def.options ?? []).map((opt) => (
-              <option key={opt} value={opt}>
-                {opt}
-              </option>
-            ))}
-          </select>
+            onChange={(value) => onDimensionChange(def.key, value)}
+            options={[{ value: '', label: '— Select Option —' }]}
+          />
         );
       default:
         return (

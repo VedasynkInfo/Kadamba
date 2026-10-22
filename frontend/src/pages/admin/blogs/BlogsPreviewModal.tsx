@@ -22,7 +22,7 @@ export function BlogsPreviewModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -71,7 +71,7 @@ export function BlogsPreviewModal({
         <div className="p-6 space-y-5 max-h-[75vh] overflow-y-auto">
           {item.coverImage ? (
             <div
-              className="rounded-xl border overflow-hidden flex items-center justify-center bg-black/40 relative min-h-[200px] max-h-[300px] border-line"
+              className="rounded-xl border overflow-hidden flex items-center justify-center bg-espresso/40 relative min-h-[200px] max-h-[300px] border-line"
             >
               <OptimizedImage
                 src={item.coverImage}

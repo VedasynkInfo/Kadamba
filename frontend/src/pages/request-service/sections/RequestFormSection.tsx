@@ -1,16 +1,7 @@
 import { useEffect, useId, useMemo, useState, type ChangeEvent, type FormEvent } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import {
-  Button,
-  Input,
-  Progress,
-  Section,
-  SectionIntro,
-  Select,
-  Textarea,
-  useToast,
-} from '@/components/ui';
+import { Button, DateField, Input, Progress, Section, SectionIntro, Select, Textarea, useToast } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { usePublicContent } from '@/hooks/usePublicContent';
 import { ContentEmpty, ContentError, ContentLoading } from '@/components/feedback/ContentState';
@@ -481,7 +472,7 @@ export function RequestFormSection() {
                     options={serviceOptions}
                     value={form.service}
                     error={errors.service}
-                    onChange={(e) => update('service', e.target.value)}
+                    onChange={(value) => update('service', value)}
                   />
                   <Input
                     label="Garment type (optional)"
@@ -500,7 +491,7 @@ export function RequestFormSection() {
                       { value: 'undecided', label: 'Not sure yet' },
                     ]}
                     value={form.fabricStatus}
-                    onChange={(e) => update('fabricStatus', e.target.value)}
+                    onChange={(value) => update('fabricStatus', value)}
                   />
                   <Select
                     label="Occasion"
@@ -510,19 +501,18 @@ export function RequestFormSection() {
                     options={[...occasionOptions]}
                     value={form.occasion}
                     error={errors.occasion}
-                    onChange={(e) => update('occasion', e.target.value)}
+                    onChange={(value) => update('occasion', value)}
                   />
                   <div className="grid gap-5 sm:grid-cols-2">
-                    <Input
+                    <DateField
                       label="Preferred date"
                       name="preferredDate"
-                      type="date"
                       required
                       min={todayIsoDate()}
                       value={form.preferredDate}
                       error={errors.preferredDate}
-                      onChange={(e) => update('preferredDate', e.target.value)}
-                    />
+                      onChange={(value) => update('preferredDate', value)}
+                      />
                     <Select
                       label="Budget"
                       name="budget"
@@ -531,7 +521,7 @@ export function RequestFormSection() {
                       options={[...budgetOptions]}
                       value={form.budget}
                       error={errors.budget}
-                      onChange={(e) => update('budget', e.target.value)}
+                      onChange={(value) => update('budget', value)}
                     />
                   </div>
                 </>

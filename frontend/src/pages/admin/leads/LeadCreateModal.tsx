@@ -100,7 +100,7 @@ export function LeadCreateModal({
             <Select
               label="Acquisition Channel"
               value={form.source}
-              onChange={(e) => setForm((f) => ({ ...f, source: e.target.value }))}
+              onChange={(value) => setForm((f) => ({ ...f, source: value }))}
               options={[
                 { value: 'walk-in', label: 'Walk-In Atelier' },
                 { value: 'instagram', label: 'Instagram / Social' },
@@ -115,14 +115,14 @@ export function LeadCreateModal({
             <Select
               label="Assignee Desk"
               value={form.assignee}
-              onChange={(e) => setForm((f) => ({ ...f, assignee: e.target.value }))}
+              onChange={(value) => setForm((f) => ({ ...f, assignee: value }))}
               options={LEAD_DESK_OPTIONS.map((d) => ({ value: d, label: d }))}
             />
 
             <Select
               label="Initial Quality Tier"
               value={form.quality}
-              onChange={(e) => setForm((f) => ({ ...f, quality: e.target.value as LeadQuality }))}
+              onChange={(value) => setForm((f) => ({ ...f, quality: value as LeadQuality }))}
               options={LEAD_QUALITY_OPTIONS.map((q) => ({
                 value: q,
                 label: q === 'hot' ? 'Hot Lead' : q === 'warm' ? 'Warm Lead' : 'Cold Enquiry',

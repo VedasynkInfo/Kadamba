@@ -1,5 +1,6 @@
 import type { ProfitLossReport } from '@/services/finance/financeService';
 import { Skeleton } from '../components/Skeleton';
+import { DateField } from '@/components/ui';
 
 function formatINR(v: number) {
   return `₹${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
@@ -42,22 +43,18 @@ export function FinanceProfitLossTab({
         <div className="flex flex-wrap items-center gap-2.5">
           <div className="flex items-center gap-1.5">
             <span className="text-[11px] opacity-65">From:</span>
-            <input
-              type="date"
+            <DateField
               value={fromDate}
-              onChange={(e) => onFromChange(e.target.value)}
-              className="rounded-lg border py-1.5 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
-            />
+              onChange={(value) => onFromChange(value)}
+              />
           </div>
 
           <div className="flex items-center gap-1.5">
             <span className="text-[11px] opacity-65">To:</span>
-            <input
-              type="date"
+            <DateField
               value={toDate}
-              onChange={(e) => onToChange(e.target.value)}
-              className="rounded-lg border py-1.5 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
-            />
+              onChange={(value) => onToChange(value)}
+              />
           </div>
 
           <button

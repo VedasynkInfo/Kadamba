@@ -97,7 +97,7 @@ export function GalleryEditor({ images, cover, onChange }: GalleryEditorProps) {
                     className="h-full w-full object-cover"
                     sizes="(max-width: 640px) 100vw, 320px"
                   />
-                  <span className="absolute left-2 top-2 rounded-full bg-black/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">
+                  <span className="absolute left-2 top-2 rounded-full bg-espresso/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">
                     {isCover ? 'Cover' : `Image ${index + 1}`}
                   </span>
                 </div>

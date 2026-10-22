@@ -23,7 +23,7 @@ export default function NotFoundPage() {
         <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
           <Link
             to="/"
-            className="rounded-md bg-black px-6 py-2.5 text-sm font-medium text-ink-inverse transition-colors hover:bg-black/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+            className="rounded-md bg-espresso px-6 py-2.5 text-sm font-medium text-ink-inverse transition-colors hover:bg-espresso/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
           >
             Back to home
           </Link>

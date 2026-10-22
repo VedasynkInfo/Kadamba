@@ -126,8 +126,8 @@ export function PortfolioModalForm({
                 <Select
                   label="Category *"
                   value={form.category}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, category: e.target.value as PortfolioCategory }))
+                  onChange={(value) =>
+                    setForm((f) => ({ ...f, category: value as PortfolioCategory }))
                   }
                   options={PORTFOLIO_CATEGORIES.map((c) => ({ value: c, label: c }))}
                 />
@@ -207,7 +207,7 @@ export function PortfolioModalForm({
               <Select
                 label="Visibility Status"
                 value={form.published ? 'yes' : 'no'}
-                onChange={(e) => setForm((f) => ({ ...f, published: e.target.value === 'yes' }))}
+                onChange={(value) => setForm((f) => ({ ...f, published: value === 'yes' }))}
                 options={[
                   { value: 'yes', label: 'Published (Live)' },
                   { value: 'no', label: 'Draft (Hidden)' },

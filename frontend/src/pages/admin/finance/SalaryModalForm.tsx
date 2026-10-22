@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Icon } from '@/components/icons';
 import { financeApi } from '@/services/finance/financeService';
 import type { Staff } from '@/services/staff/staffService';
+import { DateField, Select } from '@/components/ui';
 
 interface SalaryModalFormProps {
   open: boolean;
@@ -159,17 +160,11 @@ export function SalaryModalForm({ open, staffList, onClose, onSuccess }: SalaryM
             <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">
               Staff Member / Artisan *
             </label>
-            <select
+            <Select
               value={staffId}
-              onChange={(e) => handleStaffChange(e.target.value)}
-              className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus cursor-pointer bg-surface-raised border-line"
-            >
-              {staffList.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.fullName} ({s.locality}) — {s.employmentType}
-                </option>
-              ))}
-            </select>
+              onChange={(value) => handleStaffChange(value)}
+              options={staffList.map((s) => ({ value: s.id, label: `${s.fullName} (${s.locality}) — ${s.employmentType}` }))}
+            />
           </div>
 
           {/* Period: Year & Month */}
@@ -226,13 +221,11 @@ export function SalaryModalForm({ open, staffList, onClose, onSuccess }: SalaryM
               <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">
                 Payment Date *
               </label>
-              <input
-                type="date"
+              <DateField
                 required
                 value={paidAt}
-                onChange={(e) => setPaidAt(e.target.value)}
-                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
-              />
+                onChange={(value) => setPaidAt(value)}
+                />
             </div>
           </div>
 

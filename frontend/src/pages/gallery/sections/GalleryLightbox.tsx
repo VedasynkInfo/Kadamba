@@ -66,7 +66,7 @@ export function GalleryLightbox({ items, activeIndex, onClose, onNavigate }: Gal
             if (e.target === e.currentTarget) onClose();
           }}
         >
-          <div className="absolute inset-0 bg-black/94 backdrop-blur-sm" aria-hidden />
+          <div className="absolute inset-0 bg-espresso/94 backdrop-blur-sm" aria-hidden />
 
           <div className="relative z-10 flex w-full max-w-6xl flex-col">
             <div className="mb-3 flex items-start justify-between gap-4 sm:mb-4">
@@ -97,7 +97,7 @@ export function GalleryLightbox({ items, activeIndex, onClose, onNavigate }: Gal
               </button>
             </div>
 
-            <div className="relative flex min-h-[50vh] items-center justify-center bg-black">
+            <div className="relative flex min-h-[50vh] items-center justify-center bg-espresso">
               {item.mediaType === 'video' ? (
                 <video
                   key={item.id}

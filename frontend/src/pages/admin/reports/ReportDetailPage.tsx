@@ -16,7 +16,7 @@ import {
 import { Icon } from '@/components/icons';
 import { AdminHorizonBanner } from '../components/AdminHorizonBanner';
 import { adminBanners } from '../data';
-import { Button, Select, Spinner } from '@/components/ui';
+import { Button, DateField, Select, Spinner } from '@/components/ui';
 import { cn } from '@/utils/cn';
 import {
   reportsApi,
@@ -166,21 +166,17 @@ export default function ReportDetailPage() {
               <>
                 <label className="text-xs text-ink/55">
                   From
-                  <input
-                    type="date"
+                  <DateField
                     value={customFrom}
-                    onChange={(e) => setCustomFrom(e.target.value)}
-                    className="mt-1 block rounded border border-line bg-surface-raised px-2 py-1.5 text-sm text-ink"
-                  />
+                    onChange={(value) => setCustomFrom(value)}
+                    />
                 </label>
                 <label className="text-xs text-ink/55">
                   To
-                  <input
-                    type="date"
+                  <DateField
                     value={customTo}
-                    onChange={(e) => setCustomTo(e.target.value)}
-                    className="mt-1 block rounded border border-line bg-surface-raised px-2 py-1.5 text-sm text-ink"
-                  />
+                    onChange={(value) => setCustomTo(value)}
+                    />
                 </label>
               </>
             )}
@@ -189,7 +185,7 @@ export default function ReportDetailPage() {
                 Group by
                 <Select
                   value={groupBy}
-                  onChange={(e) => setGroupBy(e.target.value as GroupBy)}
+                  onChange={(value) => setGroupBy(value as GroupBy)}
                   options={[
                     { value: 'day', label: 'Day' },
                     { value: 'week', label: 'Week' },

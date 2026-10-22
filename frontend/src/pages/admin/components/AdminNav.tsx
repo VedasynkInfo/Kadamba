@@ -24,7 +24,7 @@ function readClosedGroups(): string[] {
 function NavBadge({ count }: { count: number }) {
   if (!count) return null;
   return (
-    <span className="relative ml-1.5 inline-flex min-w-[1.15rem] items-center justify-center rounded-sm bg-gold/25 px-1 py-0.5 text-[0.6rem] font-semibold text-gold">
+    <span className="relative ml-1.5 inline-flex min-w-[1.15rem] items-center justify-center rounded-sm bg-brand/15 px-1 py-0.5 text-[0.6rem] font-semibold text-brand-strong">
       {count > 99 ? '99+' : count}
     </span>
   );
@@ -90,7 +90,7 @@ export function AdminNav({ collapsed = false, onNavigate, scope }: AdminNavProps
             collapsed ? 'justify-center px-2 py-2' : 'gap-2.5 px-3 py-2',
             isActive
               ? 'font-semibold text-brand-strong'
-              : 'text-ink-inverse/75 hover:bg-ink-inverse/[0.06] hover:text-ink-inverse',
+              : 'text-ink/70 hover:bg-ink/[0.05] hover:text-ink',
           )
         }
       >
@@ -103,7 +103,7 @@ export function AdminNav({ collapsed = false, onNavigate, scope }: AdminNavProps
                 transition={
                   reducedMotion ? { duration: 0 } : { type: 'spring', stiffness: 520, damping: 40 }
                 }
-                className="absolute inset-0 rounded-md bg-brand/12"
+                className="absolute inset-0 rounded-md bg-brand/10 ring-1 ring-inset ring-brand/25"
               />
             ) : null}
             <Icon name={item.icon} size={collapsed ? 18 : 16} className="relative shrink-0" />
@@ -134,7 +134,7 @@ export function AdminNav({ collapsed = false, onNavigate, scope }: AdminNavProps
           return (
             <div key={group.id} className="flex flex-col gap-0.5">
               {index > 0 ? (
-                <div className="mx-2 my-1.5 border-t border-ink-inverse/10" aria-hidden />
+                <div className="mx-2 my-1.5 border-t border-line" aria-hidden />
               ) : null}
               {group.items.map((item) => renderItem(item))}
             </div>
@@ -149,7 +149,7 @@ export function AdminNav({ collapsed = false, onNavigate, scope }: AdminNavProps
               onClick={() => toggleGroup(group.id)}
               aria-expanded={open}
               aria-controls={`admin-nav-group-${group.id}`}
-              className="flex w-full items-center justify-between rounded-md px-3 py-1 text-[0.62rem] uppercase tracking-[0.2em] text-ink-inverse/70 transition-colors hover:text-ink-inverse/80"
+              className="flex w-full items-center justify-between rounded-md px-3 py-1 text-[0.62rem] uppercase tracking-[0.2em] text-ink/50 transition-colors hover:text-ink/80"
             >
               <span>{group.label}</span>
               <Icon name={open ? 'chevronDown' : 'chevronRight'} size={12} />

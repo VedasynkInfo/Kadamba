@@ -11,6 +11,8 @@ export interface Column<T> {
   className?: string;
   cellClassName?: string;
   hide?: 'sm' | 'md' | 'lg';
+  /** Right-aligns the column and switches it to tabular figures. */
+  numeric?: boolean;
   /**
    * Value used when `DataTable` sorts this column client-side. `Table` ignores
    * it. Falls back to the row's `key` property, so it is only needed when the
@@ -68,13 +70,14 @@ export function Table<T>({
   return (
     <div
       className={cn(
-        'overflow-x-auto rounded-xl border border-line bg-surface-raised text-ink transition-all duration-200 shadow-xs',
+        'overflow-x-auto rounded-xl border border-line bg-surface-raised text-ink',
+        'shadow-[var(--shadow-soft)]',
         className,
       )}
     >
-      <table className="w-full text-left border-collapse text-sm">
+      <table className="table-modern w-full text-left text-sm">
         <thead>
-          <tr className="border-b border-current/10 text-[0.65rem] uppercase tracking-wider font-semibold text-ink/75">
+          <tr>
             {columns.map((col) => (
               <th
                 key={col.key}
@@ -89,7 +92,8 @@ export function Table<T>({
                     : undefined
                 }
                 className={cn(
-                  'px-4 py-3.5 font-semibold',
+                  'px-4 py-2.5',
+                  col.numeric && 'text-right',
                   col.className,
                   col.hide === 'sm' && 'hidden sm:table-cell',
                   col.hide === 'md' && 'hidden md:table-cell',
@@ -100,13 +104,16 @@ export function Table<T>({
                   <button
                     type="button"
                     onClick={() => toggleSort(col.key)}
-                    className="inline-flex items-center gap-1 rounded-sm font-semibold uppercase tracking-wider transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                    className={cn(
+                      'inline-flex items-center gap-1 rounded-sm font-semibold uppercase tracking-wider transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
+                      col.numeric && 'flex-row-reverse',
+                    )}
                   >
                     {col.header ?? col.label}
                     {sortKey === col.key ? (
                       <Icon
                         name={sortDir === 'asc' ? 'sortAsc' : 'sortDesc'}
-                        size={14}
+                        size={13}
                         className="text-brand-strong"
                       />
                     ) : null}
@@ -118,13 +125,16 @@ export function Table<T>({
             ))}
           </tr>
         </thead>
-        <tbody className="stagger-rows divide-y divide-current/[0.06]">
+        <tbody className="stagger-rows">
           {loading ? (
             Array.from({ length: 5 }).map((_, i) => (
               <tr key={`skeleton-${i}`}>
                 {columns.map((col) => (
-                  <td key={col.key} className={cn('px-4 py-3', col.cellClassName)}>
-                    <div className="h-4 w-full animate-pulse rounded bg-current/10" />
+                  <td
+                    key={col.key}
+                    className={cn('px-4 py-2.5', col.numeric && 'text-right', col.cellClassName)}
+                  >
+                    <div className="h-3.5 w-full animate-pulse rounded bg-current/10" />
                   </td>
                 ))}
               </tr>
@@ -147,9 +157,7 @@ export function Table<T>({
                 key={getKey(row, i)}
                 className={cn(
                   'transition-colors',
-                  onRowClick
-                    ? 'cursor-pointer hover:bg-current/[0.04]'
-                    : 'hover:bg-current/[0.02]',
+                  onRowClick ? 'cursor-pointer' : '',
                 )}
                 onClick={() => onRowClick?.(row)}
               >
@@ -157,7 +165,8 @@ export function Table<T>({
                   <td
                     key={col.key}
                     className={cn(
-                      'px-4 py-3.5 text-sm opacity-90',
+                      'px-4 py-2.5 text-sm',
+                      col.numeric && 'cell-numeric text-right',
                       col.cellClassName,
                       col.hide === 'sm' && 'hidden sm:table-cell',
                       col.hide === 'md' && 'hidden md:table-cell',

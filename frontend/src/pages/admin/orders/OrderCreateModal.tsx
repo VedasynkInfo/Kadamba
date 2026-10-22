@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { TabStrip } from '@/components/ui/TabStrip';
-import { Button, Input, Modal, Select, Textarea } from '@/components/ui';
+import { Button, DateField, Input, Modal, Select, Textarea } from '@/components/ui';
 import { Icon } from '@/components/icons';
 import type { CustomerProfile } from '@/services/orders/orderService';
 import { zodResolver } from '@/lib/zodResolver';
@@ -321,17 +321,17 @@ export function OrderCreateModal({
             </div>
 
             <div className="grid grid-cols-2 gap-3 pt-2">
-              <Input
+              <DateField
                 label="Target Trial / Fitting Date"
-                type="date"
                 error={errors.expectedTrialAt?.message}
-                {...register('expectedTrialAt')}
+                value={watch('expectedTrialAt') ?? ''}
+                onChange={(value) => setValue('expectedTrialAt', value)}
               />
-              <Input
+              <DateField
                 label="Final Promised Delivery Date"
-                type="date"
                 error={errors.expectedDeliveryAt?.message}
-                {...register('expectedDeliveryAt')}
+                value={watch('expectedDeliveryAt') ?? ''}
+                onChange={(value) => setValue('expectedDeliveryAt', value)}
               />
             </div>
           </div>
@@ -429,8 +429,11 @@ export function OrderCreateModal({
               <Select
                 label="Production Priority"
                 options={ORDER_PRIORITIES}
+                value={watch('priority') ?? 'normal'}
+                onChange={(value) =>
+                  setValue('priority', value as OrderFormData['priority'], { shouldValidate: true })
+                }
                 error={errors.priority?.message}
-                {...register('priority')}
               />
               <Input
                 label="Tags (Comma separated)"

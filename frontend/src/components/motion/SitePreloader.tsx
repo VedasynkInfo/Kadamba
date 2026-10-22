@@ -75,7 +75,7 @@ export function SitePreloader() {
     <AnimatePresence>
       {visible ? (
         <motion.div
-          className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-5 bg-black text-gold"
+          className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-5 bg-espresso text-gold"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}

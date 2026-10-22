@@ -13,6 +13,7 @@ import {
 } from '@/services/media/mediaLibraryService';
 import { clearAssetCache } from '@/services/media/assetResolver';
 import { cn } from '@/utils/cn';
+import { Select } from '@/components/ui';
 
 const PAGE_SIZE = 24;
 
@@ -201,27 +202,16 @@ export default function MediaLibraryPage() {
               placeholder="Search name, alt text or hash"
               className="w-full rounded-xl border px-3 py-2 text-xs sm:w-56 bg-surface-sunken border-line"
             />
-            <select
+            <Select
               value={folder}
-              onChange={(event) => setFolder(event.target.value)}
-              className="rounded-xl border px-3 py-2 text-xs bg-surface-sunken border-line"
-            >
-              <option value="">All folders</option>
-              {folders.map((name) => (
-                <option key={name} value={name}>
-                  {name}
-                </option>
-              ))}
-            </select>
-            <select
+              onChange={(value) => setFolder(value)}
+              options={[{ value: '', label: 'All folders' }, ...folders.map((name) => ({ value: name, label: name }))]}
+            />
+            <Select
               value={kind}
-              onChange={(event) => setKind(event.target.value as '' | 'image' | 'video')}
-              className="rounded-xl border px-3 py-2 text-xs bg-surface-sunken border-line"
-            >
-              <option value="">Images &amp; video</option>
-              <option value="image">Images</option>
-              <option value="video">Video</option>
-            </select>
+              onChange={(value) => setKind(value as '' | 'image' | 'video')}
+              options={[{ value: '', label: 'Images &amp; video' }, { value: 'image', label: 'Images' }, { value: 'video', label: 'Video' }]}
+            />
             <label
               className="flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-[11px] border-line"
             >

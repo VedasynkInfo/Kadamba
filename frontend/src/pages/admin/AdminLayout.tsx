@@ -83,7 +83,7 @@ export function AdminLayout() {
                 className={cn(
                   'hidden shrink-0 flex-col border-r border-line transition-[width] duration-300 md:flex',
                   collapsed ? 'w-[4.25rem]' : 'w-60',
-                  'bg-surface-inverse text-ink-inverse',
+                  'bg-sidebar text-sidebar-ink',
                 )}
               >
                 <div className={cn('px-4 py-6', collapsed && 'px-2 text-center')}>
@@ -98,16 +98,18 @@ export function AdminLayout() {
                           className="h-7 w-auto object-contain"
                         />
                       ) : (
-                        <p className="font-heading text-xl font-bold tracking-wide text-gold">
+                        <p className="font-heading text-xl font-bold tracking-wide text-brand-strong">
                           {brand.shortName}
                         </p>
                       )}
                     </div>
                   ) : (
-                    <p className="text-center font-heading text-xl font-extrabold text-gold">K</p>
+                    <p className="text-center font-heading text-xl font-extrabold text-brand-strong">
+                      K
+                    </p>
                   )}
                   {!collapsed && (
-                    <p className="mt-1 text-[0.62rem] uppercase tracking-[0.25em] opacity-60">
+                    <p className="mt-1 text-[0.62rem] uppercase tracking-[0.25em] text-ink/45">
                       Studio Console
                     </p>
                   )}
@@ -119,7 +121,7 @@ export function AdminLayout() {
                       type="button"
                       onClick={() => setPaletteOpen(true)}
                       aria-label="Search the console"
-                      className="mx-2 mb-3 flex items-center justify-center rounded-lg border border-ink-inverse/10 bg-ink-inverse/[0.04] p-2 text-ink-inverse/60 transition hover:border-brand/40 hover:text-ink-inverse"
+                      className="mx-2 mb-3 flex items-center justify-center rounded-lg border border-line bg-surface-sunken p-2 text-ink/55 transition hover:border-brand/40 hover:text-ink"
                     >
                       <Icon name="search" size={16} />
                     </button>
@@ -128,11 +130,11 @@ export function AdminLayout() {
                   <button
                     type="button"
                     onClick={() => setPaletteOpen(true)}
-                    className="mx-2 mb-3 flex items-center gap-2 rounded-lg border border-ink-inverse/10 bg-ink-inverse/[0.04] px-2.5 py-1.5 text-left text-xs text-ink-inverse/55 transition hover:border-brand/40 hover:text-ink-inverse"
+                    className="mx-2 mb-3 flex items-center gap-2 rounded-lg border border-line bg-surface-sunken px-2.5 py-1.5 text-left text-xs text-ink/55 transition hover:border-brand/40 hover:text-ink"
                   >
                     <Icon name="search" size={14} />
                     <span className="flex-1">Search…</span>
-                    <kbd className="rounded border border-ink-inverse/15 px-1 py-0.5 text-[0.6rem] tracking-wider">
+                    <kbd className="rounded border border-line px-1 py-0.5 text-[0.6rem] tracking-wider">
                       ⌘K
                     </kbd>
                   </button>
@@ -140,13 +142,13 @@ export function AdminLayout() {
 
                 <AdminNav collapsed={collapsed} scope="rail" />
 
-                <div className="mt-auto space-y-3 border-t border-ink-inverse/10 px-3 py-5">
+                <div className="mt-auto space-y-3 border-t border-line px-3 py-5">
                   <button
                     type="button"
                     onClick={toggleCollapse}
                     aria-label={collapsed ? 'Expand navigation' : 'Collapse navigation'}
                     className={cn(
-                      'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-[0.65rem] uppercase tracking-[0.18em] text-ink-inverse/60 transition-colors hover:bg-ink-inverse/[0.06] hover:text-ink-inverse',
+                      'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-[0.65rem] uppercase tracking-[0.18em] text-ink/55 transition-colors hover:bg-ink/[0.05] hover:text-ink',
                       collapsed && 'justify-center',
                     )}
                   >
@@ -155,7 +157,7 @@ export function AdminLayout() {
                   </button>
 
                   {!collapsed && user ? (
-                    <p className="truncate px-2 text-xs text-ink-inverse/60">{user.email}</p>
+                    <p className="truncate px-2 text-xs text-ink/50">{user.email}</p>
                   ) : null}
 
                   {collapsed ? (
@@ -182,7 +184,7 @@ export function AdminLayout() {
                       <a
                         href="/"
                         aria-label="Public site"
-                        className="flex items-center justify-center rounded-md px-2 py-1.5 text-ink-inverse/60 transition-colors hover:bg-ink-inverse/[0.06] hover:text-ink-inverse"
+                        className="flex items-center justify-center rounded-md px-2 py-1.5 text-ink/55 transition-colors hover:bg-ink/[0.05] hover:text-ink"
                       >
                         <Icon name="arrowLeft" size={16} />
                       </a>
@@ -190,7 +192,7 @@ export function AdminLayout() {
                   ) : (
                     <a
                       href="/"
-                      className="flex items-center gap-2 px-2 text-[0.65rem] uppercase tracking-[0.18em] text-ink-inverse/60 transition-colors hover:text-ink-inverse"
+                      className="flex items-center gap-2 px-2 text-[0.65rem] uppercase tracking-[0.18em] text-ink/55 transition-colors hover:text-ink"
                     >
                       <Icon name="arrowLeft" size={14} />
                       <span>Public site</span>
@@ -200,12 +202,12 @@ export function AdminLayout() {
               </aside>
 
               <div className="flex min-w-0 flex-1 flex-col">
-                <header className="flex items-center justify-between gap-3 border-b border-line px-4 py-3 md:hidden bg-surface-inverse text-ink-inverse">
+                <header className="flex items-center justify-between gap-3 border-b border-line bg-surface-raised px-4 py-3 text-ink md:hidden">
                   <button
                     type="button"
                     onClick={() => setMobileNavOpen(true)}
                     aria-label="Open navigation"
-                    className="flex items-center rounded-md p-1.5 transition-colors hover:bg-ink-inverse/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                    className="flex items-center rounded-md p-1.5 transition-colors hover:bg-ink/[0.05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                   >
                     <Icon name="menu" size={20} />
                   </button>
@@ -213,11 +215,11 @@ export function AdminLayout() {
                     type="button"
                     onClick={() => setPaletteOpen(true)}
                     aria-label="Search the console"
-                    className="flex items-center rounded-md p-1.5 transition-colors hover:bg-ink-inverse/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                    className="flex items-center rounded-md p-1.5 transition-colors hover:bg-ink/[0.05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                   >
                     <Icon name="search" size={18} />
                   </button>
-                  <p className="font-heading text-lg text-gold">{brand.shortName}</p>
+                  <p className="font-heading text-lg text-brand-strong">{brand.shortName}</p>
                   <Button variant="secondary" size="sm" onClick={signOut}>
                     <Icon name="logout" size={14} />
                     <span>Sign out</span>
@@ -231,7 +233,7 @@ export function AdminLayout() {
                   onClose={() => setMobileNavOpen(false)}
                   title={brand.shortName}
                   side="left"
-                  className="bg-surface-inverse text-ink-inverse"
+                  className="bg-sidebar text-sidebar-ink"
                 >
                   <AdminNav scope="drawer" onNavigate={() => setMobileNavOpen(false)} />
                 </Drawer>

@@ -62,7 +62,7 @@ export function ServicePricingSection({ service }: ServicePricingSectionProps) {
         </div>
 
         <motion.div
-          className="self-start border border-line bg-black px-6 py-8 text-ink-inverse sm:px-8"
+          className="self-start border border-line bg-espresso px-6 py-8 text-ink-inverse sm:px-8"
           initial={reduced ? false : { opacity: 0, y: 20 }}
           whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
           viewport={{ once: true }}

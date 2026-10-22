@@ -10,6 +10,7 @@ import {
   type PortalTemplateSummary,
 } from '@/services/portal/portalService';
 import { cn } from '@/utils/cn';
+import { Select } from '@/components/ui';
 
 type EditTarget =
   | { kind: 'template'; code: string; name: string; category?: string }
@@ -266,21 +267,16 @@ export default function PortalMeasurementsPage() {
                                 {f.label}
                                 {f.required ? ' *' : ''}
                               </span>
-                              <select
+                              <Select
+                                aria-label={f.label}
                                 required={f.required}
                                 value={values[f.key] || ''}
-                                onChange={(e) =>
-                                  setValues((prev) => ({ ...prev, [f.key]: e.target.value }))
+                                onChange={(value) =>
+                                  setValues((prev) => ({ ...prev, [f.key]: value }))
                                 }
-                                className="w-full rounded-sm border border-gold/25 bg-black/40 px-3 py-2.5 text-ink-inverse outline-none focus:border-focus"
-                              >
-                                <option value="">Select…</option>
-                                {f.options.map((o) => (
-                                  <option key={o} value={o}>
-                                    {o}
-                                  </option>
-                                ))}
-                              </select>
+                                placeholder="Select…"
+                                options={(f.options ?? []).map((o) => ({ value: o, label: o }))}
+                              />
                               {f.helpText ? (
                                 <span className="mt-1 block text-[0.7rem] text-ink-inverse/70">
                                   {f.helpText}
@@ -370,7 +366,7 @@ export default function PortalMeasurementsPage() {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search blouse, lehenga…"
-                  className="w-full max-w-xs rounded-sm border border-gold/20 bg-black/30 px-3 py-2 text-sm text-ink-inverse outline-none focus:border-focus sm:w-56"
+                  className="w-full max-w-xs rounded-sm border border-gold/20 bg-espresso/30 px-3 py-2 text-sm text-ink-inverse outline-none focus:border-focus sm:w-56"
                 />
               </div>
 
@@ -391,7 +387,7 @@ export default function PortalMeasurementsPage() {
                             <button
                               type="button"
                               onClick={() => void openTemplate(t)}
-                              className="h-full w-full border border-gold/15 bg-black/25 px-4 py-4 text-left transition hover:border-gold/40 hover:bg-white/5"
+                              className="h-full w-full border border-gold/15 bg-espresso/25 px-4 py-4 text-left transition hover:border-gold/40 hover:bg-white/5"
                             >
                               <p className="font-heading text-lg text-ink-inverse">{t.name}</p>
                               <p className="mt-1 font-mono text-[0.7rem] text-gold/70">{t.code}</p>

@@ -1,4 +1,5 @@
 import { Icon } from '@/components/icons';
+import { Select } from '@/components/ui';
 interface MonthOption {
   value: string;
   label: string;
@@ -50,51 +51,32 @@ export function PaymentsToolbar({
         <div className="flex flex-1 flex-wrap items-center gap-2.5">
           {/* Year select */}
           <div className="w-[100px] shrink-0">
-            <select
+            <Select
               value={String(year)}
-              onChange={(e) => onYearChange(Number(e.target.value))}
               aria-label="Filter by year"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              {yearOptions.map((y) => (
-                <option key={y.value} value={y.value}>
-                  {y.label}
-                </option>
-              ))}
-            </select>
+              onChange={(value) => onYearChange(Number(value))}
+              options={yearOptions.map((y) => ({ value: y.value, label: y.label }))}
+            />
           </div>
 
           {/* Month select */}
           <div className="w-[130px] shrink-0">
-            <select
+            <Select
               value={String(month)}
-              onChange={(e) => onMonthChange(Number(e.target.value))}
               aria-label="Filter by month"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              {monthOptions.map((m) => (
-                <option key={m.value} value={m.value} disabled={m.disabled}>
-                  {m.label}
-                </option>
-              ))}
-            </select>
+              onChange={(value) => onMonthChange(Number(value))}
+              options={monthOptions.map((m) => ({ value: m.value, label: m.label }))}
+            />
           </div>
 
           {/* Method select */}
           <div className="w-[125px] shrink-0">
-            <select
+            <Select
               value={selectedMethod}
-              onChange={(e) => onMethodChange(e.target.value)}
               aria-label="Filter by payment method"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="All">All Methods</option>
-              <option value="upi">UPI / QR</option>
-              <option value="cash">Cash Counter</option>
-              <option value="card">Credit/Debit Card</option>
-              <option value="bank">Bank Transfer</option>
-              <option value="other">Other</option>
-            </select>
+              onChange={(value) => onMethodChange(value)}
+              options={[{ value: 'All', label: 'All Methods' }, { value: 'upi', label: 'UPI / QR' }, { value: 'cash', label: 'Cash Counter' }, { value: 'card', label: 'Credit/Debit Card' }, { value: 'bank', label: 'Bank Transfer' }, { value: 'other', label: 'Other' }]}
+            />
           </div>
 
           {/* Search query */}

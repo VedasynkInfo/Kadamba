@@ -2,6 +2,7 @@ import { Icon } from '@/components/icons';
 import type { MeasurementTemplate } from '@/services/measurements/measurementsService';
 import { SILHOUETTE_FALLBACKS, type DeskTab } from './types';
 import { cn } from '@/utils/cn';
+import { Select } from '@/components/ui';
 
 interface MeasurementsToolbarProps {
   deskTab: DeskTab;
@@ -122,35 +123,22 @@ export function MeasurementsToolbar({
 
             {/* Silhouette Garment Filter */}
             <div className="w-[165px] shrink-0">
-              <select
+              <Select
                 value={silhouetteFilter}
-                onChange={(e) => onSilhouetteChange(e.target.value)}
                 aria-label="Filter by silhouette"
-                className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-              >
-                <option value="">All Silhouettes</option>
-                {silhouetteOptions.map((t) => (
-                  <option key={t.code} value={t.code}>
-                    {t.name}
-                  </option>
-                ))}
-              </select>
+                onChange={(value) => onSilhouetteChange(value)}
+                options={[{ value: '', label: 'All Silhouettes' }, ...silhouetteOptions.map((t) => ({ value: t.code, label: t.name }))]}
+              />
             </div>
 
             {/* Status Filter */}
             <div className="w-[140px] shrink-0">
-              <select
+              <Select
                 value={statusFilter}
-                onChange={(e) => onStatusChange(e.target.value)}
                 aria-label="Filter by approval status"
-                className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-              >
-                <option value="all">All Statuses</option>
-                <option value="active">Active Fits</option>
-                <option value="pending_approval">Pending Review</option>
-                <option value="draft">Drafts</option>
-                <option value="archived">Archived</option>
-              </select>
+                onChange={(value) => onStatusChange(value)}
+                options={[{ value: 'all', label: 'All Statuses' }, { value: 'active', label: 'Active Fits' }, { value: 'pending_approval', label: 'Pending Review' }, { value: 'draft', label: 'Drafts' }, { value: 'archived', label: 'Archived' }]}
+              />
             </div>
 
             {/* Reset button */}

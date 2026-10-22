@@ -1,4 +1,4 @@
-﻿import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Icon } from '@/components/icons';
 import type { Lead, LeadStatus } from '@/pages/leads/data';
 import { whatsappDeepLink } from '@/utils/whatsapp';
@@ -21,7 +21,7 @@ export function LeadPreviewModal({ lead, onClose, onStatusChange }: LeadPreviewM
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
       role="dialog"
       aria-modal="true"

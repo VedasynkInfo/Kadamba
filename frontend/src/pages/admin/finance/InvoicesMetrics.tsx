@@ -1,7 +1,7 @@
 ﻿import { CountUp } from '@/components/motion/CountUp';
 import { Icon } from '@/components/icons';
 function formatINR(v: number) {
-  return `₹${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
+  return `â¹${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
 }
 
 interface InvoicesMetricsProps {
@@ -35,7 +35,7 @@ export function InvoicesMetrics({ summary }: InvoicesMetricsProps) {
       label: 'Outstanding Balance',
       value: formatINR(summary.totalBalance || 0),
       icon: 'outstanding',
-      sub: `${summary.unpaid || 0} unpaid · ${summary.partial || 0} partial`,
+      sub: `${summary.unpaid || 0} unpaid Â· ${summary.partial || 0} partial`,
     },
     {
       label: 'Fully Cleared Invoices',

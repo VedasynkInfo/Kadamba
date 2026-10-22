@@ -38,7 +38,7 @@ export function Navbar() {
     <>
       <header
         className={cn(
-          'sticky top-0 z-40 border-b bg-black text-ink-inverse transition-shadow duration-300',
+          'sticky top-0 z-40 border-b bg-espresso text-ink-inverse transition-shadow duration-300',
           scrolled ? 'border-gold/30 shadow-soft' : 'border-transparent',
         )}
       >

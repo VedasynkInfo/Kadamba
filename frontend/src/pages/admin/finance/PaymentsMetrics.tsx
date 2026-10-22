@@ -1,7 +1,7 @@
 ﻿import { CountUp } from '@/components/motion/CountUp';
 import { Icon } from '@/components/icons';
 function formatINR(v: number) {
-  return `₹${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
+  return `â¹${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
 }
 
 interface PaymentsMetricsProps {
@@ -34,7 +34,7 @@ export function PaymentsMetrics({ totalAmount, count, upiTotal, cashTotal }: Pay
     },
     {
       label: 'Average Receipt',
-      value: count > 0 ? formatINR(Math.round(totalAmount / count)) : '₹0',
+      value: count > 0 ? formatINR(Math.round(totalAmount / count)) : 'â¹0',
       icon: 'chart',
       sub: 'Per transaction average',
     },

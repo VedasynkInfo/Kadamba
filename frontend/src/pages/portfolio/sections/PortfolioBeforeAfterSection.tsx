@@ -103,10 +103,10 @@ export function PortfolioBeforeAfterSection({ project }: PortfolioBeforeAfterSec
               />
             </motion.div>
 
-            <span className="absolute left-4 top-4 bg-black/65 px-2.5 py-1 text-[0.6rem] uppercase tracking-[0.24em] text-ink-inverse">
+            <span className="absolute left-4 top-4 bg-espresso/65 px-2.5 py-1 text-[0.6rem] uppercase tracking-[0.24em] text-ink-inverse">
               Before
             </span>
-            <span className="absolute right-4 top-4 bg-black/65 px-2.5 py-1 text-[0.6rem] uppercase tracking-[0.24em] text-ink-inverse">
+            <span className="absolute right-4 top-4 bg-espresso/65 px-2.5 py-1 text-[0.6rem] uppercase tracking-[0.24em] text-ink-inverse">
               After
             </span>
 
@@ -146,7 +146,7 @@ export function PortfolioBeforeAfterSection({ project }: PortfolioBeforeAfterSec
                 className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-gold/80"
                 aria-hidden
               />
-              <span className="relative flex size-10 items-center justify-center rounded-full border border-gold/60 bg-black/80 text-gold">
+              <span className="relative flex size-10 items-center justify-center rounded-full border border-gold/60 bg-espresso/80 text-gold">
                 <svg viewBox="0 0 24 24" className="size-5" fill="none" aria-hidden>
                   <path
                     d="m9 7-4 5 4 5M15 7l4 5-4 5"

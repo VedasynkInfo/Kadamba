@@ -63,7 +63,7 @@ export function ImageCropModal({
   }
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 p-4">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-espresso/70 p-4">
       <div
         className="w-full max-w-3xl overflow-hidden rounded-2xl border bg-surface-raised border-line text-ink-raised"
       >
@@ -102,7 +102,7 @@ export function ImageCropModal({
           })}
         </div>
 
-        <div className="relative mt-3 h-[52vh] min-h-64 w-full bg-black">
+        <div className="relative mt-3 h-[52vh] min-h-64 w-full bg-espresso">
           <Cropper
             image={src}
             crop={crop}

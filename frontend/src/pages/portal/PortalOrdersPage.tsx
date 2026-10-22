@@ -295,7 +295,7 @@ export function PortalOrderDetailPage() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <div className="border border-gold/15 bg-black/30 px-4 py-4">
+        <div className="border border-gold/15 bg-espresso/30 px-4 py-4">
           <p className="text-[0.65rem] uppercase tracking-[0.16em] text-ink-inverse/70">Trial</p>
           <p className="mt-2 font-heading text-xl text-ink-inverse">
             {formatDate(order.expectedTrialAt)}
@@ -308,7 +308,7 @@ export function PortalOrderDetailPage() {
             <p className="mt-1 text-xs text-ink-inverse/70">Scheduled / expected</p>
           )}
         </div>
-        <div className="border border-gold/15 bg-black/30 px-4 py-4">
+        <div className="border border-gold/15 bg-espresso/30 px-4 py-4">
           <p className="text-[0.65rem] uppercase tracking-[0.16em] text-ink-inverse/70">Delivery</p>
           <p className="mt-2 font-heading text-xl text-ink-inverse">
             {formatDate(order.expectedDeliveryAt)}
@@ -321,7 +321,7 @@ export function PortalOrderDetailPage() {
             <p className="mt-1 text-xs text-ink-inverse/70">Target date</p>
           )}
         </div>
-        <div className="border border-gold/15 bg-black/30 px-4 py-4">
+        <div className="border border-gold/15 bg-espresso/30 px-4 py-4">
           <p className="text-[0.65rem] uppercase tracking-[0.16em] text-ink-inverse/70">Balance due</p>
           <p className="mt-2 font-heading text-xl text-gold">
             {inr(order.paymentSummary.balance)}
@@ -330,13 +330,13 @@ export function PortalOrderDetailPage() {
         </div>
       </div>
 
-      <section className="border border-gold/15 bg-black/20 p-5">
+      <section className="border border-gold/15 bg-espresso/20 p-5">
         <h2 className="font-heading text-xl text-gold">Garments & items</h2>
         <ul className="mt-4 space-y-3">
           {order.lineItems.map((item, i) => (
             <li
               key={`${item.name}-${i}`}
-              className="flex flex-wrap items-start justify-between gap-3 border border-gold/10 bg-black/30 px-4 py-3"
+              className="flex flex-wrap items-start justify-between gap-3 border border-gold/10 bg-espresso/30 px-4 py-3"
             >
               <div>
                 <p className="text-ink-inverse">
@@ -355,7 +355,7 @@ export function PortalOrderDetailPage() {
         </ul>
       </section>
 
-      <section className="border border-gold/15 bg-black/20 p-5">
+      <section className="border border-gold/15 bg-espresso/20 p-5">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <h2 className="font-heading text-xl text-gold">Payments</h2>
           <div className="flex flex-wrap gap-3">
@@ -395,7 +395,7 @@ export function PortalOrderDetailPage() {
         </dl>
       </section>
 
-      <section className="border border-gold/15 bg-black/20 p-5">
+      <section className="border border-gold/15 bg-espresso/20 p-5">
         <h2 className="font-heading text-xl text-gold">Status timeline</h2>
         <ol className="relative mt-6 space-y-0 border-l border-gold/25 pl-6">
           {[...order.timeline].reverse().map((t, i) => (
@@ -403,7 +403,7 @@ export function PortalOrderDetailPage() {
               <span
                 className={cn(
                   'absolute -left-[1.55rem] top-1 h-2.5 w-2.5 rounded-full border',
-                  i === 0 ? 'border-gold bg-gold' : 'border-gold/40 bg-black',
+                  i === 0 ? 'border-gold bg-gold' : 'border-gold/40 bg-espresso',
                 )}
               />
               <p className="text-ink-inverse">{statusLabel[t.status] || t.status}</p>
@@ -415,11 +415,11 @@ export function PortalOrderDetailPage() {
       </section>
 
       {order.notes.length > 0 ? (
-        <section className="border border-gold/15 bg-black/20 p-5">
+        <section className="border border-gold/15 bg-espresso/20 p-5">
           <h2 className="font-heading text-xl text-gold">Notes for you</h2>
           <ul className="mt-4 space-y-2">
             {order.notes.map((n, i) => (
-              <li key={i} className="border border-gold/10 bg-black/30 px-4 py-3 text-sm text-ink-inverse/80">
+              <li key={i} className="border border-gold/10 bg-espresso/30 px-4 py-3 text-sm text-ink-inverse/80">
                 <p>{n.body}</p>
                 {n.createdAt ? (
                   <p className="mt-2 text-[0.7rem] text-ink-inverse/70">{formatDateTime(n.createdAt)}</p>

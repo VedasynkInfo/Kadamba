@@ -11,7 +11,7 @@ export function ProductBannerSection({ product }: { product: PublicProduct }) {
   const navigate = useNavigate();
 
   return (
-    <section className="bg-black text-ink-inverse">
+    <section className="bg-espresso text-ink-inverse">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-[1.1fr_1fr] md:items-center md:py-20 lg:px-8">
         <ClipReveal className="relative aspect-[4/5] bg-white/5 md:aspect-[4/4.6]">
           <OptimizedImage

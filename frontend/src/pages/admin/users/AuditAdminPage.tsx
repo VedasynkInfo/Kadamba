@@ -3,6 +3,7 @@ import { Spinner, useToast } from '@/components/ui';
 import { PageMeta, staticPageMeta } from '@/seo';
 import { auditApi, type AuditEntry } from '@/services/users/auditService';
 import { cn } from '@/utils/cn';
+import { Select } from '@/components/ui';
 
 const PAGE_SIZE = 25;
 
@@ -124,33 +125,22 @@ export default function AuditAdminPage() {
             placeholder="Search summary, name or email"
             className="rounded-xl border px-3 py-2 text-xs bg-surface-sunken border-line"
           />
-          <select
+          <Select
             value={action}
-            onChange={(e) => {
+            onChange={(value) => {
               setPage(1);
-              setAction(e.target.value);
+              setAction(value);
             }}
-            className="rounded-xl border px-3 py-2 text-xs bg-surface-sunken border-line"
-          >
-            <option value="">All actions</option>
-            {Object.entries(ACTION_LABELS).map(([key, label]) => (
-              <option key={key} value={key}>
-                {label}
-              </option>
-            ))}
-          </select>
-          <select
+            options={[{ value: '', label: 'All actions' }]}
+          />
+          <Select
             value={outcome}
-            onChange={(e) => {
+            onChange={(value) => {
               setPage(1);
-              setOutcome(e.target.value);
+              setOutcome(value);
             }}
-            className="rounded-xl border px-3 py-2 text-xs bg-surface-sunken border-line"
-          >
-            <option value="">All outcomes</option>
-            <option value="success">Success</option>
-            <option value="failure">Failure</option>
-          </select>
+            options={[{ value: '', label: 'All outcomes' }, { value: 'success', label: 'Success' }, { value: 'failure', label: 'Failure' }]}
+          />
         </div>
 
         {loading ? (

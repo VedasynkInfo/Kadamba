@@ -1,5 +1,6 @@
 import { Icon } from '@/components/icons';
 import { CUSTOMER_SOURCES } from './types';
+import { Select } from '@/components/ui';
 
 interface CustomersToolbarProps {
   query: string;
@@ -65,48 +66,32 @@ export function CustomersToolbar({
 
           {/* Source Filter */}
           <div className="w-[140px] shrink-0">
-            <select
+            <Select
               value={selectedSource}
-              onChange={(e) => onSourceChange(e.target.value)}
               aria-label="Filter by source"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="">All Sources</option>
-              {CUSTOMER_SOURCES.map((s) => (
-                <option key={s.value} value={s.value}>
-                  {s.label}
-                </option>
-              ))}
-            </select>
+              onChange={(value) => onSourceChange(value)}
+              options={[{ value: '', label: 'All Sources' }, ...CUSTOMER_SOURCES.map((s) => ({ value: s.value, label: s.label }))]}
+            />
           </div>
 
           {/* Portal Status Filter */}
           <div className="w-[135px] shrink-0">
-            <select
+            <Select
               value={selectedPortal}
-              onChange={(e) => onPortalChange(e.target.value)}
               aria-label="Filter by portal status"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="">All Portal Status</option>
-              <option value="active">Active Login</option>
-              <option value="invited">Invite Sent</option>
-              <option value="none">No Portal Account</option>
-            </select>
+              onChange={(value) => onPortalChange(value)}
+              options={[{ value: '', label: 'All Portal Status' }, { value: 'active', label: 'Active Login' }, { value: 'invited', label: 'Invite Sent' }, { value: 'none', label: 'No Portal Account' }]}
+            />
           </div>
 
           {/* Open Orders Filter */}
           <div className="w-[140px] shrink-0">
-            <select
+            <Select
               value={selectedOrders}
-              onChange={(e) => onOrdersChange(e.target.value)}
               aria-label="Filter by open orders"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="">All Orders</option>
-              <option value="true">In Production (Active)</option>
-              <option value="false">No Active Orders</option>
-            </select>
+              onChange={(value) => onOrdersChange(value)}
+              options={[{ value: '', label: 'All Orders' }, { value: 'true', label: 'In Production (Active)' }, { value: 'false', label: 'No Active Orders' }]}
+            />
           </div>
 
           {/* Active Filter Clear Button */}

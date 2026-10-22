@@ -11,6 +11,7 @@ import {
 } from './types';
 import { Icon } from '@/components/icons';
 import { cn } from '@/utils/cn';
+import { DateField, Select } from '@/components/ui';
 
 interface StaffModalFormProps {
   open: boolean;
@@ -302,29 +303,21 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                   <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">
                     Employment Type *
                   </label>
-                  <select
+                  <Select
                     value={form.employmentType}
-                    onChange={(e) => updateField('employmentType', e.target.value as any)}
-                    className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus cursor-pointer bg-surface-raised border-line"
-                  >
-                    {EMPLOYMENT_TYPES.map((t) => (
-                      <option key={t.value} value={t.value}>
-                        {t.label}
-                      </option>
-                    ))}
-                  </select>
+                    onChange={(value) => updateField('employmentType', value as any)}
+                    options={EMPLOYMENT_TYPES.map((t) => ({ value: t.value, label: t.label }))}
+                  />
                 </div>
 
                 <div className="space-y-1">
                   <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">
                     Joining Date
                   </label>
-                  <input
-                    type="date"
+                  <DateField
                     value={form.joiningDate}
-                    onChange={(e) => updateField('joiningDate', e.target.value)}
-                    className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
-                  />
+                    onChange={(value) => updateField('joiningDate', value)}
+                    />
                 </div>
               </div>
 
@@ -413,17 +406,11 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                   <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">
                     Salary / Remuneration Model *
                   </label>
-                  <select
+                  <Select
                     value={form.salaryType}
-                    onChange={(e) => updateField('salaryType', e.target.value as any)}
-                    className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus cursor-pointer bg-surface-raised border-line"
-                  >
-                    {SALARY_TYPES.map((s) => (
-                      <option key={s.value} value={s.value}>
-                        {s.label}
-                      </option>
-                    ))}
-                  </select>
+                    onChange={(value) => updateField('salaryType', value as any)}
+                    options={SALARY_TYPES.map((s) => ({ value: s.value, label: s.label }))}
+                  />
                 </div>
 
                 <div className="space-y-1">

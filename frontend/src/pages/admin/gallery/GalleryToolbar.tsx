@@ -1,5 +1,6 @@
 import { Icon } from '@/components/icons';
 import { GALLERY_CATEGORIES } from './types';
+import { Select } from '@/components/ui';
 
 interface GalleryToolbarProps {
   query: string;
@@ -69,61 +70,42 @@ export function GalleryToolbar({
 
           {/* Category Filter */}
           <div className="w-[140px] shrink-0">
-            <select
+            <Select
               value={selectedCategory}
-              onChange={(e) => onCategoryChange(e.target.value)}
               aria-label="Filter by category"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="All">All Categories</option>
-              {GALLERY_CATEGORIES.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
+              onChange={(value) => onCategoryChange(value)}
+              options={[{ value: 'All', label: 'All Categories' }, ...GALLERY_CATEGORIES.map((c) => ({ value: c, label: c }))]}
+            />
           </div>
 
           {/* Status Filter */}
           <div className="w-[125px] shrink-0">
-            <select
+            <Select
               value={selectedStatus}
-              onChange={(e) => onStatusChange(e.target.value)}
               aria-label="Filter by status"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="All">All Status</option>
-              <option value="Published">Published</option>
-              <option value="Draft">Draft</option>
-            </select>
+              onChange={(value) => onStatusChange(value)}
+              options={[{ value: 'All', label: 'All Status' }, { value: 'Published', label: 'Published' }, { value: 'Draft', label: 'Draft' }]}
+            />
           </div>
 
           {/* Media Type Filter */}
           <div className="w-[120px] shrink-0">
-            <select
+            <Select
               value={selectedMediaType}
-              onChange={(e) => onMediaTypeChange(e.target.value)}
               aria-label="Filter by media type"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="All">All Media</option>
-              <option value="image">Images</option>
-              <option value="video">Videos</option>
-            </select>
+              onChange={(value) => onMediaTypeChange(value)}
+              options={[{ value: 'All', label: 'All Media' }, { value: 'image', label: 'Images' }, { value: 'video', label: 'Videos' }]}
+            />
           </div>
 
           {/* Sort By Filter */}
           <div className="w-[130px] shrink-0">
-            <select
+            <Select
               value={sortBy}
-              onChange={(e) => onSortByChange(e.target.value as 'sortOrder' | 'titleAsc' | 'titleDesc')}
               aria-label="Sort gallery items"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              <option value="sortOrder">Sort Order</option>
-              <option value="titleAsc">Title (A–Z)</option>
-              <option value="titleDesc">Title (Z–A)</option>
-            </select>
+              onChange={(value) => onSortByChange(value as 'sortOrder' | 'titleAsc' | 'titleDesc')}
+              options={[{ value: 'sortOrder', label: 'Sort Order' }, { value: 'titleAsc', label: 'Title (A–Z)' }, { value: 'titleDesc', label: 'Title (Z–A)' }]}
+            />
           </div>
 
           {/* Active Filter Clear Button */}

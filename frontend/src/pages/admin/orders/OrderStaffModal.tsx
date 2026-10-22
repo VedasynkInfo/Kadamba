@@ -1,5 +1,6 @@
 import { Button, Input, Modal } from '@/components/ui';
 import type { OrderStaff } from '@/services/orders/orderService';
+import { Select } from '@/components/ui';
 
 const STAFF_ROLES = [
   { value: 'designer', label: 'Designer' },
@@ -45,17 +46,11 @@ export function OrderStaffModal({
             value={newStaffName}
             onChange={(e) => setNewStaffName(e.target.value)}
           />
-          <select
+          <Select
             value={newStaffRole}
-            onChange={(e: any) => setNewStaffRole(e.target.value)}
-            className="w-[150px] rounded-md border border-line bg-surface-field px-3 py-2 text-sm text-ink focus:border-focus focus:outline-none focus:ring-2 focus:ring-focus/30"
-          >
-            {STAFF_ROLES.map((role) => (
-              <option key={role.value} value={role.value}>
-                {role.label}
-              </option>
-            ))}
-          </select>
+            onChange={(value) => setNewStaffRole(value as typeof newStaffRole)}
+            options={STAFF_ROLES.map((role) => ({ value: role.value, label: role.label }))}
+          />
           <Button type="button" size="sm" onClick={onAddStaffMember}>
             Add
           </Button>

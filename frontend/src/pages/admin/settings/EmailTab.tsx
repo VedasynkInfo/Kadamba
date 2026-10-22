@@ -256,7 +256,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
         {/* Active Template Editor */}
         {currentTemplate ? (
           <div
-            className="rounded-xl border p-4 space-y-3 mt-2 bg-black/20 border-line"
+            className="rounded-xl border p-4 space-y-3 mt-2 bg-espresso/20 border-line"
           >
             <div className="space-y-1">
               <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">

@@ -18,7 +18,7 @@ const MONTH_NAMES = [
 ];
 
 function formatINR(v: number) {
-  return `₹${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
+  return `â¹${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
 }
 
 function formatDate(iso: string) {
@@ -128,7 +128,7 @@ export function FinanceSalariesTab({ salaries, onAddSalary }: FinanceSalariesTab
 
                       <td className="py-3 px-4">
                         <span className="opacity-80 block truncate max-w-[250px]">
-                          {sal.notes || '—'}
+                          {sal.notes || 'â'}
                         </span>
                       </td>
 

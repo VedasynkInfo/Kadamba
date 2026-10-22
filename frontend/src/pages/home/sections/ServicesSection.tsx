@@ -140,7 +140,7 @@ export function ServicesSection() {
                 <div
                   className={cn(
                     'absolute inset-0 transition-colors duration-500',
-                    isActive ? 'bg-black/35' : 'bg-black/60',
+                    isActive ? 'bg-espresso/35' : 'bg-espresso/60',
                   )}
                   aria-hidden
                 />

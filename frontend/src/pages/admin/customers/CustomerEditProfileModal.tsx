@@ -1,4 +1,5 @@
 import { Button, Input, Modal } from '@/components/ui';
+import { Select } from '@/components/ui';
 
 export interface CustomerEditFormState {
   name: string;
@@ -80,17 +81,11 @@ export function CustomerEditProfileModal({
           </div>
           <div>
             <label className="block text-ink/55 mb-1.5 font-semibold">Client source</label>
-            <select
+            <Select
               value={form.source}
-              onChange={(e) => setForm((f) => ({ ...f, source: e.target.value }))}
-              className="w-full rounded-md border border-line bg-surface-field px-3 py-2 text-sm text-ink focus:border-focus focus:outline-none focus:ring-2 focus:ring-focus/30"
-            >
-              <option value="walk-in">Walk-in / Phone</option>
-              <option value="instagram">Instagram</option>
-              <option value="google">Google Maps</option>
-              <option value="referral">Referral</option>
-              <option value="website">Website</option>
-            </select>
+              onChange={(value) => setForm((f) => ({ ...f, source: value }))}
+              options={[{ value: 'walk-in', label: 'Walk-in / Phone' }, { value: 'instagram', label: 'Instagram' }, { value: 'google', label: 'Google Maps' }, { value: 'referral', label: 'Referral' }, { value: 'website', label: 'Website' }]}
+            />
           </div>
         </div>
 
@@ -158,29 +153,21 @@ export function CustomerEditProfileModal({
         <div className="grid grid-cols-3 gap-3 pt-2">
           <div>
             <label className="block text-ink/55 mb-1.5 font-semibold">Fit Unit</label>
-            <select
+            <Select
               value={form.preferredUnit}
-              onChange={(e: any) =>
-                setForm((f) => ({ ...f, preferredUnit: e.target.value as 'in' | 'cm' }))
+              onChange={(value) =>
+                setForm((f) => ({ ...f, preferredUnit: value as 'in' | 'cm' }))
               }
-              className="w-full rounded-md border border-line bg-surface-field px-3 py-2 text-sm text-ink focus:border-focus focus:outline-none focus:ring-2 focus:ring-focus/30"
-            >
-              <option value="in">Inches (in)</option>
-              <option value="cm">Centimeters (cm)</option>
-            </select>
+              options={[{ value: 'in', label: 'Inches (in)' }, { value: 'cm', label: 'Centimeters (cm)' }]}
+            />
           </div>
           <div>
             <label className="block text-ink/55 mb-1.5 font-semibold">Portal status</label>
-            <select
+            <Select
               value={form.portalStatus}
-              onChange={(e) => setForm((f) => ({ ...f, portalStatus: e.target.value }))}
-              className="w-full rounded-md border border-line bg-surface-field px-3 py-2 text-sm text-ink focus:border-focus focus:outline-none focus:ring-2 focus:ring-focus/30"
-            >
-              <option value="none">None</option>
-              <option value="invited">Invited</option>
-              <option value="active">Active</option>
-              <option value="locked">Locked</option>
-            </select>
+              onChange={(value) => setForm((f) => ({ ...f, portalStatus: value }))}
+              options={[{ value: 'none', label: 'None' }, { value: 'invited', label: 'Invited' }, { value: 'active', label: 'Active' }, { value: 'locked', label: 'Locked' }]}
+            />
           </div>
           <div className="col-span-1">
             <label className="block text-ink/55 mb-1.5 font-semibold">Client tags</label>

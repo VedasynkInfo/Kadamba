@@ -1,5 +1,6 @@
 import { Icon } from '@/components/icons';
 import { Link } from 'react-router-dom';
+import { Select } from '@/components/ui';
 
 const BILL_STATUS_OPTIONS = [
   { value: 'All', label: 'All Bills' },
@@ -63,18 +64,12 @@ export function InvoicesToolbar({
 
           {/* Status Filter */}
           <div className="w-[155px] shrink-0">
-            <select
+            <Select
               value={selectedStatus}
-              onChange={(e) => onStatusChange(e.target.value)}
               aria-label="Filter by billing status"
-              className="w-full rounded-lg border py-2 px-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-focus transition cursor-pointer bg-surface-raised border-line"
-            >
-              {BILL_STATUS_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
+              onChange={(value) => onStatusChange(value)}
+              options={BILL_STATUS_OPTIONS.map((opt) => ({ value: opt.value, label: opt.label }))}
+            />
           </div>
 
           {/* Reset Filters */}

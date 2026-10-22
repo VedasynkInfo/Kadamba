@@ -67,7 +67,7 @@ export function ImageLightbox({ open, onClose, title, image, alt }: ImageLightbo
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="absolute inset-0 bg-black/90 backdrop-blur-sm" aria-hidden />
+      <div className="absolute inset-0 bg-espresso/90 backdrop-blur-sm" aria-hidden />
       <div
         ref={panelRef}
         role="dialog"

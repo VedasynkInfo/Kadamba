@@ -11,7 +11,7 @@ export function ProductBannerSection({ product }: { product: PublicProduct }) {
   const navigate = useNavigate();
 
   return (
-    <section className="bg-espresso text-ink-inverse">
+    <section className="on-dark bg-espresso text-ink-inverse">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-[1.1fr_1fr] md:items-center md:py-20 lg:px-8">
         <ClipReveal className="relative aspect-[4/5] bg-white/5 md:aspect-[4/4.6]">
           <OptimizedImage
@@ -53,7 +53,7 @@ export function ProductBannerSection({ product }: { product: PublicProduct }) {
             </p>
           ) : null}
           {product.leadTimeNote ? (
-            <p className="mt-2 text-xs leading-relaxed text-ink-inverse/55">
+            <p className="mt-2 text-xs leading-relaxed text-ink-inverse/70">
               {product.leadTimeNote}
             </p>
           ) : null}
@@ -93,7 +93,7 @@ export function ProductBannerSection({ product }: { product: PublicProduct }) {
               Back to collection
             </Link>
           </div>
-          <p className="mt-5 text-xs leading-relaxed text-ink-inverse/55">
+          <p className="mt-5 text-xs leading-relaxed text-ink-inverse/70">
             Workshop code {product.code}. Every piece is cut after a consultation and measured in
             person or through the customer portal.
           </p>
@@ -289,7 +289,7 @@ export function ProductRelatedSection({
                 />
               </div>
               <h3 className="mt-3 font-heading text-xl text-ink">{item.name}</h3>
-              <p className="mt-1 text-xs uppercase tracking-[0.18em] text-ink/55">
+              <p className="mt-1 text-xs uppercase tracking-[0.18em] text-ink/70">
                 {item.category?.name ?? 'Atelier'}
               </p>
             </Link>

@@ -246,7 +246,7 @@ export default function OrderDetailAdminPage() {
     return (
       <div className="mx-auto max-w-7xl px-4 py-16 text-center">
         <h3 className="font-heading text-xl text-ink">Order not found</h3>
-        <p className="text-ink/55 text-xs mt-2">The requested order workspace could not be resolved.</p>
+        <p className="text-ink/70 text-xs mt-2">The requested order workspace could not be resolved.</p>
         <Link to="/admin/orders" className="text-xs font-semibold hover:underline block mt-4 text-ink">
           <Icon name="arrowLeft" size={14} className="mr-1 inline align-middle" /> Back to orders desk
         </Link>
@@ -283,7 +283,7 @@ export default function OrderDetailAdminPage() {
                       {order.priority} priority
                     </span>
                     {order.tags.map((tag) => (
-                      <span key={tag} className="text-[10px] bg-surface-sunken text-ink/55 border border-line px-2 py-0.5 rounded">
+                      <span key={tag} className="text-[10px] bg-surface-sunken text-ink/70 border border-line px-2 py-0.5 rounded">
                         #{tag}
                       </span>
                     ))}
@@ -347,7 +347,7 @@ export default function OrderDetailAdminPage() {
                   <div key={index} className="flex justify-between gap-4 p-4 border border-line bg-white/40 rounded-sm">
                     <div>
                       <span className="font-medium text-ink text-sm block">
-                        {item.name} <span className="text-xs text-ink/55 font-normal">({item.qty} Qty)</span>
+                        {item.name} <span className="text-xs text-ink/70 font-normal">({item.qty} Qty)</span>
                       </span>
                       {item.notes && <p className="text-xs text-ink/60 mt-1">{item.notes}</p>}
                     </div>
@@ -397,7 +397,7 @@ export default function OrderDetailAdminPage() {
                     <div key={pid} className="flex justify-between items-center p-3.5 border border-line bg-white/45 rounded-sm text-xs">
                       <div>
                         <span className="font-semibold block">Profile ID: {pid.slice(-6).toUpperCase()}</span>
-                        <span className="text-ink/55 mt-0.5 block">Linked to this tailor card</span>
+                        <span className="text-ink/70 mt-0.5 block">Linked to this tailor card</span>
                       </div>
                       <div className="flex gap-3">
                         <Link
@@ -436,7 +436,7 @@ export default function OrderDetailAdminPage() {
                 />
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <label className="flex items-center gap-1.5 text-xs text-ink/55">
+                    <label className="flex items-center gap-1.5 text-xs text-ink/70">
                       <input
                         type="radio"
                         name="note-vis"
@@ -445,7 +445,7 @@ export default function OrderDetailAdminPage() {
                       />
                       Internal note (staff only)
                     </label>
-                    <label className="flex items-center gap-1.5 text-xs text-ink/55">
+                    <label className="flex items-center gap-1.5 text-xs text-ink/70">
                       <input
                         type="radio"
                         name="note-vis"
@@ -566,15 +566,15 @@ export default function OrderDetailAdminPage() {
 
               <div className="space-y-3 text-xs">
                 <div className="flex justify-between">
-                  <span className="text-ink/55">Total Quoted</span>
+                  <span className="text-ink/70">Total Quoted</span>
                   <span className="font-medium">₹{order.paymentSummary.totalQuoted}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-ink/55">Advance Paid</span>
+                  <span className="text-ink/70">Advance Paid</span>
                   <span className="font-medium text-emerald-700">₹{order.paymentSummary.advance}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-ink/55">Total Paid</span>
+                  <span className="text-ink/70">Total Paid</span>
                   <span className="font-medium text-emerald-700">₹{order.paymentSummary.totalPaid}</span>
                 </div>
                 <div className="flex justify-between border-t border-line pt-2 font-semibold">

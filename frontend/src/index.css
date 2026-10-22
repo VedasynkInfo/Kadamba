@@ -133,6 +133,10 @@
   --color-primary-hover: #a67a20;
   --color-primary-text: #17140f;
   --color-accent: #b8892b;
+  /* The text-safe gold. The bright brand gold lives on the dark surfaces and
+     is re-pointed there by `.on-dark`. */
+  --color-gold: #7a5c15;
+  --color-gold-dark: #7a5c15;
   --public-bg: #faf7f1;
   --public-text: #17140f;
   --public-card: #ffffff;
@@ -198,29 +202,36 @@
 /*
   The customer portal.
 
-  Light as well, and warmer than the console: the portal is a branded
-  experience for a customer, not an internal tool. It keeps the console's
-  rhythm (the same tokens, the same density) but sits on the studio's paper
-  tone so the two never look like different products.
+  Deliberately dark, and deliberately different from the console.
+
+  The portal is a branded space for a customer, not a desk an operator sits
+  at, and it is read on a phone — often in the evening, often about a wedding
+  that is four months away. The console and the public site are light because
+  they are working surfaces; this one is the studio's other face, and it keeps
+  the warm near-black it was drawn for.
+
+  The pages here are written against this shell, so the tokens are the
+  original ones: the layout paints its own radial gradient and the ink on top
+  of it is the cream one.
 */
 .portal-shell {
-  --color-surface: #f7f3ec;
-  --color-surface-raised: #ffffff;
-  --color-surface-sunken: rgba(27, 24, 21, 0.04);
-  --color-surface-field: #ffffff;
-  --color-surface-inverse: var(--color-espresso);
-  --color-sidebar: #ffffff;
-  --color-sidebar-ink: #17140f;
-  --color-ink: #17140f;
-  --color-ink-raised: #17140f;
-  --color-ink-inverse: #fdf8ee;
-  --color-ink-on-brand: #17140f;
-  --color-line: rgba(27, 24, 21, 0.12);
-  --color-line-strong: rgba(27, 24, 21, 0.24);
+  --color-surface: var(--color-espresso);
+  --color-surface-raised: rgba(255, 255, 255, 0.05);
+  --color-surface-sunken: rgba(255, 255, 255, 0.04);
+  --color-surface-field: rgba(255, 255, 255, 0.06);
+  --color-surface-inverse: var(--color-black);
+  --color-sidebar: rgba(255, 255, 255, 0.05);
+  --color-sidebar-ink: #fdf8ee;
+  --color-ink: #f3f4f6;
+  --color-ink-raised: #f3f4f6;
+  --color-ink-inverse: var(--color-cream);
+  --color-ink-on-brand: var(--color-black);
+  --color-line: rgba(255, 255, 255, 0.14);
+  --color-line-strong: rgba(255, 255, 255, 0.28);
   --color-brand: var(--color-gold);
-  --color-brand-strong: #7a5c15;
+  --color-brand-strong: var(--color-gold);
   --color-focus: var(--color-gold);
-  --color-danger: #b42318;
+  --color-danger: #fb7185;
 
   background-color: var(--color-surface);
   color: var(--color-ink);
@@ -649,6 +660,24 @@ html.lenis body {
   the counters read their value. The JavaScript motion (framer-motion) is
   switched off by `usePrefersReducedMotion`; this is the CSS half.
 */
+/*
+  Gold, and where it may be used as text.
+
+  The brand gold is bright (#e3b23c) because most of it sits on the studio's
+  near-black. As *text* on a light surface it is unreadable — 1.8:1 against
+  paper — so the light shells get a darker gold, and the dark surfaces
+  re-point the token to the bright one with `.on-dark`.
+
+  The result is that `text-gold` is safe wherever it is used: the same class
+  reads on the cream page and on the black panel.
+*/
+.on-dark {
+  --color-gold: #e3b23c;
+  --color-gold-dark: #e3b23c;
+  --color-brand-strong: #e3b23c;
+  --color-focus: #e3b23c;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-in,
   .animate-fade-in-up,

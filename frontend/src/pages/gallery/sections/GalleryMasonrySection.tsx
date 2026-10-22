@@ -180,7 +180,7 @@ function MasonryTile({
               height={item.height}
             />
             <span
-              className="absolute inset-0 flex items-center justify-center bg-espresso/25"
+              className="on-dark absolute inset-0 flex items-center justify-center bg-espresso/25"
               aria-hidden
             >
               <span className="flex size-12 items-center justify-center border border-gold/70 text-gold backdrop-blur-[2px]">

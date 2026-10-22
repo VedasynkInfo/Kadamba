@@ -125,7 +125,7 @@ export function ServicesCatalogSection() {
         />
       ) : (
         <>
-          <p className="mt-4 text-sm text-ink/55" aria-live="polite">
+          <p className="mt-4 text-sm text-ink/70" aria-live="polite">
             {filtered.length} {filtered.length === 1 ? 'service' : 'services'}
             {category !== 'All' ? ` in ${category}` : ''}
             {query.trim() ? ` matching “${query.trim()}”` : ''}

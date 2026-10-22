@@ -68,7 +68,7 @@ function SortableProductRow({
       <button
         type="button"
         className={cn(
-          'shrink-0 rounded p-1.5 text-ink/45 transition-colors',
+          'shrink-0 rounded p-1.5 text-ink/70 transition-colors',
           canReorder
             ? 'cursor-grab hover:bg-current/[0.06] hover:text-ink'
             : 'cursor-not-allowed opacity-25',
@@ -274,7 +274,7 @@ export function ProductMasterList({
 
       {products.length === 0 ? (
         <div className="p-10 text-center">
-          <Icon name="products" size={26} className="mx-auto mb-2 opacity-50" />
+          <Icon name="products" size={26} className="mx-auto mb-2 opacity-70" />
           <p className="text-sm font-medium">No products match this view</p>
           <p className="mt-1 text-xs opacity-65">
             Try another category or clear the search. A new catalogue can be seeded from the empty

@@ -24,7 +24,7 @@ export function PortfolioPreviewModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
+      className="on-dark fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -46,7 +46,7 @@ export function PortfolioPreviewModal({
             <span
               className={cn(
                 'inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold',
-                item.published ? 'text-emerald-500 bg-emerald-500/10' : 'opacity-60 bg-current/[0.06]',
+                item.published ? 'text-emerald-700 bg-emerald-500/10' : 'opacity-70 bg-current/[0.06]',
               )}
             >
               <span className="h-1.5 w-1.5 rounded-full bg-current" />
@@ -68,7 +68,7 @@ export function PortfolioPreviewModal({
         <div className="p-6 space-y-5 max-h-[75vh] overflow-y-auto">
           {displayImage ? (
             <div
-              className="rounded-xl border overflow-hidden flex items-center justify-center bg-espresso/40 relative min-h-[220px] max-h-[340px] border-line"
+              className="on-dark rounded-xl border overflow-hidden flex items-center justify-center bg-espresso/40 relative min-h-[220px] max-h-[340px] border-line"
             >
               <OptimizedImage
                 src={displayImage}
@@ -81,13 +81,13 @@ export function PortfolioPreviewModal({
 
           <div className="space-y-3">
             <div>
-              <div className="flex items-center gap-2 text-xs opacity-60 mb-1">
+              <div className="flex items-center gap-2 text-xs opacity-70 mb-1">
                 <span>{item.year || '2025'}</span>
                 <span>•</span>
                 <span>{item.location || 'Kurnool Atelier'}</span>
               </div>
               <h3 className="text-xl font-bold tracking-tight text-inherit font-heading">{item.title}</h3>
-              <p className="font-mono text-xs opacity-60 mt-0.5">/portfolio/{item.slug}</p>
+              <p className="font-mono text-xs opacity-70 mt-0.5">/portfolio/{item.slug}</p>
             </div>
 
             {item.summary ? (
@@ -98,7 +98,7 @@ export function PortfolioPreviewModal({
               <div
                 className="rounded-lg p-3.5 border text-xs space-y-2 opacity-85 leading-relaxed bg-surface-sunken border-line"
               >
-                <span className="font-semibold block text-[10px] uppercase tracking-wider opacity-60">
+                <span className="font-semibold block text-[10px] uppercase tracking-wider opacity-70">
                   Couture Story & Craftsmanship:
                 </span>
                 {item.story.map((paragraph, idx) => (
@@ -124,7 +124,7 @@ export function PortfolioPreviewModal({
             <div
               className="rounded-xl border p-4 shadow-xs bg-surface-raised border-line"
             >
-              <p className="text-[10px] font-bold uppercase tracking-wider opacity-50 mb-2">
+              <p className="text-[10px] font-bold uppercase tracking-wider opacity-70 mb-2">
                 Search Snippet Preview
               </p>
               <p className="text-xs text-blue-500 hover:underline cursor-pointer truncate font-medium">

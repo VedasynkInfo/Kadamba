@@ -36,7 +36,7 @@ export function VariantsEditor({ variants, onChange }: VariantsEditorProps) {
     <div className="space-y-4">
       {variants.length === 0 ? (
         <div className="rounded-lg border border-dashed border-line p-8 text-center">
-          <Icon name="thread" size={26} className="mx-auto mb-2 opacity-50" />
+          <Icon name="thread" size={26} className="mx-auto mb-2 opacity-70" />
           <p className="text-sm font-medium">No variants</p>
           <p className="mt-1 text-xs opacity-70">
             Add a choice only when customers genuinely choose between versions of this garment.

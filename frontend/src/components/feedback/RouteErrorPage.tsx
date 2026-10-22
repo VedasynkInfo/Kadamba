@@ -54,7 +54,7 @@ export function RouteErrorPage() {
             <button
               type="button"
               onClick={() => revalidator.revalidate()}
-              className="rounded-md bg-espresso px-6 py-2.5 text-sm font-medium text-ink-inverse transition-colors hover:bg-espresso/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+              className="on-dark rounded-md bg-espresso px-6 py-2.5 text-sm font-medium text-ink-inverse transition-colors hover:bg-espresso/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
             >
               Try again
             </button>
@@ -63,7 +63,7 @@ export function RouteErrorPage() {
             to="/"
             className={
               missing
-                ? 'rounded-md bg-espresso px-6 py-2.5 text-sm font-medium text-ink-inverse transition-colors hover:bg-espresso/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus'
+                ? 'on-dark rounded-md bg-espresso px-6 py-2.5 text-sm font-medium text-ink-inverse transition-colors hover:bg-espresso/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus'
                 : 'rounded-md border border-line-strong px-6 py-2.5 text-sm font-medium text-ink transition-colors hover:border-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus'
             }
           >

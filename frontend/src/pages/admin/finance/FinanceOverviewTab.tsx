@@ -28,7 +28,7 @@ export function FinanceOverviewTab({ summary }: FinanceOverviewTabProps) {
               <h3 className="font-heading text-base font-bold tracking-wide">
                 Workshop Performance Progression
               </h3>
-              <p className="text-[11px] opacity-60 mt-0.5">
+              <p className="text-[11px] opacity-70 mt-0.5">
                 Monthly revenue collections vs atelier operational costs (last 6 months)
               </p>
             </div>
@@ -58,7 +58,7 @@ export function FinanceOverviewTab({ summary }: FinanceOverviewTabProps) {
                     <div className="flex items-center gap-3">
                       <span className="text-emerald-400 font-semibold">{formatINR(row.revenue)}</span>
                       <span className="opacity-40">/</span>
-                      <span className="text-rose-400 font-semibold">{formatINR(row.expenses)}</span>
+                      <span className="text-rose-700 font-semibold">{formatINR(row.expenses)}</span>
                     </div>
                   </div>
 
@@ -92,7 +92,7 @@ export function FinanceOverviewTab({ summary }: FinanceOverviewTabProps) {
             <h4 className="font-heading text-sm font-bold">Invoices & Billing Hub</h4>
             <Icon name="file" size={14} />
           </div>
-          <p className="text-xs opacity-60 mb-4">
+          <p className="text-xs opacity-70 mb-4">
             Manage tax invoices, proforma bills, settlement statuses, and client billing links.
           </p>
           <Link
@@ -111,7 +111,7 @@ export function FinanceOverviewTab({ summary }: FinanceOverviewTabProps) {
             <h4 className="font-heading text-sm font-bold">Payments & Receipts</h4>
             <span className="text-lg"><Icon name="card" size={14} className="mr-1 inline align-middle" /> </span>
           </div>
-          <p className="text-xs opacity-60 mb-4">
+          <p className="text-xs opacity-70 mb-4">
             Audit daily receipts across UPI, cash counter, cards, and send WhatsApp receipts.
           </p>
           <Link

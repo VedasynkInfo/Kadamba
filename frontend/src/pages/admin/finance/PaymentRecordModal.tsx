@@ -135,13 +135,13 @@ export function PaymentRecordModal({
             <span className="text-xl">??</span>
             <div>
               <h3 className="font-heading text-base font-bold tracking-wide">Record Payment</h3>
-              <p className="text-[10px] opacity-60 mt-0.5">Post an advance or settlement to an active workshop order</p>
+              <p className="text-[10px] opacity-70 mt-0.5">Post an advance or settlement to an active workshop order</p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer border-line"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-70 hover:opacity-100 transition cursor-pointer border-line"
             aria-label="Close modal"
           >
             ?
@@ -201,7 +201,7 @@ export function PaymentRecordModal({
                   className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
                 />
                 {searchingOrders ? (
-                  <span className="absolute right-3 top-2.5 text-[10px] opacity-50 animate-pulse">
+                  <span className="absolute right-3 top-2.5 text-[10px] opacity-70 animate-pulse">
                     Searching...
                   </span>
                 ) : null}
@@ -227,7 +227,7 @@ export function PaymentRecordModal({
                         <div className="font-bold text-xs">
                           #{ord.orderNumber} — {ord.customerId?.name || 'Client'} ({ord.customerId?.phone || ''})
                         </div>
-                        <div className="text-[10px] opacity-60 flex gap-2 mt-0.5">
+                        <div className="text-[10px] opacity-70 flex gap-2 mt-0.5">
                           <span>Balance: ?{ord.paymentSummary?.balance ?? 0}</span>
                           <span>Status: {ord.status}</span>
                         </div>
@@ -338,7 +338,7 @@ export function PaymentRecordModal({
             <button
               type="submit"
               disabled={submitting || !selectedOrder}
-              className="rounded-xl px-5 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 disabled:opacity-50 cursor-pointer bg-brand text-ink-on-brand"
+              className="rounded-xl px-5 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 disabled:opacity-70 cursor-pointer bg-brand text-ink-on-brand"
             >
               {submitting ? 'Recording...' : 'Record Payment'}
             </button>

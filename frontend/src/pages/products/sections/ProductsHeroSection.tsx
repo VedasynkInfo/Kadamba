@@ -11,7 +11,7 @@ export function ProductsHeroSection() {
   const navigate = useNavigate();
 
   return (
-    <section className="relative isolate overflow-hidden bg-espresso text-ink-inverse">
+    <section className="on-dark relative isolate overflow-hidden bg-espresso text-ink-inverse">
       <OptimizedImage
         src={productsHero.image}
         alt={productsHero.alt}

@@ -17,7 +17,7 @@ export function MediaTab({ form, patchForm }: MediaTabProps) {
       >
         <div className="border-b pb-3 border-line">
           <h3 className="font-heading text-sm font-bold tracking-wide">Media & Storage Rules</h3>
-          <p className="text-[10px] opacity-60 mt-0.5">Asset upload limits, CDN compression, and format requirements</p>
+          <p className="text-[10px] opacity-70 mt-0.5">Asset upload limits, CDN compression, and format requirements</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -39,7 +39,7 @@ export function MediaTab({ form, patchForm }: MediaTabProps) {
               }}
               className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
             />
-            <span className="text-[10px] opacity-50 block mt-0.5">
+            <span className="text-[10px] opacity-70 block mt-0.5">
               Applies to lookbook pictures, gallery items, and customer fit photos
             </span>
           </div>
@@ -68,7 +68,7 @@ export function MediaTab({ form, patchForm }: MediaTabProps) {
       >
         <div className="border-b pb-3 border-line">
           <h3 className="font-heading text-sm font-bold tracking-wide">Lookbook & Banner Presets</h3>
-          <p className="text-[10px] opacity-60 mt-0.5">Target canvas resolutions used for responsive atelier media</p>
+          <p className="text-[10px] opacity-70 mt-0.5">Target canvas resolutions used for responsive atelier media</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">

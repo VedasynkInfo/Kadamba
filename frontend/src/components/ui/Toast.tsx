@@ -101,7 +101,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         toastOptions={{
           classNames: {
             toast: cn(
-              'font-admin rounded-lg border border-gold/30 bg-espresso text-ink-inverse shadow-soft',
+              'on-dark font-admin rounded-lg border border-gold/30 bg-espresso text-ink-inverse shadow-soft',
             ),
             title: 'font-heading text-sm text-gold',
             description: 'text-xs text-ink-inverse/70',

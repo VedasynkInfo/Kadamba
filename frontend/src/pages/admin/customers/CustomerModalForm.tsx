@@ -27,7 +27,7 @@ export function CustomerModalForm({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
+      className="on-dark fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -42,7 +42,7 @@ export function CustomerModalForm({
         >
           <div>
             <h2 className="font-heading text-lg font-bold text-inherit">Register Client Profile</h2>
-            <p className="opacity-60 text-xs mt-0.5">
+            <p className="opacity-70 text-xs mt-0.5">
               Add client to studio registry with bespoke measurements, orders, and portal access
             </p>
           </div>
@@ -193,7 +193,7 @@ export function CustomerModalForm({
         <div
           className="flex items-center justify-between gap-3 border-t px-6 py-4 border-line"
         >
-          <div className="text-xs opacity-50">
+          <div className="text-xs opacity-70">
             {form.name ? `Client: ${form.name}` : 'Name and phone required (*)'}
           </div>
 

@@ -124,7 +124,7 @@ export default function PortalDashboardPage() {
             value: String(data.pendingMeasurementActions),
           },
         ].map((item) => (
-          <div key={item.label} className="border border-gold/15 bg-espresso/30 px-4 py-5">
+          <div key={item.label} className="on-dark border border-gold/15 bg-espresso/30 px-4 py-5">
             <p className="text-[0.65rem] uppercase tracking-[0.2em] text-ink-inverse/70">{item.label}</p>
             <p className="mt-2 font-heading text-xl text-ink-inverse sm:text-2xl">{item.value}</p>
           </div>
@@ -154,7 +154,7 @@ export default function PortalDashboardPage() {
       <section>
         <div className="mb-4 flex items-end justify-between gap-4">
           <h2 className="font-heading text-xl text-gold">Recent orders</h2>
-          <Link to="/portal/orders" className="text-xs uppercase tracking-[0.18em] text-ink-inverse/55 hover:text-gold">
+          <Link to="/portal/orders" className="text-xs uppercase tracking-[0.18em] text-ink-inverse/70 hover:text-gold">
             View all
           </Link>
         </div>

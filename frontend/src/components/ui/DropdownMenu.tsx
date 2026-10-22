@@ -28,7 +28,7 @@ export const DropdownMenuContent = forwardRef<
 DropdownMenuContent.displayName = 'DropdownMenuContent';
 
 const itemClasses =
-  'relative flex cursor-pointer select-none items-center gap-2 rounded-md px-2.5 py-2 text-sm outline-none transition-colors duration-150 data-[disabled]:pointer-events-none data-[disabled]:opacity-50';
+  'relative flex cursor-pointer select-none items-center gap-2 rounded-md px-2.5 py-2 text-sm outline-none transition-colors duration-150 data-[disabled]:pointer-events-none data-[disabled]:opacity-70';
 
 export interface DropdownMenuItemProps
   extends ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> {

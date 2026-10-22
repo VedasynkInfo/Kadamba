@@ -123,7 +123,7 @@ export function ProductEditor({
     >
       <div className="flex flex-wrap items-start justify-between gap-3 border-b border-line p-4">
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] opacity-60">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] opacity-70">
             {isNew ? 'New product' : 'Product detail'}
           </p>
           <h2 className="mt-0.5 font-heading text-xl font-bold">
@@ -315,7 +315,7 @@ export function ProductEditor({
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <p className="text-sm font-semibold">Usage</p>
                   {usageLoading ? (
-                    <span className="text-xs opacity-60">Checking orders and services...</span>
+                    <span className="text-xs opacity-70">Checking orders and services...</span>
                   ) : null}
                 </div>
                 <div className="mt-3 grid grid-cols-3 gap-2 text-center">
@@ -334,7 +334,7 @@ export function ProductEditor({
                 </div>
                 {usage && usage.services.length > 0 ? (
                   <div className="mt-3">
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.14em] opacity-60">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.14em] opacity-70">
                       Linked from services
                     </p>
                     <ul className="mt-1 flex flex-wrap gap-1.5">
@@ -344,7 +344,7 @@ export function ProductEditor({
                             to="/admin/services"
                             className={cn(
                               'inline-flex rounded-full border border-line px-2 py-0.5 text-[11px] hover:border-gold/60',
-                              !service.published && 'opacity-60',
+                              !service.published && 'opacity-70',
                             )}
                           >
                             {service.title}
@@ -388,7 +388,7 @@ export function ProductEditor({
       </div>
 
       <div className="flex items-center justify-between gap-3 border-t border-line bg-surface-sunken/30 p-4">
-        <p className="text-xs opacity-60">
+        <p className="text-xs opacity-70">
           {form.active ? 'Visible on the storefront when saved.' : 'Saved as a draft.'}
         </p>
         <div className="flex gap-2">

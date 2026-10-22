@@ -41,7 +41,7 @@ export function CustomerEditProfileModal({
     <Modal open={open} onClose={onClose} title="Edit Client Profile">
       <form onSubmit={onSave} className="space-y-4 text-xs pb-4">
         <div>
-          <label className="block text-ink/55 mb-1.5 font-semibold">Client Name *</label>
+          <label className="block text-ink/70 mb-1.5 font-semibold">Client Name *</label>
           <Input
             type="text"
             required
@@ -52,7 +52,7 @@ export function CustomerEditProfileModal({
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-ink/55 mb-1.5 font-semibold">Primary Phone *</label>
+            <label className="block text-ink/70 mb-1.5 font-semibold">Primary Phone *</label>
             <Input
               type="tel"
               required
@@ -61,7 +61,7 @@ export function CustomerEditProfileModal({
             />
           </div>
           <div>
-            <label className="block text-ink/55 mb-1.5 font-semibold">WhatsApp number</label>
+            <label className="block text-ink/70 mb-1.5 font-semibold">WhatsApp number</label>
             <Input
               type="tel"
               value={form.whatsapp}
@@ -72,7 +72,7 @@ export function CustomerEditProfileModal({
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-ink/55 mb-1.5 font-semibold">Email address</label>
+            <label className="block text-ink/70 mb-1.5 font-semibold">Email address</label>
             <Input
               type="email"
               value={form.email}
@@ -80,7 +80,7 @@ export function CustomerEditProfileModal({
             />
           </div>
           <div>
-            <label className="block text-ink/55 mb-1.5 font-semibold">Client source</label>
+            <label className="block text-ink/70 mb-1.5 font-semibold">Client source</label>
             <Select
               value={form.source}
               onChange={(value) => setForm((f) => ({ ...f, source: value }))}
@@ -90,7 +90,7 @@ export function CustomerEditProfileModal({
         </div>
 
         <div>
-          <label className="block text-ink/55 mb-1.5 font-semibold">Address line 1</label>
+          <label className="block text-ink/70 mb-1.5 font-semibold">Address line 1</label>
           <Input
             type="text"
             value={form.line1}
@@ -98,7 +98,7 @@ export function CustomerEditProfileModal({
           />
         </div>
         <div>
-          <label className="block text-ink/55 mb-1.5 font-semibold">Address line 2</label>
+          <label className="block text-ink/70 mb-1.5 font-semibold">Address line 2</label>
           <Input
             type="text"
             value={form.line2}
@@ -107,7 +107,7 @@ export function CustomerEditProfileModal({
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-ink/55 mb-1.5 font-semibold">Landmark</label>
+            <label className="block text-ink/70 mb-1.5 font-semibold">Landmark</label>
             <Input
               type="text"
               value={form.landmark}
@@ -115,7 +115,7 @@ export function CustomerEditProfileModal({
             />
           </div>
           <div>
-            <label className="block text-ink/55 mb-1.5 font-semibold">Locality / Area</label>
+            <label className="block text-ink/70 mb-1.5 font-semibold">Locality / Area</label>
             <Input
               type="text"
               value={form.locality}
@@ -125,7 +125,7 @@ export function CustomerEditProfileModal({
         </div>
         <div className="grid grid-cols-3 gap-3">
           <div>
-            <label className="block text-ink/55 mb-1.5 font-semibold">City</label>
+            <label className="block text-ink/70 mb-1.5 font-semibold">City</label>
             <Input
               type="text"
               value={form.city}
@@ -133,7 +133,7 @@ export function CustomerEditProfileModal({
             />
           </div>
           <div>
-            <label className="block text-ink/55 mb-1.5 font-semibold">State</label>
+            <label className="block text-ink/70 mb-1.5 font-semibold">State</label>
             <Input
               type="text"
               value={form.state}
@@ -141,7 +141,7 @@ export function CustomerEditProfileModal({
             />
           </div>
           <div>
-            <label className="block text-ink/55 mb-1.5 font-semibold">Pincode</label>
+            <label className="block text-ink/70 mb-1.5 font-semibold">Pincode</label>
             <Input
               type="text"
               value={form.pincode}
@@ -152,7 +152,7 @@ export function CustomerEditProfileModal({
 
         <div className="grid grid-cols-3 gap-3 pt-2">
           <div>
-            <label className="block text-ink/55 mb-1.5 font-semibold">Fit Unit</label>
+            <label className="block text-ink/70 mb-1.5 font-semibold">Fit Unit</label>
             <Select
               value={form.preferredUnit}
               onChange={(value) =>
@@ -162,7 +162,7 @@ export function CustomerEditProfileModal({
             />
           </div>
           <div>
-            <label className="block text-ink/55 mb-1.5 font-semibold">Portal status</label>
+            <label className="block text-ink/70 mb-1.5 font-semibold">Portal status</label>
             <Select
               value={form.portalStatus}
               onChange={(value) => setForm((f) => ({ ...f, portalStatus: value }))}
@@ -170,7 +170,7 @@ export function CustomerEditProfileModal({
             />
           </div>
           <div className="col-span-1">
-            <label className="block text-ink/55 mb-1.5 font-semibold">Client tags</label>
+            <label className="block text-ink/70 mb-1.5 font-semibold">Client tags</label>
             <Input
               type="text"
               value={form.tags}
@@ -181,7 +181,7 @@ export function CustomerEditProfileModal({
         </div>
 
         <div>
-          <label className="block text-ink/55 mb-1.5 font-semibold">Profile Notes summary</label>
+          <label className="block text-ink/70 mb-1.5 font-semibold">Profile Notes summary</label>
           <Input
             type="text"
             value={form.notes}

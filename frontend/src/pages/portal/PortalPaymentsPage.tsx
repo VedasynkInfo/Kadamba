@@ -72,12 +72,12 @@ export default function PortalPaymentsPage() {
     <div className="space-y-8">
       <div>
         <h1 className="font-heading text-3xl text-ink-inverse">Payments & invoices</h1>
-        <p className="mt-2 text-sm text-ink-inverse/55">
+        <p className="mt-2 text-sm text-ink-inverse/70">
           Open any invoice for a full billing document — quoted amount, payments, and balance.
         </p>
       </div>
 
-      <div className="border border-gold/20 bg-espresso/30 px-5 py-6">
+      <div className="on-dark border border-gold/20 bg-espresso/30 px-5 py-6">
         <p className="text-[0.65rem] uppercase tracking-[0.2em] text-ink-inverse/70">Outstanding balance</p>
         <p className="mt-2 font-heading text-3xl text-gold">{formatINR(data.outstandingBalance)}</p>
       </div>
@@ -167,7 +167,7 @@ export default function PortalPaymentsPage() {
                     </Link>
                   ) : null}
                 </div>
-                <p className="text-ink-inverse/55">
+                <p className="text-ink-inverse/70">
                   {new Date(p.paidAt).toLocaleDateString('en-IN', {
                     day: 'numeric',
                     month: 'short',

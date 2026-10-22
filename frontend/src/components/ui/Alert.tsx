@@ -53,7 +53,7 @@ export function Alert({
           <button
             type="button"
             onClick={onDismiss}
-            className="shrink-0 opacity-60 hover:opacity-100 transition-opacity"
+            className="shrink-0 opacity-70 hover:opacity-100 transition-opacity"
             aria-label="Dismiss"
           >
             <Icon name="close" size={16} />

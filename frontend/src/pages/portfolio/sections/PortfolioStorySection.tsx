@@ -41,7 +41,7 @@ export function PortfolioStorySection({ project }: PortfolioStorySectionProps) {
             {project.tags.map((tag) => (
               <li
                 key={tag}
-                className="border border-line/12 px-3 py-1.5 text-[0.65rem] uppercase tracking-[0.2em] text-ink/55"
+                className="border border-line/12 px-3 py-1.5 text-[0.65rem] uppercase tracking-[0.2em] text-ink/70"
               >
                 {tag}
               </li>

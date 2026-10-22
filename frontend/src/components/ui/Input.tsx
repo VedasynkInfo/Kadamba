@@ -50,7 +50,7 @@ export function Input({
           'bg-surface-field text-ink-raised border-line',
           'placeholder:text-ink/60',
           'focus:border-focus focus:outline-none focus:ring-2 focus:ring-focus/30',
-          'disabled:cursor-not-allowed disabled:opacity-50',
+          'disabled:cursor-not-allowed disabled:opacity-70',
           error ? 'border-danger' : undefined,
           className,
         )}

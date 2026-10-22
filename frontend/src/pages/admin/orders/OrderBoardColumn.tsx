@@ -92,7 +92,7 @@ function OrderBoardCardBase({ order }: { order: Order }) {
           #{order.orderNumber}
         </p>
         {order.priority === 'rush' ? (
-          <span className="inline-flex items-center gap-1 rounded bg-rose-500/15 px-1.5 py-0.5 text-[0.6rem] font-bold uppercase text-rose-400">
+          <span className="inline-flex items-center gap-1 rounded bg-rose-500/15 px-1.5 py-0.5 text-[0.6rem] font-bold uppercase text-rose-700">
             <Icon name="rush" size={10} />
             Rush
           </span>

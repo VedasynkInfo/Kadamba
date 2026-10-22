@@ -28,7 +28,7 @@ export function StatCard({
 }: StatCardProps) {
   const toneClasses = {
     default: 'text-inherit',
-    success: 'text-emerald-500',
+    success: 'text-emerald-700',
     warning: 'text-amber-500',
     danger: 'text-rose-500',
   }[tone];
@@ -59,7 +59,7 @@ export function StatCard({
         {typeof value === 'number' ? <CountUp value={value} /> : value}
       </p>
       {sub ? (
-        <p className="mt-1.5 text-xs opacity-60 truncate">
+        <p className="mt-1.5 text-xs opacity-70 truncate">
           {sub}
         </p>
       ) : null}

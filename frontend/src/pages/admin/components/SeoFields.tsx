@@ -25,7 +25,7 @@ function CharHint({ value, max }: { value: string; max: number }) {
   const len = value.length;
   const over = len > max;
   return (
-    <span className={cn('text-[0.65rem]', over ? 'text-rose-500 font-semibold' : 'opacity-60')}>
+    <span className={cn('text-[0.65rem]', over ? 'text-rose-500 font-semibold' : 'opacity-70')}>
       {len}/{max}
     </span>
   );

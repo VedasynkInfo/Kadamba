@@ -38,7 +38,7 @@ function ColorField({ label, sub, value, fallback, onChange }: ColorFieldProps) 
         <label className="block text-[11px] font-semibold tracking-wide truncate">
           {label}
         </label>
-        <span className="text-[10px] opacity-60 block truncate mt-0.5">{sub}</span>
+        <span className="text-[10px] opacity-70 block truncate mt-0.5">{sub}</span>
       </div>
 
       <div className="flex items-center gap-2 shrink-0">
@@ -95,14 +95,14 @@ export function ThemeTab({ form, patchForm, onResetTheme }: ThemeTabProps) {
             <h3 className="font-heading text-sm font-bold tracking-wide">
               Haute Couture Palette Presets
             </h3>
-            <p className="text-[10px] opacity-60 mt-0.5">
+            <p className="text-[10px] opacity-70 mt-0.5">
               1-click luxury atelier themes inspired by royal fabrics and midnight atelier palettes
             </p>
           </div>
           <button
             type="button"
             onClick={onResetTheme}
-            className="text-xs font-semibold text-rose-400 hover:underline cursor-pointer"
+            className="text-xs font-semibold text-rose-700 hover:underline cursor-pointer"
           >
             ↺ Reset to Default
           </button>
@@ -134,7 +134,7 @@ export function ThemeTab({ form, patchForm, onResetTheme }: ThemeTabProps) {
                 ))}
               </div>
               <span className={`font-bold text-xs block ${preset.labelClassName}`}>{preset.name}</span>
-              <span className="text-[10px] opacity-60">{preset.description}</span>
+              <span className="text-[10px] opacity-70">{preset.description}</span>
             </button>
           ))}
         </div>
@@ -144,7 +144,7 @@ export function ThemeTab({ form, patchForm, onResetTheme }: ThemeTabProps) {
       <div className="rounded-2xl border border-line bg-surface-raised p-5 text-ink-raised shadow-xs transition-colors">
         <div className="border-b border-line pb-3 mb-4">
           <h3 className="font-heading text-sm font-bold tracking-wide">Real-time Interface Palette Preview</h3>
-          <p className="text-[10px] opacity-60 mt-0.5">Live mockup of your selected studio color combinations</p>
+          <p className="text-[10px] opacity-70 mt-0.5">Live mockup of your selected studio color combinations</p>
         </div>
 
         {/* Every preview colour is set once, here, and inherited: the elements
@@ -194,7 +194,7 @@ export function ThemeTab({ form, patchForm, onResetTheme }: ThemeTabProps) {
                   >
                     Primary Button
                   </button>
-                  <span className="text-[10px] opacity-60">Interactive state</span>
+                  <span className="text-[10px] opacity-70">Interactive state</span>
                 </div>
               </div>
             </div>
@@ -208,7 +208,7 @@ export function ThemeTab({ form, patchForm, onResetTheme }: ThemeTabProps) {
           <h3 className="font-heading text-sm font-bold tracking-wide">
             1. Admin Studio Workspace Variables
           </h3>
-          <p className="text-[10px] opacity-60 mt-0.5">
+          <p className="text-[10px] opacity-70 mt-0.5">
             Controls colors for admin sidebar, workspace background, panel surfaces, and action buttons
           </p>
         </div>
@@ -286,7 +286,7 @@ export function ThemeTab({ form, patchForm, onResetTheme }: ThemeTabProps) {
           <h3 className="font-heading text-sm font-bold tracking-wide">
             2. Public Storefront Theme Variables
           </h3>
-          <p className="text-[10px] opacity-60 mt-0.5">
+          <p className="text-[10px] opacity-70 mt-0.5">
             Controls client-facing homepage, lookbook, services catalog, and consultation portal
           </p>
         </div>

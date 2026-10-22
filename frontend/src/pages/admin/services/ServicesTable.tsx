@@ -160,7 +160,7 @@ export function ServicesTable({
                           {item.title}
                         </button>
                         <div className="flex items-center gap-1.5 mt-0.5">
-                          <span className="font-mono text-[10px] opacity-60 truncate max-w-[200px]">
+                          <span className="font-mono text-[10px] opacity-70 truncate max-w-[200px]">
                             /{item.slug}
                           </span>
                         </div>
@@ -190,7 +190,7 @@ export function ServicesTable({
                           'inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold border',
                           item.isFulfillable
                             ? 'bg-blue-500/10 text-blue-500 border-blue-500/20'
-                            : 'opacity-60 border-current/15',
+                            : 'opacity-70 border-current/15',
                         )}
                       >
                         {item.isFulfillable ? 'Catalog Linked' : 'Bespoke'}
@@ -205,7 +205,7 @@ export function ServicesTable({
                         className={cn(
                           'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border transition hover:opacity-85 cursor-pointer',
                           item.published
-                            ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/25'
+                            ? 'bg-emerald-500/10 text-emerald-700 border-emerald-500/25'
                             : 'bg-current/[0.06] opacity-70 border-current/15',
                         )}
                         title="Click to toggle publish status"

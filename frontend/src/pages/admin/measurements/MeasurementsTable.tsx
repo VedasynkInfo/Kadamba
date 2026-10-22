@@ -165,7 +165,7 @@ export function MeasurementsTable({
                           >
                             {p.customerName || 'Walk-in Client'}
                           </button>
-                          <span className="text-[11px] opacity-60 block font-mono mt-0.5 truncate">
+                          <span className="text-[11px] opacity-70 block font-mono mt-0.5 truncate">
                             ID: {p.customerId ? p.customerId.slice(-6).toUpperCase() : 'General'}
                           </span>
                         </div>
@@ -190,7 +190,7 @@ export function MeasurementsTable({
                     {/* Dimensions Count */}
                     <td className="py-3 px-4 whitespace-nowrap">
                       <span className="font-semibold text-xs">{valuesCount} Points</span>
-                      <span className="text-[10px] opacity-60 block mt-0.5 uppercase">
+                      <span className="text-[10px] opacity-70 block mt-0.5 uppercase">
                         in {p.unit || 'inches'}
                       </span>
                     </td>
@@ -198,7 +198,7 @@ export function MeasurementsTable({
                     {/* Recorded Date & Tailor */}
                     <td className="py-3 px-4 whitespace-nowrap">
                       <span className="font-medium block">{formatDate(p.measuredAt)}</span>
-                      <span className="text-[10px] opacity-60 block mt-0.5 truncate max-w-[120px]">
+                      <span className="text-[10px] opacity-70 block mt-0.5 truncate max-w-[120px]">
                         By {p.measuredBy || 'Atelier Master'}
                       </span>
                     </td>
@@ -239,7 +239,7 @@ export function MeasurementsTable({
                             type="button"
                             onClick={() => onApprove(p)}
                             disabled={isApproving}
-                            className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/40 hover:bg-amber-500/30 transition cursor-pointer disabled:opacity-50"
+                            className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/40 hover:bg-amber-500/30 transition cursor-pointer disabled:opacity-70"
                             title="Approve measurement specification"
                           >
                             <span><Icon name="check" size={14} className="mr-1 inline align-middle" /> </span>
@@ -353,7 +353,7 @@ export function MeasurementsTable({
                 setMenuAnchor(null);
                 onArchive(target);
               }}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-rose-400 hover:bg-rose-500/10 transition cursor-pointer"
+              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-rose-700 hover:bg-rose-500/10 transition cursor-pointer"
             >
               {menuAnchor.profile.status === 'archived' ? (
                 <Icon name="archived" size={14} />

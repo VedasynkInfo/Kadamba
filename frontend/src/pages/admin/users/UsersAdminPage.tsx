@@ -141,7 +141,7 @@ export default function UsersAdminPage() {
             >
               Users & Roles
             </h1>
-            <p className="text-xs opacity-60">
+            <p className="text-xs opacity-70">
               Control who can sign in and exactly what each person can reach.
             </p>
           </div>
@@ -164,7 +164,7 @@ export default function UsersAdminPage() {
           >
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="border-b text-[10px] uppercase tracking-wider opacity-60 border-line">
+                <thead className="border-b text-[10px] uppercase tracking-wider opacity-70 border-line">
                   <tr>
                     <th className="px-4 py-3">Person</th>
                     <th className="px-4 py-3">Role</th>
@@ -211,7 +211,7 @@ export default function UsersAdminPage() {
                             'rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase',
                             user.status === 'active'
                               ? 'bg-emerald-500/15 text-emerald-400'
-                              : 'bg-rose-500/15 text-rose-400',
+                              : 'bg-rose-500/15 text-rose-700',
                           )}
                         >
                           {user.status}
@@ -232,7 +232,7 @@ export default function UsersAdminPage() {
                             type="button"
                             onClick={() => void toggleStatus(user)}
                             disabled={savingId === user.id}
-                            className="rounded-lg border px-2.5 py-1 text-[11px] transition hover:bg-white/5 disabled:opacity-50 border-line"
+                            className="rounded-lg border px-2.5 py-1 text-[11px] transition hover:bg-white/5 disabled:opacity-70 border-line"
                           >
                             {user.status === 'active' ? 'Disable' : 'Enable'}
                           </button>
@@ -262,12 +262,12 @@ export default function UsersAdminPage() {
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h2 className="font-heading text-lg font-bold">Permissions</h2>
-                <p className="text-xs opacity-60">{editing.name} · {editing.email}</p>
+                <p className="text-xs opacity-70">{editing.name} · {editing.email}</p>
               </div>
               <button
                 type="button"
                 onClick={() => setEditing(null)}
-                className="text-xs opacity-60 hover:opacity-100"
+                className="text-xs opacity-70 hover:opacity-100"
               >
                 Close
               </button>
@@ -276,7 +276,7 @@ export default function UsersAdminPage() {
             <div className="mt-5 space-y-4">
               {groups.map((group) => (
                 <fieldset key={group.group}>
-                  <legend className="text-[10px] font-bold uppercase tracking-wider opacity-60">
+                  <legend className="text-[10px] font-bold uppercase tracking-wider opacity-70">
                     {group.group}
                   </legend>
                   <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -319,7 +319,7 @@ export default function UsersAdminPage() {
                   type="button"
                   onClick={() => void savePermissions()}
                   disabled={savingId === editing.id}
-                  className="rounded-xl bg-gold px-4 py-2 text-xs font-bold text-ink disabled:opacity-50"
+                  className="rounded-xl bg-gold px-4 py-2 text-xs font-bold text-ink disabled:opacity-70"
                 >
                   {savingId === editing.id ? 'Saving…' : 'Save permissions'}
                 </button>

@@ -110,7 +110,7 @@ export function HeroSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative isolate w-full overflow-hidden bg-espresso text-ink-inverse"
+      className="on-dark relative isolate w-full overflow-hidden bg-espresso text-ink-inverse"
       aria-roledescription="carousel"
       aria-label="Kadamba featured banners"
       tabIndex={0}

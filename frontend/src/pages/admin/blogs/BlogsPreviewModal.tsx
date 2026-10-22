@@ -22,7 +22,7 @@ export function BlogsPreviewModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
+      className="on-dark fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -49,7 +49,7 @@ export function BlogsPreviewModal({
             <span
               className={cn(
                 'inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold',
-                item.published ? 'text-emerald-500 bg-emerald-500/10' : 'opacity-60 bg-current/[0.06]',
+                item.published ? 'text-emerald-700 bg-emerald-500/10' : 'opacity-70 bg-current/[0.06]',
               )}
             >
               <span className="h-1.5 w-1.5 rounded-full bg-current" />
@@ -71,7 +71,7 @@ export function BlogsPreviewModal({
         <div className="p-6 space-y-5 max-h-[75vh] overflow-y-auto">
           {item.coverImage ? (
             <div
-              className="rounded-xl border overflow-hidden flex items-center justify-center bg-espresso/40 relative min-h-[200px] max-h-[300px] border-line"
+              className="on-dark rounded-xl border overflow-hidden flex items-center justify-center bg-espresso/40 relative min-h-[200px] max-h-[300px] border-line"
             >
               <OptimizedImage
                 src={item.coverImage}
@@ -84,7 +84,7 @@ export function BlogsPreviewModal({
 
           <div className="space-y-3">
             <div>
-              <div className="flex items-center gap-2 text-xs opacity-60 mb-1">
+              <div className="flex items-center gap-2 text-xs opacity-70 mb-1">
                 <span>{item.date || 'Recent'}</span>
                 <span>•</span>
                 <span>{item.readMinutes || 4} min read</span>
@@ -92,7 +92,7 @@ export function BlogsPreviewModal({
                 <span>By {item.author || "Kadamba's Designer Studio"}</span>
               </div>
               <h3 className="text-xl font-bold tracking-tight text-inherit font-heading">{item.title}</h3>
-              <p className="font-mono text-xs opacity-60 mt-0.5">/blogs/{item.slug}</p>
+              <p className="font-mono text-xs opacity-70 mt-0.5">/blogs/{item.slug}</p>
             </div>
 
             {item.excerpt ? (
@@ -128,7 +128,7 @@ export function BlogsPreviewModal({
             <div
               className="rounded-xl border p-4 shadow-xs bg-surface-raised border-line"
             >
-              <p className="text-[10px] font-bold uppercase tracking-wider opacity-50 mb-2">
+              <p className="text-[10px] font-bold uppercase tracking-wider opacity-70 mb-2">
                 Search Snippet Preview
               </p>
               <p className="text-xs text-blue-500 hover:underline cursor-pointer truncate font-medium">

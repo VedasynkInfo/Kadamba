@@ -304,7 +304,7 @@ export default function CustomerDetailAdminPage() {
     return (
       <div className="mx-auto max-w-7xl px-4 py-16 text-center">
         <h3 className="font-heading text-xl text-ink">Client not found</h3>
-        <p className="text-ink/55 text-xs mt-2">The requested client profile workspace could not be resolved.</p>
+        <p className="text-ink/70 text-xs mt-2">The requested client profile workspace could not be resolved.</p>
         <Link to="/admin/customers" className="text-xs font-semibold hover:underline block mt-4 text-ink">
           <Icon name="arrowLeft" size={14} className="mr-1 inline align-middle" /> Back to customers directory
         </Link>
@@ -423,7 +423,7 @@ export default function CustomerDetailAdminPage() {
                       </thead>
                       <tbody className="stagger-rows divide-y divide-black/5 bg-white/30">
                         {orders.map((order) => (
-                          <tr key={order._id || order.id} className="hover:bg-espresso/[0.01]">
+                          <tr key={order._id || order.id} className="on-dark hover:bg-espresso/[0.01]">
                             <td className="p-3 font-mono font-bold">
                               {order.referenceId || `Enq #${order.orderNumber}`}
                             </td>
@@ -573,15 +573,15 @@ export default function CustomerDetailAdminPage() {
               <h3 className="font-heading text-lg text-ink border-b border-line pb-2">Atelier ledger</h3>
               <div className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-ink/55">Active Tailoring Orders</span>
+                  <span className="text-ink/70">Active Tailoring Orders</span>
                   <span className="font-semibold text-ink">{customer.summary?.activeOrderCount || 0} active</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-ink/55">Total Orders Placed</span>
+                  <span className="text-ink/70">Total Orders Placed</span>
                   <span className="font-semibold text-ink">{customer.summary?.orderCount || 0} jobs</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-ink/55">Measurement Profiles</span>
+                  <span className="text-ink/70">Measurement Profiles</span>
                   <span className="font-semibold text-ink">{customer.summary?.measurementCount || 0} fit cards</span>
                 </div>
                 <div className="flex justify-between border-t border-line pt-3">

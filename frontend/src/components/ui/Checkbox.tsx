@@ -18,7 +18,7 @@ export function Checkbox({ label, error, id, className, disabled, ...props }: Ch
         htmlFor={checkId}
         className={cn(
           'inline-flex cursor-pointer items-start gap-2.5 text-sm text-ink',
-          disabled && 'cursor-not-allowed opacity-50',
+          disabled && 'cursor-not-allowed opacity-70',
           className,
         )}
       >

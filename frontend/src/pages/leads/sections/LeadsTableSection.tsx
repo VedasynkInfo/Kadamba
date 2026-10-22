@@ -264,7 +264,7 @@ export function LeadsTableSection({
         </ul>
 
         {filtered.length === 0 ? (
-          <p className="mt-12 text-center text-ink/55">No leads match these filters.</p>
+          <p className="mt-12 text-center text-ink/70">No leads match these filters.</p>
         ) : null}
       </div>
     </section>

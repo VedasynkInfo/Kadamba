@@ -52,7 +52,7 @@ export function ServicesModalForm({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
+      className="on-dark fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -69,7 +69,7 @@ export function ServicesModalForm({
             <h2 className="font-heading text-lg font-bold text-inherit">
               {isNew ? 'Create New Atelier Service' : 'Edit Service Details'}
             </h2>
-            <p className="text-xs opacity-60 mt-0.5">
+            <p className="text-xs opacity-70 mt-0.5">
               {isNew ? 'Define signature bespoke couture and tailoring offerings' : 'Update pricing, features, catalog link, and SEO'}
             </p>
           </div>
@@ -310,7 +310,7 @@ export function ServicesModalForm({
         <div
           className="flex items-center justify-between gap-3 border-t px-6 py-4 border-line"
         >
-          <div className="text-xs opacity-50">
+          <div className="text-xs opacity-70">
             {form.title ? `Service: "${form.title}"` : 'Fill required fields (*)'}
           </div>
 

@@ -79,7 +79,7 @@ export default function AdminDashboardPage() {
           <Link to={`/admin/leads/${row.id}`} className="font-semibold text-inherit hover:underline transition block">
             {row.name}
           </Link>
-          <span className="text-[10px] opacity-60 block font-mono mt-0.5">{row.phone}</span>
+          <span className="text-[10px] opacity-70 block font-mono mt-0.5">{row.phone}</span>
         </div>
       ),
     },
@@ -90,7 +90,7 @@ export default function AdminDashboardPage() {
       key: 'createdAt',
       label: 'Date',
       className: 'text-right',
-      render: (row) => <span className="text-xs opacity-60">{new Date(row.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}</span>,
+      render: (row) => <span className="text-xs opacity-70">{new Date(row.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}</span>,
     },
   ];
 
@@ -108,7 +108,7 @@ export default function AdminDashboardPage() {
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <h2 className="text-lg font-bold tracking-tight text-inherit">Console Workspace</h2>
-            <p className="text-xs opacity-60">Real-time studio pulse & workshop intelligence</p>
+            <p className="text-xs opacity-70">Real-time studio pulse & workshop intelligence</p>
           </div>
 
           <div
@@ -196,7 +196,7 @@ export default function AdminDashboardPage() {
               >
                 <div>
                   <h3 className="text-sm font-semibold tracking-wide text-inherit">Atelier Quick Actions</h3>
-                  <p className="text-[11px] opacity-60">Instant studio publishing & client workflow shortcuts</p>
+                  <p className="text-[11px] opacity-70">Instant studio publishing & client workflow shortcuts</p>
                 </div>
               </div>
 
@@ -225,7 +225,7 @@ export default function AdminDashboardPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="text-sm font-semibold tracking-wide text-inherit">Recent Consultations</h3>
-                    <p className="text-[11px] opacity-60">Latest design enquiries from bespoke clientele</p>
+                    <p className="text-[11px] opacity-70">Latest design enquiries from bespoke clientele</p>
                   </div>
                   <Link
                     to="/admin/leads/list"
@@ -240,7 +240,7 @@ export default function AdminDashboardPage() {
                   columns={columns}
                   data={recentLeads}
                   rowKey={(r) => r.id}
-                  emptyState={<div className="py-8 text-center text-xs opacity-50">No consultations recorded in this date range.</div>}
+                  emptyState={<div className="py-8 text-center text-xs opacity-70">No consultations recorded in this date range.</div>}
                 />
               </div>
 
@@ -251,19 +251,19 @@ export default function AdminDashboardPage() {
                       <h3 className="text-sm font-semibold tracking-wide text-inherit">
                         Needs attention
                       </h3>
-                      <p className="text-[11px] opacity-60">
+                      <p className="text-[11px] opacity-70">
                         What is waiting on a person, not on a machine
                       </p>
                     </div>
                     {attention.length > 0 ? (
-                      <span className="shrink-0 rounded-md bg-rose-500/15 px-2 py-0.5 text-[0.65rem] font-bold uppercase text-rose-400">
+                      <span className="shrink-0 rounded-md bg-rose-500/15 px-2 py-0.5 text-[0.65rem] font-bold uppercase text-rose-700">
                         {attention.length} waiting
                       </span>
                     ) : null}
                   </div>
 
                   {attention.length === 0 ? (
-                    <p className="py-6 text-center text-xs opacity-50">
+                    <p className="py-6 text-center text-xs opacity-70">
                       Nothing is waiting. The studio is clear.
                     </p>
                   ) : (
@@ -295,7 +295,7 @@ export default function AdminDashboardPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="text-sm font-semibold tracking-wide text-inherit">Production Queue</h3>
-                      <p className="text-[11px] opacity-60">Upcoming trials & client handovers</p>
+                      <p className="text-[11px] opacity-70">Upcoming trials & client handovers</p>
                     </div>
                     <Link
                       to="/admin/orders"
@@ -310,7 +310,7 @@ export default function AdminDashboardPage() {
                     className="divide-y rounded-xl border overflow-hidden shadow-xs bg-surface-raised border-line text-ink-raised"
                   >
                     {(summary.actionOrders || []).length === 0 ? (
-                      <li className="px-4 py-8 text-center text-xs opacity-50">No open orders with delivery dates.</li>
+                      <li className="px-4 py-8 text-center text-xs opacity-70">No open orders with delivery dates.</li>
                     ) : (
                       (summary.actionOrders || []).map((o) => (
                         <li
@@ -319,7 +319,7 @@ export default function AdminDashboardPage() {
                         >
                           <Link to={`/admin/orders/${o.id}`} className="block px-4 py-3 text-inherit">
                             <p className="font-semibold text-inherit text-xs truncate">{o.title}</p>
-                            <p className="mt-0.5 text-[10px] opacity-60">
+                            <p className="mt-0.5 text-[10px] opacity-70">
                               #{o.orderNumber} · {o.customerName}
                             </p>
                             {o.expectedDeliveryAt ? (

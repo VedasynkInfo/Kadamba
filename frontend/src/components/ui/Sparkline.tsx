@@ -43,7 +43,7 @@ export function Sparkline({ values, className, trend }: SparklineProps) {
       className={cn(
         'h-7 w-full',
         resolvedTrend === 'up' && 'text-emerald-400',
-        resolvedTrend === 'down' && 'text-rose-400',
+        resolvedTrend === 'down' && 'text-rose-700',
         resolvedTrend === 'flat' && 'text-brand-strong',
         className,
       )}

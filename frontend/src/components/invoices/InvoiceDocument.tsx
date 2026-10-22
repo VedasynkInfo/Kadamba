@@ -213,7 +213,7 @@ export function InvoiceDocument({ invoice, className, footerNote }: InvoiceDocum
                       <p className="mt-0.5 text-xs text-ink/70">{item.productTypeCode}</p>
                     ) : null}
                     {item.notes ? (
-                      <p className="mt-1 text-xs leading-relaxed text-ink/55">{item.notes}</p>
+                      <p className="mt-1 text-xs leading-relaxed text-ink/70">{item.notes}</p>
                     ) : null}
                   </td>
                   <td className="py-3 text-right align-top tabular-nums">{item.qty}</td>

@@ -127,7 +127,7 @@ export function CustomersTable({
                         >
                           {customer.name}
                         </button>
-                        <div className="flex items-center gap-1.5 mt-0.5 text-[11px] opacity-60">
+                        <div className="flex items-center gap-1.5 mt-0.5 text-[11px] opacity-70">
                           <span className="font-mono">#{customer.id.slice(-6).toUpperCase()}</span>
                           {customer.source ? (
                             <span className="capitalize">· {customer.source}</span>
@@ -140,7 +140,7 @@ export function CustomersTable({
                     <td className="py-3 px-4 whitespace-nowrap">
                       <span className="font-mono text-xs">{customer.phone}</span>
                       {customer.email ? (
-                        <span className="block text-[10px] opacity-50 truncate max-w-[140px]">{customer.email}</span>
+                        <span className="block text-[10px] opacity-70 truncate max-w-[140px]">{customer.email}</span>
                       ) : null}
                     </td>
 
@@ -157,8 +157,8 @@ export function CustomersTable({
                         className={cn(
                           'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border',
                           customer.portalStatus === 'active'
-                            ? 'bg-emerald-500/15 text-emerald-500 border-emerald-500/30'
-                            : 'opacity-60 border-current/15',
+                            ? 'bg-emerald-500/15 text-emerald-700 border-emerald-500/30'
+                            : 'opacity-70 border-current/15',
                         )}
                       >
                         <span
@@ -254,7 +254,7 @@ export function CustomersTable({
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setMenuAnchor(null)}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-500 hover:bg-emerald-500/10 transition cursor-pointer"
+              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-700 hover:bg-emerald-500/10 transition cursor-pointer"
             >
               <Icon name="message" size={14} />
               <span>WhatsApp Concierge</span>

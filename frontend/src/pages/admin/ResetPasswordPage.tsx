@@ -117,7 +117,7 @@ export default function ResetPasswordPage() {
               />
             </div>
 
-            <ul className="space-y-1.5 text-xs text-ink-inverse/55">
+            <ul className="space-y-1.5 text-xs text-ink-inverse/70">
               <li className={checks.length ? 'text-emerald-400' : ''}>
                 <Icon
                   name={checks.length ? 'check' : 'dot'}

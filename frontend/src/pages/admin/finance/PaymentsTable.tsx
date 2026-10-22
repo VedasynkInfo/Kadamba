@@ -128,7 +128,7 @@ export function PaymentsTable({
                     {/* Date */}
                     <td className="py-3 px-4 whitespace-nowrap">
                       <span className="font-semibold block">{formatDate(pay.paidAt)}</span>
-                      <span className="text-[10px] opacity-60 block mt-0.5">By {pay.recordedBy || 'Admin'}</span>
+                      <span className="text-[10px] opacity-70 block mt-0.5">By {pay.recordedBy || 'Admin'}</span>
                     </td>
 
                     {/* Reference / Note */}
@@ -142,7 +142,7 @@ export function PaymentsTable({
                           {pay.reference || `REC-${pay.id.slice(-6).toUpperCase()}`}
                         </button>
                         {pay.notes ? (
-                          <span className="text-[10px] opacity-60 block truncate max-w-[150px] mt-0.5">
+                          <span className="text-[10px] opacity-70 block truncate max-w-[150px] mt-0.5">
                             {pay.notes}
                           </span>
                         ) : null}
@@ -155,7 +155,7 @@ export function PaymentsTable({
                         <span className="font-semibold block truncate">
                           {pay.order?.customer?.name || 'Walk-in Customer'}
                         </span>
-                        <div className="flex items-center gap-1.5 text-[11px] opacity-60 mt-0.5">
+                        <div className="flex items-center gap-1.5 text-[11px] opacity-70 mt-0.5">
                           {pay.order?.orderNumber ? (
                             <Link
                               to={`/admin/orders/${pay.order.id}`}
@@ -274,7 +274,7 @@ export function PaymentsTable({
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setMenuAnchor(null)}
-                className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-500 hover:bg-emerald-500/10 transition cursor-pointer"
+                className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-700 hover:bg-emerald-500/10 transition cursor-pointer"
               >
                 <Icon name="message" size={14} />
                 <span>Send WhatsApp Receipt</span>

@@ -57,6 +57,28 @@ export interface BlogPreview {
   image: string;
 }
 
+/** The people and the disciplines behind the studio. */
+export interface StudioDiscipline {
+  id: string;
+  title: string;
+  description: string;
+}
+
+/** The material vocabulary the studio works in. */
+export interface FabricNote {
+  id: string;
+  name: string;
+  origin: string;
+  description: string;
+}
+
+/** Why Kurnool, and what the studio does for the women of the city. */
+export interface KurnoolNote {
+  id: string;
+  title: string;
+  description: string;
+}
+
 export interface MarqueeItem {
   id: string;
   title: string;
@@ -264,6 +286,91 @@ export const stats: StatItem[] = [
   { id: 'st2', value: 2500, suffix: '+', label: 'Garments tailored' },
   { id: 'st3', value: 800, suffix: '+', label: 'Bridal outfits completed' },
   { id: 'st4', value: 95, suffix: '%', label: 'Clients who return' },
+];
+
+export const studioDisciplines: StudioDiscipline[] = [
+  {
+    id: 'sd1',
+    title: 'Bridal couture',
+    description:
+      'A lehenga is built around one silhouette and one person. We drape, bell, canvas and border it by hand, then fit it until it sits the way it should on the day.',
+  },
+  {
+    id: 'sd2',
+    title: 'Zardozi & maggam',
+    description:
+      'Our maggam artists work in gota, zari, resham and zardozi — the vocabulary of a South Indian wedding, carried by hand, not by machine.',
+  },
+  {
+    id: 'sd3',
+    title: 'Everyday tradition',
+    description:
+      'Sarees, blouses, kurtas and festive sets for the office, the festival and the family photograph — cut to move in.',
+  },
+  {
+    id: 'sd4',
+    title: 'Alterations & corrections',
+    description:
+      'A garment that is not quite right is not a finished garment. Bring it back and we will correct it, usually at no charge.',
+  },
+];
+
+export const fabricNotes: FabricNote[] = [
+  {
+    id: 'fb1',
+    name: 'Raw silk',
+    origin: 'Kanchipuram & Bhagalpur',
+    description:
+      'The body of a bridal lehenga. It holds a pleat, takes a border, and ages into something better than the day it was cut.',
+  },
+  {
+    id: 'fb2',
+    name: 'Chanderi & organza',
+    origin: 'Madhya Pradesh',
+    description:
+      'Sheer, weightless, and cut to layer. The fabric of a dupatta that floats rather than hangs.',
+  },
+  {
+    id: 'fb3',
+    name: 'Handloom cotton',
+    origin: 'Telangana & Andhra',
+    description:
+      'Cool, honest and everyday. The right cloth for a blouse you will wear fifty times.',
+  },
+  {
+    id: 'fb4',
+    name: 'Zari & resham',
+    origin: 'Karnataka & Tamil Nadu',
+    description:
+      'The metal thread and the silk thread that carry a wedding. Hand-woven, and worth the patience.',
+  },
+];
+
+export const kurnoolNotes: KurnoolNote[] = [
+  {
+    id: 'kn1',
+    title: 'A studio the city trusts',
+    description:
+      'Kadamba has dressed brides in Kurnool for over fifteen years. Most of them arrived with a photograph and left with something that could not have been bought.',
+  },
+  {
+    id: 'kn2',
+    title: 'Measurements taken in person',
+    description:
+      'Every fitting happens in the studio, on the person, in the fabric. A measurement taken over the phone is a garment that will not fit.',
+  },
+  {
+    id: 'kn3',
+    title: 'Serving Andhra Pradesh, and further',
+    description:
+      'Families come from Nandyal, Cuddapah, Ongole and Vijayawada for bridal work, and we keep the fittings in Kurnool so the atelier can see the garment.',
+  },
+  {
+    id: 'kn4',
+    title: 'A quiet, unhurried appointment',
+    description:
+      'No rush, no shop-floor pressure. Bring the occasion, the photographs, and as much time as the decision deserves.',
+  },
 ];
 
 export const heroImage = img.bridal;

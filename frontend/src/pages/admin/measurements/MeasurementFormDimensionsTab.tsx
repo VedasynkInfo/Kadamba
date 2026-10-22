@@ -102,7 +102,7 @@ export function MeasurementFormDimensionsTab({
           <span className="text-xs font-bold tracking-wide">
             Template: {activeTemplate ? activeTemplate.name : form.productTypeCode}
           </span>
-          <span className="text-[10px] opacity-60 block mt-0.5">
+          <span className="text-[10px] opacity-70 block mt-0.5">
             All dimensions recorded in {form.unit}. Maintain uniform tape tightness.
           </span>
         </div>
@@ -131,14 +131,14 @@ export function MeasurementFormDimensionsTab({
                       {def.label} {def.required && <span className="text-amber-400">*</span>}
                     </span>
                     {def.unit && (
-                      <span className="text-[9px] uppercase font-mono opacity-50">
+                      <span className="text-[9px] uppercase font-mono opacity-70">
                         ({def.unit})
                       </span>
                     )}
                   </label>
                   {renderFieldInput(def)}
                   {def.helpText && (
-                    <p className="text-[9px] opacity-50 leading-tight">{def.helpText}</p>
+                    <p className="text-[9px] opacity-70 leading-tight">{def.helpText}</p>
                   )}
                 </div>
               ))}
@@ -150,7 +150,7 @@ export function MeasurementFormDimensionsTab({
           className="rounded-xl border p-5 text-center space-y-2 border-line bg-surface-sunken"
         >
           <p className="text-xs font-semibold">No custom template fields attached to this silhouette.</p>
-          <p className="text-[11px] opacity-60">
+          <p className="text-[11px] opacity-70">
             Switch to a defined silhouette (Bridal Lehenga, Blouse, Kurta) or record observations in tailor notes.
           </p>
         </div>

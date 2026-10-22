@@ -17,7 +17,7 @@ export function BlogMastheadBanner({ post }: BlogMastheadBannerProps) {
 
   return (
     <section
-      className="relative isolate w-full overflow-hidden bg-espresso text-ink-inverse"
+      className="on-dark relative isolate w-full overflow-hidden bg-espresso text-ink-inverse"
       aria-label={post.title}
     >
       <div className="relative min-h-[min(58svh,620px)] w-full md:min-h-[min(64svh,700px)]">
@@ -54,7 +54,7 @@ export function BlogMastheadBanner({ post }: BlogMastheadBannerProps) {
             }}
           >
             <nav aria-label="Breadcrumb" className="mb-5">
-              <ol className="flex flex-wrap items-center gap-2 text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/55">
+              <ol className="flex flex-wrap items-center gap-2 text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/70">
                 <li>
                   <Link to="/blogs" className="transition-colors hover:text-gold">
                     Journal

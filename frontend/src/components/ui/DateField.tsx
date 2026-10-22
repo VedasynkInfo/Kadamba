@@ -258,12 +258,12 @@ export function DateField({
             'flex w-full items-center justify-between gap-2 rounded-lg border py-2 pl-3.5 pr-3 text-left text-sm transition-all',
             'bg-surface-field text-ink-raised border-line',
             'focus:border-focus focus:outline-none focus:ring-2 focus:ring-focus/30',
-            'disabled:cursor-not-allowed disabled:opacity-50',
+            'disabled:cursor-not-allowed disabled:opacity-70',
             error ? 'border-danger' : undefined,
             className,
           )}
         >
-          <span className={cn('truncate', !value && 'text-ink/50')}>
+          <span className={cn('truncate', !value && 'text-ink/70')}>
             {value ? formatHuman(value) : placeholder}
           </span>
           <Icon name="calendar" size={15} className="shrink-0 text-ink-raised/60" />
@@ -306,7 +306,7 @@ export function DateField({
               {WEEKDAYS.map((day) => (
                 <div
                   key={day}
-                  className="py-1 text-center text-[0.6rem] font-semibold uppercase tracking-wider text-ink/45"
+                  className="py-1 text-center text-[0.6rem] font-semibold uppercase tracking-wider text-ink/70"
                 >
                   {day}
                 </div>

@@ -24,7 +24,7 @@ export function FinanceMetrics({ summary }: FinanceMetricsProps) {
       label: 'Operational Expenses',
       value: formatINR(summary.totalExpenses),
       subtext: 'Fabrics, material, atelier overheads',
-      accent: 'text-rose-400',
+      accent: 'text-rose-700',
       borderAccent: 'border-l-rose-500',
       icon: 'expense',
     },
@@ -48,7 +48,7 @@ export function FinanceMetrics({ summary }: FinanceMetricsProps) {
       label: 'Net Studio Profit',
       value: formatINR(summary.netProfit),
       subtext: summary.netProfit >= 0 ? 'Profitable operating period' : 'Operating deficit',
-      accent: summary.netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400',
+      accent: summary.netProfit >= 0 ? 'text-emerald-400' : 'text-rose-700',
       borderAccent: summary.netProfit >= 0 ? 'border-l-emerald-500' : 'border-l-rose-500',
       icon: 'profit',
     },
@@ -68,7 +68,7 @@ export function FinanceMetrics({ summary }: FinanceMetricsProps) {
           <div className={`mt-2 font-heading text-xl font-bold tracking-tight ${c.accent}`}>
             {typeof c.value === 'number' ? <CountUp value={c.value} /> : c.value}
           </div>
-          <p className="mt-1 text-[10px] opacity-60 truncate">{c.subtext}</p>
+          <p className="mt-1 text-[10px] opacity-70 truncate">{c.subtext}</p>
         </div>
       ))}
     </div>

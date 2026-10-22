@@ -53,7 +53,7 @@ export function OrderMeasurementsModal({
                     <span className="font-semibold block">
                       {p.profileName} ({p.productTypeCode})
                     </span>
-                    <span className="text-ink/55 text-[10px] block mt-0.5">
+                    <span className="text-ink/70 text-[10px] block mt-0.5">
                       Updated: {new Date(p.measuredAt).toLocaleDateString('en-IN')}
                     </span>
                   </div>

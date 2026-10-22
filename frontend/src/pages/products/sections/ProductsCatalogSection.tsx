@@ -108,12 +108,12 @@ export function ProductsCatalogSection() {
                         'Made to measure in Kurnool.'}
                     </p>
                     {product.indicativePriceRange ? (
-                      <p className="mt-3 text-xs uppercase tracking-[0.18em] text-ink/55">
+                      <p className="mt-3 text-xs uppercase tracking-[0.18em] text-ink/70">
                         {product.indicativePriceRange}
                       </p>
                     ) : null}
                     {product.leadTimeDays ? (
-                      <p className="mt-1 text-xs text-ink/50">
+                      <p className="mt-1 text-xs text-ink/70">
                         About {product.leadTimeDays} days to make
                       </p>
                     ) : null}

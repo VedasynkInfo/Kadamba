@@ -370,7 +370,7 @@ export default function ProductsAdminPage() {
           { label: 'Fit cards linked', value: metrics.fits, icon: 'measurements' as const },
         ].map((metric) => (
           <div key={metric.label} className="rounded-lg border border-line bg-surface-raised p-3">
-            <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] opacity-60">
+            <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] opacity-70">
               <Icon name={metric.icon} size={12} />
               {metric.label}
             </div>
@@ -482,7 +482,7 @@ export default function ProductsAdminPage() {
 
             {productTypes.length === 0 ? (
               <div className="rounded-xl border border-dashed border-line bg-surface-raised p-5 text-center">
-                <Icon name="database" size={24} className="mx-auto mb-2 opacity-50" />
+                <Icon name="database" size={24} className="mx-auto mb-2 opacity-70" />
                 <p className="text-sm font-medium">The catalogue is empty</p>
                 <p className="mt-1 text-xs opacity-65">
                   Seed the studio&apos;s starting garments, categories and fit-card links, or create

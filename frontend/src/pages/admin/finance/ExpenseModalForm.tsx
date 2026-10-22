@@ -125,7 +125,7 @@ export function ExpenseModalForm({ open, expense, onClose, onSuccess }: ExpenseM
               <h3 className="font-heading text-base font-bold tracking-wide">
                 {expense ? 'Edit Expense Record' : 'Record New Studio Expense'}
               </h3>
-              <p className="text-[10px] opacity-60 mt-0.5">
+              <p className="text-[10px] opacity-70 mt-0.5">
                 Log procurement, raw materials, studio rent, and overheads
               </p>
             </div>
@@ -133,7 +133,7 @@ export function ExpenseModalForm({ open, expense, onClose, onSuccess }: ExpenseM
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer border-line"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-70 hover:opacity-100 transition cursor-pointer border-line"
             aria-label="Close modal"
           >
             <Icon name="close" size={16} />
@@ -187,7 +187,7 @@ export function ExpenseModalForm({ open, expense, onClose, onSuccess }: ExpenseM
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="e.g. 4500"
-                className="w-full rounded-xl border py-2 px-3 text-xs font-bold text-rose-400 focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
+                className="w-full rounded-xl border py-2 px-3 text-xs font-bold text-rose-700 focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
               />
             </div>
           </div>
@@ -233,7 +233,7 @@ export function ExpenseModalForm({ open, expense, onClose, onSuccess }: ExpenseM
             <button
               type="submit"
               disabled={submitting}
-              className="rounded-xl px-5 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 disabled:opacity-50 cursor-pointer bg-brand text-ink-on-brand"
+              className="rounded-xl px-5 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 disabled:opacity-70 cursor-pointer bg-brand text-ink-on-brand"
             >
               {submitting ? 'Saving...' : expense ? 'Update Expense' : 'Record Expense'}
             </button>

@@ -59,7 +59,7 @@ export function TabStrip({
             aria-current={isActive ? 'true' : undefined}
             className={cn(
               'relative flex items-center gap-2 whitespace-nowrap px-4 py-3 transition cursor-pointer',
-              isActive ? 'font-bold text-brand-strong' : 'opacity-60 hover:opacity-100',
+              isActive ? 'font-bold text-brand-strong' : 'opacity-70 hover:opacity-100',
               itemClassName,
             )}
           >

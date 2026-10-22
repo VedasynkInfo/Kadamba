@@ -159,7 +159,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <PortalShell>
-          <Dialog.Overlay className="fixed inset-0 z-50 bg-espresso/60 backdrop-blur-sm" />
+          <Dialog.Overlay className="on-dark fixed inset-0 z-50 bg-espresso/60 backdrop-blur-sm" />
           <Dialog.Content
             aria-modal="true"
             className="fixed left-1/2 top-[12vh] z-50 w-[min(38rem,calc(100vw-2rem))] -translate-x-1/2 overflow-hidden rounded-2xl border border-line bg-surface-raised text-ink-raised shadow-2xl outline-none"

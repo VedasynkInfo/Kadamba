@@ -116,7 +116,7 @@ export default function StaffAdminPage() {
             >
               Artisan & Staff Roster
             </h1>
-            <p className="text-xs opacity-60">
+            <p className="text-xs opacity-70">
               Master craftsmen, tailors, maggam artisans, and atelier workforce management
             </p>
           </div>

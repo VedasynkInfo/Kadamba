@@ -50,6 +50,43 @@ export interface MockOptions {
 
 const EMPTY_PAGE = { items: [], pagination: { page: 1, limit: 20, total: 0, pages: 0 } };
 
+/**
+ * A complete settings document.
+ *
+ * The settings service parses the response against the shared contract, so a
+ * partial document is a parse failure rather than a partial read. The mock
+ * therefore returns the whole shape.
+ */
+const SETTINGS = {
+  studioName: "Kadamba's Designer Studio",
+  shortName: 'Kadamba',
+  tagline: "Kurnool's boutique for women's traditional & bridal wear",
+  logoUrl: '',
+  logoDarkUrl: '',
+  location: 'Kurnool',
+  phoneDisplay: '+91 98765 43210',
+  phoneTel: '+919876543210',
+  phoneAltDisplay: '',
+  phoneAltTel: '',
+  email: 'hello@kadambasstudio.com',
+  addressLines: ["Kadamba's Designer Studio", 'Kurnool'],
+  landmark: '',
+  locality: '',
+  city: 'Kurnool',
+  state: 'Andhra Pradesh',
+  pincode: '',
+  hours: [{ day: 'Mon – Sat', time: '10:00 AM – 7:00 PM' }],
+  whatsappNumber: '919876543210',
+  whatsappPrefill: 'Hi, I would like to enquire.',
+  mapEmbedUrl: '',
+  mapLink: 'https://maps.google.com/?q=Kurnool',
+  social: [],
+  socialNamed: {},
+  seo: { siteName: "Kadamba's Designer Studio" },
+  media: { defaultUnit: 'in', bannerPresets: [] },
+  theme: { primary: '#b8892b' },
+};
+
 const DASHBOARD_SUMMARY = {
   range: { from: '2026-01-01T00:00:00.000Z', to: '2026-12-31T00:00:00.000Z' },
   metrics: {
@@ -353,7 +390,7 @@ export async function mockApi(page: Page, options: MockOptions = {}): Promise<Mo
     if (path === '/admin/settings') {
       await json({
         success: true,
-        data: { studioName: "Kadamba's Designer Studio", emailConfig: { pass: '', passSet: false } },
+        data: { ...SETTINGS, emailConfig: { pass: '', passSet: false } },
       });
       return;
     }
@@ -375,25 +412,7 @@ export async function mockApi(page: Page, options: MockOptions = {}): Promise<Mo
 
     // ── Public site ─────────────────────────────────────────────────────────
     if (path === '/settings/public') {
-      await json({
-        success: true,
-        data: {
-          studioName: "Kadamba's Designer Studio",
-          shortName: 'Kadamba',
-          tagline: "Kurnool's boutique",
-          location: 'Kurnool',
-          phoneDisplay: '+91 98765 43210',
-          phoneTel: '+919876543210',
-          email: 'hello@kadambasstudio.com',
-          addressLines: ["Kadamba's Designer Studio", 'Kurnool'],
-          hours: [],
-          social: [],
-          socialNamed: {},
-          seo: { siteName: "Kadamba's Designer Studio" },
-          media: { defaultUnit: 'in', bannerPresets: [] },
-          theme: { primary: '#000000' },
-        },
-      });
+      await json({ success: true, data: SETTINGS });
       return;
     }
 
@@ -514,6 +533,9 @@ export async function mockApi(page: Page, options: MockOptions = {}): Promise<Mo
 
     // Anything else: a successful, empty answer. A journey that depends on
     // real data will fail on its own assertion, not on a 404.
+    if (process.env.E2E_DEBUG) {
+      console.log('unmocked', method, path);
+    }
     await json({ success: true, data: EMPTY_PAGE });
   });
 

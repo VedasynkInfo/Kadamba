@@ -35,7 +35,7 @@ export function Drawer({ open, onClose, title, children, side = 'right', classNa
     >
       <Dialog.Portal>
         <PortalShell>
-          <Dialog.Overlay className="fixed inset-0 z-50 bg-espresso/60 backdrop-blur-sm" />
+          <Dialog.Overlay className="on-dark fixed inset-0 z-50 bg-espresso/60 backdrop-blur-sm" />
           <Dialog.Content
             aria-modal="true"
             data-lenis-prevent

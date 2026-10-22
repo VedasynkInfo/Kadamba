@@ -24,7 +24,7 @@ export function ServicesPreviewModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
+      className="on-dark fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -46,7 +46,7 @@ export function ServicesPreviewModal({
             <span
               className={cn(
                 'inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold',
-                item.published ? 'text-emerald-500 bg-emerald-500/10' : 'opacity-60 bg-current/[0.06]',
+                item.published ? 'text-emerald-700 bg-emerald-500/10' : 'opacity-70 bg-current/[0.06]',
               )}
             >
               <span className="h-1.5 w-1.5 rounded-full bg-current" />
@@ -68,7 +68,7 @@ export function ServicesPreviewModal({
         <div className="p-6 space-y-5 max-h-[75vh] overflow-y-auto">
           {displayImage ? (
             <div
-              className="rounded-xl border overflow-hidden flex items-center justify-center bg-espresso/40 relative min-h-[220px] max-h-[340px] border-line"
+              className="on-dark rounded-xl border overflow-hidden flex items-center justify-center bg-espresso/40 relative min-h-[220px] max-h-[340px] border-line"
             >
               <OptimizedImage
                 src={displayImage}
@@ -82,7 +82,7 @@ export function ServicesPreviewModal({
           <div className="space-y-3">
             <div>
               <h3 className="text-xl font-bold tracking-tight text-inherit font-heading">{item.title}</h3>
-              <p className="font-mono text-xs opacity-60 mt-0.5">/services/{item.slug}</p>
+              <p className="font-mono text-xs opacity-70 mt-0.5">/services/{item.slug}</p>
             </div>
 
             {item.summary ? (
@@ -94,7 +94,7 @@ export function ServicesPreviewModal({
               className="grid grid-cols-2 gap-3 rounded-lg p-3 border text-xs bg-surface-sunken border-line"
             >
               <div>
-                <span className="font-semibold opacity-60 block text-[10px] uppercase tracking-wider">
+                <span className="font-semibold opacity-70 block text-[10px] uppercase tracking-wider">
                   Pricing Starting From
                 </span>
                 <span className="font-bold text-sm text-brand-strong">
@@ -102,7 +102,7 @@ export function ServicesPreviewModal({
                 </span>
               </div>
               <div>
-                <span className="font-semibold opacity-60 block text-[10px] uppercase tracking-wider">
+                <span className="font-semibold opacity-70 block text-[10px] uppercase tracking-wider">
                   Catalog Status
                 </span>
                 <span className="font-semibold text-xs">
@@ -138,7 +138,7 @@ export function ServicesPreviewModal({
             <div
               className="rounded-xl border p-4 shadow-xs bg-surface-raised border-line"
             >
-              <p className="text-[10px] font-bold uppercase tracking-wider opacity-50 mb-2">
+              <p className="text-[10px] font-bold uppercase tracking-wider opacity-70 mb-2">
                 Search Snippet Preview
               </p>
               <p className="text-xs text-blue-500 hover:underline cursor-pointer truncate font-medium">

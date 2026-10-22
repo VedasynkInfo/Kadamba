@@ -149,7 +149,7 @@ export function OrdersTable({
                 {balance > 0 ? (
                   <span className="font-semibold text-amber-500">Due: {formatINR(balance)}</span>
                 ) : (
-                  <span className="text-emerald-500">Paid</span>
+                  <span className="text-emerald-700">Paid</span>
                 )}
               </div>
             </div>
@@ -183,7 +183,7 @@ export function OrdersTable({
             className={cn(
               'inline-flex items-center whitespace-nowrap rounded border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider',
               order.priority === 'rush'
-                ? 'border-rose-500/30 bg-rose-500/15 text-rose-400'
+                ? 'border-rose-500/30 bg-rose-500/15 text-rose-700'
                 : order.priority === 'high'
                   ? 'border-amber-500/30 bg-amber-500/15 text-amber-400'
                   : 'border-line text-ink/65',

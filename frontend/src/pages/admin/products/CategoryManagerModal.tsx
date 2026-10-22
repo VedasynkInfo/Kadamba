@@ -91,9 +91,9 @@ export function CategoryManagerModal({
           ) : (
             categories.map((category) => (
               <div key={category.id} className="flex items-center gap-3 px-3 py-2">
-                <span className="w-16 font-mono text-[11px] opacity-60">{category.code}</span>
+                <span className="w-16 font-mono text-[11px] opacity-70">{category.code}</span>
                 <span className="min-w-0 flex-1 truncate text-sm font-medium">{category.name}</span>
-                <span className="text-[10px] uppercase tracking-wide opacity-50">
+                <span className="text-[10px] uppercase tracking-wide opacity-70">
                   {category.active ? 'Active' : 'Hidden'} / {category.sortOrder}
                 </span>
                 <Button

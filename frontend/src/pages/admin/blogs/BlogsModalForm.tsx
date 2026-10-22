@@ -69,7 +69,7 @@ export function BlogsModalForm({
             <h2 className="font-heading text-lg font-bold text-inherit">
               {isNew ? 'Publish New Editorial Article' : 'Edit Editorial Article'}
             </h2>
-            <p className="text-xs opacity-60 mt-0.5">
+            <p className="text-xs opacity-70 mt-0.5">
               {isNew ? 'Craft bridal stories, styling guides, and studio notes' : 'Update article content, authorship, and search optimization'}
             </p>
           </div>
@@ -243,7 +243,7 @@ export function BlogsModalForm({
         <div
           className="flex items-center justify-between gap-3 border-t px-6 py-4 border-line"
         >
-          <div className="text-xs opacity-50">
+          <div className="text-xs opacity-70">
             {form.title ? `Article: "${form.title}"` : 'Fill required fields (*)'}
           </div>
 

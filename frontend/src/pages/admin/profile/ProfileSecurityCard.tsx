@@ -54,7 +54,7 @@ export function ProfileSecurityCard({ onUpdatePassword }: ProfileSecurityCardPro
         <h3 className="font-heading text-base font-bold tracking-wide">
           Security & Access Key
         </h3>
-        <p className="text-[11px] opacity-60 mt-0.5">
+        <p className="text-[11px] opacity-70 mt-0.5">
           Rotate your administrator studio password to safeguard customer and financial ledgers
         </p>
       </div>
@@ -111,7 +111,7 @@ export function ProfileSecurityCard({ onUpdatePassword }: ProfileSecurityCardPro
         <div
           className="rounded-xl border p-3.5 space-y-1.5 border-line bg-surface-sunken"
         >
-          <span className="text-[10px] uppercase font-bold tracking-wider opacity-60 block">
+          <span className="text-[10px] uppercase font-bold tracking-wider opacity-70 block">
             Password Policy Requirements:
           </span>
           <div className="flex flex-wrap gap-4 text-[11px] opacity-70">
@@ -134,7 +134,7 @@ export function ProfileSecurityCard({ onUpdatePassword }: ProfileSecurityCardPro
           <button
             type="submit"
             disabled={saving}
-            className="rounded-xl px-5 py-2.5 text-xs font-bold border hover:bg-current/[0.05] transition disabled:opacity-50 cursor-pointer border-line"
+            className="rounded-xl px-5 py-2.5 text-xs font-bold border hover:bg-current/[0.05] transition disabled:opacity-70 cursor-pointer border-line"
           >
             {saving ? 'Updating Credentials...' : 'Update Password'}
           </button>

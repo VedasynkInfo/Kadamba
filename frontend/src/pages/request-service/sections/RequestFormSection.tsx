@@ -389,7 +389,7 @@ export function RequestFormSection() {
                   i === stepIndex
                     ? 'text-sm font-medium text-ink'
                     : i < stepIndex
-                      ? 'text-sm text-ink/55'
+                      ? 'text-sm text-ink/70'
                       : 'text-sm text-ink/70'
                 }
               >

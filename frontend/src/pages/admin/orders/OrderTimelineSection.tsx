@@ -13,7 +13,7 @@ export function OrderTimelineSection({ timeline }: OrderTimelineSectionProps) {
       <div className="relative pl-4 border-l border-line space-y-6 text-xs">
         {timeline.map((event, idx) => (
           <div key={idx} className="relative">
-            <span className="absolute -left-[20px] top-1.5 w-2.5 h-2.5 bg-espresso rounded-full border-2 border-cream" />
+            <span className="on-dark absolute -left-[20px] top-1.5 w-2.5 h-2.5 bg-espresso rounded-full border-2 border-cream" />
             <div className="flex justify-between gap-2 text-[10px] text-ink/70">
               <span className="font-semibold uppercase tracking-wider text-ink/60">
                 {event.status.replace('_', ' ')}

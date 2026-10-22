@@ -69,7 +69,7 @@ export function MeasurementFormClientTab({
           >
             <div>
               <span className="font-bold text-xs">{selectedCustomer.name}</span>
-              <span className="text-[10px] opacity-60 block mt-0.5">
+              <span className="text-[10px] opacity-70 block mt-0.5">
                 {selectedCustomer.phone ? `${selectedCustomer.phone} • ` : ''}
                 ID: {selectedCustomer.id}
               </span>
@@ -95,7 +95,7 @@ export function MeasurementFormClientTab({
               className="w-full rounded-xl border py-2.5 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
             />
             {searchingCustomers ? (
-              <span className="absolute right-3 top-2.5 text-[10px] opacity-50 animate-pulse">
+              <span className="absolute right-3 top-2.5 text-[10px] opacity-70 animate-pulse">
                 Searching directory...
               </span>
             ) : null}
@@ -116,11 +116,11 @@ export function MeasurementFormClientTab({
                     >
                       <div>
                         <span className="font-bold text-xs block">{c.name}</span>
-                        <span className="text-[10px] opacity-60 block mt-0.5">
+                        <span className="text-[10px] opacity-70 block mt-0.5">
                           {c.phone || 'No phone'} {c.email ? `• ${c.email}` : ''}
                         </span>
                       </div>
-                      <span className="text-[10px] font-mono opacity-50">Select <Icon name="arrowRight" size={14} className="mr-1 inline align-middle" /> </span>
+                      <span className="text-[10px] font-mono opacity-70">Select <Icon name="arrowRight" size={14} className="mr-1 inline align-middle" /> </span>
                     </button>
                   </li>
                 ))}
@@ -158,7 +158,7 @@ export function MeasurementFormClientTab({
             placeholder="e.g. Sangeet Bridal Lehenga"
             className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus bg-surface-sunken border-line"
           />
-          <p className="text-[10px] opacity-50">Auto-filled from client + silhouette, fully editable</p>
+          <p className="text-[10px] opacity-70">Auto-filled from client + silhouette, fully editable</p>
         </div>
       </div>
 

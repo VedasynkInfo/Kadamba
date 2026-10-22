@@ -47,13 +47,13 @@ export function FinanceSalariesTab({ salaries, onAddSalary }: FinanceSalariesTab
       >
         <div>
           <h3 className="font-heading text-sm font-bold tracking-wide">Artisan Payroll Ledger</h3>
-          <p className="text-[11px] opacity-60 mt-0.5">
+          <p className="text-[11px] opacity-70 mt-0.5">
             Disbursements to workshop tailors, masters, and maggam specialists
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="text-xs opacity-60">
+          <span className="text-xs opacity-70">
             Total <strong>{salaries.length}</strong> disbursements
           </span>
           <button
@@ -110,7 +110,7 @@ export function FinanceSalariesTab({ salaries, onAddSalary }: FinanceSalariesTab
                       <td className="py-3 px-4">
                         <span className="font-semibold block truncate">{staffName}</span>
                         {staffPhone ? (
-                          <span className="text-[10px] opacity-60 block font-mono mt-0.5">
+                          <span className="text-[10px] opacity-70 block font-mono mt-0.5">
                             {staffPhone}
                           </span>
                         ) : null}

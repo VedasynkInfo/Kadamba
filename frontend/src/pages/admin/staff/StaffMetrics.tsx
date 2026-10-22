@@ -76,7 +76,7 @@ export function StaffMetrics({
           <div className={`mt-2 font-heading text-2xl font-bold tracking-tight ${c.accent}`}>
             {typeof c.value === 'number' ? <CountUp value={c.value} /> : c.value}
           </div>
-          <p className="mt-1 text-[11px] opacity-60 truncate">{c.subtext}</p>
+          <p className="mt-1 text-[11px] opacity-70 truncate">{c.subtext}</p>
         </div>
       ))}
     </div>

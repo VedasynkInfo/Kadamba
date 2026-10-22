@@ -33,7 +33,7 @@ export function GeneralTab({ form, patchForm }: GeneralTabProps) {
       >
         <div className="border-b pb-3 border-line">
           <h3 className="font-heading text-sm font-bold tracking-wide">Brand & Studio Identity</h3>
-          <p className="text-[10px] opacity-60 mt-0.5">Primary public boutique branding & descriptive tagline</p>
+          <p className="text-[10px] opacity-70 mt-0.5">Primary public boutique branding & descriptive tagline</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -118,7 +118,7 @@ export function GeneralTab({ form, patchForm }: GeneralTabProps) {
       >
         <div className="border-b pb-3 border-line">
           <h3 className="font-heading text-sm font-bold tracking-wide">Contact & Instant Channels</h3>
-          <p className="text-[10px] opacity-60 mt-0.5">Direct phone numbers, client email, and WhatsApp prefill message</p>
+          <p className="text-[10px] opacity-70 mt-0.5">Direct phone numbers, client email, and WhatsApp prefill message</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -199,7 +199,7 @@ export function GeneralTab({ form, patchForm }: GeneralTabProps) {
       >
         <div className="border-b pb-3 border-line">
           <h3 className="font-heading text-sm font-bold tracking-wide">Boutique Address & Operating Schedule</h3>
-          <p className="text-[10px] opacity-60 mt-0.5">Physical location lines, map coordinates, and daily studio hours</p>
+          <p className="text-[10px] opacity-70 mt-0.5">Physical location lines, map coordinates, and daily studio hours</p>
         </div>
 
         <div className="space-y-1">
@@ -307,7 +307,7 @@ export function GeneralTab({ form, patchForm }: GeneralTabProps) {
                       hours: f.hours.filter((_, i) => i !== idx),
                     }))
                   }
-                  className="p-1.5 text-xs opacity-50 hover:opacity-100 text-rose-400 cursor-pointer"
+                  className="p-1.5 text-xs opacity-70 hover:opacity-100 text-rose-700 cursor-pointer"
                   title="Remove row"
                 >
                   <Icon name="close" size={14} />

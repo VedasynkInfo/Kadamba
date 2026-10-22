@@ -184,7 +184,7 @@ export function StaffTable({
                           );
                         })}
                         {specs.length > 2 ? (
-                          <span className="rounded px-1.5 py-0.5 text-[10px] font-semibold opacity-60 border border-current/20">
+                          <span className="rounded px-1.5 py-0.5 text-[10px] font-semibold opacity-70 border border-current/20">
                             +{specs.length - 2}
                           </span>
                         ) : null}
@@ -196,7 +196,7 @@ export function StaffTable({
                       {s.salaryAmount ? (
                         <div>
                           <span className="font-semibold text-xs">{formatINR(s.salaryAmount)}</span>
-                          <span className="text-[10px] opacity-60 block mt-0.5">
+                          <span className="text-[10px] opacity-70 block mt-0.5">
                             /{s.salaryType === 'monthly' ? 'month' : s.salaryType}
                           </span>
                         </div>
@@ -219,7 +219,7 @@ export function StaffTable({
                           'inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border',
                           s.status === 'active'
                             ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
-                            : 'bg-rose-500/15 text-rose-400 border-rose-500/30',
+                            : 'bg-rose-500/15 text-rose-700 border-rose-500/30',
                         )}
                       >
                         <span
@@ -309,7 +309,7 @@ export function StaffTable({
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setMenuAnchor(null)}
-                className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-500 hover:bg-emerald-500/10 transition cursor-pointer"
+                className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-700 hover:bg-emerald-500/10 transition cursor-pointer"
               >
                 <Icon name="whatsapp" size={14} />
                 <span>Send WhatsApp</span>
@@ -328,7 +328,7 @@ export function StaffTable({
                   setMenuAnchor(null);
                   onDeactivate(target);
                 }}
-                className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-rose-400 hover:bg-rose-500/10 transition cursor-pointer"
+                className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-rose-700 hover:bg-rose-500/10 transition cursor-pointer"
               >
                 <Icon name="idle" size={14} />
                 <span>Deactivate Member</span>

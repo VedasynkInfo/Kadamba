@@ -18,7 +18,7 @@ export default function ReportsAdminPage() {
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 md:px-10">
         <div className="border-b border-line pb-6 mb-10">
           <h2 className="font-heading text-xl text-ink">Boutique reports</h2>
-          <p className="mt-1 text-sm text-ink/55 max-w-2xl">
+          <p className="mt-1 text-sm text-ink/70 max-w-2xl">
             Revenue means payments received. Outstanding is quoted total minus paid on open orders.
             Choose a report to filter by date and export CSV.
           </p>
@@ -42,7 +42,7 @@ export default function ReportsAdminPage() {
                       <p className="font-heading text-lg text-ink group-hover:text-ink/80">
                         {item.title}
                       </p>
-                      <p className="mt-1.5 text-sm text-ink/55 leading-relaxed">
+                      <p className="mt-1.5 text-sm text-ink/70 leading-relaxed">
                         {item.description}
                       </p>
                       <span className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-gold tracking-wide">

@@ -54,7 +54,7 @@ export function PaymentsMetrics({ totalAmount, count, upiTotal, cashTotal }: Pay
           <div className="mt-2 text-2xl font-bold font-heading tracking-tight text-inherit truncate">
             {typeof c.value === 'number' ? <CountUp value={c.value} /> : c.value}
           </div>
-          <div className="mt-1 text-[10px] opacity-50 truncate">{c.sub}</div>
+          <div className="mt-1 text-[10px] opacity-70 truncate">{c.sub}</div>
         </div>
       ))}
     </div>

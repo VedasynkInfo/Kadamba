@@ -67,7 +67,7 @@ function PortalShell() {
 
   return (
     <div className="portal-shell min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--color-ember)_0%,_var(--color-espresso)_55%)] text-ink-inverse">
-      <header className="border-b border-gold/20 bg-espresso/40 backdrop-blur-md">
+      <header className="on-dark border-b border-gold/20 bg-espresso/40 backdrop-blur-md">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
           <Link to="/portal/dashboard" className="flex items-center gap-3 min-w-0">
             {activeLogo ? (
@@ -121,7 +121,7 @@ function PortalShell() {
                     'shrink-0 rounded-sm px-3 py-2 text-xs uppercase tracking-[0.16em] transition',
                     isActive
                       ? 'bg-gold/15 text-gold'
-                      : 'text-ink-inverse/55 hover:bg-white/5 hover:text-ink-inverse',
+                      : 'text-ink-inverse/70 hover:bg-white/5 hover:text-ink-inverse',
                   )
                 }
               >

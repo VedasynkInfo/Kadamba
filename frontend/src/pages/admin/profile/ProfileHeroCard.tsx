@@ -41,7 +41,7 @@ export function ProfileHeroCard({ name, email, role }: ProfileHeroCardProps) {
             </span>
           </div>
           <p className="text-xs opacity-65 font-mono">{email}</p>
-          <div className="pt-2 flex flex-wrap items-center justify-center sm:justify-start gap-3 text-[11px] opacity-60">
+          <div className="pt-2 flex flex-wrap items-center justify-center sm:justify-start gap-3 text-[11px] opacity-70">
             <span className="inline-flex items-center gap-1">
               <Icon name="studio" size={12} />
               Kadamba&apos;s Designer Studio

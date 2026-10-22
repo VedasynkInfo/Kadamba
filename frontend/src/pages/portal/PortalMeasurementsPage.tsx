@@ -189,7 +189,7 @@ export default function PortalMeasurementsPage() {
     <div className="space-y-8">
       <div>
         <h1 className="font-heading text-3xl text-ink-inverse">Measurements</h1>
-        <p className="mt-2 text-sm text-ink-inverse/55">
+        <p className="mt-2 text-sm text-ink-inverse/70">
           Choose a saved profile or garment type — fields load automatically for updates.
         </p>
       </div>
@@ -366,7 +366,7 @@ export default function PortalMeasurementsPage() {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search blouse, lehenga…"
-                  className="w-full max-w-xs rounded-sm border border-gold/20 bg-espresso/30 px-3 py-2 text-sm text-ink-inverse outline-none focus:border-focus sm:w-56"
+                  className="on-dark w-full max-w-xs rounded-sm border border-gold/20 bg-espresso/30 px-3 py-2 text-sm text-ink-inverse outline-none focus:border-focus sm:w-56"
                 />
               </div>
 
@@ -387,7 +387,7 @@ export default function PortalMeasurementsPage() {
                             <button
                               type="button"
                               onClick={() => void openTemplate(t)}
-                              className="h-full w-full border border-gold/15 bg-espresso/25 px-4 py-4 text-left transition hover:border-gold/40 hover:bg-white/5"
+                              className="on-dark h-full w-full border border-gold/15 bg-espresso/25 px-4 py-4 text-left transition hover:border-gold/40 hover:bg-white/5"
                             >
                               <p className="font-heading text-lg text-ink-inverse">{t.name}</p>
                               <p className="mt-1 font-mono text-[0.7rem] text-gold/70">{t.code}</p>

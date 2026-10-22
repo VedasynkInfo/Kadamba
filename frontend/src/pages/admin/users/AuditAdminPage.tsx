@@ -100,7 +100,7 @@ export default function AuditAdminPage() {
             >
               Audit Log
             </h1>
-            <p className="text-xs opacity-60">
+            <p className="text-xs opacity-70">
               Every privileged action, in order, hash-chained so tampering is detectable.
             </p>
           </div>
@@ -108,7 +108,7 @@ export default function AuditAdminPage() {
             type="button"
             onClick={() => void verify()}
             disabled={verifying}
-            className="rounded-xl border px-4 py-2 text-[11px] uppercase tracking-wider transition hover:bg-white/5 disabled:opacity-50 border-line"
+            className="rounded-xl border px-4 py-2 text-[11px] uppercase tracking-wider transition hover:bg-white/5 disabled:opacity-70 border-line"
           >
             {verifying ? 'Verifying…' : 'Verify integrity'}
           </button>
@@ -158,7 +158,7 @@ export default function AuditAdminPage() {
                     <p className="font-semibold">
                       {ACTION_LABELS[entry.action] ?? entry.action}
                       {entry.outcome === 'failure' ? (
-                        <span className="ml-2 rounded-full bg-rose-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase text-rose-400">
+                        <span className="ml-2 rounded-full bg-rose-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase text-rose-700">
                           failed
                         </span>
                       ) : null}
@@ -169,7 +169,7 @@ export default function AuditAdminPage() {
                       {entry.ip ? ` · ${entry.ip}` : ''}
                     </p>
                   </div>
-                  <time className="shrink-0 opacity-50" dateTime={entry.createdAt}>
+                  <time className="shrink-0 opacity-70" dateTime={entry.createdAt}>
                     {new Date(entry.createdAt).toLocaleString()}
                   </time>
                 </li>
@@ -199,7 +199,7 @@ export default function AuditAdminPage() {
             >
               Previous
             </button>
-            <span className="opacity-60">
+            <span className="opacity-70">
               {page} / {pages}
             </span>
             <button

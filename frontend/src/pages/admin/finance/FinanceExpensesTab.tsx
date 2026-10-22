@@ -103,7 +103,7 @@ export function FinanceExpensesTab({
       >
         <div className="flex flex-1 flex-wrap items-center gap-2.5">
           <div className="relative min-w-[180px] flex-1 sm:max-w-xs">
-            <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-xs opacity-50">
+            <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-xs opacity-70">
               <Icon name="search" size={14} />
             </span>
             <input
@@ -126,7 +126,7 @@ export function FinanceExpensesTab({
         </div>
 
         <div className="flex items-center justify-between sm:justify-end gap-3">
-          <span className="text-xs opacity-60">
+          <span className="text-xs opacity-70">
             Showing <strong>{filtered.length}</strong> items
           </span>
           <button
@@ -181,7 +181,7 @@ export function FinanceExpensesTab({
                       <td className="py-3 px-4">
                         <span className="font-semibold block truncate">{exp.title}</span>
                         {exp.notes ? (
-                          <span className="text-[10px] opacity-60 block truncate max-w-[300px] mt-0.5">
+                          <span className="text-[10px] opacity-70 block truncate max-w-[300px] mt-0.5">
                             {exp.notes}
                           </span>
                         ) : null}
@@ -200,7 +200,7 @@ export function FinanceExpensesTab({
                       </td>
 
                       <td className="py-3 px-4 text-right whitespace-nowrap">
-                        <span className="font-bold text-rose-400">{formatINR(exp.amount)}</span>
+                        <span className="font-bold text-rose-700">{formatINR(exp.amount)}</span>
                       </td>
 
                       <td className="py-3 px-4 text-right whitespace-nowrap w-[70px]">
@@ -264,7 +264,7 @@ export function FinanceExpensesTab({
                     onDeleteExpense(id);
                   }
                 }}
-                className="w-full flex items-center gap-2 rounded-lg px-3 py-2 font-medium text-rose-400 hover:bg-rose-500/10 transition cursor-pointer"
+                className="w-full flex items-center gap-2 rounded-lg px-3 py-2 font-medium text-rose-700 hover:bg-rose-500/10 transition cursor-pointer"
               >
                 <Icon name="delete" size={14} />
                 <span>Delete Expense</span>

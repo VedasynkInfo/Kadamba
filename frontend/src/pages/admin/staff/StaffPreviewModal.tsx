@@ -54,7 +54,7 @@ export function StaffPreviewModal({ staff, onClose, onEdit }: StaffPreviewModalP
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
+      className="on-dark fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -84,7 +84,7 @@ export function StaffPreviewModal({ staff, onClose, onEdit }: StaffPreviewModalP
                     'inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border',
                     staff.status === 'active'
                       ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
-                      : 'bg-rose-500/15 text-rose-400 border-rose-500/30',
+                      : 'bg-rose-500/15 text-rose-700 border-rose-500/30',
                   )}
                 >
                   {staff.status}
@@ -97,7 +97,7 @@ export function StaffPreviewModal({ staff, onClose, onEdit }: StaffPreviewModalP
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer border-line"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-70 hover:opacity-100 transition cursor-pointer border-line"
             aria-label="Close modal"
           >
             <Icon name="close" size={16} />
@@ -108,7 +108,7 @@ export function StaffPreviewModal({ staff, onClose, onEdit }: StaffPreviewModalP
         <div className="p-5 space-y-4 max-h-[75vh] overflow-y-auto">
           {/* Craft Skills */}
           <div>
-            <span className="text-[10px] uppercase font-bold tracking-wider opacity-60 block mb-2">
+            <span className="text-[10px] uppercase font-bold tracking-wider opacity-70 block mb-2">
               Master Crafts & Specializations
             </span>
             <div className="flex flex-wrap gap-1.5">
@@ -137,20 +137,20 @@ export function StaffPreviewModal({ staff, onClose, onEdit }: StaffPreviewModalP
                 Employment Profile
               </h4>
               <div className="flex justify-between items-center text-[11px]">
-                <span className="opacity-60">Contract Type:</span>
+                <span className="opacity-70">Contract Type:</span>
                 <span className="font-semibold uppercase tracking-wide">{staff.employmentType}</span>
               </div>
               <div className="flex justify-between items-center text-[11px]">
-                <span className="opacity-60">Experience:</span>
+                <span className="opacity-70">Experience:</span>
                 <span className="font-semibold">{staff.yearsExperience ? `${staff.yearsExperience} Years` : '—'}</span>
               </div>
               <div className="flex justify-between items-center text-[11px]">
-                <span className="opacity-60">Joining Date:</span>
+                <span className="opacity-70">Joining Date:</span>
                 <span className="font-semibold">{staff.joiningDate ? formatDate(staff.joiningDate) : '—'}</span>
               </div>
               {staff.languages && staff.languages.length > 0 ? (
                 <div className="flex justify-between items-center text-[11px]">
-                  <span className="opacity-60">Languages:</span>
+                  <span className="opacity-70">Languages:</span>
                   <span className="font-semibold">{staff.languages.join(', ')}</span>
                 </div>
               ) : null}
@@ -164,17 +164,17 @@ export function StaffPreviewModal({ staff, onClose, onEdit }: StaffPreviewModalP
                 Compensation & Safety
               </h4>
               <div className="flex justify-between items-center text-[11px]">
-                <span className="opacity-60">Salary / Rate:</span>
+                <span className="opacity-70">Salary / Rate:</span>
                 <span className="font-bold text-amber-400">
                   {staff.salaryAmount ? `${formatINR(staff.salaryAmount)} / ${staff.salaryType}` : 'Not set'}
                 </span>
               </div>
               <div className="flex justify-between items-center text-[11px]">
-                <span className="opacity-60">Workshop Locality:</span>
+                <span className="opacity-70">Workshop Locality:</span>
                 <span className="font-semibold">{staff.locality || '—'}</span>
               </div>
               <div className="flex justify-between items-center text-[11px]">
-                <span className="opacity-60">Emergency Contact:</span>
+                <span className="opacity-70">Emergency Contact:</span>
                 <span className="font-semibold">
                   {staff.emergencyContact?.name || '—'}{' '}
                   {staff.emergencyContact?.phone ? `(${staff.emergencyContact.phone})` : ''}
@@ -182,7 +182,7 @@ export function StaffPreviewModal({ staff, onClose, onEdit }: StaffPreviewModalP
               </div>
               {staff.address ? (
                 <div className="pt-1 border-t text-[10px] border-line">
-                  <span className="opacity-50 block">Full Address:</span>
+                  <span className="opacity-70 block">Full Address:</span>
                   <span className="opacity-80 block truncate">{staff.address}</span>
                 </div>
               ) : null}
@@ -194,7 +194,7 @@ export function StaffPreviewModal({ staff, onClose, onEdit }: StaffPreviewModalP
             <div
               className="rounded-xl border p-3 border-line bg-surface-sunken"
             >
-              <span className="text-[10px] uppercase font-bold tracking-wider opacity-60 block mb-1">
+              <span className="text-[10px] uppercase font-bold tracking-wider opacity-70 block mb-1">
                 Previous Studios / Boutiques
               </span>
               <p className="text-xs opacity-80">{staff.previousWorkplaces.join(', ')}</p>

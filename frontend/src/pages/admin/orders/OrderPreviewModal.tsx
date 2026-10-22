@@ -54,7 +54,7 @@ export function OrderPreviewModal({ order, onClose, onStatusChange }: OrderPrevi
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
+      className="on-dark fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -122,11 +122,11 @@ export function OrderPreviewModal({ order, onClose, onStatusChange }: OrderPrevi
             className="grid grid-cols-2 gap-3 rounded-xl p-3.5 border bg-surface-sunken border-line"
           >
             <div>
-              <span className="opacity-50 block text-[10px] uppercase font-semibold">Fitting & Trial</span>
+              <span className="opacity-70 block text-[10px] uppercase font-semibold">Fitting & Trial</span>
               <span className="font-bold text-sm mt-0.5 block">{formatDate(order.expectedTrialAt)}</span>
             </div>
             <div>
-              <span className="opacity-50 block text-[10px] uppercase font-semibold">Final Delivery</span>
+              <span className="opacity-70 block text-[10px] uppercase font-semibold">Final Delivery</span>
               <span className="font-bold text-sm mt-0.5 block text-emerald-400">
                 {formatDate(order.expectedDeliveryAt)}
               </span>
@@ -148,14 +148,14 @@ export function OrderPreviewModal({ order, onClose, onStatusChange }: OrderPrevi
                     <div>
                       <span className="font-semibold block">{item.name || `Garment #${idx + 1}`}</span>
                       {item.notes ? (
-                        <span className="opacity-60 text-[11px] block mt-0.5">{item.notes}</span>
+                        <span className="opacity-70 text-[11px] block mt-0.5">{item.notes}</span>
                       ) : null}
                     </div>
                     <span className="font-mono text-xs opacity-75 font-semibold">Qty: {item.qty || 1}</span>
                   </div>
                 ))
               ) : (
-                <div className="p-3 opacity-50 text-center">No line items specified</div>
+                <div className="p-3 opacity-70 text-center">No line items specified</div>
               )}
             </div>
           </div>
@@ -181,15 +181,15 @@ export function OrderPreviewModal({ order, onClose, onStatusChange }: OrderPrevi
             </div>
             <div className="grid grid-cols-3 gap-2 pt-1 text-center">
               <div>
-                <span className="text-[10px] opacity-50 block">Quoted</span>
+                <span className="text-[10px] opacity-70 block">Quoted</span>
                 <span className="font-bold text-xs">{formatINR(totalQ)}</span>
               </div>
               <div>
-                <span className="text-[10px] opacity-50 block">Paid</span>
+                <span className="text-[10px] opacity-70 block">Paid</span>
                 <span className="font-bold text-xs text-emerald-400">{formatINR(paid)}</span>
               </div>
               <div>
-                <span className="text-[10px] opacity-50 block">Balance Due</span>
+                <span className="text-[10px] opacity-70 block">Balance Due</span>
                 <span className="font-bold text-xs text-amber-400">{formatINR(balance)}</span>
               </div>
             </div>
@@ -199,7 +199,7 @@ export function OrderPreviewModal({ order, onClose, onStatusChange }: OrderPrevi
           <div className="space-y-1.5">
             <label className="text-[11px] font-semibold opacity-75 block">Move to next stage:</label>
             {stageChoices.length === 0 ? (
-              <p className="text-[11px] opacity-60">
+              <p className="text-[11px] opacity-70">
                 {stConfig.label} — lifecycle complete, no further stages.
               </p>
             ) : (
@@ -231,7 +231,7 @@ export function OrderPreviewModal({ order, onClose, onStatusChange }: OrderPrevi
               href={waHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-lg border px-3.5 py-1.5 font-bold text-emerald-500 hover:bg-emerald-500/10 transition cursor-pointer border-emerald-500/30"
+              className="inline-flex items-center gap-1.5 rounded-lg border px-3.5 py-1.5 font-bold text-emerald-700 hover:bg-emerald-500/10 transition cursor-pointer border-emerald-500/30"
             >
               <span><Icon name="message" size={14} className="mr-1 inline align-middle" /> WhatsApp Client</span>
             </a>

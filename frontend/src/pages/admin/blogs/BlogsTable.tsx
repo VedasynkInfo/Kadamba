@@ -159,7 +159,7 @@ export function BlogsTable({
                           {item.title}
                         </button>
                         <div className="flex items-center gap-1.5 mt-0.5">
-                          <span className="font-mono text-[10px] opacity-60 truncate max-w-[200px]">
+                          <span className="font-mono text-[10px] opacity-70 truncate max-w-[200px]">
                             /{item.slug}
                           </span>
                         </div>
@@ -201,7 +201,7 @@ export function BlogsTable({
                         className={cn(
                           'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border transition hover:opacity-85 cursor-pointer',
                           item.published
-                            ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/25'
+                            ? 'bg-emerald-500/10 text-emerald-700 border-emerald-500/25'
                             : 'bg-current/[0.06] opacity-70 border-current/15',
                         )}
                         title="Click to toggle publish status"

@@ -32,7 +32,7 @@ export default function ProfileAdminPage() {
           >
             Administrator Profile & Security
           </h1>
-          <p className="text-xs opacity-60">
+          <p className="text-xs opacity-70">
             Manage your personal studio access identity, verified email, and master credentials
           </p>
         </div>

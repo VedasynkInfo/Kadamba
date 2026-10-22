@@ -51,7 +51,7 @@ export function ProfileDetailsCard({
         <h3 className="font-heading text-base font-bold tracking-wide">
           Account Identification
         </h3>
-        <p className="text-[11px] opacity-60 mt-0.5">
+        <p className="text-[11px] opacity-70 mt-0.5">
           Your public administrator name and studio communication credentials
         </p>
       </div>
@@ -81,7 +81,7 @@ export function ProfileDetailsCard({
               value={email}
               className="w-full rounded-xl border py-2.5 px-3 text-xs opacity-65 cursor-not-allowed font-mono bg-surface-sunken border-line"
             />
-            <span className="text-[10px] opacity-50 block mt-0.5">
+            <span className="text-[10px] opacity-70 block mt-0.5">
               Verified administrative email (fixed)
             </span>
           </div>
@@ -96,7 +96,7 @@ export function ProfileDetailsCard({
               value={role.toUpperCase()}
               className="w-full rounded-xl border py-2.5 px-3 text-xs opacity-65 cursor-not-allowed font-semibold uppercase tracking-wider bg-surface-sunken border-line"
             />
-            <span className="text-[10px] opacity-50 block mt-0.5">
+            <span className="text-[10px] opacity-70 block mt-0.5">
               Role permissions managed by Master Superadmin
             </span>
           </div>
@@ -106,7 +106,7 @@ export function ProfileDetailsCard({
           <button
             type="submit"
             disabled={saving}
-            className="rounded-xl px-5 py-2.5 text-xs font-bold shadow-xs transition hover:opacity-95 disabled:opacity-50 cursor-pointer bg-brand text-ink-on-brand"
+            className="rounded-xl px-5 py-2.5 text-xs font-bold shadow-xs transition hover:opacity-95 disabled:opacity-70 cursor-pointer bg-brand text-ink-on-brand"
           >
             {saving ? 'Saving Changes...' : 'Save Profile Changes'}
           </button>

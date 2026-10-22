@@ -40,7 +40,7 @@ export function RadioGroup({
             key={opt.value}
             className={cn(
               'inline-flex cursor-pointer items-center gap-2.5 text-sm text-ink',
-              opt.disabled && 'cursor-not-allowed opacity-50',
+              opt.disabled && 'cursor-not-allowed opacity-70',
             )}
           >
             <input

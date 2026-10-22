@@ -69,7 +69,7 @@ export function PortfolioModalForm({
             <h2 className="font-heading text-lg font-bold text-inherit">
               {isNew ? 'Create New Portfolio Exhibit' : 'Edit Portfolio Exhibit'}
             </h2>
-            <p className="text-xs opacity-60 mt-0.5">
+            <p className="text-xs opacity-70 mt-0.5">
               {isNew ? 'Showcase atelier bespoke bridal and client transformations' : 'Update project photography, client stories, and SEO'}
             </p>
           </div>
@@ -241,7 +241,7 @@ export function PortfolioModalForm({
         <div
           className="flex items-center justify-between gap-3 border-t px-6 py-4 border-line"
         >
-          <div className="text-xs opacity-50">
+          <div className="text-xs opacity-70">
             {form.title ? `Project: "${form.title}"` : 'Fill required fields (*)'}
           </div>
 

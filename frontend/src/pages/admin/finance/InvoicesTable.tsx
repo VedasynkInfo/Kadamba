@@ -133,7 +133,7 @@ export function InvoicesTable({
                         >
                           {inv.invoiceNumber || `ORD-#${inv.orderNumber}`}
                         </button>
-                        <span className="text-[10px] opacity-60 font-mono block mt-0.5">
+                        <span className="text-[10px] opacity-70 font-mono block mt-0.5">
                           Order #{inv.orderNumber}
                         </span>
                       </div>
@@ -145,7 +145,7 @@ export function InvoicesTable({
                         <span className="font-semibold block truncate">
                           {inv.customer?.name || 'Walk-in Customer'}
                         </span>
-                        <span className="text-[11px] opacity-60 block mt-0.5 truncate">
+                        <span className="text-[11px] opacity-70 block mt-0.5 truncate">
                           {inv.title || inv.customer?.phone || '—'}
                         </span>
                       </div>
@@ -161,7 +161,7 @@ export function InvoicesTable({
                       <div>
                         <div className="flex items-center justify-between text-[11px] font-medium">
                           <span className="text-emerald-400 font-semibold">{formatINR(paid)}</span>
-                          <span className="opacity-60 font-mono text-[10px]">{paidPercent}%</span>
+                          <span className="opacity-70 font-mono text-[10px]">{paidPercent}%</span>
                         </div>
                         <div
                           className="mt-1 h-1.5 w-full rounded-full overflow-hidden bg-line"
@@ -178,11 +178,11 @@ export function InvoicesTable({
                             style={{ width: `${paidPercent}%` }}
                           />
                         </div>
-                        <div className="text-[10px] opacity-60 mt-0.5">
+                        <div className="text-[10px] opacity-70 mt-0.5">
                           {balance > 0 ? (
                             <span className="text-amber-500 font-semibold">Due: {formatINR(balance)}</span>
                           ) : (
-                            <span className="text-emerald-500 font-medium">Settled</span>
+                            <span className="text-emerald-700 font-medium">Settled</span>
                           )}
                         </div>
                       </div>
@@ -194,7 +194,7 @@ export function InvoicesTable({
                         className={cn(
                           'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold border uppercase tracking-wider',
                           inv.billStatus === 'paid'
-                            ? 'bg-emerald-500/15 text-emerald-500 border-emerald-500/30'
+                            ? 'bg-emerald-500/15 text-emerald-700 border-emerald-500/30'
                             : inv.billStatus === 'partial'
                             ? 'bg-amber-500/15 text-amber-500 border-amber-500/30'
                             : inv.billStatus === 'unpaid'
@@ -297,7 +297,7 @@ export function InvoicesTable({
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setMenuAnchor(null)}
-                className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-500 hover:bg-emerald-500/10 transition cursor-pointer"
+                className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-700 hover:bg-emerald-500/10 transition cursor-pointer"
               >
                 <Icon name="message" size={14} />
                 <span>Send Payment Reminder</span>

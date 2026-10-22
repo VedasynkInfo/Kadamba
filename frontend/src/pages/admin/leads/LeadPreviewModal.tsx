@@ -21,7 +21,7 @@ export function LeadPreviewModal({ lead, onClose, onStatusChange }: LeadPreviewM
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
+      className="on-dark fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -76,15 +76,15 @@ export function LeadPreviewModal({ lead, onClose, onStatusChange }: LeadPreviewM
             className="grid grid-cols-2 sm:grid-cols-3 gap-3 rounded-xl p-3.5 border bg-surface-sunken border-line"
           >
             <div>
-              <span className="opacity-50 block text-[10px] uppercase font-semibold">Enquired Service</span>
+              <span className="opacity-70 block text-[10px] uppercase font-semibold">Enquired Service</span>
               <span className="font-bold mt-0.5 block">{lead.service}</span>
             </div>
             <div>
-              <span className="opacity-50 block text-[10px] uppercase font-semibold">Assigned Desk</span>
+              <span className="opacity-70 block text-[10px] uppercase font-semibold">Assigned Desk</span>
               <span className="font-semibold mt-0.5 block">{lead.assignee || 'Unassigned'}</span>
             </div>
             <div>
-              <span className="opacity-50 block text-[10px] uppercase font-semibold">Acquisition Source</span>
+              <span className="opacity-70 block text-[10px] uppercase font-semibold">Acquisition Source</span>
               <span className="font-medium mt-0.5 block opacity-85 capitalize">{lead.source}</span>
             </div>
           </div>
@@ -125,7 +125,7 @@ export function LeadPreviewModal({ lead, onClose, onStatusChange }: LeadPreviewM
               </div>
               <Link
                 to={`/admin/orders/${lead.orderNumber}`}
-                className="text-xs font-bold text-emerald-500 hover:underline"
+                className="text-xs font-bold text-emerald-700 hover:underline"
               >
                 View Order <Icon name="arrowRight" size={14} className="mr-1 inline align-middle" /> 
               </Link>
@@ -141,7 +141,7 @@ export function LeadPreviewModal({ lead, onClose, onStatusChange }: LeadPreviewM
             href={waHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-lg border px-3.5 py-1.5 font-bold text-emerald-500 hover:bg-emerald-500/10 transition cursor-pointer border-emerald-500/30"
+            className="inline-flex items-center gap-1.5 rounded-lg border px-3.5 py-1.5 font-bold text-emerald-700 hover:bg-emerald-500/10 transition cursor-pointer border-emerald-500/30"
           >
             <span><Icon name="message" size={14} className="mr-1 inline align-middle" /> WhatsApp Concierge</span>
           </a>

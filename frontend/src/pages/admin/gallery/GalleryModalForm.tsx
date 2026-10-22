@@ -66,7 +66,7 @@ export function GalleryModalForm({
             <h2 className="font-heading text-lg font-bold text-inherit">
               {editingId ? 'Edit Gallery Item' : 'Add New Media to Atelier'}
             </h2>
-            <p className="text-xs opacity-60 mt-0.5">
+            <p className="text-xs opacity-70 mt-0.5">
               {editingId ? 'Modify media assets, categorization, and metadata' : 'Publish high-resolution photography and video reels'}
             </p>
           </div>
@@ -224,7 +224,7 @@ export function GalleryModalForm({
         <div
           className="flex items-center justify-between gap-3 border-t px-6 py-4 border-line"
         >
-          <div className="text-xs opacity-50">
+          <div className="text-xs opacity-70">
             {form.title ? `Item: "${form.title}"` : 'Fill required fields (*)'}
           </div>
 

@@ -134,7 +134,7 @@ export default function PortalRequestsPage() {
     <div className="space-y-8">
       <div>
         <h1 className="font-heading text-3xl text-ink-inverse">Browse & request</h1>
-        <p className="mt-2 max-w-xl text-sm text-ink-inverse/55">
+        <p className="mt-2 max-w-xl text-sm text-ink-inverse/70">
           Choose a garment from {brand.shortName}&apos;s catalog — we&apos;ll open a linked enquiry
           for your next fitting in {brand.location}.
         </p>
@@ -197,7 +197,7 @@ export default function PortalRequestsPage() {
               ) : (
                 <>
                   <div className="mt-6 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-                    <div className="space-y-3 border border-gold/15 bg-espresso/30 p-5">
+                    <div className="on-dark space-y-3 border border-gold/15 bg-espresso/30 p-5">
                       <p className="text-[0.62rem] uppercase tracking-[0.24em] text-ink-inverse/70">
                         {selected.categoryName || 'Garment'}
                       </p>
@@ -310,7 +310,7 @@ export default function PortalRequestsPage() {
                   <button
                     type="button"
                     onClick={() => selectItem(item)}
-                    className="group h-full w-full border border-gold/15 bg-espresso/25 px-4 py-5 text-left transition hover:border-gold/45 hover:bg-white/[0.04]"
+                    className="on-dark group h-full w-full border border-gold/15 bg-espresso/25 px-4 py-5 text-left transition hover:border-gold/45 hover:bg-white/[0.04]"
                   >
                     <p className="text-[0.65rem] uppercase tracking-[0.16em] text-ink-inverse/70">
                       {item.categoryName || item.categoryCode || 'Garment'}
@@ -320,7 +320,7 @@ export default function PortalRequestsPage() {
                     </p>
                     <p className="mt-1 font-mono text-[0.7rem] text-gold/70">{item.code}</p>
                     {item.publicDescription ? (
-                      <p className="mt-2 line-clamp-2 text-sm text-ink-inverse/55">
+                      <p className="mt-2 line-clamp-2 text-sm text-ink-inverse/70">
                         {item.publicDescription}
                       </p>
                     ) : null}

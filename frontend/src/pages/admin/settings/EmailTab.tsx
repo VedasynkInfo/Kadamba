@@ -58,7 +58,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
       >
         <div className="border-b pb-3 border-line">
           <h3 className="font-heading text-sm font-bold tracking-wide">SMTP Email Relay</h3>
-          <p className="text-[10px] opacity-60 mt-0.5">
+          <p className="text-[10px] opacity-70 mt-0.5">
             Transport service used to deliver client consultations, invoice links, and tailor notifications
           </p>
         </div>
@@ -209,7 +209,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
             type="button"
             onClick={handleSendTest}
             disabled={testingEmail}
-            className="rounded-xl px-4 py-2 text-xs font-bold border hover:bg-current/[0.05] transition disabled:opacity-50 cursor-pointer border-line"
+            className="rounded-xl px-4 py-2 text-xs font-bold border hover:bg-current/[0.05] transition disabled:opacity-70 cursor-pointer border-line"
           >
             {testingEmail ? (
               'Sending Test...'
@@ -229,7 +229,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
       >
         <div className="border-b pb-3 border-line">
           <h3 className="font-heading text-sm font-bold tracking-wide">Transactional Notification Templates</h3>
-          <p className="text-[10px] opacity-60 mt-0.5">Customize client copy sent during the order lifecycle</p>
+          <p className="text-[10px] opacity-70 mt-0.5">Customize client copy sent during the order lifecycle</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -245,7 +245,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
                   <span className="font-mono text-[10px] uppercase font-bold text-brand-strong">
                     {t.key.replace(/_/g, ' ')}
                   </span>
-                  <span className="text-[11px] opacity-60">{isEditing ? 'Close ▲' : 'Edit ▼'}</span>
+                  <span className="text-[11px] opacity-70">{isEditing ? 'Close ▲' : 'Edit ▼'}</span>
                 </div>
                 <p className="font-semibold text-xs mt-1 truncate">{t.subject}</p>
               </div>
@@ -256,7 +256,7 @@ export function EmailTab({ form, patchForm }: EmailTabProps) {
         {/* Active Template Editor */}
         {currentTemplate ? (
           <div
-            className="rounded-xl border p-4 space-y-3 mt-2 bg-espresso/20 border-line"
+            className="on-dark rounded-xl border p-4 space-y-3 mt-2 bg-espresso/20 border-line"
           >
             <div className="space-y-1">
               <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">

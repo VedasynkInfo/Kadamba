@@ -34,7 +34,7 @@ export function BlogArticleSection({ post }: BlogArticleSectionProps) {
             {post.tags.map((tag) => (
               <li
                 key={tag}
-                className="border border-line px-3 py-1 text-[0.65rem] uppercase tracking-[0.18em] text-ink/55"
+                className="border border-line px-3 py-1 text-[0.65rem] uppercase tracking-[0.18em] text-ink/70"
               >
                 {tag}
               </li>

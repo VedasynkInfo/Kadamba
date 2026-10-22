@@ -96,7 +96,7 @@ export default function PortalLoginPage() {
               </Button>
             </form>
 
-            <p className="mt-6 text-sm text-ink-inverse/55">
+            <p className="mt-6 text-sm text-ink-inverse/70">
               First time?{' '}
               <Link to="/portal/activate" className="text-gold hover:underline">
                 Activate with Reference ID

@@ -188,7 +188,7 @@ export default function MediaLibraryPage() {
             >
               Media Library
             </h1>
-            <p className="text-xs opacity-60">
+            <p className="text-xs opacity-70">
               {total} asset{total === 1 ? '' : 's'} · {formatBytes(totalVariantBytes)} of responsive
               variants on this page
             </p>
@@ -232,7 +232,7 @@ export default function MediaLibraryPage() {
           </div>
         ) : items.length === 0 ? (
           <div
-            className="rounded-2xl border px-6 py-16 text-center text-xs opacity-60 bg-surface-raised border-line"
+            className="rounded-2xl border px-6 py-16 text-center text-xs opacity-70 bg-surface-raised border-line"
           >
             No media matches these filters.
           </div>
@@ -305,7 +305,7 @@ export default function MediaLibraryPage() {
             >
               Previous
             </button>
-            <span className="opacity-60">
+            <span className="opacity-70">
               Page {page} of {pages}
             </span>
             <button
@@ -328,7 +328,7 @@ export default function MediaLibraryPage() {
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h2 className="font-heading text-lg font-bold">Asset detail</h2>
-                <p className="text-xs opacity-60">{selected.originalName || selected.hash}</p>
+                <p className="text-xs opacity-70">{selected.originalName || selected.hash}</p>
               </div>
               <button
                 type="button"
@@ -336,7 +336,7 @@ export default function MediaLibraryPage() {
                   setSelected(null);
                   setBlockedBy(null);
                 }}
-                className="text-xs opacity-60 hover:opacity-100"
+                className="text-xs opacity-70 hover:opacity-100"
               >
                 Close
               </button>
@@ -398,7 +398,7 @@ export default function MediaLibraryPage() {
             </div>
 
             <div className="mt-5">
-              <label className="text-[10px] font-bold uppercase tracking-wider opacity-60">
+              <label className="text-[10px] font-bold uppercase tracking-wider opacity-70">
                 Alt text
               </label>
               <textarea
@@ -412,7 +412,7 @@ export default function MediaLibraryPage() {
             </div>
 
             <div className="mt-5">
-              <p className="text-[10px] font-bold uppercase tracking-wider opacity-60">
+              <p className="text-[10px] font-bold uppercase tracking-wider opacity-70">
                 Used in {selected.usage?.length ?? 0} place
                 {(selected.usage?.length ?? 0) === 1 ? '' : 's'}
               </p>
@@ -421,7 +421,7 @@ export default function MediaLibraryPage() {
                   {selected.usage.map((usage) => (
                     <li key={`${usage.entityType}-${usage.entityId}-${usage.field}`} className="opacity-75">
                       <span className="font-semibold">{usage.label}</span> · {usage.title}{' '}
-                      <span className="opacity-60">({usage.field})</span>
+                      <span className="opacity-70">({usage.field})</span>
                     </li>
                   ))}
                 </ul>
@@ -474,7 +474,7 @@ export default function MediaLibraryPage() {
                       type="button"
                       onClick={() => void regenerate()}
                       disabled={busyId === selected._id || selected.kind === 'video'}
-                      className="rounded-xl border px-3 py-2 text-[11px] disabled:opacity-50 border-line"
+                      className="rounded-xl border px-3 py-2 text-[11px] disabled:opacity-70 border-line"
                     >
                       Rebuild variants
                     </button>
@@ -482,7 +482,7 @@ export default function MediaLibraryPage() {
                       type="button"
                       onClick={() => void saveAlt()}
                       disabled={busyId === selected._id}
-                      className="rounded-xl bg-gold px-3 py-2 text-[11px] font-bold text-ink disabled:opacity-50"
+                      className="rounded-xl bg-gold px-3 py-2 text-[11px] font-bold text-ink disabled:opacity-70"
                     >
                       {busyId === selected._id ? 'Saving…' : 'Save alt text'}
                     </button>
@@ -491,10 +491,10 @@ export default function MediaLibraryPage() {
                       onClick={() => void remove(Boolean(blockedBy))}
                       disabled={busyId === selected._id}
                       className={cn(
-                        'rounded-xl px-3 py-2 text-[11px] font-bold disabled:opacity-50',
+                        'rounded-xl px-3 py-2 text-[11px] font-bold disabled:opacity-70',
                         blockedBy
                           ? 'bg-rose-600 text-white'
-                          : 'border text-rose-400',
+                          : 'border text-rose-700',
                       )}
                       style={blockedBy ? undefined : { borderColor: 'var(--admin-border)' }}
                     >

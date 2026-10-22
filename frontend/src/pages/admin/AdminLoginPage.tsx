@@ -11,6 +11,11 @@ import { adminHorizonMedia, loginCopy } from './data';
 /**
  * Console sign-in: password step, then a second factor step when the account
  * has TOTP enabled.
+ *
+ * The console is a light application, so this page is light too — the dark
+ * panel on the left is the photograph, and the ink on the right is the
+ * console's own ink. An earlier version styled this page for the old dark
+ * console, and on a light ground the cream text was invisible.
  */
 export default function AdminLoginPage() {
   const { login, isAuthenticated, user, mfaChallenge, completeMfa, cancelMfa } = useAuth();
@@ -81,55 +86,54 @@ export default function AdminLoginPage() {
           <motion.img
             src={adminHorizonMedia.image}
             alt={adminHorizonMedia.alt}
-            className="absolute inset-0 h-full w-full object-cover"
+            className="absolute inset-0 size-full object-cover"
             initial={reduced ? false : { scale: 1.06 }}
-            animate={{ scale: 1 }}
+            animate={reduced ? false : { scale: 1 }}
             transition={{ duration: reduced ? 0 : 1.4, ease: [0.22, 1, 0.36, 1] }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-surface/40 via-transparent to-surface" />
-          <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-espresso/60 via-espresso/20 to-transparent" />
         </div>
 
         <div className="flex flex-col justify-center px-6 py-16 sm:px-12 lg:px-16">
           <motion.div
             initial={reduced ? false : { opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            animate={reduced ? false : { opacity: 1, y: 0 }}
+            transition={{ duration: reduced ? 0 : 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="mx-auto w-full max-w-md"
           >
-            <p className="font-heading text-[0.62rem] uppercase tracking-[0.42em] text-gold/85">
+            <p className="font-heading text-[0.62rem] uppercase tracking-[0.42em] text-brand-strong">
               {loginCopy.locationLine}
             </p>
-            <p className="mt-4 font-heading text-4xl tracking-[0.06em] text-gold">
+            <p className="mt-4 font-heading text-4xl tracking-[0.06em] text-ink">
               {loginCopy.brandName}
             </p>
 
             {mfaChallenge ? (
               <>
-                <h1 className="mt-5 font-heading text-2xl text-ink-inverse sm:text-3xl">
+                <h1 className="mt-5 font-heading text-2xl text-ink sm:text-3xl">
                   Two-step verification
                 </h1>
-                <p className="mt-3 text-sm leading-relaxed text-ink-inverse/65">
+                <p className="mt-3 text-sm leading-relaxed text-ink/70">
                   Enter the 6-digit code from your authenticator app. You can also use one of
                   your recovery codes.
                 </p>
 
                 <form onSubmit={onVerify} className="mt-10 space-y-5" noValidate>
-                  <div className="[&_label]:text-ink-inverse/80">
+                  <div>
                     <Input
                       label="Verification code"
-                      name="code"
+                      name="verification-code"
                       inputMode="numeric"
                       autoComplete="one-time-code"
                       autoFocus
                       required
                       value={code}
-                      onChange={(e) => setCode(e.target.value)}
+                      onChange={(event) => setCode(event.target.value)}
                       placeholder="123456 or recovery code"
                     />
                   </div>
                   {error ? (
-                    <p className="text-sm text-gold" role="alert">
+                    <p className="text-sm text-danger" role="alert">
                       {error}
                     </p>
                   ) : null}
@@ -140,7 +144,7 @@ export default function AdminLoginPage() {
                     loading={loading}
                     className="w-full"
                   >
-                    Verify & continue
+                    Verify &amp; continue
                   </Button>
                   <button
                     type="button"
@@ -149,7 +153,7 @@ export default function AdminLoginPage() {
                       setCode('');
                       setError('');
                     }}
-                    className="w-full inline-flex items-center justify-center gap-1 text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/70 transition hover:text-gold"
+                    className="w-full inline-flex items-center justify-center gap-1 text-[0.65rem] uppercase tracking-[0.22em] text-ink/65 transition hover:text-brand-strong"
                   >
                     <Icon name="arrowLeft" size={14} />
                     Back to sign in
@@ -158,13 +162,13 @@ export default function AdminLoginPage() {
               </>
             ) : (
               <>
-                <h1 className="mt-5 font-heading text-2xl text-ink-inverse sm:text-3xl">
+                <h1 className="mt-5 font-heading text-2xl text-ink sm:text-3xl">
                   {loginCopy.headline}
                 </h1>
-                <p className="mt-3 text-sm leading-relaxed text-ink-inverse/65">{loginCopy.copy}</p>
+                <p className="mt-3 text-sm leading-relaxed text-ink/70">{loginCopy.copy}</p>
 
                 <form onSubmit={onSubmit} className="mt-10 space-y-5" noValidate>
-                  <div className="[&_label]:text-ink-inverse/80">
+                  <div>
                     <Input
                       label="Email"
                       type="email"
@@ -172,10 +176,10 @@ export default function AdminLoginPage() {
                       autoComplete="username"
                       required
                       value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(event) => setEmail(event.target.value)}
                     />
                   </div>
-                  <div className="[&_label]:text-ink-inverse/80">
+                  <div>
                     <Input
                       label="Password"
                       type="password"
@@ -183,11 +187,11 @@ export default function AdminLoginPage() {
                       autoComplete="current-password"
                       required
                       value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      onChange={(event) => setPassword(event.target.value)}
                     />
                   </div>
                   {error ? (
-                    <p className="text-sm text-gold" role="alert">
+                    <p className="text-sm text-danger" role="alert">
                       {error}
                     </p>
                   ) : null}
@@ -204,7 +208,7 @@ export default function AdminLoginPage() {
 
                 <a
                   href="/admin/forgot-password"
-                  className="mt-6 inline-block text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/70 transition hover:text-gold"
+                  className="mt-6 inline-block text-[0.65rem] uppercase tracking-[0.22em] text-ink/65 transition hover:text-brand-strong"
                 >
                   Forgot password?
                 </a>
@@ -213,7 +217,7 @@ export default function AdminLoginPage() {
 
             <a
               href="/"
-              className="mt-10 inline-flex items-center gap-1 text-[0.65rem] uppercase tracking-[0.22em] text-ink-inverse/70 transition hover:text-gold"
+              className="mt-10 inline-flex items-center gap-1 text-[0.65rem] uppercase tracking-[0.22em] text-ink/65 transition hover:text-brand-strong"
             >
               <Icon name="arrowLeft" size={14} />
               Public site

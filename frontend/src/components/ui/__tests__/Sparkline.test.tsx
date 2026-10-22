@@ -30,7 +30,7 @@ describe('Sparkline', () => {
     up.unmount();
 
     const down = render(<Sparkline values={[3, 2, 1]} />);
-    expect(svgOf(down.container)?.getAttribute('class')).toContain('text-rose-400');
+    expect(svgOf(down.container)?.getAttribute('class')).toContain('text-rose-700');
     down.unmount();
 
     const flat = render(<Sparkline values={[2, 2, 2]} />);
@@ -39,7 +39,7 @@ describe('Sparkline', () => {
 
   it('keeps an explicit trend override', () => {
     const { container } = render(<Sparkline values={[1, 2, 3]} trend="down" />);
-    expect(svgOf(container)?.getAttribute('class')).toContain('text-rose-400');
+    expect(svgOf(container)?.getAttribute('class')).toContain('text-rose-700');
   });
 
   it('hides the decoration from assistive technology', () => {

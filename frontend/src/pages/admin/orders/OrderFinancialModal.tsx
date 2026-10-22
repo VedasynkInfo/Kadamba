@@ -53,7 +53,7 @@ export function OrderFinancialModal({
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs text-ink/55 mb-1.5">Amount (₹) *</label>
+              <label className="block text-xs text-ink/70 mb-1.5">Amount (₹) *</label>
               <Input
                 id="record-payment-amount"
                 type="number"
@@ -65,7 +65,7 @@ export function OrderFinancialModal({
               />
             </div>
             <div>
-              <label className="block text-xs text-ink/55 mb-1.5">Date *</label>
+              <label className="block text-xs text-ink/70 mb-1.5">Date *</label>
               <DateField
                 id="record-payment-date"
                 value={paymentDate}
@@ -74,7 +74,7 @@ export function OrderFinancialModal({
             </div>
           </div>
           <div>
-            <label className="block text-xs text-ink/55 mb-1.5">Method *</label>
+            <label className="block text-xs text-ink/70 mb-1.5">Method *</label>
             <Select
               id="record-payment-method"
               value={paymentMethod}
@@ -83,7 +83,7 @@ export function OrderFinancialModal({
             />
           </div>
           <div>
-            <label className="block text-xs text-ink/55 mb-1.5">Reference / UPI ID</label>
+            <label className="block text-xs text-ink/70 mb-1.5">Reference / UPI ID</label>
             <Input
               id="record-payment-ref"
               placeholder="Transaction ID, UPI reference…"
@@ -92,7 +92,7 @@ export function OrderFinancialModal({
             />
           </div>
           <div>
-            <label className="block text-xs text-ink/55 mb-1.5">Notes</label>
+            <label className="block text-xs text-ink/70 mb-1.5">Notes</label>
             <Input
               id="record-payment-notes"
               placeholder="Optional note"
@@ -121,7 +121,7 @@ export function OrderFinancialModal({
       ) : (
         <div className="space-y-4">
           <div>
-            <label className="block text-xs text-ink/55 mb-1.5">Total Quoted Amount (₹)</label>
+            <label className="block text-xs text-ink/70 mb-1.5">Total Quoted Amount (₹)</label>
             <Input
               type="number"
               min="0"

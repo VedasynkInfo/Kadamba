@@ -109,7 +109,7 @@ export function AdminLayout() {
                     </p>
                   )}
                   {!collapsed && (
-                    <p className="mt-1 text-[0.62rem] uppercase tracking-[0.25em] text-ink/45">
+                    <p className="mt-1 text-[0.62rem] uppercase tracking-[0.25em] text-ink/70">
                       Studio Console
                     </p>
                   )}
@@ -121,7 +121,7 @@ export function AdminLayout() {
                       type="button"
                       onClick={() => setPaletteOpen(true)}
                       aria-label="Search the console"
-                      className="mx-2 mb-3 flex items-center justify-center rounded-lg border border-line bg-surface-sunken p-2 text-ink/55 transition hover:border-brand/40 hover:text-ink"
+                      className="mx-2 mb-3 flex items-center justify-center rounded-lg border border-line bg-surface-sunken p-2 text-ink/70 transition hover:border-brand/40 hover:text-ink"
                     >
                       <Icon name="search" size={16} />
                     </button>
@@ -130,7 +130,7 @@ export function AdminLayout() {
                   <button
                     type="button"
                     onClick={() => setPaletteOpen(true)}
-                    className="mx-2 mb-3 flex items-center gap-2 rounded-lg border border-line bg-surface-sunken px-2.5 py-1.5 text-left text-xs text-ink/55 transition hover:border-brand/40 hover:text-ink"
+                    className="mx-2 mb-3 flex items-center gap-2 rounded-lg border border-line bg-surface-sunken px-2.5 py-1.5 text-left text-xs text-ink/70 transition hover:border-brand/40 hover:text-ink"
                   >
                     <Icon name="search" size={14} />
                     <span className="flex-1">Search…</span>
@@ -148,7 +148,7 @@ export function AdminLayout() {
                     onClick={toggleCollapse}
                     aria-label={collapsed ? 'Expand navigation' : 'Collapse navigation'}
                     className={cn(
-                      'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-[0.65rem] uppercase tracking-[0.18em] text-ink/55 transition-colors hover:bg-ink/[0.05] hover:text-ink',
+                      'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-[0.65rem] uppercase tracking-[0.18em] text-ink/70 transition-colors hover:bg-ink/[0.05] hover:text-ink',
                       collapsed && 'justify-center',
                     )}
                   >
@@ -157,7 +157,7 @@ export function AdminLayout() {
                   </button>
 
                   {!collapsed && user ? (
-                    <p className="truncate px-2 text-xs text-ink/50">{user.email}</p>
+                    <p className="truncate px-2 text-xs text-ink/70">{user.email}</p>
                   ) : null}
 
                   {collapsed ? (
@@ -184,7 +184,7 @@ export function AdminLayout() {
                       <a
                         href="/"
                         aria-label="Public site"
-                        className="flex items-center justify-center rounded-md px-2 py-1.5 text-ink/55 transition-colors hover:bg-ink/[0.05] hover:text-ink"
+                        className="flex items-center justify-center rounded-md px-2 py-1.5 text-ink/70 transition-colors hover:bg-ink/[0.05] hover:text-ink"
                       >
                         <Icon name="arrowLeft" size={16} />
                       </a>
@@ -192,7 +192,7 @@ export function AdminLayout() {
                   ) : (
                     <a
                       href="/"
-                      className="flex items-center gap-2 px-2 text-[0.65rem] uppercase tracking-[0.18em] text-ink/55 transition-colors hover:text-ink"
+                      className="flex items-center gap-2 px-2 text-[0.65rem] uppercase tracking-[0.18em] text-ink/70 transition-colors hover:text-ink"
                     >
                       <Icon name="arrowLeft" size={14} />
                       <span>Public site</span>

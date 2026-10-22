@@ -34,7 +34,7 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
       >
         <div className="border-b pb-3 border-line">
           <h3 className="font-heading text-sm font-bold tracking-wide">Official Atelier Channels</h3>
-          <p className="text-[10px] opacity-60 mt-0.5">
+          <p className="text-[10px] opacity-70 mt-0.5">
             Key social handles displayed in the public header, lookbook hero, and footer
           </p>
         </div>
@@ -157,7 +157,7 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
         <div className="flex items-center justify-between border-b pb-3 border-line">
           <div>
             <h3 className="font-heading text-sm font-bold tracking-wide">Additional Media Links</h3>
-            <p className="text-[10px] opacity-60 mt-0.5">Pinterest boards, LinkedIn, threads, or boutique portfolio links</p>
+            <p className="text-[10px] opacity-70 mt-0.5">Pinterest boards, LinkedIn, threads, or boutique portfolio links</p>
           </div>
           <button
             type="button"
@@ -206,7 +206,7 @@ export function SocialTab({ form, patchForm }: SocialTabProps) {
                     social: f.social.filter((_, i) => i !== idx),
                   }))
                 }
-                className="p-1.5 text-xs opacity-50 hover:opacity-100 text-rose-400 cursor-pointer"
+                className="p-1.5 text-xs opacity-70 hover:opacity-100 text-rose-700 cursor-pointer"
                 title="Remove platform"
               >
                 <Icon name="close" size={14} />

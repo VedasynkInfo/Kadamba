@@ -15,9 +15,12 @@
     "format": "prettier --write .",
     "test:e2e": "playwright test",
     "test:e2e:install": "playwright install --with-deps chromium webkit",
+    "test:e2e:update": "playwright test --update-snapshots",
     "check:tokens": "node ../scripts/check-tokens.mjs",
     "check:emoji": "node ../scripts/check-emoji.mjs",
     "check:contract": "node ../scripts/sync-shared.mjs --check",
+    "check:bundle": "node scripts/check-bundle-budget.mjs",
+    "check:lighthouse": "lhci autorun",
     "build:prerender": "npm run build && node scripts/prerender.mjs"
   },
   "dependencies": {
@@ -55,6 +58,8 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@lhci/cli": "^0.14.0",
     "@playwright/test": "^1.61.1",
     "@tailwindcss/vite": "^4.3.3",
     "@testing-library/dom": "^10.4.2",

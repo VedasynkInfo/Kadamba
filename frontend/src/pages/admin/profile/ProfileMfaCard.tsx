@@ -149,7 +149,7 @@ export function ProfileMfaCard() {
             <h3 className="font-heading text-base font-bold tracking-wide">
               Two-Factor Authentication
             </h3>
-            <p className="text-[11px] opacity-60 mt-0.5">
+            <p className="text-[11px] opacity-70 mt-0.5">
               Protect the ledger and customer data with an authenticator app
             </p>
           </div>
@@ -201,7 +201,7 @@ export function ProfileMfaCard() {
             <li>Enter the 6-digit code below to confirm.</li>
           </ol>
           <div className="space-y-2">
-            <p className="text-[10px] uppercase tracking-wider opacity-60">Setup key</p>
+            <p className="text-[10px] uppercase tracking-wider opacity-70">Setup key</p>
             <code className="block break-all rounded-lg border px-3 py-2 font-mono text-[11px] border-line">
               {enrolment.secret}
             </code>
@@ -219,7 +219,7 @@ export function ProfileMfaCard() {
               type="button"
               onClick={() => void confirmEnrolment()}
               disabled={busy || code.trim().length < 6}
-              className="rounded-xl bg-gold px-4 py-2 text-xs font-bold text-ink disabled:opacity-50"
+              className="rounded-xl bg-gold px-4 py-2 text-xs font-bold text-ink disabled:opacity-70"
             >
               {busy ? 'Verifying…' : 'Enable 2FA'}
             </button>
@@ -261,7 +261,7 @@ export function ProfileMfaCard() {
               type="button"
               onClick={() => void disable()}
               disabled={busy || !password || code.trim().length < 6}
-              className="rounded-xl border border-rose-500/40 px-4 py-2 text-xs font-semibold text-rose-400 disabled:opacity-50"
+              className="rounded-xl border border-rose-500/40 px-4 py-2 text-xs font-semibold text-rose-700 disabled:opacity-70"
             >
               {busy ? 'Disabling…' : 'Disable 2FA'}
             </button>
@@ -317,7 +317,7 @@ export function ProfileMfaCard() {
                 type="button"
                 onClick={() => void regenerate()}
                 disabled={busy || !password}
-                className="rounded-xl border px-4 py-2 text-xs font-semibold disabled:opacity-50 border-line"
+                className="rounded-xl border px-4 py-2 text-xs font-semibold disabled:opacity-70 border-line"
               >
                 {busy ? 'Generating…' : 'Generate new codes'}
               </button>
@@ -333,7 +333,7 @@ export function ProfileMfaCard() {
             type="button"
             onClick={() => void startEnrolment()}
             disabled={busy}
-            className="rounded-xl bg-gold px-4 py-2 text-xs font-bold text-ink disabled:opacity-50"
+            className="rounded-xl bg-gold px-4 py-2 text-xs font-bold text-ink disabled:opacity-70"
           >
             {busy ? 'Preparing…' : 'Set up two-factor authentication'}
           </button>

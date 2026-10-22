@@ -167,7 +167,7 @@ export default function PaymentsAdminPage() {
             >
               Payments Desk
             </h1>
-            <p className="text-xs opacity-60">
+            <p className="text-xs opacity-70">
               Revenue receipts & advances received — {MONTH_NAMES[month - 1]} {year}
             </p>
           </div>

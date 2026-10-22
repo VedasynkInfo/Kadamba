@@ -154,7 +154,7 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
               <h3 className="font-heading text-base font-bold tracking-wide">
                 {staff ? `Edit Artisan: ${staff.fullName}` : 'Register New Artisan'}
               </h3>
-              <p className="text-[10px] opacity-60 mt-0.5">
+              <p className="text-[10px] opacity-70 mt-0.5">
                 Workshop craftsman profile, master skills, and compensation contract
               </p>
             </div>
@@ -162,7 +162,7 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer border-line"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-70 hover:opacity-100 transition cursor-pointer border-line"
             aria-label="Close modal"
           >
             <Icon name="close" size={16} />
@@ -441,7 +441,7 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                       'p-3 rounded-xl border text-center font-bold text-xs transition cursor-pointer',
                       form.status === 'active'
                         ? 'border-emerald-500 bg-emerald-500/15 text-emerald-400'
-                        : 'border-line opacity-60 hover:opacity-100',
+                        : 'border-line opacity-70 hover:opacity-100',
                     )}
                   >
                     <span className="inline-flex items-center justify-center gap-1">
@@ -455,8 +455,8 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                     className={cn(
                       'p-3 rounded-xl border text-center font-bold text-xs transition cursor-pointer',
                       form.status === 'inactive'
-                        ? 'border-rose-500 bg-rose-500/15 text-rose-400'
-                        : 'border-line opacity-60 hover:opacity-100',
+                        ? 'border-rose-500 bg-rose-500/15 text-rose-700'
+                        : 'border-line opacity-70 hover:opacity-100',
                     )}
                   >
                     <span className="inline-flex items-center justify-center gap-1">
@@ -513,7 +513,7 @@ export function StaffModalForm({ open, staff, onClose, onSuccess }: StaffModalFo
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="rounded-xl px-5 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 disabled:opacity-50 cursor-pointer bg-brand text-ink-on-brand"
+                  className="rounded-xl px-5 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 disabled:opacity-70 cursor-pointer bg-brand text-ink-on-brand"
                 >
                   {submitting ? 'Saving...' : staff ? 'Update Staff' : 'Save Staff'}
                 </button>

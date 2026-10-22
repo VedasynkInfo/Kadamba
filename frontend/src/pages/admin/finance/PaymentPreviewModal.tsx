@@ -54,7 +54,7 @@ export function PaymentPreviewModal({ payment, onClose }: PaymentPreviewModalPro
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
+      className="on-dark fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -72,13 +72,13 @@ export function PaymentPreviewModal({ payment, onClose }: PaymentPreviewModalPro
             <span className="text-xl">??</span>
             <div>
               <h3 className="font-heading text-base font-bold tracking-wide">Receipt Snapshot</h3>
-              <p className="font-mono text-[10px] opacity-60 mt-0.5">{refCode}</p>
+              <p className="font-mono text-[10px] opacity-70 mt-0.5">{refCode}</p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer border-line"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-70 hover:opacity-100 transition cursor-pointer border-line"
             aria-label="Close modal"
           >
             ?
@@ -87,7 +87,7 @@ export function PaymentPreviewModal({ payment, onClose }: PaymentPreviewModalPro
 
         {/* Hero Amount & Method */}
         <div className="p-6 text-center border-b border-line">
-          <p className="text-[10px] uppercase font-bold tracking-widest opacity-60 mb-1">Amount Received</p>
+          <p className="text-[10px] uppercase font-bold tracking-widest opacity-70 mb-1">Amount Received</p>
           <h2 className="font-heading text-3xl font-black text-emerald-400">
             {formatINR(payment.amount)}
           </h2>
@@ -112,7 +112,7 @@ export function PaymentPreviewModal({ payment, onClose }: PaymentPreviewModalPro
                 ? '?? Card'
                 : '?? Bank Transfer'}
             </span>
-            <span className="text-[11px] opacity-60">on {formatDateTime(payment.paidAt)}</span>
+            <span className="text-[11px] opacity-70">on {formatDateTime(payment.paidAt)}</span>
           </div>
         </div>
 
@@ -122,7 +122,7 @@ export function PaymentPreviewModal({ payment, onClose }: PaymentPreviewModalPro
             <div
               className="rounded-xl border p-3 border-line bg-surface-sunken"
             >
-              <span className="text-[10px] uppercase tracking-wider opacity-60 block">Customer</span>
+              <span className="text-[10px] uppercase tracking-wider opacity-70 block">Customer</span>
               <span className="font-bold text-sm block mt-1 truncate">
                 {customer?.name || 'Walk-in Client'}
               </span>
@@ -136,7 +136,7 @@ export function PaymentPreviewModal({ payment, onClose }: PaymentPreviewModalPro
             <div
               className="rounded-xl border p-3 border-line bg-surface-sunken"
             >
-              <span className="text-[10px] uppercase tracking-wider opacity-60 block">Linked Order</span>
+              <span className="text-[10px] uppercase tracking-wider opacity-70 block">Linked Order</span>
               {order ? (
                 <>
                   <Link
@@ -150,7 +150,7 @@ export function PaymentPreviewModal({ payment, onClose }: PaymentPreviewModalPro
                   </span>
                 </>
               ) : (
-                <span className="opacity-50 block mt-1">—</span>
+                <span className="opacity-70 block mt-1">—</span>
               )}
             </div>
           </div>
@@ -160,16 +160,16 @@ export function PaymentPreviewModal({ payment, onClose }: PaymentPreviewModalPro
             className="rounded-xl border p-3 space-y-2 border-line bg-surface-sunken"
           >
             <div className="flex justify-between items-center text-[11px]">
-              <span className="opacity-60">Payment Reference / Txn ID:</span>
+              <span className="opacity-70">Payment Reference / Txn ID:</span>
               <span className="font-mono font-semibold">{payment.reference || 'None specified'}</span>
             </div>
             <div className="flex justify-between items-center text-[11px]">
-              <span className="opacity-60">Recorded By:</span>
+              <span className="opacity-70">Recorded By:</span>
               <span className="font-semibold">{payment.recordedBy || 'Admin Desk'}</span>
             </div>
             {payment.notes ? (
               <div className="pt-2 border-t text-[11px] border-line">
-                <span className="opacity-60 block text-[10px] uppercase tracking-wider mb-0.5">Notes:</span>
+                <span className="opacity-70 block text-[10px] uppercase tracking-wider mb-0.5">Notes:</span>
                 <p className="opacity-90 italic">{payment.notes}</p>
               </div>
             ) : null}

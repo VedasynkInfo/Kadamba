@@ -40,7 +40,7 @@ export function InvoicesToolbar({
         <div className="flex flex-1 flex-wrap items-center gap-2.5">
           {/* Search input */}
           <div className="relative min-w-[200px] flex-1 sm:max-w-xs">
-            <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-xs opacity-50">
+            <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-xs opacity-70">
               <Icon name="search" size={14} />
             </span>
             <input
@@ -54,7 +54,7 @@ export function InvoicesToolbar({
               <button
                 type="button"
                 onClick={() => onQueryChange('')}
-                className="absolute inset-y-0 right-2.5 flex items-center text-xs opacity-50 hover:opacity-100 cursor-pointer"
+                className="absolute inset-y-0 right-2.5 flex items-center text-xs opacity-70 hover:opacity-100 cursor-pointer"
                 title="Clear search"
               >
                 <Icon name="close" size={16} />
@@ -87,7 +87,7 @@ export function InvoicesToolbar({
 
         {/* Right side: Count & Link to Payments */}
         <div className="flex items-center justify-between gap-2.5 pt-2 lg:pt-0 lg:justify-end">
-          <span className="text-xs opacity-60 whitespace-nowrap">
+          <span className="text-xs opacity-70 whitespace-nowrap">
             Showing <strong className="opacity-100 font-semibold">{filteredCount}</strong> of {totalCount}
           </span>
 

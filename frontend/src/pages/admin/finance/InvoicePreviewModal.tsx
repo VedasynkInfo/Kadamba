@@ -31,7 +31,7 @@ export function InvoicePreviewModal({ invoice, onClose }: InvoicePreviewModalPro
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
+      className="on-dark fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -57,7 +57,7 @@ export function InvoicePreviewModal({ invoice, onClose }: InvoicePreviewModalPro
                   ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
                   : invoice.billStatus === 'partial'
                   ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
-                  : 'bg-rose-500/15 text-rose-400 border border-rose-500/30',
+                  : 'bg-rose-500/15 text-rose-700 border border-rose-500/30',
               )}
             >
               {invoice.billStatus}
@@ -77,7 +77,7 @@ export function InvoicePreviewModal({ invoice, onClose }: InvoicePreviewModalPro
         {/* Content Body */}
         <div className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
           <div>
-            <span className="text-[10px] opacity-50 uppercase tracking-wider block font-semibold">
+            <span className="text-[10px] opacity-70 uppercase tracking-wider block font-semibold">
               Client & Project
             </span>
             <h3 className="text-xl font-bold font-heading text-inherit mt-0.5">{invoice.customer?.name}</h3>
@@ -109,19 +109,19 @@ export function InvoicePreviewModal({ invoice, onClose }: InvoicePreviewModalPro
 
             <div className="grid grid-cols-2 gap-3 pt-2 text-xs">
               <div className="flex justify-between border-b pb-1.5 border-line">
-                <span className="opacity-60">Total Quoted:</span>
+                <span className="opacity-70">Total Quoted:</span>
                 <span className="font-bold">{formatINR(totalQ)}</span>
               </div>
               <div className="flex justify-between border-b pb-1.5 border-line">
-                <span className="opacity-60">Advance Booking:</span>
+                <span className="opacity-70">Advance Booking:</span>
                 <span className="font-bold">{formatINR(advance)}</span>
               </div>
               <div className="flex justify-between border-b pb-1.5 border-line">
-                <span className="opacity-60">Total Paid:</span>
+                <span className="opacity-70">Total Paid:</span>
                 <span className="font-bold text-emerald-400">{formatINR(paid)}</span>
               </div>
               <div className="flex justify-between border-b pb-1.5 border-line">
-                <span className="opacity-60">Balance Due:</span>
+                <span className="opacity-70">Balance Due:</span>
                 <span className="font-bold text-amber-400">{formatINR(balance)}</span>
               </div>
             </div>
@@ -137,7 +137,7 @@ export function InvoicePreviewModal({ invoice, onClose }: InvoicePreviewModalPro
               href={waHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-lg border px-3.5 py-1.5 font-bold text-emerald-500 hover:bg-emerald-500/10 transition cursor-pointer border-emerald-500/30"
+              className="inline-flex items-center gap-1.5 rounded-lg border px-3.5 py-1.5 font-bold text-emerald-700 hover:bg-emerald-500/10 transition cursor-pointer border-emerald-500/30"
             >
               <span><Icon name="message" size={14} className="mr-1 inline align-middle" /> WhatsApp Reminder</span>
             </a>

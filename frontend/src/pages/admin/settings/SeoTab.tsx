@@ -19,17 +19,17 @@ export function SeoTab({ form, patchForm }: SeoTabProps) {
       >
         <div className="border-b pb-3 mb-4 border-line">
           <h3 className="font-heading text-sm font-bold tracking-wide">Google Search Snippet Simulation</h3>
-          <p className="text-[10px] opacity-60 mt-0.5">Real-time preview of how your atelier appears in search engine results</p>
+          <p className="text-[10px] opacity-70 mt-0.5">Real-time preview of how your atelier appears in search engine results</p>
         </div>
 
         <div
-          className="rounded-xl border p-4 max-w-xl space-y-1.5 bg-espresso/25 border-line"
+          className="on-dark rounded-xl border p-4 max-w-xl space-y-1.5 bg-espresso/25 border-line"
         >
           <div className="flex items-center gap-2">
             <span className="h-4 w-4 rounded-full bg-brand flex items-center justify-center text-[9px] text-white font-bold">
               K
             </span>
-            <span className="text-[11px] opacity-60 font-mono">
+            <span className="text-[11px] opacity-70 font-mono">
               https://kadambasdesignerstudio.com › couture
             </span>
           </div>
@@ -48,7 +48,7 @@ export function SeoTab({ form, patchForm }: SeoTabProps) {
       >
         <div className="border-b pb-3 border-line">
           <h3 className="font-heading text-sm font-bold tracking-wide">Search Engine Metadata</h3>
-          <p className="text-[10px] opacity-60 mt-0.5">Global title templates, default descriptions, and crawl directives</p>
+          <p className="text-[10px] opacity-70 mt-0.5">Global title templates, default descriptions, and crawl directives</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -127,7 +127,7 @@ export function SeoTab({ form, patchForm }: SeoTabProps) {
         <div className="pt-2 border-t flex items-center justify-between border-line">
           <div>
             <span className="font-semibold text-xs block">Allow Search Engine Indexing (robots.txt)</span>
-            <span className="text-[11px] opacity-60 block mt-0.5">
+            <span className="text-[11px] opacity-70 block mt-0.5">
               Disable this only if the atelier site is in private staging or maintenance mode
             </span>
           </div>

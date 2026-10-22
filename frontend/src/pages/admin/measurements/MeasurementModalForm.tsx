@@ -194,7 +194,7 @@ export function MeasurementModalForm({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
+      className="on-dark fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -214,7 +214,7 @@ export function MeasurementModalForm({
               <h3 className="font-heading text-base font-bold tracking-wide">
                 {profile ? `Edit Fit Profile: ${profile.profileName}` : 'New Couture Fit Specification'}
               </h3>
-              <p className="text-[11px] opacity-60 mt-0.5">
+              <p className="text-[11px] opacity-70 mt-0.5">
                 Record anatomical specifications, template dimensions, and atelier posture directives
               </p>
             </div>
@@ -222,7 +222,7 @@ export function MeasurementModalForm({
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer border-line"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-70 hover:opacity-100 transition cursor-pointer border-line"
             aria-label="Close modal"
           >
             <Icon name="close" size={16} />
@@ -324,7 +324,7 @@ export function MeasurementModalForm({
                 <button
                   type="submit"
                   disabled={submitting || !form.customerId}
-                  className="rounded-xl px-5 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 disabled:opacity-50 cursor-pointer bg-brand text-ink-on-brand"
+                  className="rounded-xl px-5 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 disabled:opacity-70 cursor-pointer bg-brand text-ink-on-brand"
                 >
                   {submitting ? 'Saving Fit...' : profile ? 'Update Fit Specification' : 'Save Fit Specification'}
                 </button>

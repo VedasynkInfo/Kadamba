@@ -1,4 +1,4 @@
-import type { TextareaHTMLAttributes } from 'react';
+import { useId, type TextareaHTMLAttributes } from 'react';
 import { cn } from '@/utils/cn';
 
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -20,7 +20,10 @@ export function Textarea({
   rows = 4,
   ...props
 }: TextareaProps) {
-  const areaId = id ?? props.name;
+  // A generated id keeps the label associated with the field even when the
+  // caller gives neither an `id` nor a `name`.
+  const generatedId = useId();
+  const areaId = id ?? props.name ?? generatedId;
 
   return (
     <div className="flex w-full flex-col gap-1.5">
@@ -47,7 +50,7 @@ export function Textarea({
           'bg-surface-field text-ink-raised border-line',
           'placeholder:text-ink/60',
           'focus:border-focus focus:outline-none focus:ring-2 focus:ring-focus/30',
-          'disabled:cursor-not-allowed disabled:opacity-50',
+          'disabled:cursor-not-allowed disabled:opacity-70',
           error ? 'border-danger' : undefined,
           className,
         )}

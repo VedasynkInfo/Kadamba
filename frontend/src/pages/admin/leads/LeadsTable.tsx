@@ -131,7 +131,7 @@ export function LeadsTable({
                         >
                           {lead.name}
                         </button>
-                        <div className="flex items-center gap-1.5 mt-0.5 text-[11px] opacity-60">
+                        <div className="flex items-center gap-1.5 mt-0.5 text-[11px] opacity-70">
                           <span>{lead.phone}</span>
                           {lead.city ? <span>· {lead.city}</span> : null}
                         </div>
@@ -172,7 +172,7 @@ export function LeadsTable({
                     {/* Service & Source */}
                     <td className="py-3 px-4">
                       <span className="font-medium truncate block max-w-[130px]">{lead.service}</span>
-                      <span className="text-[10px] opacity-50 capitalize">{lead.source || 'website'}</span>
+                      <span className="text-[10px] opacity-70 capitalize">{lead.source || 'website'}</span>
                     </td>
 
                     {/* Assigned Desk */}
@@ -193,7 +193,7 @@ export function LeadsTable({
                         className={cn(
                           'inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold border',
                           lead.status === 'Completed'
-                            ? 'bg-emerald-500/15 text-emerald-500 border-emerald-500/30'
+                            ? 'bg-emerald-500/15 text-emerald-700 border-emerald-500/30'
                             : lead.status === 'Rejected'
                             ? 'bg-rose-500/15 text-rose-500 border border-rose-500/30'
                             : lead.status === 'Appointment'
@@ -277,7 +277,7 @@ export function LeadsTable({
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setMenuAnchor(null)}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-500 hover:bg-emerald-500/10 transition cursor-pointer"
+              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-700 hover:bg-emerald-500/10 transition cursor-pointer"
             >
               <Icon name="message" size={14} />
               <span>WhatsApp Chat</span>
@@ -294,7 +294,7 @@ export function LeadsTable({
                 setMenuAnchor(null);
                 onStatusChange(id, 'Completed');
               }}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-500 hover:bg-emerald-500/10 cursor-pointer"
+              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-700 hover:bg-emerald-500/10 cursor-pointer"
             >
               <Icon name="won" size={14} />
               <span>Mark Completed</span>

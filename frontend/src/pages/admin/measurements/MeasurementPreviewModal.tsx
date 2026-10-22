@@ -86,7 +86,7 @@ export function MeasurementPreviewModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
+      className="on-dark fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -120,7 +120,7 @@ export function MeasurementPreviewModal({
                   {profile.status}
                 </span>
               </div>
-              <p className="text-[11px] opacity-60 mt-0.5">
+              <p className="text-[11px] opacity-70 mt-0.5">
                 Client: <strong>{profile.customerName || 'Walk-in Client'}</strong> • Silhouette:{' '}
                 {silhouette.name}
               </p>
@@ -130,7 +130,7 @@ export function MeasurementPreviewModal({
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer border-line"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-70 hover:opacity-100 transition cursor-pointer border-line"
             aria-label="Close modal"
           >
             <Icon name="close" size={16} />
@@ -151,7 +151,7 @@ export function MeasurementPreviewModal({
             </div>
 
             <div className="flex items-center gap-1">
-              <span className="text-[10px] opacity-60 uppercase mr-1">Unit:</span>
+              <span className="text-[10px] opacity-70 uppercase mr-1">Unit:</span>
               <button
                 type="button"
                 onClick={() => setDisplayUnit('inches')}
@@ -159,7 +159,7 @@ export function MeasurementPreviewModal({
                   'px-2 py-0.5 rounded text-[10px] font-bold border transition cursor-pointer',
                   displayUnit === 'inches'
                     ? 'bg-brand text-ink-on-brand border-transparent'
-                    : 'opacity-50 border-current/20',
+                    : 'opacity-70 border-current/20',
                 )}
               >
                 Inches
@@ -171,7 +171,7 @@ export function MeasurementPreviewModal({
                   'px-2 py-0.5 rounded text-[10px] font-bold border transition cursor-pointer',
                   displayUnit === 'cm'
                     ? 'bg-brand text-ink-on-brand border-transparent'
-                    : 'opacity-50 border-current/20',
+                    : 'opacity-70 border-current/20',
                 )}
               >
                 CM
@@ -192,7 +192,7 @@ export function MeasurementPreviewModal({
                 type="button"
                 onClick={() => onApprove(profile)}
                 disabled={isApproving}
-                className="inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-bold bg-amber-500 text-ink hover:bg-amber-400 transition cursor-pointer disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-bold bg-amber-500 text-ink hover:bg-amber-400 transition cursor-pointer disabled:opacity-70"
               >
                 <span><Icon name="check" size={14} className="mr-1 inline align-middle" /> </span>
                 <span>{isApproving ? 'Approving...' : 'Approve Profile'}</span>
@@ -206,13 +206,13 @@ export function MeasurementPreviewModal({
               <span className="text-[11px] font-semibold opacity-75 uppercase tracking-wider">
                 Anatomical Points ({entries.length})
               </span>
-              <span className="text-[10px] opacity-50">
+              <span className="text-[10px] opacity-70">
                 Values recorded in {profile.unit || 'inches'}
               </span>
             </div>
 
             {entries.length === 0 ? (
-              <p className="text-xs opacity-50 italic py-2">No measurement points logged yet.</p>
+              <p className="text-xs opacity-70 italic py-2">No measurement points logged yet.</p>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                 {entries.map(([key, val]) => {
@@ -235,14 +235,14 @@ export function MeasurementPreviewModal({
                       key={key}
                       className="rounded-xl border p-2.5 transition border-line bg-surface-sunken"
                     >
-                      <span className="text-[10px] opacity-60 uppercase block truncate">
+                      <span className="text-[10px] opacity-70 uppercase block truncate">
                         {friendlyLabel}
                       </span>
                       <div className="flex items-baseline gap-1 mt-0.5">
                         <span className="font-heading text-sm font-bold tracking-tight text-brand-strong">
                           {displayVal}
                         </span>
-                        <span className="text-[9px] opacity-50 font-mono">{displayUnit}</span>
+                        <span className="text-[9px] opacity-70 font-mono">{displayUnit}</span>
                       </div>
                     </div>
                   );
@@ -284,7 +284,7 @@ export function MeasurementPreviewModal({
               {profile.notes ? (
                 <p className="whitespace-pre-line">{profile.notes}</p>
               ) : (
-                <p className="opacity-50 italic">No specific posture directives or notes recorded.</p>
+                <p className="opacity-70 italic">No specific posture directives or notes recorded.</p>
               )}
             </div>
           </div>

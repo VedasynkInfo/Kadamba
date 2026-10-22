@@ -238,12 +238,12 @@ export function Select({
             'flex w-full items-center justify-between gap-2 rounded-lg border py-2 pl-3.5 pr-9 text-left text-sm transition-all',
             'bg-surface-field text-ink-raised border-line',
             'focus:border-focus focus:outline-none focus:ring-2 focus:ring-focus/30',
-            'disabled:cursor-not-allowed disabled:opacity-50',
+            'disabled:cursor-not-allowed disabled:opacity-70',
             error ? 'border-danger' : undefined,
             className,
           )}
         >
-          <span className={cn('truncate', !selected && 'text-ink/50')}>
+          <span className={cn('truncate', !selected && 'text-ink/70')}>
             {selected?.label ?? placeholder}
           </span>
           <svg
@@ -295,7 +295,7 @@ export function Select({
               className="max-h-60 overflow-y-auto py-1"
             >
               {filtered.length === 0 ? (
-                <li className="px-3 py-2 text-xs text-ink/55">No matches</li>
+                <li className="px-3 py-2 text-xs text-ink/70">No matches</li>
               ) : (
                 filtered.map((option, index) => {
                   const isSelected = option.value === value;
@@ -320,7 +320,7 @@ export function Select({
                     >
                       <span className="truncate">{option.label}</span>
                       {option.hint ? (
-                        <span className="shrink-0 text-[0.65rem] text-ink/45">{option.hint}</span>
+                        <span className="shrink-0 text-[0.65rem] text-ink/70">{option.hint}</span>
                       ) : null}
                     </li>
                   );

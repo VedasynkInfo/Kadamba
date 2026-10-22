@@ -38,7 +38,7 @@ export function LeadCreateModal({
         >
           <div>
             <h2 className="font-heading text-lg font-bold text-inherit">Register New Client Enquiry</h2>
-            <p className="opacity-60 text-xs mt-0.5">
+            <p className="opacity-70 text-xs mt-0.5">
               Add walk-in, phone, or bridal exhibition leads to Kadamba's CRM
             </p>
           </div>
@@ -143,7 +143,7 @@ export function LeadCreateModal({
         <div
           className="flex items-center justify-between gap-3 border-t px-6 py-4 border-line"
         >
-          <div className="text-xs opacity-50">
+          <div className="text-xs opacity-70">
             {form.name ? `Lead: ${form.name}` : 'Name and phone required (*)'}
           </div>
 

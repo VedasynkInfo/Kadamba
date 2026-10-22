@@ -114,7 +114,7 @@ export default function FinanceAdminPage() {
             >
               Finance & Accounts Hub
             </h1>
-            <p className="text-xs opacity-60">
+            <p className="text-xs opacity-70">
               Studio revenue, raw material expenses, artisan salaries, and bottom-line profitability
             </p>
           </div>

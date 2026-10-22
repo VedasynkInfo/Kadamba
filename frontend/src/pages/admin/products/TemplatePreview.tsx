@@ -48,12 +48,12 @@ export function TemplatePreview({ template, className }: TemplatePreviewProps) {
     <div className={cn('rounded-lg border border-line bg-surface-sunken/50 p-4', className)}>
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] opacity-60">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] opacity-70">
             Fit card preview
           </p>
           <p className="mt-1 text-sm font-semibold">
             {template.name}{' '}
-            <span className="font-mono text-xs font-normal opacity-60">{template.code}</span>
+            <span className="font-mono text-xs font-normal opacity-70">{template.code}</span>
           </p>
         </div>
         <span className="rounded-full border border-line px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide">

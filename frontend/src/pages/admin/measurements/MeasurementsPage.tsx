@@ -200,7 +200,7 @@ export default function MeasurementsPage() {
             >
               Couture Fit & Measurements Desk
             </h1>
-            <p className="text-xs opacity-60">
+            <p className="text-xs opacity-70">
               Anatomical specifications, posture directives, and silhouette templates for master tailors
             </p>
           </div>

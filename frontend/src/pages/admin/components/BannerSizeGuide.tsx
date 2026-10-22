@@ -23,7 +23,7 @@ export function BannerSizeGuide({
   const list = preferred.length ? preferred : presets.slice(0, 3);
 
   return (
-    <div className="rounded-md border border-line bg-espresso/[0.02] px-3 py-2.5 text-xs text-ink/65">
+    <div className="on-dark rounded-md border border-line bg-espresso/[0.02] px-3 py-2.5 text-xs text-ink/65">
       <p className="font-medium uppercase tracking-[0.12em] text-ink/70">Recommended sizes</p>
       <ul className="mt-1.5 space-y-0.5">
         {list.map((p) => (

@@ -5,6 +5,8 @@ import { Heading, type HeadingLevel } from './Heading';
 export interface SectionIntroProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
   title: ReactNode;
   description?: ReactNode;
+  /** A small uppercase label above the title — the section's subject. */
+  eyebrow?: ReactNode;
   /** Heading level for the title. */
   as?: HeadingLevel;
   /** Light (cream) or dark (black) section surfaces. */
@@ -22,6 +24,7 @@ export interface SectionIntroProps extends Omit<HTMLAttributes<HTMLDivElement>, 
 export function SectionIntro({
   title,
   description,
+  eyebrow,
   as = 2,
   tone = 'light',
   actions,
@@ -44,7 +47,20 @@ export function SectionIntro({
       {...props}
     >
       <div className={cn('min-w-0 flex-1', centered && 'mx-auto')}>
-        <Heading as={as} className={cn(isDark && 'text-ink-inverse', centered && 'mx-auto')}>
+        {eyebrow ? (
+          <p
+            className={cn(
+              'text-[0.65rem] font-semibold uppercase tracking-[0.28em]',
+              isDark ? 'text-gold/85' : 'text-brand-strong',
+            )}
+          >
+            {eyebrow}
+          </p>
+        ) : null}
+        <Heading
+          as={as}
+          className={cn(eyebrow && 'mt-3', isDark && 'text-ink-inverse', centered && 'mx-auto')}
+        >
           {title}
         </Heading>
         {description ? (

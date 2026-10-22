@@ -34,7 +34,7 @@ export function ServicePricingSection({ service }: ServicePricingSectionProps) {
           <p className="mt-4 max-w-xl text-base leading-relaxed text-ink/65">
             {service.pricing.note}
           </p>
-          <p className="mt-3 text-sm text-ink/55">{service.durationNote}</p>
+          <p className="mt-3 text-sm text-ink/70">{service.durationNote}</p>
 
           <motion.ul
             className="mt-10 divide-y divide-black/10 border-y border-line"
@@ -62,7 +62,7 @@ export function ServicePricingSection({ service }: ServicePricingSectionProps) {
         </div>
 
         <motion.div
-          className="self-start border border-line bg-espresso px-6 py-8 text-ink-inverse sm:px-8"
+          className="on-dark self-start border border-line bg-espresso px-6 py-8 text-ink-inverse sm:px-8"
           initial={reduced ? false : { opacity: 0, y: 20 }}
           whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
           viewport={{ once: true }}

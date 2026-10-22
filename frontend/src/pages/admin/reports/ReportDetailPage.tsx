@@ -131,7 +131,7 @@ export default function ReportDetailPage() {
             Reports hub
           </Link>
           <h2 className="mt-2 font-heading text-2xl text-ink">{meta?.title}</h2>
-          <p className="mt-1 text-sm text-ink/55">{meta?.description}</p>
+          <p className="mt-1 text-sm text-ink/70">{meta?.description}</p>
         </div>
 
         {/* Controls */}
@@ -164,14 +164,14 @@ export default function ReportDetailPage() {
           <div className="flex flex-wrap items-end gap-3">
             {preset === 'custom' && (
               <>
-                <label className="text-xs text-ink/55">
+                <label className="text-xs text-ink/70">
                   From
                   <DateField
                     value={customFrom}
                     onChange={(value) => setCustomFrom(value)}
                     />
                 </label>
-                <label className="text-xs text-ink/55">
+                <label className="text-xs text-ink/70">
                   To
                   <DateField
                     value={customTo}
@@ -181,7 +181,7 @@ export default function ReportDetailPage() {
               </>
             )}
             {meta?.needsGroupBy && (
-              <label className="text-xs text-ink/55">
+              <label className="text-xs text-ink/70">
                 Group by
                 <Select
                   value={groupBy}

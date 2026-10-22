@@ -143,7 +143,7 @@ export function GalleryTable({
                           className="h-full w-full object-cover transition-transform duration-300 group-hover/thumb:scale-110"
                         />
                         {isVideo ? (
-                          <span className="absolute inset-0 flex items-center justify-center bg-espresso/45 text-white text-xs">
+                          <span className="on-dark absolute inset-0 flex items-center justify-center bg-espresso/45 text-white text-xs">
                             <Icon name="play" size={16} />
                           </span>
                         ) : null}
@@ -161,7 +161,7 @@ export function GalleryTable({
                           {item.title}
                         </button>
                         <div className="flex items-center gap-1.5 mt-0.5">
-                          <span className="font-mono text-[10px] opacity-60 truncate max-w-[220px]">
+                          <span className="font-mono text-[10px] opacity-70 truncate max-w-[220px]">
                             /{item.slug}
                           </span>
                           {item.alt ? (
@@ -191,7 +191,7 @@ export function GalleryTable({
 
                     {/* Sort Order */}
                     <td className="py-2.5 px-4 text-center whitespace-nowrap">
-                      <span className="font-mono text-xs opacity-60 font-semibold">
+                      <span className="font-mono text-xs opacity-70 font-semibold">
                         #{item.sortOrder}
                       </span>
                     </td>
@@ -204,7 +204,7 @@ export function GalleryTable({
                         className={cn(
                           'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border transition hover:opacity-85 cursor-pointer',
                           item.published
-                            ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/25'
+                            ? 'bg-emerald-500/10 text-emerald-700 border-emerald-500/25'
                             : 'bg-current/[0.06] opacity-70 border-current/15',
                         )}
                         title="Click to toggle publish status"

@@ -22,14 +22,18 @@ const variantClasses: Record<ButtonVariant, string> = {
     'bg-[var(--color-primary)] text-[var(--color-primary-text)] border border-black/10 hover:bg-[var(--color-primary-hover)] shadow-sm focus-visible:ring-focus',
   admin:
     'bg-brand text-ink-on-brand border border-black/10 hover:brightness-[0.97] shadow-sm font-semibold focus-visible:ring-focus',
+  /* The secondary and ghost buttons do not set a text colour: they inherit
+     it, so the same button reads correctly on a light section and on the
+     dark one. Setting it here is what made a "secondary" button on a dark
+     section a white card with cream text — invisible. */
   secondary:
-    'bg-surface-raised text-ink border border-line hover:border-brand/45 hover:bg-surface-sunken shadow-xs',
+    'bg-transparent border border-line hover:border-brand/45 hover:bg-current/[0.06] shadow-xs',
   danger:
     'bg-danger/10 text-danger border border-danger/30 hover:bg-danger/15 shadow-xs',
   ghost:
-    'bg-transparent text-ink hover:bg-current/[0.06] border border-transparent',
+    'bg-transparent border border-transparent hover:bg-current/[0.08]',
   luxury:
-    'bg-espresso text-gold border border-gold/40 hover:border-gold hover:shadow-[0_0_20px_rgba(227,178,60,0.22)] relative overflow-hidden',
+    'on-dark bg-espresso text-gold border border-gold/40 hover:border-gold hover:shadow-[0_0_20px_rgba(227,178,60,0.22)] relative overflow-hidden',
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
@@ -64,7 +68,7 @@ export function Button({
         'transition-all duration-200 ease-luxury',
         'active:scale-[0.98] disabled:active:scale-100',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-1 focus-visible:ring-offset-transparent',
-        'disabled:pointer-events-none disabled:opacity-50 cursor-pointer',
+        'disabled:pointer-events-none disabled:opacity-70 cursor-pointer',
         variantClasses[variant],
         sizeClasses[size],
         className,

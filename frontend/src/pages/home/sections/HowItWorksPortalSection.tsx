@@ -52,7 +52,7 @@ export function HowItWorksPortalSection() {
           </motion.li>
         ))}
       </ol>
-      <p className="mt-10 text-center text-sm text-ink/55">
+      <p className="mt-10 text-center text-sm text-ink/70">
         Already have a Reference ID?{' '}
         <Link to="/portal/activate" className="font-medium text-ink underline underline-offset-2">
           Activate portal

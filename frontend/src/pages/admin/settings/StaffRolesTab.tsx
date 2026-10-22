@@ -49,7 +49,7 @@ export function StaffRolesTab() {
           <h3 className="font-heading text-sm font-bold tracking-wide">
             Workshop Staff & Artisan Directory
           </h3>
-          <p className="text-[11px] opacity-60 mt-0.5">
+          <p className="text-[11px] opacity-70 mt-0.5">
             Add or manage tailoring staff members, piece-rate contracts, and master specialties
           </p>
         </div>
@@ -81,7 +81,7 @@ export function StaffRolesTab() {
             <p className="text-[11px] opacity-70 leading-relaxed">{r.desc}</p>
 
             <div className="pt-2 border-t space-y-1.5 border-line">
-              <span className="text-[10px] uppercase font-bold tracking-wider opacity-60 block mb-1">
+              <span className="text-[10px] uppercase font-bold tracking-wider opacity-70 block mb-1">
                 Granted Privileges:
               </span>
               <ul className="space-y-1 text-[11px]">

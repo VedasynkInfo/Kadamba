@@ -133,7 +133,7 @@ export function SalaryModalForm({ open, staffList, onClose, onSuccess }: SalaryM
               <h3 className="font-heading text-base font-bold tracking-wide">
                 Disburse Artisan Salary
               </h3>
-              <p className="text-[10px] opacity-60 mt-0.5">
+              <p className="text-[10px] opacity-70 mt-0.5">
                 Record monthly remuneration or piece-rate payout for workshop staff
               </p>
             </div>
@@ -141,7 +141,7 @@ export function SalaryModalForm({ open, staffList, onClose, onSuccess }: SalaryM
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-60 hover:opacity-100 transition cursor-pointer border-line"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border text-sm opacity-70 hover:opacity-100 transition cursor-pointer border-line"
             aria-label="Close modal"
           >
             <Icon name="close" size={16} />
@@ -258,7 +258,7 @@ export function SalaryModalForm({ open, staffList, onClose, onSuccess }: SalaryM
             <button
               type="submit"
               disabled={submitting || !staffId}
-              className="rounded-xl px-5 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 disabled:opacity-50 cursor-pointer bg-brand text-ink-on-brand"
+              className="rounded-xl px-5 py-2 text-xs font-bold shadow-xs transition hover:opacity-95 disabled:opacity-70 cursor-pointer bg-brand text-ink-on-brand"
             >
               {submitting ? 'Disbursing...' : 'Disburse Salary'}
             </button>

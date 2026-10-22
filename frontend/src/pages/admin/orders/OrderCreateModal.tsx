@@ -226,7 +226,7 @@ export function OrderCreateModal({
                       <button
                         type="button"
                         onClick={() => setValue('selectedCustomer', null, { shouldValidate: true })}
-                        className="rounded-sm text-xs text-rose-400 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                        className="rounded-sm text-xs text-rose-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                       >
                         Change
                       </button>
@@ -281,7 +281,7 @@ export function OrderCreateModal({
                     </div>
                   )}
                   {customerError ? (
-                    <p role="alert" className="text-xs text-rose-400">
+                    <p role="alert" className="text-xs text-rose-700">
                       {customerError}
                     </p>
                   ) : null}
@@ -350,7 +350,7 @@ export function OrderCreateModal({
             </div>
 
             {errors.lineItems?.message ? (
-              <p role="alert" className="text-xs text-rose-400">
+              <p role="alert" className="text-xs text-rose-700">
                 {errors.lineItems.message}
               </p>
             ) : null}
@@ -367,7 +367,7 @@ export function OrderCreateModal({
                       <button
                         type="button"
                         onClick={() => remove(index)}
-                        className="inline-flex items-center gap-1 rounded-sm text-xs font-semibold text-rose-400 hover:text-rose-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                        className="inline-flex items-center gap-1 rounded-sm text-xs font-semibold text-rose-700 hover:text-rose-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                       >
                         <Icon name="close" size={14} /> Remove
                       </button>

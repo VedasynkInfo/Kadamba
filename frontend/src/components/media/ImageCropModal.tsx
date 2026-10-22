@@ -63,18 +63,18 @@ export function ImageCropModal({
   }
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-espresso/70 p-4">
+    <div className="on-dark fixed inset-0 z-[60] flex items-center justify-center bg-espresso/70 p-4">
       <div
         className="w-full max-w-3xl overflow-hidden rounded-2xl border bg-surface-raised border-line text-ink-raised"
       >
         <div className="flex items-start justify-between gap-4 p-4 pb-0">
           <div>
             <h2 className="font-heading text-base font-bold">Crop image</h2>
-            <p className="text-[11px] opacity-60">
+            <p className="text-[11px] opacity-70">
               Drag to reposition, scroll or pinch to zoom, then choose a shape.
             </p>
           </div>
-          <button type="button" onClick={onCancel} className="text-xs opacity-60 hover:opacity-100">
+          <button type="button" onClick={onCancel} className="text-xs opacity-70 hover:opacity-100">
             Cancel
           </button>
         </div>
@@ -102,7 +102,7 @@ export function ImageCropModal({
           })}
         </div>
 
-        <div className="relative mt-3 h-[52vh] min-h-64 w-full bg-espresso">
+        <div className="on-dark relative mt-3 h-[52vh] min-h-64 w-full bg-espresso">
           <Cropper
             image={src}
             crop={crop}
@@ -137,7 +137,7 @@ export function ImageCropModal({
 
           <div className="flex items-center gap-2">
             {error ? (
-              <p role="alert" className="text-[11px] text-rose-400">
+              <p role="alert" className="text-[11px] text-rose-700">
                 {error}
               </p>
             ) : null}

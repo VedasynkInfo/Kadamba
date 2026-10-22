@@ -14,7 +14,7 @@ export function AboutHeroSection() {
 
   return (
     <section
-      className="relative isolate w-full overflow-hidden bg-espresso text-ink-inverse"
+      className="on-dark relative isolate w-full overflow-hidden bg-espresso text-ink-inverse"
       aria-label="About Kadamba's Designer Studio"
     >
       <div className="relative min-h-[min(88svh,880px)] w-full md:min-h-[calc(100svh-4.25rem)]">

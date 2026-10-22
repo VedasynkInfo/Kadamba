@@ -206,7 +206,7 @@ export function ProductImportModal({
               <tbody className="divide-y divide-line">
                 {parseResult.rows.slice(0, 100).map((row) => (
                   <tr key={`${row.row}-${row.values.code}`}>
-                    <td className="px-2 py-1.5 opacity-60">{row.row}</td>
+                    <td className="px-2 py-1.5 opacity-70">{row.row}</td>
                     <td className="px-2 py-1.5 font-mono">{row.values.code || '-'}</td>
                     <td className="px-2 py-1.5">{row.values.name || '-'}</td>
                     <td className="px-2 py-1.5">{row.values.category || '-'}</td>
@@ -239,7 +239,7 @@ export function ProductImportModal({
                   <tbody className="divide-y divide-line">
                     {result.failed.map((issue) => (
                       <tr key={`${issue.row}-${issue.code ?? ''}`}>
-                        <td className="px-2 py-1.5 opacity-60">{issue.row}</td>
+                        <td className="px-2 py-1.5 opacity-70">{issue.row}</td>
                         <td className="px-2 py-1.5 font-mono">{issue.code || '-'}</td>
                         <td className="px-2 py-1.5 text-danger">{issue.message}</td>
                       </tr>
@@ -251,7 +251,7 @@ export function ProductImportModal({
           </div>
         ) : null}
 
-        <p className="text-xs opacity-60">
+        <p className="text-xs opacity-70">
           Supported columns include code, name, category, template, slug, descriptions, price range,
           lead time, tags, featured, active, sort order, image, gallery JSON, variants JSON and SEO
           JSON. Existing codes are updated; new codes are created.

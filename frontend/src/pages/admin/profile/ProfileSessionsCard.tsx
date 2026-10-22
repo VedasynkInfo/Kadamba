@@ -107,7 +107,7 @@ export function ProfileSessionsCard() {
       >
         <div>
           <h3 className="font-heading text-base font-bold tracking-wide">Active Devices</h3>
-          <p className="text-[11px] opacity-60 mt-0.5">
+          <p className="text-[11px] opacity-70 mt-0.5">
             Every browser currently signed in to your account
           </p>
         </div>
@@ -115,7 +115,7 @@ export function ProfileSessionsCard() {
           type="button"
           onClick={() => void revokeAll()}
           disabled={busy === 'all'}
-          className="rounded-xl border px-3 py-1.5 text-[11px] font-semibold disabled:opacity-50 border-line"
+          className="rounded-xl border px-3 py-1.5 text-[11px] font-semibold disabled:opacity-70 border-line"
         >
           {busy === 'all' ? 'Signing out…' : 'Sign out everywhere'}
         </button>
@@ -153,7 +153,7 @@ export function ProfileSessionsCard() {
                   type="button"
                   onClick={() => void revoke(session.familyId)}
                   disabled={busy === session.familyId}
-                  className="shrink-0 rounded-lg border px-3 py-1.5 text-[11px] transition hover:bg-white/5 disabled:opacity-50 border-line"
+                  className="shrink-0 rounded-lg border px-3 py-1.5 text-[11px] transition hover:bg-white/5 disabled:opacity-70 border-line"
                 >
                   {busy === session.familyId ? 'Revoking…' : 'Sign out'}
                 </button>

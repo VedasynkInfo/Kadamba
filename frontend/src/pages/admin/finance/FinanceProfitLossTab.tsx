@@ -35,7 +35,7 @@ export function FinanceProfitLossTab({
           <h3 className="font-heading text-base font-bold tracking-wide">
             Studio Profit & Loss Statement
           </h3>
-          <p className="text-[11px] opacity-60 mt-0.5">
+          <p className="text-[11px] opacity-70 mt-0.5">
             Audit operating margins and net profit across customized reporting periods
           </p>
         </div>
@@ -79,37 +79,37 @@ export function FinanceProfitLossTab({
             <div
               className="rounded-xl border border-l-4 border-l-emerald-500 p-4 shadow-xs bg-surface-raised border-line"
             >
-              <span className="text-[10px] uppercase font-bold tracking-wider opacity-60 block">
+              <span className="text-[10px] uppercase font-bold tracking-wider opacity-70 block">
                 Total Revenue
               </span>
               <p className="mt-1 font-heading text-xl font-bold text-emerald-400">
                 {formatINR(report.summary.revenue)}
               </p>
-              <span className="text-[10px] opacity-50 block mt-0.5">From workshop orders</span>
+              <span className="text-[10px] opacity-70 block mt-0.5">From workshop orders</span>
             </div>
 
             <div
               className="rounded-xl border border-l-4 border-l-rose-500 p-4 shadow-xs bg-surface-raised border-line"
             >
-              <span className="text-[10px] uppercase font-bold tracking-wider opacity-60 block">
+              <span className="text-[10px] uppercase font-bold tracking-wider opacity-70 block">
                 Direct Expenses
               </span>
-              <p className="mt-1 font-heading text-xl font-bold text-rose-400">
+              <p className="mt-1 font-heading text-xl font-bold text-rose-700">
                 {formatINR(report.summary.expenses)}
               </p>
-              <span className="text-[10px] opacity-50 block mt-0.5">Procurement & overheads</span>
+              <span className="text-[10px] opacity-70 block mt-0.5">Procurement & overheads</span>
             </div>
 
             <div
               className="rounded-xl border border-l-4 border-l-amber-500 p-4 shadow-xs bg-surface-raised border-line"
             >
-              <span className="text-[10px] uppercase font-bold tracking-wider opacity-60 block">
+              <span className="text-[10px] uppercase font-bold tracking-wider opacity-70 block">
                 Artisan Salaries
               </span>
               <p className="mt-1 font-heading text-xl font-bold text-amber-400">
                 {formatINR(report.summary.salaries)}
               </p>
-              <span className="text-[10px] opacity-50 block mt-0.5">Staff payroll payout</span>
+              <span className="text-[10px] opacity-70 block mt-0.5">Staff payroll payout</span>
             </div>
 
             <div
@@ -117,17 +117,17 @@ export function FinanceProfitLossTab({
                 report.summary.netProfit >= 0 ? 'border-l-emerald-500' : 'border-l-rose-500'
               } bg-surface-raised border-line`}
             >
-              <span className="text-[10px] uppercase font-bold tracking-wider opacity-60 block">
+              <span className="text-[10px] uppercase font-bold tracking-wider opacity-70 block">
                 Net P&L Result
               </span>
               <p
                 className={`mt-1 font-heading text-xl font-bold ${
-                  report.summary.netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'
+                  report.summary.netProfit >= 0 ? 'text-emerald-400' : 'text-rose-700'
                 }`}
               >
                 {formatINR(report.summary.netProfit)}
               </p>
-              <span className="text-[10px] opacity-50 block mt-0.5">
+              <span className="text-[10px] opacity-70 block mt-0.5">
                 {report.summary.netProfit >= 0 ? 'Net Operating Profit' : 'Operating Deficit'}
               </span>
             </div>
@@ -141,16 +141,16 @@ export function FinanceProfitLossTab({
             >
               <h4 className="font-heading text-sm font-bold mb-3">Expenses in Period</h4>
               {report.expenses.length === 0 ? (
-                <p className="opacity-50 py-4 text-center">No expenses in this period.</p>
+                <p className="opacity-70 py-4 text-center">No expenses in this period.</p>
               ) : (
                 <ul className="divide-y space-y-2 border-line">
                   {report.expenses.slice(0, 8).map((e) => (
                     <li key={e.id} className="pt-2 flex justify-between items-center text-xs">
                       <div>
                         <span className="font-semibold block truncate max-w-[200px]">{e.title}</span>
-                        <span className="text-[10px] opacity-50 uppercase">{e.category}</span>
+                        <span className="text-[10px] opacity-70 uppercase">{e.category}</span>
                       </div>
-                      <span className="font-bold text-rose-400">{formatINR(e.amount)}</span>
+                      <span className="font-bold text-rose-700">{formatINR(e.amount)}</span>
                     </li>
                   ))}
                 </ul>
@@ -163,14 +163,14 @@ export function FinanceProfitLossTab({
             >
               <h4 className="font-heading text-sm font-bold mb-3">Salaries in Period</h4>
               {report.salaries.length === 0 ? (
-                <p className="opacity-50 py-4 text-center">No salaries disbursed in this period.</p>
+                <p className="opacity-70 py-4 text-center">No salaries disbursed in this period.</p>
               ) : (
                 <ul className="divide-y space-y-2 border-line">
                   {report.salaries.slice(0, 8).map((s) => (
                     <li key={s.id} className="pt-2 flex justify-between items-center text-xs">
                       <div>
                         <span className="font-semibold block truncate max-w-[200px]">{s.staffName}</span>
-                        <span className="text-[10px] opacity-50">{s.period}</span>
+                        <span className="text-[10px] opacity-70">{s.period}</span>
                       </div>
                       <span className="font-bold text-amber-400">{formatINR(s.amount)}</span>
                     </li>

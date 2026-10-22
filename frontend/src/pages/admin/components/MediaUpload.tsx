@@ -134,7 +134,7 @@ export function MediaUpload({
       </label>
 
       {value ? (
-        <div className="overflow-hidden rounded-md border border-line bg-espresso/[0.03]">
+        <div className="on-dark overflow-hidden rounded-md border border-line bg-espresso/[0.03]">
           {showVideo ? (
             <video
               src={previewSrc}
@@ -283,7 +283,7 @@ function LibraryPickerButton({
       </Button>
 
       {open ? (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-espresso/70 p-4">
+        <div className="on-dark fixed inset-0 z-[60] flex items-center justify-center bg-espresso/70 p-4">
           <div
             className="max-h-[85vh] w-full max-w-3xl overflow-y-auto rounded-2xl border p-5 bg-surface-raised border-line text-ink-raised"
           >
@@ -292,7 +292,7 @@ function LibraryPickerButton({
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="text-xs opacity-60 hover:opacity-100"
+                className="text-xs opacity-70 hover:opacity-100"
               >
                 Close
               </button>
@@ -307,11 +307,11 @@ function LibraryPickerButton({
             />
 
             {loadError ? (
-              <p className="mt-4 text-xs text-rose-400">{loadError}</p>
+              <p className="mt-4 text-xs text-rose-700">{loadError}</p>
             ) : loading ? (
-              <p className="mt-6 text-center text-xs opacity-60">Loading…</p>
+              <p className="mt-6 text-center text-xs opacity-70">Loading…</p>
             ) : items.length === 0 ? (
-              <p className="mt-6 text-center text-xs opacity-60">Nothing uploaded yet.</p>
+              <p className="mt-6 text-center text-xs opacity-70">Nothing uploaded yet.</p>
             ) : (
               <ul className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-4">
                 {items.map((asset) => (

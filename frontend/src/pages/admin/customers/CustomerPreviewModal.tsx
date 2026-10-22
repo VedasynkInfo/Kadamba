@@ -19,7 +19,7 @@ export function CustomerPreviewModal({ customer, onClose }: CustomerPreviewModal
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
+      className="on-dark fixed inset-0 z-50 flex items-center justify-center p-4 bg-espresso/60 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -42,8 +42,8 @@ export function CustomerPreviewModal({ customer, onClose }: CustomerPreviewModal
               className={cn(
                 'inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold',
                 customer.portalStatus === 'active'
-                  ? 'text-emerald-500 bg-emerald-500/10'
-                  : 'opacity-60 bg-current/[0.06]',
+                  ? 'text-emerald-700 bg-emerald-500/10'
+                  : 'opacity-70 bg-current/[0.06]',
               )}
             >
               <span className="h-1.5 w-1.5 rounded-full bg-current" />
@@ -75,16 +75,16 @@ export function CustomerPreviewModal({ customer, onClose }: CustomerPreviewModal
             className="grid grid-cols-2 gap-3 rounded-xl p-3.5 border bg-surface-sunken border-line"
           >
             <div>
-              <span className="opacity-50 block text-[10px] uppercase font-semibold">Primary Mobile</span>
+              <span className="opacity-70 block text-[10px] uppercase font-semibold">Primary Mobile</span>
               <span className="font-bold mt-0.5 block font-mono">{customer.phone}</span>
             </div>
             <div>
-              <span className="opacity-50 block text-[10px] uppercase font-semibold">WhatsApp Number</span>
+              <span className="opacity-70 block text-[10px] uppercase font-semibold">WhatsApp Number</span>
               <span className="font-semibold mt-0.5 block font-mono">{customer.whatsapp || customer.phone}</span>
             </div>
             {customer.email ? (
               <div className="col-span-2">
-                <span className="opacity-50 block text-[10px] uppercase font-semibold">Email Address</span>
+                <span className="opacity-70 block text-[10px] uppercase font-semibold">Email Address</span>
                 <span className="font-medium mt-0.5 block opacity-90">{customer.email}</span>
               </div>
             ) : null}
@@ -95,7 +95,7 @@ export function CustomerPreviewModal({ customer, onClose }: CustomerPreviewModal
             <div
               className="rounded-xl p-3.5 border text-xs space-y-1 bg-surface-sunken border-line"
             >
-              <span className="opacity-50 block text-[10px] uppercase font-semibold">Bespoke Atelier Address</span>
+              <span className="opacity-70 block text-[10px] uppercase font-semibold">Bespoke Atelier Address</span>
               <p className="opacity-90">
                 {[
                   customer.address.line1,
@@ -114,7 +114,7 @@ export function CustomerPreviewModal({ customer, onClose }: CustomerPreviewModal
           {/* Tags */}
           {customer.tags?.length ? (
             <div>
-              <span className="opacity-60 block text-[10px] uppercase font-semibold mb-1.5">Client Tags</span>
+              <span className="opacity-70 block text-[10px] uppercase font-semibold mb-1.5">Client Tags</span>
               <div className="flex flex-wrap gap-1.5">
                 {customer.tags.map((t, idx) => (
                   <span
@@ -137,7 +137,7 @@ export function CustomerPreviewModal({ customer, onClose }: CustomerPreviewModal
             href={waHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-lg border px-3.5 py-1.5 font-bold text-emerald-500 hover:bg-emerald-500/10 transition cursor-pointer border-emerald-500/30"
+            className="inline-flex items-center gap-1.5 rounded-lg border px-3.5 py-1.5 font-bold text-emerald-700 hover:bg-emerald-500/10 transition cursor-pointer border-emerald-500/30"
           >
             <span><Icon name="message" size={14} className="mr-1 inline align-middle" /> WhatsApp Concierge</span>
           </a>

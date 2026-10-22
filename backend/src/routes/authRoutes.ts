@@ -22,7 +22,7 @@ import {
   verifyMfa,
 } from '../controllers/authController';
 import { authenticate, authorize, requirePermission } from '../middleware/auth';
-import { authRateLimiter, loginAccountRateLimiter, passwordResetRateLimiter } from '../middleware/rateLimit';
+import { authRateLimiter, authRefreshRateLimiter, loginAccountRateLimiter, passwordResetRateLimiter } from '../middleware/rateLimit';
 import { validateRequest } from '../middleware/validate';
 import { requireTrustedOrigin } from '../middleware/trustedOrigin';
 
@@ -57,7 +57,7 @@ router.post(
 
 router.post(
   '/refresh',
-  authRateLimiter,
+  authRefreshRateLimiter,
   requireTrustedOrigin,
   // The refresh token lives in an httpOnly cookie; the body fallback keeps
   // non-browser clients working.

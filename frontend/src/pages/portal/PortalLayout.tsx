@@ -20,10 +20,23 @@ const nav = [
 ];
 
 function RequirePortal({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated, loading } = usePortalAuth();
+  const { isAuthenticated, loading, restore } = usePortalAuth();
   const location = useLocation();
 
-  if (loading) {
+  /**
+   * Entering the portal from inside the application — a client-side
+   * navigation from the public site, say — has to ask the API whether the
+   * cookie still holds a session. The provider only does that on a full page
+   * load, so this is the other half of the restore.
+   */
+  const [restored, setRestored] = useState(false);
+  useEffect(() => {
+    if (restored) return;
+    setRestored(true);
+    void restore();
+  }, [restore, restored]);
+
+  if (loading || !restored) {
     return (
       <div className="portal-shell flex min-h-screen items-center justify-center bg-surface">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-gold/30 border-t-gold" />

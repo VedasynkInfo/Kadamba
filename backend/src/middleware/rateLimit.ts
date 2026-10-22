@@ -36,6 +36,34 @@ export const authRateLimiter = rateLimit({
   message: { success: false, code: 'RATE_LIMITED', message: 'Too many auth attempts. Try again later.' },
 });
 
+/**
+ * Session refresh — its own budget.
+ *
+ * The refresh token is a long random value in an httpOnly cookie, so this
+ * endpoint is not a credential-guessing surface the way `/auth/login` is; the
+ * per-IP sign-in budget belongs to sign-in. It was being spent by ordinary
+ * page loads instead, because every full page load exchanges the cookie for
+ * a new access token — so a desk working normally could lock itself out of
+ * the console with a rate limit rather than with a mistake.
+ *
+ * The budget here is generous enough for a working day and still bounded:
+ * 240 refreshes per 15 minutes is 16 a minute.
+ */
+export const authRefreshRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 240,
+  standardHeaders: true,
+  legacyHeaders: false,
+  validate,
+  skip: skipInTest,
+  store: new MongoRateLimitStore('auth-refresh'),
+  message: {
+    success: false,
+    code: 'RATE_LIMITED',
+    message: 'Too many session refreshes. Try again in a moment.',
+  },
+});
+
 /** Public form posts (contact / leads). */
 export const publicWriteRateLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,

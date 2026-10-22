@@ -16,6 +16,15 @@ interface LoginPayload {
   mfaTicket?: string;
 }
 
+/**
+ * The refresh request currently in flight, if any.
+ *
+ * The server rotates the refresh token on every use, so two concurrent
+ * refreshes invalidate each other. Sharing one promise means there is only
+ * ever one.
+ */
+let refreshInFlight: Promise<ApiResponse<LoginPayload>> | null = null;
+
 export const authApi = {
   login: async (credentials: LoginCredentials) => {
     const { data } = await adminApi.post<ApiResponse<LoginPayload>>('/auth/login', credentials);
@@ -43,11 +52,32 @@ export const authApi = {
     return data;
   },
 
-  /** Uses the httpOnly refresh cookie; no token is passed from JS. */
+  /**
+   * Uses the httpOnly refresh cookie; no token is passed from JS.
+   *
+   * The refresh token is *rotated* on every use: the server issues a new one
+   * and invalidates the old. That makes concurrent refreshes fatal — two
+   * calls with the same cookie value mean the second one presents a token
+   * that has already been replaced, and the session is signed out.
+   *
+   * So a refresh is single-flighted: the first caller starts the request and
+   * everybody who asks while it is in flight is given the same promise. A
+   * remount, a hot reload, or two components racing to restore the session
+   * all end up as one request.
+   */
   refresh: async () => {
-    const { data } = await adminApi.post<ApiResponse<LoginPayload>>('/auth/refresh');
-    if (data.data?.token) setAdminToken(data.data.token);
-    return data;
+    if (!refreshInFlight) {
+      refreshInFlight = adminApi
+        .post<ApiResponse<LoginPayload>>('/auth/refresh')
+        .then(({ data }) => {
+          if (data.data?.token) setAdminToken(data.data.token);
+          return data;
+        })
+        .finally(() => {
+          refreshInFlight = null;
+        });
+    }
+    return refreshInFlight;
   },
 
   logout: async () => {

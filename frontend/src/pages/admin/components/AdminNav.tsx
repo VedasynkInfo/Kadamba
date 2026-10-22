@@ -81,6 +81,7 @@ export function AdminNav({ collapsed = false, onNavigate, scope }: AdminNavProps
   function renderItem(item: AdminNavItem) {
     const link = (
       <NavLink
+        key={item.to}
         to={item.to}
         end={item.end}
         onClick={onNavigate}

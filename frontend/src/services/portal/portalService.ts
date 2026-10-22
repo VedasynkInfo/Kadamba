@@ -4,6 +4,15 @@ import axios from 'axios';
 
 const PORTAL_USER_KEY = 'kadamba_portal_user';
 
+/**
+ * The portal refresh request currently in flight, if any.
+ *
+ * The portal token is rotated on every use, so two concurrent refreshes
+ * invalidate each other. One request, shared.
+ */
+let portalRefreshInFlight: Promise<{ user: PortalUser; token: string; expiresIn?: number } | null> | null =
+  null;
+
 export { PORTAL_USER_KEY };
 
 export interface PortalUser {
@@ -160,14 +169,29 @@ export const portalApi = {
   login: (payload: { email: string; password: string }) =>
     portalPost<{ user: PortalUser; token: string; expiresIn?: number }>('/portal/login', payload),
 
-  /** Restore the session from the httpOnly refresh cookie. */
+  /**
+   * Restore the session from the httpOnly refresh cookie.
+   *
+   * Single-flighted, for the same reason the admin refresh is: the portal
+   * token is rotated on every use, so two concurrent refreshes invalidate
+   * each other and sign the customer out.
+   */
   refresh: async () => {
-    const { data } = await portalClient.post<
-      ApiResponse<{ user: PortalUser; token: string; expiresIn?: number }>
-    >('/portal/refresh');
-    if (!data.success || !data.data) return null;
-    setPortalToken(data.data.token);
-    return data.data;
+    if (!portalRefreshInFlight) {
+      portalRefreshInFlight = portalClient
+        .post<ApiResponse<{ user: PortalUser; token: string; expiresIn?: number }>>(
+          '/portal/refresh',
+        )
+        .then(({ data }) => {
+          if (!data.success || !data.data) return null;
+          setPortalToken(data.data.token);
+          return data.data;
+        })
+        .finally(() => {
+          portalRefreshInFlight = null;
+        });
+    }
+    return portalRefreshInFlight;
   },
 
   logout: async () => {

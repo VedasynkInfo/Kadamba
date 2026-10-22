@@ -6,9 +6,11 @@ import { faqJsonLd, JsonLd, PageMeta, productJsonLd } from '@/seo';
 import { productFaqs, productImage, productPath } from './data';
 import {
   ProductBannerSection,
+  ProductCareSection,
   ProductCtaSection,
   ProductFaqSection,
   ProductGallerySection,
+  ProductMakingSection,
   ProductNotesSection,
   ProductRelatedSection,
 } from './sections';
@@ -76,7 +78,9 @@ export default function ProductDetailPage() {
       />
       <ProductBannerSection product={product} />
       <ProductNotesSection product={product} />
+      <ProductMakingSection product={product} />
       <ProductGallerySection product={product} />
+      <ProductCareSection product={product} />
       <ProductFaqSection />
       <ProductRelatedSection product={product} products={products} />
       <ProductCtaSection />

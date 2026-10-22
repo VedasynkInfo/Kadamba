@@ -7,5 +7,7 @@ export {
   ProductGallerySection,
   ProductFaqSection,
   ProductRelatedSection,
+  ProductMakingSection,
+  ProductCareSection,
   ProductCtaSection,
 } from './ProductDetailSections';

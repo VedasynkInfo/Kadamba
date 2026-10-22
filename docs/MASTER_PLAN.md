@@ -621,7 +621,7 @@ Unplanned work, requested after the phase plan was written: the console read as 
 | 11A.11 | Sitemap and robots generated from the live catalogue | ✅ |
 | 11A.12 | The journal: sixty articles, Kurnool first | ✅ |
 | 11A.13 | Kurnool locality pages, FAQ schema, a journal index by cluster | ⬜ |
-| 11A.14 | Product and service pages: the same scroll treatment as the home page | ⬜ |
+| 11A.14 | Product and service pages: the same scroll treatment as the home page | ✅ |
 
 **11A.1 - one light scheme, and a deliberate exception**
 - The public ground moves from cream to warm paper and the console from blue-black to paper. The two now differ by accent and density rather than by being different products — which was the complaint.
@@ -660,7 +660,12 @@ Unplanned work, requested after the phase plan was written: the console read as 
 - Every article answers a question the studio is actually asked, in the words of the person who asks it — what to wear to a wedding in April, how many trials a lehenga needs, what a good fitting room should look like, how to store a zardozi border. The setting is Kurnool and the district: the heat, the Telugu festivals, the handlooms, the fabrics.
 - An article that only exists to carry a keyword is an article a reader leaves and a search engine learns to ignore, so the rule was that the article has to be worth reading on its own.
 
-**Verification:** frontend `npm run lint`, `npm run typecheck`, Vite production build and Vitest (248 tests) pass; Playwright runs 44 journeys (44 passed, 1 skipped), the axe scan over six surfaces and three visual baselines. The bundle budget passes at 43.6 kB for the entry chunk and 777 kB for the tree. Backend `npm run lint`, `npx tsc --noEmit`, `npm run build` and Vitest (200 tests) pass, with the journal and the new theme defaults in the seed.
+**11A.14 - the product and service pages**
+- A product page now carries eight sections: the banner, the notes, **the making** (cloth, pattern, hand, fitting), the gallery, **looking after it** (store it folded, keep it out of the sun, wash it the day after, bring it back), the questions, the related pieces and the closing call to action. The two new ones are the parts a shop front cannot tell.
+- A service page now carries eight as well, and the questions are per service — twenty questions across the four services, written as the questions the studio is actually asked. They are also the `FAQPage` schema for the page, so the same text is both readable and marked up.
+- Every new section reveals on scroll through the same `useScrollReveal` grammar the home page uses, and every one of them is skipped when the visitor has asked for reduced motion.
+
+**Verification:** frontend `npm run lint`, `npm run typecheck`, Vite production build and Vitest (248 tests) pass; Playwright runs 44 journeys (44 passed, 1 skipped), the axe scan over six surfaces and three visual baselines. The bundle budget passes at 43.6 kB for the entry chunk and 777 kB for the tree. Backend `npm run lint`, `npx tsc --noEmit`, `npm run build` and Vitest (403 tests) pass at 86.06% lines, 82.94% statements, 89.45% functions and 65.16% branches, with the journal and the new theme defaults in the seed.
 
 ---
 

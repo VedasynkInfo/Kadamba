@@ -2,8 +2,8 @@ import { Navigate, useParams } from 'react-router-dom';
 import { Spinner } from '@/components/ui';
 import { ContentError } from '@/components/feedback/ContentState';
 import { usePublicContent } from '@/hooks/usePublicContent';
-import { JsonLd, PageMeta, serviceJsonLd } from '@/seo';
-import { getServiceBySlug } from './data';
+import { JsonLd, PageMeta, faqJsonLd, serviceJsonLd } from '@/seo';
+import { getServiceBySlug, questionsForService } from './data';
 import {
   ServiceBannerSection,
   ServiceCtaSection,
@@ -11,6 +11,8 @@ import {
   ServiceFeaturesSection,
   ServiceGallerySection,
   ServicePricingSection,
+  ServiceProcessSection,
+  ServiceQuestionsSection,
 } from './sections';
 
 /**
@@ -55,18 +57,23 @@ export default function ServiceDetailPage() {
         image={service.ogImage || service.bannerImage || service.cardImage}
       />
       <JsonLd
-        data={serviceJsonLd({
-          name: service.title,
-          description: service.summary,
-          path,
-          image: service.bannerImage || service.cardImage,
-        })}
+        data={[
+          serviceJsonLd({
+            name: service.title,
+            description: service.summary,
+            path,
+            image: service.bannerImage || service.cardImage,
+          }),
+          faqJsonLd(questionsForService(service.slug)),
+        ]}
       />
       <ServiceBannerSection service={service} />
       <ServiceDescriptionSection service={service} />
       <ServicePricingSection service={service} />
+      <ServiceProcessSection />
       <ServiceGallerySection service={service} />
       <ServiceFeaturesSection service={service} />
+      <ServiceQuestionsSection service={service} />
       <ServiceCtaSection service={service} />
     </>
   );

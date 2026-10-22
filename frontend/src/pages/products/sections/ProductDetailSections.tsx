@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
 import { ClipReveal } from '@/components/motion/ClipReveal';
 import { Button, Section, SectionIntro } from '@/components/ui';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 import type { PublicProduct } from '@/services/products/publicProductService';
 import { ImageLightbox } from '@/pages/home/sections/ImageLightbox';
 import { productDetailCopy, productFaqs, productImage, productPath } from '../data';
@@ -269,14 +270,16 @@ export function ProductRelatedSection({
     })
     .slice(0, 3);
 
+  const listRef = useScrollReveal<HTMLUListElement>({ selector: '[data-reveal]' });
+
   if (related.length === 0) return null;
 
   return (
     <Section tone="light" className="border-t border-line/15 py-16 md:py-20">
       <SectionIntro title={productDetailCopy.relatedTitle} />
-      <ul className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <ul ref={listRef} className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {related.map((item) => (
-          <li key={item.id}>
+          <li key={item.id} data-reveal>
             <Link to={productPath(item)} viewTransition className="group block">
               <div className="relative aspect-[4/5] overflow-hidden bg-surface-sunken">
                 <OptimizedImage
@@ -293,6 +296,113 @@ export function ProductRelatedSection({
                 {item.category?.name ?? 'Atelier'}
               </p>
             </Link>
+          </li>
+        ))}
+      </ul>
+    </Section>
+  );
+}
+
+/**
+ * The making.
+ *
+ * A piece is not a picture with a price; it is cloth that was cut, worked and
+ * fitted. This is the part of the story that a shop front cannot tell, and
+ * the part that makes the enquiry worth sending.
+ */
+export function ProductMakingSection({ product }: { product: PublicProduct }) {
+  const listRef = useScrollReveal<HTMLOListElement>({ selector: '[data-reveal]', stagger: 0.1 });
+
+  const steps = [
+    {
+      id: 'make-1',
+      title: 'The cloth',
+      body: 'Silk, cotton or chanderi, chosen for the way it falls on a person and for the month the wedding falls in — not for the photograph of the bolt.',
+    },
+    {
+      id: 'make-2',
+      title: 'The pattern',
+      body: 'Drawn from your measurements rather than taken off a size, so the shoulder line and the waist are yours and the alteration later is a small one.',
+    },
+    {
+      id: 'make-3',
+      title: 'The hand',
+      body: 'Zari, resham, gota and zardozi worked on the cloth before the garment is cut, so a border can be replaced rather than re-stitched.',
+    },
+    {
+      id: 'make-4',
+      title: 'The fitting',
+      body: 'Tried on, stood in, sat in, and worn for an hour. The garment is finished after the sixth hour, not before it.',
+    },
+  ];
+
+  return (
+    <Section tone="dark" className="on-dark py-16 md:py-24">
+      <SectionIntro
+        eyebrow="The making"
+        title="How a piece is made"
+        description={`${product.name} is built in the Kurnool workshop the way every piece here is: one person, one silhouette, and as many fittings as it takes.`}
+      />
+      <ol ref={listRef} className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        {steps.map((step, index) => (
+          <li key={step.id} data-reveal className="border-t border-ink-inverse/20 pt-5">
+            <p className="text-[0.65rem] uppercase tracking-[0.28em] text-gold/85">
+              {String(index + 1).padStart(2, '0')}
+            </p>
+            <h3 className="mt-3 font-heading text-xl text-ink-inverse">{step.title}</h3>
+            <p className="mt-3 text-sm leading-relaxed text-ink-inverse/70">{step.body}</p>
+          </li>
+        ))}
+      </ol>
+    </Section>
+  );
+}
+
+/**
+ * Looking after it.
+ *
+ * The most useful thing a studio can tell a client who has just bought
+ * something expensive is how to keep it. Most of this is common sense written
+ * down at the right moment.
+ */
+export function ProductCareSection({ product }: { product: PublicProduct }) {
+  const listRef = useScrollReveal<HTMLUListElement>({ selector: '[data-reveal]' });
+
+  const notes = [
+    {
+      id: 'care-1',
+      title: 'Store it folded, not hung',
+      body: 'A heavy skirt is held by the fold it was made with. Fold it along those lines, put tissue between the layers, and keep it in a muslin bag rather than plastic.',
+    },
+    {
+      id: 'care-2',
+      title: 'Keep it out of the sun',
+      body: 'The sun-fade on a zari border is a warm brown along the edge, and it does not come out. A cupboard, a shelf, and a garment bag is enough.',
+    },
+    {
+      id: 'care-3',
+      title: 'Wash it the day after, not the week after',
+      body: 'Whatever has transferred — perfume, sweat, powder, make-up — has had days to set by the time it is a week old. Cold water, no wringing, dried flat in the shade.',
+    },
+    {
+      id: 'care-4',
+      title: 'Bring it back',
+      body: 'A garment that needs a three-minute fix is a garment you wear. Send it to the studio and we will correct it, usually at no charge.',
+    },
+  ];
+
+  return (
+    <Section tone="light" className="py-16 md:py-20">
+      <SectionIntro
+        eyebrow="Aftercare"
+        title={`Looking after ${product.name.toLowerCase()}`}
+        description="Four things that keep a piece looking the way it did on the day you collected it."
+      />
+      <ul ref={listRef} className="mt-10 grid gap-8 sm:grid-cols-2">
+        {notes.map((note) => (
+          <li key={note.id} data-reveal className="border-t border-line pt-5">
+            <h3 className="font-heading text-lg leading-snug text-ink">{note.title}</h3>
+            <p className="mt-2 text-sm leading-relaxed text-ink/70">{note.body}</p>
           </li>
         ))}
       </ul>

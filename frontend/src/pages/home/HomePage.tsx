@@ -1,61 +1,82 @@
 import { JsonLd, PageMeta, localBusinessJsonLd, staticPageMeta } from '@/seo';
+import { CtaBand, HeroBanner } from '@/components/site';
 import {
-  CtaBannerSection,
+  AtelierSection,
+  BridalSection,
+  ClothSection,
+  CollectionsSection,
   EnquirySection,
-  FabricsSection,
-  FeaturedCollectionsSection,
-  HeroSection,
-  HowItWorksPortalSection,
-  KurnoolSection,
-  LatestBlogsSection,
-  MarqueeSection,
-  ProcessTimelineSection,
-  ServicesSection,
-  StatisticsSection,
-  StudioSection,
-  TestimonialsSection,
-  WhyChooseUsSection,
+  FaqSection,
+  GalleryRailSection,
+  JournalSection,
+  LetterSection,
+  MakingSection,
+  MarqueeBand,
+  PortalSection,
+  PrinciplesSection,
+  ReachSection,
+  RecordSection,
+  SignatureSection,
 } from './sections';
+import { bannerSlides, plate } from './content';
 
 /**
- * The home page: fifteen sections, in the order a visit should read them.
+ * The home page: eighteen sections, in the order a visit should read them.
  *
- *  1.  Hero — what the studio is
- *  2.  Services — what it makes
- *  3.  Featured collections — the work
- *  4.  Marquee — the names of the craft
- *  5.  Testimonials — the city's word
- *  6.  Why choose us — the difference
- *  7.  How the portal works — after the order
- *  8. Process — the way through
- *  9.  Statistics — the record
- * 10. The atelier — who does the work
- * 11. The cloth — what it is cut from
- * 12. Kurnool — why here
- * 13. Latest writing — the journal
- * 14. Enquiry — start a conversation
- * 15. Closing call to action
+ *  1.  The banner          — the bridal commission, in five frames
+ *  2.  The letter          — who is speaking, and the record underneath
+ *  3.  The index           — the four disciplines of the house
+ *  4.  The vocabulary      — the craft, as a band of words
+ *  5.  The collections     — the range, as plates
+ *  6.  The atelier         — the hands behind the cloth
+ *  7.  The making          — four movements, one commission
+ *  8.  The cloth           — what the house is willing to cut
+ *  9.  The bridal panel    — the reason most people arrive
+ * 10.  The work            — a rail of photographs from the floor
+ * 11.  The promises        — four operating rules
+ * 12.  Local to global     — Kurnool, and the cities it dresses
+ * 13.  The record          — the figures, and one client's sentence
+ * 14.  The journal         — the studio's long-form voice
+ * 15.  After the order     — aftercare and the client portal
+ * 16.  The questions       — the honest answers
+ * 17.  The enquiry         — the short form
+ * 18.  The invitation      — one last door
+ *
+ * The arc is deliberate: the work, then the people, then the reach, then the
+ * invitation. A visitor who reads all eighteen knows exactly what would happen
+ * if they called.
  */
 export default function HomePage() {
   return (
     <>
       <PageMeta {...staticPageMeta.home} />
       <JsonLd data={localBusinessJsonLd()} />
-      <HeroSection />
-      <ServicesSection />
-      <FeaturedCollectionsSection />
-      <MarqueeSection />
-      <TestimonialsSection />
-      <WhyChooseUsSection />
-      <HowItWorksPortalSection />
-      <ProcessTimelineSection />
-      <StatisticsSection />
-      <StudioSection />
-      <FabricsSection />
-      <KurnoolSection />
-      <LatestBlogsSection />
+
+      <HeroBanner slides={bannerSlides} />
+      <LetterSection />
+      <SignatureSection />
+      <MarqueeBand />
+      <CollectionsSection />
+      <AtelierSection />
+      <MakingSection />
+      <ClothSection />
+      <BridalSection />
+      <GalleryRailSection />
+      <PrinciplesSection />
+      <ReachSection />
+      <RecordSection />
+      <JournalSection />
+      <PortalSection />
+      <FaqSection />
       <EnquirySection />
-      <CtaBannerSection />
+      <CtaBand
+        eyebrow="The next celebration"
+        title="Every wedding begins"
+        accent="with a conversation."
+        copy="Bring the date, the photographs, and the people who will be standing beside you. The studio will take it from there — one appointment at a time."
+        image={plate.bridalAlt}
+        action={{ label: 'Book a consultation', to: '/request-service' }}
+      />
     </>
   );
 }

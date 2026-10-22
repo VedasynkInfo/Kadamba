@@ -15,7 +15,10 @@ export function MainLayout() {
     <PublicContentProvider>
       <SmoothScroll />
       <SitePreloader />
-      <div className="flex min-h-screen flex-col bg-surface">
+      {/* `public-shell` re-points the type and adds the editorial utilities.
+          See the note in index.css: the console and the portal never inherit
+          the serif, because they are never inside this element. */}
+      <div className="public-shell flex min-h-screen flex-col bg-surface">
         <a
           href="#main-content"
           className="on-dark sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-espresso focus:px-4 focus:py-2 focus:text-sm focus:text-ink-inverse focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"

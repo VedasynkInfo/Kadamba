@@ -1,13 +1,15 @@
 import { motion } from 'framer-motion';
-import { CountUp } from '@/components/motion/CountUp';
 import { Heading, Section, SectionIntro } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { fadeUp, staggerChildren } from '@/motion/variants';
 import { achievementNotes, achievementStats } from '../data';
 
 /**
- * Local recognition and client trust — the same counter primitive as the home
- * statistics strip, so both read identically at any scroll position.
+ * Local recognition and client trust.
+ *
+ * The figures are printed, not counted up. A number that animates from zero is
+ * a performance; on a page asking to be trusted it should simply be true, and
+ * legible in a screenshot as well as in a browser.
  */
 export function AchievementsSection() {
   const reduced = usePrefersReducedMotion();
@@ -28,11 +30,8 @@ export function AchievementsSection() {
         {achievementStats.map((stat) => (
           <li key={stat.id}>
             <p className="font-heading text-4xl text-gold md:text-5xl">
-              <CountUp
-                value={stat.value}
-                duration={1.4}
-                format={(value) => `${value}${stat.suffix}`}
-              />
+              {stat.value.toLocaleString('en-IN')}
+              {stat.suffix}
             </p>
             <p className="mt-2 text-sm text-ink-inverse/70">{stat.label}</p>
           </li>

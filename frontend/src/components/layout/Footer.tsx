@@ -1,7 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { usePublicContent } from '@/hooks/usePublicContent';
 import { brand } from '@/pages/home/data';
-import { Container } from './Container';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
 
 const footerLinks = [
@@ -31,7 +30,7 @@ export function Footer() {
 
   return (
     <footer className="on-dark mt-auto border-t border-gold/20 bg-espresso py-12 text-ink-inverse">
-      <Container>
+      <div className="house-container">
         <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
           <div>
             {logo ? (
@@ -116,7 +115,7 @@ export function Footer() {
           &copy; {new Date().getFullYear()} {settings.studioName || brand.name}. All rights
           reserved.
         </p>
-      </Container>
+      </div>
     </footer>
   );
 }

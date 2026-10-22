@@ -128,7 +128,7 @@ export const team: TeamMember[] = [
     role: 'Boutique styling',
     bio: 'Guides fabric and silhouette choices for bridal and festive looks on the boutique floor.',
     image: img.portrait1,
-    alt: 'Portrait of boutique styling lead',
+    alt: 'Cloth study for boutique styling — a handloom drape in the studio',
   },
   {
     id: 'tm2',
@@ -136,7 +136,7 @@ export const team: TeamMember[] = [
     role: 'Custom fitting',
     bio: 'Leads measurements, pattern work, and trials so every garment sits with a confident fit.',
     image: img.portrait2,
-    alt: 'Portrait of master tailor',
+    alt: 'Cloth study for tailoring — a dark silk fall on the cutting table',
   },
   {
     id: 'tm3',
@@ -144,7 +144,7 @@ export const team: TeamMember[] = [
     role: 'Embroidery & detail',
     bio: 'Refines hems, embellishment, and final touches before delivery for the celebration.',
     image: img.portrait3,
-    alt: 'Portrait of finishing specialist',
+    alt: 'Cloth study for finishing — a rose silk drape in daylight',
   },
 ];
 

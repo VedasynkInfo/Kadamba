@@ -12,16 +12,20 @@ interface ContainerProps {
 const sizeClasses: Record<ContainerSize, string> = {
   sm: 'max-w-3xl',
   md: 'max-w-5xl',
-  lg: 'max-w-6xl',
+  lg: 'max-w-[var(--shell-max)]',
   full: 'max-w-none',
 };
 
 /**
  * Horizontal page container with responsive padding.
+ *
+ * The width and gutter are tokens (`--shell-max`, `--gutter`) so the public
+ * shell can widen every page to the house measure without the console moving:
+ * outside `.public-shell` the fallbacks are the old 72rem / 1rem.
  */
 export function Container({ children, className = '', size = 'lg' }: ContainerProps) {
   return (
-    <div className={cn('mx-auto w-full px-4 sm:px-6', sizeClasses[size], className)}>
+    <div className={cn('mx-auto w-full px-[var(--gutter)]', sizeClasses[size], className)}>
       {children}
     </div>
   );

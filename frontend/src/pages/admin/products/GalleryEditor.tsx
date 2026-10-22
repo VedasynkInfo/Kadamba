@@ -110,11 +110,13 @@ export function GalleryEditor({ images, cover, onChange }: GalleryEditorProps) {
                     placeholder="Embroidered bridal lehenga, full view"
                     maxLength={250}
                   />
-                  <Input
-                    label="Image URL"
+                  <MediaUpload
+                    label="Replace photograph"
                     value={image.url}
-                    onChange={(event) => patch(image.id, { url: event.target.value })}
-                    placeholder="/uploads/products/lehenga.jpg"
+                    onChange={(url) => patch(image.id, { url })}
+                    folder="products"
+                    enableCrop={false}
+                    hint="Upload a replacement or choose another frame from the library."
                   />
                   <div className="flex flex-wrap items-center gap-1.5">
                     <Button

@@ -173,17 +173,14 @@ export function SalaryModalForm({ open, staffList, onClose, onSuccess }: SalaryM
               <label className="block text-[11px] font-semibold opacity-75 uppercase tracking-wider">
                 Pay Period Month *
               </label>
-              <select
+              <Select
                 value={month}
-                onChange={(e) => setMonth(e.target.value)}
-                className="w-full rounded-xl border py-2 px-3 text-xs focus:outline-none focus:ring-1 focus:ring-focus cursor-pointer bg-surface-raised border-line"
-              >
-                {MONTH_NAMES.map((name, idx) => (
-                  <option key={idx + 1} value={String(idx + 1)}>
-                    {name}
-                  </option>
-                ))}
-              </select>
+                onChange={(value) => setMonth(value)}
+                options={MONTH_NAMES.map((name, idx) => ({
+                  value: String(idx + 1),
+                  label: name,
+                }))}
+              />
             </div>
 
             <div className="space-y-1">

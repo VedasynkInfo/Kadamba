@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
 import { Button, Section } from '@/components/ui';
+import { FilterRow, SectionHead } from '@/components/site';
 import { ContentEmpty, ContentError, ContentLoading } from '@/components/feedback/ContentState';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { usePublicContent } from '@/hooks/usePublicContent';
@@ -38,43 +39,28 @@ export function GalleryMasonrySection() {
       className="overflow-hidden py-16 md:py-24"
       aria-label="Studio gallery"
     >
-      <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-        <div className="max-w-xl">
-          <p className="font-heading text-xs uppercase tracking-[0.28em] text-gold">
-            Browse by occasion
-          </p>
-          <h2 className="mt-3 font-heading text-3xl text-ink-inverse md:text-4xl">
-            Bridal, traditional & atelier details
-          </h2>
-          <p className="mt-3 text-ink-inverse/70">
-            Filter the lookbook — every frame reflects custom tailoring from our Kurnool boutique.
-          </p>
-        </div>
+      <div className="flex flex-col gap-8">
+        <SectionHead
+          tone="dark"
+          eyebrow="Browse by occasion"
+          title="Bridal, traditional"
+          accent="& atelier details."
+          description="Every frame reflects custom tailoring from the Kurnool studio — fittings, finished commissions and the details in between."
+          actions={
+            <span className="text-[0.6rem] uppercase tracking-[0.24em] text-ink-inverse/40">
+              {String(filtered.length).padStart(2, '0')} pieces
+            </span>
+          }
+        />
 
-        <div className="flex flex-wrap gap-2" role="group" aria-label="Gallery categories">
-          {galleryCategories.map((category) => (
-            <Button
-              key={category}
-              size="sm"
-              variant={filter === category ? 'primary' : 'secondary'}
-              className={cn(
-                'min-h-10',
-                filter !== category && 'text-ink-inverse hover:border-gold hover:text-gold',
-              )}
-              onClick={() => setFilter(category)}
-              aria-pressed={filter === category}
-            >
-              {category}
-            </Button>
-          ))}
-        </div>
+        <FilterRow
+          tone="dark"
+          options={galleryCategories.map((category) => ({ id: category, label: category }))}
+          value={filter}
+          onChange={(id) => setFilter(id as GalleryFilter)}
+          label="Gallery categories"
+        />
       </div>
-
-      {!loading ? (
-        <p className="mt-6 text-sm text-ink-inverse/70" aria-live="polite">
-          {filtered.length} {filtered.length === 1 ? 'piece' : 'pieces'}
-        </p>
-      ) : null}
 
       {loading ? (
         <ContentLoading className="mt-8" count={6} tone="dark" label="Loading the lookbook" />

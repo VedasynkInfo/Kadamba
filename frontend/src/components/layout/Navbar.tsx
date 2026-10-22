@@ -43,7 +43,7 @@ export function Navbar() {
         )}
       >
         <nav
-          className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-4"
+          className="house-container flex items-center justify-between gap-6 py-4"
           aria-label="Primary"
         >
           <NavLink

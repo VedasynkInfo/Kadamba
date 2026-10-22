@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
 import { Icon } from '@/components/icons';
-import { Button, Input, Section, SectionIntro } from '@/components/ui';
+import { Button, Input, Section } from '@/components/ui';
+import { FilterRow, SectionHead } from '@/components/site';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { usePublicContent } from '@/hooks/usePublicContent';
 import { ContentEmpty, ContentError, ContentLoading } from '@/components/feedback/ContentState';
@@ -56,7 +57,12 @@ function ServiceIconMark({ name }: { name: ServiceIcon }) {
 }
 
 /**
- * Service catalog — category filters, search, and image-led cards.
+ * The service catalogue.
+ *
+ * Four disciplines, each with a plate, an honest lead time and the price it
+ * starts from. Filters are lines of type rather than pills, and the search is a
+ * ruled field: the page should read like a printed programme, not a dashboard
+ * with pictures.
  */
 export function ServicesCatalogSection() {
   const navigate = useNavigate();
@@ -71,50 +77,41 @@ export function ServicesCatalogSection() {
   );
 
   return (
-    <Section
-      id="services-catalog"
-      tone="light"
-      className="scroll-mt-24 py-16 md:py-24"
-    >
-      <SectionIntro
-        title={servicesCatalogIntro.title}
+    <Section id="services-catalog" className="house-section scroll-mt-24 bg-surface">
+      <SectionHead
+        eyebrow="The four disciplines"
+        title="What the house"
+        accent="can make."
         description={servicesCatalogIntro.description}
         actions={
-          <div className="flex flex-wrap gap-2" role="group" aria-label="Service categories">
-            {serviceCategories.map((item) => (
-              <Button
-                key={item}
-                size="sm"
-                variant={category === item ? 'primary' : 'secondary'}
-                className="min-h-10"
-                onClick={() => setCategory(item)}
-                aria-pressed={category === item}
-              >
-                {item}
-              </Button>
-            ))}
-          </div>
+          <span className="text-[0.6rem] uppercase tracking-[0.24em] text-ink/40">
+            {String(filtered.length).padStart(2, '0')} services
+          </span>
         }
       />
 
-      <div className="mt-8 max-w-md">
-        <Input
-          id="services-search"
-          type="search"
-          label="Search services"
-          placeholder="Search bridal, tailoring…"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
+      <div className="mt-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <FilterRow
+          className="min-w-0 flex-1"
+          options={serviceCategories.map((item) => ({ id: item, label: item }))}
+          value={category}
+          onChange={(id) => setCategory(id as ServiceCategoryFilter)}
+          label="Service categories"
         />
+        <div className="w-full shrink-0 lg:w-64">
+          <Input
+            id="services-search"
+            type="search"
+            label="Search services"
+            placeholder="Search bridal, tailoring…"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </div>
       </div>
 
       {loading ? (
-        <ContentLoading
-          className="mt-10"
-          count={4}
-          columns={2}
-          label="Loading services"
-        />
+        <ContentLoading className="mt-10" count={4} columns={2} label="Loading services" />
       ) : error ? (
         <ContentError className="mt-10" error={error} onRetry={refresh} />
       ) : services.length === 0 ? (
@@ -125,12 +122,6 @@ export function ServicesCatalogSection() {
         />
       ) : (
         <>
-          <p className="mt-4 text-sm text-ink/70" aria-live="polite">
-            {filtered.length} {filtered.length === 1 ? 'service' : 'services'}
-            {category !== 'All' ? ` in ${category}` : ''}
-            {query.trim() ? ` matching “${query.trim()}”` : ''}
-          </p>
-
           <AnimatePresence mode="wait">
             {filtered.length === 0 ? (
               <motion.div
@@ -160,7 +151,7 @@ export function ServicesCatalogSection() {
             ) : (
               <motion.ul
                 key={`${category}-${query}`}
-                className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-2"
+                className="mt-12 grid gap-x-6 gap-y-14 sm:grid-cols-2"
                 variants={reduced ? undefined : staggerChildren}
                 initial={reduced ? false : 'hidden'}
                 animate={reduced ? undefined : 'visible'}
@@ -198,12 +189,12 @@ function ServiceCard({
         onClick={onOpen}
         className={cn(
           'group flex w-full flex-col text-left focus-visible:outline-none',
-          'focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-cream',
+          'focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-surface',
         )}
       >
-        <div className="relative aspect-[16/11] w-full overflow-hidden">
+        <div className="plate plate-frame plate-hover relative aspect-[16/11] w-full">
           <OptimizedImage
-            sizes="(min-width: 1200px) 552px, 50vw"
+            sizes="(min-width: 1200px) 620px, 50vw"
             src={service.cardImage}
             alt={service.bannerAlt}
             className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
@@ -211,25 +202,29 @@ function ServiceCard({
             height={1100}
           />
           <div
-            className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent"
+            className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent"
             aria-hidden
           />
-          <span className="absolute bottom-4 left-4 inline-flex items-center gap-2 text-gold">
+          <span className="absolute bottom-5 left-5 z-[3] inline-flex items-center gap-2 text-gold">
             <ServiceIconMark name={service.icon} />
-            <span className="text-xs font-semibold uppercase tracking-[0.2em]">
+            <span className="text-[0.58rem] font-semibold uppercase tracking-[0.24em]">
               {service.category}
             </span>
           </span>
         </div>
-        <h3 className="mt-5 font-heading text-2xl leading-snug text-ink">{service.title}</h3>
-        <p className="mt-2 text-base leading-relaxed text-ink/70">{service.summary}</p>
-        <p className="mt-3 font-heading text-lg text-ink">
-          From <span className="text-gold">{service.pricing.startingFrom}</span>
-        </p>
-        <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-ink transition-colors group-hover:text-gold">
-          View details & pricing
-          <Icon name="arrowRight" size={14} />
-        </span>
+
+        <h3 className="mt-5 font-heading text-3xl leading-tight text-ink">{service.title}</h3>
+        <p className="mt-2 max-w-xl text-base leading-relaxed text-ink/65">{service.summary}</p>
+
+        <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-ink/12 pt-4">
+          <p className="font-heading text-lg text-ink">
+            From <span className="text-brand-strong">{service.pricing.startingFrom}</span>
+          </p>
+          <span className="link-arrow text-[0.6rem] text-ink/55 transition-colors group-hover:text-brand-strong">
+            View details &amp; pricing
+            <Icon name="arrowRight" size={14} />
+          </span>
+        </div>
       </button>
     </motion.li>
   );

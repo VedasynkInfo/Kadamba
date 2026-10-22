@@ -2,7 +2,8 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
-import { Button, Input, Section, SectionIntro } from '@/components/ui';
+import { Button, Input, Section } from '@/components/ui';
+import { FilterRow, SectionHead } from '@/components/site';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { usePublicContent } from '@/hooks/usePublicContent';
 import { ContentEmpty, ContentError, ContentLoading } from '@/components/feedback/ContentState';
@@ -32,37 +33,37 @@ export function BlogsCatalogSection() {
   );
 
   return (
-    <Section id="blogs-catalog" tone="light" className="scroll-mt-24 py-16 md:py-24">
-      <SectionIntro
-        title={blogsCatalogIntro.title}
+    <Section id="blogs-catalog" className="house-section scroll-mt-24 bg-surface">
+      <SectionHead
+        eyebrow="The journal"
+        title="Essays from"
+        accent="the workroom."
         description={blogsCatalogIntro.description}
         actions={
-          <div className="flex flex-wrap gap-2" role="group" aria-label="Blog categories">
-            {blogCategories.map((item) => (
-              <Button
-                key={item}
-                size="sm"
-                variant={category === item ? 'primary' : 'secondary'}
-                className="min-h-10"
-                onClick={() => setCategory(item)}
-                aria-pressed={category === item}
-              >
-                {item}
-              </Button>
-            ))}
-          </div>
+          <span className="text-[0.6rem] uppercase tracking-[0.24em] text-ink/40">
+            {String(filtered.length).padStart(2, '0')} essays
+          </span>
         }
       />
 
-      <div className="mt-8 max-w-md">
-        <Input
-          id="blogs-search"
-          type="search"
-          label="Search posts"
-          placeholder="Search bridal, fabric, fittings…"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
+      <div className="mt-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <FilterRow
+          className="min-w-0 flex-1"
+          options={blogCategories.map((item) => ({ id: item, label: item }))}
+          value={category}
+          onChange={(id) => setCategory(id as BlogCategoryFilter)}
+          label="Journal categories"
         />
+        <div className="w-full shrink-0 lg:w-64">
+          <Input
+            id="blogs-search"
+            type="search"
+            label="Search posts"
+            placeholder="Search bridal, fabric, fittings…"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </div>
       </div>
 
       {loading ? (

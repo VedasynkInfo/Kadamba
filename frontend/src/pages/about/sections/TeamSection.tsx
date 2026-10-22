@@ -27,7 +27,7 @@ export function TeamSection() {
       >
         {team.map((member) => (
           <motion.li key={member.id} variants={reduced ? undefined : fadeUp}>
-            <div className="aspect-[4/5] w-full overflow-hidden">
+            <div className="plate plate-frame aspect-[4/5] w-full">
               <OptimizedImage
                 sizes="(min-width: 1200px) 368px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                 src={member.image}
@@ -42,6 +42,9 @@ export function TeamSection() {
             </p>
             <h3 className="mt-2 font-heading text-2xl leading-snug">{member.name}</h3>
             <p className="mt-3 text-base leading-relaxed text-ink/70">{member.bio}</p>
+            <p className="mt-4 border-t border-ink/10 pt-3 text-[0.55rem] uppercase tracking-[0.22em] text-ink/35">
+              Cloth study &middot; Kadamba studio
+            </p>
           </motion.li>
         ))}
       </motion.ul>

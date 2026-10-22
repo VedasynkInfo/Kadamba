@@ -1,6 +1,4 @@
-export { PortfolioHeroSection } from './PortfolioHeroSection';
 export { PortfolioCatalogSection } from './PortfolioCatalogSection';
-export { PortfolioCtaSection } from './PortfolioCtaSection';
 export { PortfolioBannerSection } from './PortfolioBannerSection';
 export { PortfolioStorySection } from './PortfolioStorySection';
 export { PortfolioGallerySection } from './PortfolioGallerySection';

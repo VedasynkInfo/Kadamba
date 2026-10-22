@@ -1,5 +1,6 @@
 import { Input, Textarea } from '@/components/ui';
 import { cn } from '@/utils/cn';
+import { MediaUpload } from './MediaUpload';
 
 export interface SeoFieldsValue {
   metaTitle: string;
@@ -100,10 +101,13 @@ export function SeoFields({
         value={value.ogDescription || ''}
         onChange={(e) => patch('ogDescription', e.target.value)}
       />
-      <Input
-        label="OG image URL"
+      <MediaUpload
+        label="OG image"
         value={value.ogImage || ''}
-        onChange={(e) => patch('ogImage', e.target.value)}
+        onChange={(url) => patch('ogImage', url)}
+        folder="seo"
+        enableCrop={false}
+        hint="Upload a 1200×630 image, or choose one from the library."
       />
 
       <p className={cn('text-xs font-medium uppercase tracking-[0.14em]', muted)}>Twitter</p>
@@ -118,10 +122,13 @@ export function SeoFields({
         value={value.twitterDescription || ''}
         onChange={(e) => patch('twitterDescription', e.target.value)}
       />
-      <Input
-        label="Twitter image URL"
+      <MediaUpload
+        label="Twitter image"
         value={value.twitterImage || ''}
-        onChange={(e) => patch('twitterImage', e.target.value)}
+        onChange={(url) => patch('twitterImage', url)}
+        folder="seo"
+        enableCrop={false}
+        hint="Upload a 1200×675 image, or choose one from the library."
       />
     </div>
   );

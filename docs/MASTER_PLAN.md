@@ -669,6 +669,67 @@ Unplanned work, requested after the phase plan was written: the console read as 
 
 ---
 
+## Phase 11B — The public house
+
+11A finished the console and the portal. The public site is the part a client meets first, and it was still the older page: a banner that did not move, a home page that stopped after fifteen sections, and interior pages whose headers belonged to a previous design. This phase rebuilt every public surface a client can reach, and audited the console for the two things the brief kept returning to — no native form widgets, and no image fields that ask for a URL instead of a file.
+
+| # | Task | Status |
+|---|------|--------|
+| 11B.1 | The home page: eighteen sections, local to global | ✅ |
+| 11B.2 | One public type system and one width/gutter scale | ✅ |
+| 11B.3 | Every interior page rebuilt on `PageHero` and `SectionHead` | ✅ |
+| 11B.4 | The catalogue: URL-synced filters, three-up plates, honest meta | ✅ |
+| 11B.5 | Placeholder plates and demo-media normalisation | ✅ |
+| 11B.6 | Controls and media audit: no native widgets, no image URLs | ✅ |
+| 11B.7 | API connection audit across public and console | ✅ |
+| 11B.8 | Finish the shared row menu on the remaining seven desks | ⬜ (11A.10) |
+| 11B.9 | Kurnool locality pages and the journal by cluster | ⬜ (11A.13) |
+
+**11B.1 — eighteen sections, and an arc rather than a list**
+- The home page runs: banner, manifesto, services, collections, marquee, atelier, bridal, making, gallery rail, reach, record, principles, cloth, journal, Kurnool, questions, enquiry, closing band. The order is fixed and documented at the top of `HomePage.tsx`, because a story with the locality section before the atelier is a different story.
+- The arc is local to global: the studio's room in Kurnool, the hands and the cloth, the record, and only then the five countries the work has travelled to. Nothing claims a scale the studio cannot show.
+- `HeroBanner` slides and animates between slides; `PageHero` is the quieter interior version. Both read the same `useCarousel` clock, so there is one timer in the product and not one per section.
+- Every entrance is `Reveal`, `ClipReveal` or a scroll transform, and every one is skipped under `prefers-reduced-motion`.
+
+**11B.2 — one public type system, one width**
+- Cormorant Garamond is the display and heading face, Syne the body, console and portal face. The public shell re-points `--font-heading` rather than adding a second token, so a component written for the console renders in the right face on the site without knowing which shell it is in.
+- `--shell-max: 84rem` and `--gutter: clamp(1.25rem, 4vw, 2.5rem)` live on `.public-shell`; the `:root` fallbacks stay at 72rem/1rem so the console stays compact. Navbar, Footer, `PageHero` and `Container` all use `house-container`, which is why the banner text, the section heads and the footer columns finally share an edge.
+
+**11B.3 — the interior pages**
+- About, Services, Collections, Gallery, Portfolio, Blogs, Contact and Consultation all open on `PageHero` and close on `CtaBand` (Contact deliberately does not — it already is the call to action). The old per-page hero and CTA section files were deleted and the barrels updated, so there is one banner pattern rather than eight.
+- Filter rows are underlined type (`FilterRow`), not pills: a row of six pills above a catalogue reads as a dashboard, and this is a shop front.
+- About lost its count-up animation. A number that animates from zero reads as marketing; the same number sitting still reads as a record. The team plates are captioned "Cloth study" with honest alts because they are placeholder art, not portraits.
+
+**11B.4 — the catalogue**
+- Collection cards link to `/products?category=CODE`; `ProductsPage` reads the param through `useSearchParams` and falls back to All when the code is unknown, so a shared link cannot produce an empty grid.
+- The grid is three-up at desktop with price and lead-time meta. The per-card `ClipReveal` was removed: on the first column of each row it could stay at `inset(0 0 100%)` after scrolling, leaving an invisible card. A plain wrapper is the honest fix; the section still reveals as a whole.
+- One seeded category is genuinely named `TEST`. It is left visible rather than hidden in code — it is data, and the fix is to rename it in the console.
+
+**11B.5 — plates, not stock photography**
+- The placeholder art is generated (`backend/src/scripts/generatePlaceholders.ts`): seventeen atelier plates plus `og-default.jpg`, about 1 MB total, in ivory, parchment, sand, oxblood, espresso, charcoal, gold, rose and olive, using drape, loom, arch, bolt, field and veil motifs. They are deliberately abstract — a stock photograph of a different studio's work would be a lie about whose work it is.
+- `normaliseDemoMedia.ts` rewrote the seeded `/uploads/*` references that had no file behind them to branded plates, so the seeded site has no broken images. It is a one-off, recorded here rather than hidden in a component.
+
+**11B.6 — controls and media**
+- The audit found one native `<select>` left (the salary month) and no native date inputs. The month is now the shared `Select`; every other desk already used `Select`, `DateField` or `DateTimeField`.
+- Every image field now takes a file. The per-record SEO drawer's OG and Twitter fields and the product gallery's replacement field were text inputs labelled "URL"; both are `MediaUpload` now, with hints for the intended crop. Blogs, gallery, portfolio, services, product gallery, settings logo and the measurement directives were already uploads.
+- No page asks an operator to paste a URL to make an image appear.
+
+**11B.7 — the API audit**
+- Public: `/api/health`, `/api/settings/public`, `/api/products`, `/api/services`, `/api/blogs`, `/api/gallery` and `/api/portfolio` all return `200` with `success: true`.
+- Console: sign-in, `/admin/dashboard/summary`, `/badges`, `/customers`, `/orders`, `/leads`, `/admin/products/categories`, `/admin/products/product-types`, `/admin/staff`, `/admin/finance/{summary,payments,invoices,expenses,salaries}`, `/admin/settings`, `/admin/media`, `/admin/users` and `/admin/reports/orders-by-status` all return `200`.
+- The 404s seen during the audit were guessed paths (`/admin/products`, `/admin/reports/summary`); the console calls `/admin/products/categories`, `/admin/products/product-types` and named report slugs, and those are the ones above.
+- Home collections, the journal, the gallery rail, the enquiry form and the FAQ band all read live data. The editorial copy of the home page (the manifesto, the principles, the reach list) lives in `content.ts`, not the CMS; that is a content-model gap, not a wiring gap, and is recorded as such.
+
+**Verification:** frontend `npm run lint`, `npm run typecheck` and the production build pass; Vitest passes 248 tests and backend Vitest passes 403. Manual pass over `/`, `/about`, `/services`, `/collections`, `/products`, `/gallery`, `/portfolio`, `/blogs`, `/contact` and `/consultation` at desktop and mobile widths, plus `/products?category=BRIDAL` for the deep link.
+
+**Open, recorded honestly**
+- 11A.10 is still open for customers, finance expenses, invoices, payments, leads, measurements and staff. The shared menu exists and four desks use it; the rest still carry their own copy.
+- 11A.13 is still open: Kurnool locality pages, the journal index by cluster, and `faqJsonLd` on the locality pages.
+- The home page's editorial copy is code, not CMS. Moving it into `SiteSettings` would make it editable without a deploy and is the next content-model step.
+- The Phase 8 Lighthouse gate still needs a deployed build with a live API and a seeded catalogue; it cannot be measured honestly against a dev server.
+
+---
+
 
 | # | Task | Status |
 |---|------|--------|

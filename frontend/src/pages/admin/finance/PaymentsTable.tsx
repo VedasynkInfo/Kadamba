@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Icon } from '@/components/icons';
+import { Link, useNavigate } from 'react-router-dom';
 import type { PaymentRecord } from '@/services/finance/financeService';
 import { whatsappDeepLink } from '@/utils/whatsapp';
 import { EmptyState } from '../components/EmptyState';
 import { Skeleton } from '../components/Skeleton';
 import { cn } from '@/utils/cn';
+import { RowActionsMenu } from '@/components/ui';
 
 const SKELETON_ROWS = 6;
 
@@ -38,47 +37,7 @@ export function PaymentsTable({
   onPreview,
   onNewPayment,
 }: PaymentsTableProps) {
-  const [menuAnchor, setMenuAnchor] = useState<{
-    payment: PaymentRecord;
-    top: number;
-    right: number;
-    showAbove: boolean;
-  } | null>(null);
-
-  useEffect(() => {
-    if (!menuAnchor) return;
-    const handleClose = () => setMenuAnchor(null);
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setMenuAnchor(null);
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('scroll', handleClose, true);
-    window.addEventListener('resize', handleClose);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('scroll', handleClose, true);
-      window.removeEventListener('resize', handleClose);
-    };
-  }, [menuAnchor]);
-
-  function handleOpenMenu(e: React.MouseEvent<HTMLButtonElement>, payment: PaymentRecord) {
-    e.stopPropagation();
-    if (menuAnchor?.payment.id === payment.id) {
-      setMenuAnchor(null);
-      return;
-    }
-    const rect = e.currentTarget.getBoundingClientRect();
-    const menuHeight = 180;
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const showAbove = spaceBelow < menuHeight && rect.top > menuHeight;
-
-    setMenuAnchor({
-      payment,
-      top: showAbove ? rect.top - 6 : rect.bottom + 6,
-      right: window.innerWidth - rect.right,
-      showAbove,
-    });
-  }
+  const navigate = useNavigate();
 
   return (
     <div
@@ -118,7 +77,6 @@ export function PaymentsTable({
               className="stagger-rows divide-y border-line"
             >
               {items.map((pay) => {
-                const isMenuOpen = menuAnchor?.payment.id === pay.id;
 
                 return (
                   <tr
@@ -201,20 +159,15 @@ export function PaymentsTable({
 
                     {/* Actions Menu */}
                     <td className="py-3 px-4 text-right whitespace-nowrap w-[70px]">
-                      <button
-                        type="button"
-                        onClick={(e) => handleOpenMenu(e, pay)}
-                        className={cn(
-                          'inline-flex h-8 w-8 items-center justify-center rounded-lg border transition cursor-pointer',
-                          isMenuOpen
-                            ? 'bg-brand/15 text-brand-strong font-bold'
-                            : 'hover:bg-current/[0.08]', isMenuOpen ? 'border-brand' : 'border-line'
-                        )}
-                        aria-label="Actions menu"
-                        aria-expanded={isMenuOpen}
-                      >
-                        <span className="text-base leading-none font-bold">⋮</span>
-                      </button>
+                      <RowActionsMenu
+                        label={`Actions for payment ${pay.reference || pay.id.slice(-6)}`}
+                        row={pay}
+                        actions={[
+                          { id: 'preview', label: 'Quick Receipt Preview', icon: 'view', onSelect: (row) => onPreview(row) },
+                          { id: 'order', label: 'Open Order Workspace', icon: 'thread', hidden: (row) => !row.order?.id, onSelect: (row) => navigate(`/admin/orders/${row.order?.id}`) },
+                          { id: 'receipt', label: 'Send WhatsApp Receipt', icon: 'message', hidden: (row) => !row.order?.customer?.phone, onSelect: (row) => window.open(whatsappDeepLink(row.order?.customer?.phone || '', `Dear ${row.order?.customer?.name}, we have recorded your payment of ₹${row.amount} for order #${row.order?.orderNumber}. Thank you, Kadamba's Designer Studio.`), '_blank', 'noopener,noreferrer') },
+                        ]}
+                      />
                     </td>
                   </tr>
                 );
@@ -224,65 +177,7 @@ export function PaymentsTable({
         </div>
       )}
 
-      {/* Floating Action Dropdown */}
-      {menuAnchor ? (
-        <>
-          <div
-            className="fixed inset-0 z-40 bg-transparent"
-            onClick={() => setMenuAnchor(null)}
-          />
-
-          <div
-            className="fixed z-50 w-52 rounded-xl border p-1 shadow-2xl animate-fade-in text-left text-xs bg-surface-raised border-line text-ink-raised"
-            style={{
-              top: menuAnchor.showAbove ? undefined : `${menuAnchor.top}px`,
-              bottom: menuAnchor.showAbove ? `${window.innerHeight - menuAnchor.top}px` : undefined,
-              right: `${menuAnchor.right}px`,
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              type="button"
-              onClick={() => {
-                const py = menuAnchor.payment;
-                setMenuAnchor(null);
-                onPreview(py);
-              }}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
-            >
-              <Icon name="view" size={14} />
-              <span>Quick Receipt Preview</span>
-            </button>
-
-            {menuAnchor.payment.order?.id ? (
-              <Link
-                to={`/admin/orders/${menuAnchor.payment.order.id}`}
-                onClick={() => setMenuAnchor(null)}
-                className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
-              >
-                <Icon name="thread" size={14} />
-                <span>Open Order Workspace</span>
-              </Link>
-            ) : null}
-
-            {menuAnchor.payment.order?.customer?.phone ? (
-              <a
-                href={whatsappDeepLink(
-                  menuAnchor.payment.order.customer.phone,
-                  `Dear ${menuAnchor.payment.order.customer.name}, we have recorded your payment of ₹${menuAnchor.payment.amount} for order #${menuAnchor.payment.order.orderNumber}. Thank you, Kadamba's Designer Studio.`,
-                )}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setMenuAnchor(null)}
-                className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-700 hover:bg-emerald-500/10 transition cursor-pointer"
-              >
-                <Icon name="message" size={14} />
-                <span>Send WhatsApp Receipt</span>
-              </a>
-            ) : null}
-          </div>
-        </>
-      ) : null}
+      
     </div>
   );
 }

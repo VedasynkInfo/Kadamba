@@ -1,6 +1,6 @@
 import { PageMeta, staticPageMeta } from '@/seo';
 import { CtaBand, PageHero } from '@/components/site';
-import { BlogsCatalogSection } from './sections';
+import { BlogsCatalogSection, BlogClustersSection } from './sections';
 
 /**
  * The journal.
@@ -29,6 +29,7 @@ export default function BlogsPage() {
       />
 
       <BlogsCatalogSection />
+      <BlogClustersSection />
 
       <CtaBand
         eyebrow="Before you commission"

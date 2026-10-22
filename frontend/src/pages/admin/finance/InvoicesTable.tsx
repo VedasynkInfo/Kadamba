@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Icon } from '@/components/icons';
+import { useNavigate } from 'react-router-dom';
 import type { InvoiceRecord } from '@/services/finance/financeService';
 import { whatsappDeepLink } from '@/utils/whatsapp';
 import { EmptyState } from '../components/EmptyState';
 import { Skeleton } from '../components/Skeleton';
 import { cn } from '@/utils/cn';
+import { RowActionsMenu } from '@/components/ui';
 
 const SKELETON_ROWS = 6;
 
@@ -28,47 +27,7 @@ export function InvoicesTable({
   onResetFilters,
   onPreview,
 }: InvoicesTableProps) {
-  const [menuAnchor, setMenuAnchor] = useState<{
-    invoice: InvoiceRecord;
-    top: number;
-    right: number;
-    showAbove: boolean;
-  } | null>(null);
-
-  useEffect(() => {
-    if (!menuAnchor) return;
-    const handleClose = () => setMenuAnchor(null);
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setMenuAnchor(null);
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('scroll', handleClose, true);
-    window.addEventListener('resize', handleClose);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('scroll', handleClose, true);
-      window.removeEventListener('resize', handleClose);
-    };
-  }, [menuAnchor]);
-
-  function handleOpenMenu(e: React.MouseEvent<HTMLButtonElement>, invoice: InvoiceRecord) {
-    e.stopPropagation();
-    if (menuAnchor?.invoice.id === invoice.id) {
-      setMenuAnchor(null);
-      return;
-    }
-    const rect = e.currentTarget.getBoundingClientRect();
-    const menuHeight = 200;
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const showAbove = spaceBelow < menuHeight && rect.top > menuHeight;
-
-    setMenuAnchor({
-      invoice,
-      top: showAbove ? rect.top - 6 : rect.bottom + 6,
-      right: window.innerWidth - rect.right,
-      showAbove,
-    });
-  }
+  const navigate = useNavigate();
 
   return (
     <div
@@ -112,7 +71,6 @@ export function InvoicesTable({
               className="stagger-rows divide-y border-line"
             >
               {items.map((inv) => {
-                const isMenuOpen = menuAnchor?.invoice.id === inv.id;
                 const totalQ = inv.paymentSummary?.totalQuoted || 0;
                 const paid = inv.paymentSummary?.totalPaid || 0;
                 const balance = inv.paymentSummary?.balance || 0;
@@ -226,20 +184,16 @@ export function InvoicesTable({
 
                     {/* Actions Menu */}
                     <td className="py-3 px-4 text-right whitespace-nowrap w-[70px]">
-                      <button
-                        type="button"
-                        onClick={(e) => handleOpenMenu(e, inv)}
-                        className={cn(
-                          'inline-flex h-8 w-8 items-center justify-center rounded-lg border transition cursor-pointer',
-                          isMenuOpen
-                            ? 'bg-brand/15 text-brand-strong font-bold'
-                            : 'hover:bg-current/[0.08]', isMenuOpen ? 'border-brand' : 'border-line'
-                        )}
-                        aria-label="Actions menu"
-                        aria-expanded={isMenuOpen}
-                      >
-                        <span className="text-base leading-none font-bold">⋮</span>
-                      </button>
+                      <RowActionsMenu
+                        label={`Actions for invoice ${inv.invoiceNumber || inv.orderNumber}`}
+                        row={inv}
+                        actions={[
+                          { id: 'preview', label: 'Quick Preview', icon: 'view', onSelect: (row) => onPreview(row) },
+                          { id: 'document', label: 'Printable Invoice Document', icon: 'print', onSelect: (row) => navigate(`/admin/invoices/${row.id}`) },
+                          { id: 'reminder', label: 'Send Payment Reminder', icon: 'message', hidden: (row) => !row.customer?.phone || (row.paymentSummary?.balance || 0) <= 0, onSelect: (row) => window.open(whatsappDeepLink(row.customer.phone, `Dear ${row.customer.name}, regarding order #${row.orderNumber}, your outstanding balance is ₹${row.paymentSummary.balance}. Thank you, Kadamba's Designer Studio.`), '_blank', 'noopener,noreferrer') },
+                          { id: 'record', label: 'Record Payment', icon: 'card', divider: true, onSelect: () => navigate('/admin/payments') },
+                        ]}
+                      />
                     </td>
                   </tr>
                 );
@@ -249,76 +203,7 @@ export function InvoicesTable({
         </div>
       )}
 
-      {/* Floating Action Dropdown */}
-      {menuAnchor ? (
-        <>
-          <div
-            className="fixed inset-0 z-40 bg-transparent"
-            onClick={() => setMenuAnchor(null)}
-          />
-
-          <div
-            className="fixed z-50 w-52 rounded-xl border p-1 shadow-2xl animate-fade-in text-left text-xs bg-surface-raised border-line text-ink-raised"
-            style={{
-              top: menuAnchor.showAbove ? undefined : `${menuAnchor.top}px`,
-              bottom: menuAnchor.showAbove ? `${window.innerHeight - menuAnchor.top}px` : undefined,
-              right: `${menuAnchor.right}px`,
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              type="button"
-              onClick={() => {
-                const inv = menuAnchor.invoice;
-                setMenuAnchor(null);
-                onPreview(inv);
-              }}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
-            >
-              <Icon name="view" size={14} />
-              <span>Quick Preview</span>
-            </button>
-
-            <Link
-              to={`/admin/invoices/${menuAnchor.invoice.id}`}
-              onClick={() => setMenuAnchor(null)}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
-            >
-              <Icon name="print" size={14} />
-              <span>Printable Invoice Document</span>
-            </Link>
-
-            {menuAnchor.invoice.customer?.phone && (menuAnchor.invoice.paymentSummary?.balance || 0) > 0 ? (
-              <a
-                href={whatsappDeepLink(
-                  menuAnchor.invoice.customer.phone,
-                  `Dear ${menuAnchor.invoice.customer.name}, regarding order #${menuAnchor.invoice.orderNumber}, your outstanding balance is ₹${menuAnchor.invoice.paymentSummary.balance}. Thank you, Kadamba's Designer Studio.`,
-                )}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setMenuAnchor(null)}
-                className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-700 hover:bg-emerald-500/10 transition cursor-pointer"
-              >
-                <Icon name="message" size={14} />
-                <span>Send Payment Reminder</span>
-              </a>
-            ) : null}
-
-            <div
-              className="my-1 border-t border-line"
-            />
-
-            <Link
-              to="/admin/payments"
-              onClick={() => setMenuAnchor(null)}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-brand-strong hover:bg-current/[0.06] cursor-pointer"
-            >
-              <Icon name="card" size={14} />
-              <span>Record Payment</span>
-            </Link>
-          </div>
-        </>
-      ) : null}
+      
     </div>
   );
 }

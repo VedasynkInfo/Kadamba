@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import type {
   MeasurementProfile,
   MeasurementTemplate,
@@ -8,6 +7,7 @@ import { EmptyState } from '../components/EmptyState';
 import { Skeleton } from '../components/Skeleton';
 import { Icon } from '@/components/icons';
 import { cn } from '@/utils/cn';
+import { RowActionsMenu } from '@/components/ui';
 
 const SKELETON_ROWS = 6;
 
@@ -49,47 +49,6 @@ export function MeasurementsTable({
   onArchive,
   onNewMeasurement,
 }: MeasurementsTableProps) {
-  const [menuAnchor, setMenuAnchor] = useState<{
-    profile: MeasurementProfile;
-    top: number;
-    right: number;
-    showAbove: boolean;
-  } | null>(null);
-
-  useEffect(() => {
-    if (!menuAnchor) return;
-    const handleClose = () => setMenuAnchor(null);
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setMenuAnchor(null);
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('scroll', handleClose, true);
-    window.addEventListener('resize', handleClose);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('scroll', handleClose, true);
-      window.removeEventListener('resize', handleClose);
-    };
-  }, [menuAnchor]);
-
-  function handleOpenMenu(e: React.MouseEvent<HTMLButtonElement>, p: MeasurementProfile) {
-    e.stopPropagation();
-    if (menuAnchor?.profile.id === p.id) {
-      setMenuAnchor(null);
-      return;
-    }
-    const rect = e.currentTarget.getBoundingClientRect();
-    const menuHeight = 240;
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const showAbove = spaceBelow < menuHeight && rect.top > menuHeight;
-
-    setMenuAnchor({
-      profile: p,
-      top: showAbove ? rect.top - 6 : rect.bottom + 6,
-      right: window.innerWidth - rect.right,
-      showAbove,
-    });
-  }
 
   function getInitials(name?: string) {
     if (!name) return 'CL';
@@ -138,7 +97,6 @@ export function MeasurementsTable({
               className="stagger-rows divide-y border-line"
             >
               {items.map((p) => {
-                const isMenuOpen = menuAnchor?.profile.id === p.id;
                 const silhouette = getSilhouetteMeta(p.productTypeCode, templates);
                 const valuesCount = Object.keys(p.values || {}).length;
                 const isPending = p.status === 'pending_approval';
@@ -247,20 +205,17 @@ export function MeasurementsTable({
                           </button>
                         ) : null}
 
-                        <button
-                          type="button"
-                          onClick={(e) => handleOpenMenu(e, p)}
-                          className={cn(
-                            'inline-flex h-7 w-7 items-center justify-center rounded-lg border transition cursor-pointer',
-                            isMenuOpen
-                              ? 'bg-brand/15 text-brand-strong font-bold'
-                              : 'hover:bg-current/[0.08]', isMenuOpen ? 'border-brand' : 'border-line'
-                          )}
-                          aria-label="Actions menu"
-                          aria-expanded={isMenuOpen}
-                        >
-                          <span className="text-base leading-none font-bold">⋮</span>
-                        </button>
+                        <RowActionsMenu
+                          label={`Actions for ${p.customerName}`}
+                          row={p}
+                          actions={[
+                            { id: 'approve', label: 'Approve Fit Profile', icon: 'check', hidden: (row) => row.status !== 'pending_approval', onSelect: (row) => onApprove(row) },
+                            { id: 'view', label: 'View Fit Specification', icon: 'view', onSelect: (row) => onPreview(row) },
+                            { id: 'edit', label: 'Edit Dimensions', icon: 'edit', onSelect: (row) => onEdit(row) },
+                            { id: 'duplicate', label: 'Duplicate Profile', icon: 'copy', onSelect: (row) => onDuplicate(row) },
+                            { id: 'archive', label: p.status === 'archived' ? 'Unarchive Fit' : 'Archive Fit', icon: 'archived', divider: true, tone: p.status === 'archived' ? 'default' : 'danger', onSelect: (row) => onArchive(row) },
+                          ]}
+                        />
                       </div>
                     </td>
                   </tr>
@@ -271,98 +226,7 @@ export function MeasurementsTable({
         </div>
       )}
 
-      {/* Floating Action Dropdown Menu */}
-      {menuAnchor ? (
-        <>
-          <div
-            className="fixed inset-0 z-40 bg-transparent"
-            onClick={() => setMenuAnchor(null)}
-          />
-
-          <div
-            className="fixed z-50 w-52 rounded-xl border p-1 shadow-2xl animate-fade-in text-left text-xs bg-surface-raised border-line text-ink-raised"
-            style={{
-              top: menuAnchor.showAbove ? undefined : `${menuAnchor.top}px`,
-              bottom: menuAnchor.showAbove ? `${window.innerHeight - menuAnchor.top}px` : undefined,
-              right: `${menuAnchor.right}px`,
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {menuAnchor.profile.status === 'pending_approval' ? (
-              <button
-                type="button"
-                onClick={() => {
-                  const target = menuAnchor.profile;
-                  setMenuAnchor(null);
-                  onApprove(target);
-                }}
-                className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-bold text-amber-400 hover:bg-amber-500/10 transition cursor-pointer"
-              >
-                <Icon name="check" size={14} />
-                <span>Approve Fit Profile</span>
-              </button>
-            ) : null}
-
-            <button
-              type="button"
-              onClick={() => {
-                const target = menuAnchor.profile;
-                setMenuAnchor(null);
-                onPreview(target);
-              }}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
-            >
-              <Icon name="view" size={14} />
-              <span>View Fit Specification</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                const target = menuAnchor.profile;
-                setMenuAnchor(null);
-                onEdit(target);
-              }}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
-            >
-              <Icon name="edit" size={14} />
-              <span>Edit Dimensions</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                const target = menuAnchor.profile;
-                setMenuAnchor(null);
-                onDuplicate(target);
-              }}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
-            >
-              <Icon name="copy" size={14} />
-              <span>Duplicate Profile</span>
-            </button>
-
-            <div
-              className="my-1 border-t border-line"
-            />
-
-            <button
-              type="button"
-              onClick={() => {
-                const target = menuAnchor.profile;
-                setMenuAnchor(null);
-                onArchive(target);
-              }}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-rose-700 hover:bg-rose-500/10 transition cursor-pointer"
-            >
-              {menuAnchor.profile.status === 'archived' ? (
-                <Icon name="archived" size={14} />
-              ) : null}
-              <span>{menuAnchor.profile.status === 'archived' ? 'Unarchive Fit' : 'Archive Fit'}</span>
-            </button>
-          </div>
-        </>
-      ) : null}
+      
     </div>
   );
 }

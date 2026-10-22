@@ -18,6 +18,13 @@ export interface RowAction<T> {
   tone?: 'default' | 'danger';
   /** Draw a rule above this action. */
   divider?: boolean;
+  /**
+   * Leave the action out for rows where it does not apply.
+   *
+   * A reminder action on an invoice that is fully paid is not a disabled
+   * action; it is an action that has no meaning for that row.
+   */
+  hidden?: (row: T) => boolean;
 }
 
 export interface RowActionsMenuProps<T> {
@@ -65,6 +72,10 @@ export function RowActionsMenu<T>({ actions, label, row, className }: RowActions
   const menuRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
+  // An action that does not apply to this row is not drawn, and does not
+  // count towards the height used to decide whether the menu opens upwards.
+  const visibleActions = actions.filter((action) => !action.hidden?.(row));
+
   const close = useCallback((returnFocus = true) => {
     setOpen(false);
     if (returnFocus) triggerRef.current?.focus();
@@ -73,14 +84,14 @@ export function RowActionsMenu<T>({ actions, label, row, className }: RowActions
   const place = useCallback(() => {
     const rect = triggerRef.current?.getBoundingClientRect();
     if (!rect) return;
-    const menuHeight = 44 * actions.length + 12;
+    const menuHeight = 44 * visibleActions.length + 12;
     const spaceBelow = window.innerHeight - rect.bottom;
     setAnchor({
       top: rect.bottom + 6,
       right: Math.max(12, window.innerWidth - rect.right),
       showAbove: spaceBelow < menuHeight && rect.top > spaceBelow,
     });
-  }, [actions.length]);
+  }, [visibleActions.length]);
 
   useLayoutEffect(() => {
     if (open) place();
@@ -120,7 +131,7 @@ export function RowActionsMenu<T>({ actions, label, row, className }: RowActions
   }, [close, open]);
 
   function focusItem(index: number) {
-    const count = itemRefs.current.length;
+    const count = visibleActions.length;
     if (count === 0) return;
     const next = (index + count) % count;
     itemRefs.current[next]?.focus();
@@ -139,11 +150,11 @@ export function RowActionsMenu<T>({ actions, label, row, className }: RowActions
       focusItem(0);
     } else if (event.key === 'End') {
       event.preventDefault();
-      focusItem(itemRefs.current.length - 1);
+      focusItem(visibleActions.length - 1);
     }
   }
 
-  if (actions.length === 0) return null;
+  if (visibleActions.length === 0) return null;
 
   return (
     <>
@@ -180,7 +191,7 @@ export function RowActionsMenu<T>({ actions, label, row, className }: RowActions
               right: `${anchor.right}px`,
             }}
           >
-            {actions.map((action, index) => {
+            {visibleActions.map((action, index) => {
               const icon = action.iconFor ? action.iconFor(row) : action.icon;
               return (
                 <div key={action.id}>

@@ -1,9 +1,8 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { Icon } from '@/components/icons';
 import type { ExpenseRecord } from '@/services/finance/financeService';
 import { EmptyState } from '../components/EmptyState';
-import { cn } from '@/utils/cn';
-import { Select } from '@/components/ui';
+import { RowActionsMenu, Select } from '@/components/ui';
 
 function formatINR(v: number) {
   return `₹${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`;
@@ -36,47 +35,6 @@ export function FinanceExpensesTab({
 }: FinanceExpensesTabProps) {
   const [query, setQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
-  const [menuAnchor, setMenuAnchor] = useState<{
-    expense: ExpenseRecord;
-    top: number;
-    right: number;
-    showAbove: boolean;
-  } | null>(null);
-
-  useEffect(() => {
-    if (!menuAnchor) return;
-    const handleClose = () => setMenuAnchor(null);
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setMenuAnchor(null);
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('scroll', handleClose, true);
-    window.addEventListener('resize', handleClose);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('scroll', handleClose, true);
-      window.removeEventListener('resize', handleClose);
-    };
-  }, [menuAnchor]);
-
-  function handleOpenMenu(e: React.MouseEvent<HTMLButtonElement>, exp: ExpenseRecord) {
-    e.stopPropagation();
-    if (menuAnchor?.expense.id === exp.id) {
-      setMenuAnchor(null);
-      return;
-    }
-    const rect = e.currentTarget.getBoundingClientRect();
-    const menuHeight = 120;
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const showAbove = spaceBelow < menuHeight && rect.top > menuHeight;
-
-    setMenuAnchor({
-      expense: exp,
-      top: showAbove ? rect.top - 6 : rect.bottom + 6,
-      right: window.innerWidth - rect.right,
-      showAbove,
-    });
-  }
 
   const filtered = useMemo(() => {
     let result = [...expenses];
@@ -171,7 +129,6 @@ export function FinanceExpensesTab({
                 className="stagger-rows divide-y border-line"
               >
                 {filtered.map((exp) => {
-                  const isMenuOpen = menuAnchor?.expense.id === exp.id;
 
                   return (
                     <tr
@@ -204,20 +161,14 @@ export function FinanceExpensesTab({
                       </td>
 
                       <td className="py-3 px-4 text-right whitespace-nowrap w-[70px]">
-                        <button
-                          type="button"
-                          onClick={(e) => handleOpenMenu(e, exp)}
-                          className={cn(
-                            'inline-flex h-8 w-8 items-center justify-center rounded-lg border transition cursor-pointer',
-                            isMenuOpen
-                              ? 'bg-brand/15 text-brand-strong font-bold'
-                              : 'hover:bg-current/[0.08]', isMenuOpen ? 'border-brand' : 'border-line'
-                          )}
-                          aria-label="Actions menu"
-                          aria-expanded={isMenuOpen}
-                        >
-                          <span className="text-base leading-none font-bold">⋮</span>
-                        </button>
+                        <RowActionsMenu
+                          label={`Actions for ${exp.title}`}
+                          row={exp}
+                          actions={[
+                            { id: 'edit', label: 'Edit Expense', icon: 'edit', onSelect: (row) => onEditExpense(row) },
+                            { id: 'delete', label: 'Delete Expense', icon: 'delete', divider: true, tone: 'danger', onSelect: (row) => { if (window.confirm('Delete this expense record?')) onDeleteExpense(row.id); } },
+                          ]}
+                        />
                       </td>
                     </tr>
                   );
@@ -227,51 +178,7 @@ export function FinanceExpensesTab({
           </div>
         )}
 
-        {/* Floating Action Dropdown */}
-        {menuAnchor ? (
-          <>
-            <div
-              className="fixed inset-0 z-40 bg-transparent"
-              onClick={() => setMenuAnchor(null)}
-            />
-            <div
-              className="fixed z-50 w-44 rounded-xl border p-1 shadow-2xl animate-fade-in text-left text-xs bg-surface-raised border-line text-ink-raised"
-              style={{
-                top: menuAnchor.showAbove ? undefined : `${menuAnchor.top}px`,
-                bottom: menuAnchor.showAbove ? `${window.innerHeight - menuAnchor.top}px` : undefined,
-                right: `${menuAnchor.right}px`,
-              }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                type="button"
-                onClick={() => {
-                  const target = menuAnchor.expense;
-                  setMenuAnchor(null);
-                  onEditExpense(target);
-                }}
-                className="w-full flex items-center gap-2 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
-              >
-                <span><Icon name="edit" size={14} className="mr-1 inline align-middle" /> </span>
-                <span>Edit Expense</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  const id = menuAnchor.expense.id;
-                  setMenuAnchor(null);
-                  if (window.confirm('Delete this expense record?')) {
-                    onDeleteExpense(id);
-                  }
-                }}
-                className="w-full flex items-center gap-2 rounded-lg px-3 py-2 font-medium text-rose-700 hover:bg-rose-500/10 transition cursor-pointer"
-              >
-                <Icon name="delete" size={14} />
-                <span>Delete Expense</span>
-              </button>
-            </div>
-          </>
-        ) : null}
+        
       </div>
     </div>
   );

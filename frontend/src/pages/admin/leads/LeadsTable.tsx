@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Icon } from '@/components/icons';
 import type { Lead, LeadStatus } from '@/pages/leads/data';
 import { formatLeadDate } from '@/pages/leads/data';
@@ -7,6 +6,7 @@ import { whatsappDeepLink } from '@/utils/whatsapp';
 import { EmptyState } from '../components/EmptyState';
 import { Skeleton } from '../components/Skeleton';
 import { cn } from '@/utils/cn';
+import { RowActionsMenu } from '@/components/ui';
 
 const SKELETON_ROWS = 6;
 
@@ -29,47 +29,7 @@ export function LeadsTable({
   onPreview,
   onStatusChange,
 }: LeadsTableProps) {
-  const [menuAnchor, setMenuAnchor] = useState<{
-    lead: Lead;
-    top: number;
-    right: number;
-    showAbove: boolean;
-  } | null>(null);
-
-  useEffect(() => {
-    if (!menuAnchor) return;
-    const handleClose = () => setMenuAnchor(null);
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setMenuAnchor(null);
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('scroll', handleClose, true);
-    window.addEventListener('resize', handleClose);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('scroll', handleClose, true);
-      window.removeEventListener('resize', handleClose);
-    };
-  }, [menuAnchor]);
-
-  function handleOpenMenu(e: React.MouseEvent<HTMLButtonElement>, lead: Lead) {
-    e.stopPropagation();
-    if (menuAnchor?.lead.id === lead.id) {
-      setMenuAnchor(null);
-      return;
-    }
-    const rect = e.currentTarget.getBoundingClientRect();
-    const menuHeight = 220;
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const showAbove = spaceBelow < menuHeight && rect.top > menuHeight;
-
-    setMenuAnchor({
-      lead,
-      top: showAbove ? rect.top - 6 : rect.bottom + 6,
-      right: window.innerWidth - rect.right,
-      showAbove,
-    });
-  }
+  const navigate = useNavigate();
 
   return (
     <div
@@ -114,7 +74,6 @@ export function LeadsTable({
               className="stagger-rows divide-y border-line"
             >
               {items.map((lead) => {
-                const isMenuOpen = menuAnchor?.lead.id === lead.id;
 
                 return (
                   <tr
@@ -207,20 +166,16 @@ export function LeadsTable({
 
                     {/* Actions Menu */}
                     <td className="py-3 px-4 text-right whitespace-nowrap w-[70px]">
-                      <button
-                        type="button"
-                        onClick={(e) => handleOpenMenu(e, lead)}
-                        className={cn(
-                          'inline-flex h-8 w-8 items-center justify-center rounded-lg border transition cursor-pointer',
-                          isMenuOpen
-                            ? 'bg-brand/15 text-brand-strong font-bold'
-                            : 'hover:bg-current/[0.08]', isMenuOpen ? 'border-brand' : 'border-line'
-                        )}
-                        aria-label="Actions menu"
-                        aria-expanded={isMenuOpen}
-                      >
-                        <span className="text-base leading-none font-bold">⋮</span>
-                      </button>
+                      <RowActionsMenu
+                        label={`Actions for ${lead.name}`}
+                        row={lead}
+                        actions={[
+                          { id: 'preview', label: 'Quick Preview', icon: 'view', onSelect: (row) => onPreview(row) },
+                          { id: 'dossier', label: 'Full Lead Dossier', icon: 'copy', onSelect: (row) => navigate(`/admin/leads/${row.id}`) },
+                          { id: 'whatsapp', label: 'WhatsApp Chat', icon: 'message', onSelect: (row) => window.open(whatsappDeepLink(row.phone, `Hi ${row.name}, this is Kadamba's Designer Studio regarding your ${row.service} enquiry.`), '_blank', 'noopener,noreferrer') },
+                          { id: 'complete', label: 'Mark Completed', icon: 'won', divider: true, onSelect: (row) => onStatusChange(row.id, 'Completed') },
+                        ]}
+                      />
                     </td>
                   </tr>
                 );
@@ -230,78 +185,7 @@ export function LeadsTable({
         </div>
       )}
 
-      {/* Floating Action Dropdown */}
-      {menuAnchor ? (
-        <>
-          <div
-            className="fixed inset-0 z-40 bg-transparent"
-            onClick={() => setMenuAnchor(null)}
-          />
-
-          <div
-            className="fixed z-50 w-48 rounded-xl border p-1 shadow-2xl animate-fade-in text-left text-xs bg-surface-raised border-line text-ink-raised"
-            style={{
-              top: menuAnchor.showAbove ? undefined : `${menuAnchor.top}px`,
-              bottom: menuAnchor.showAbove ? `${window.innerHeight - menuAnchor.top}px` : undefined,
-              right: `${menuAnchor.right}px`,
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              type="button"
-              onClick={() => {
-                const ld = menuAnchor.lead;
-                setMenuAnchor(null);
-                onPreview(ld);
-              }}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
-            >
-              <Icon name="view" size={14} />
-              <span>Quick Preview</span>
-            </button>
-
-            <Link
-              to={`/admin/leads/${menuAnchor.lead.id}`}
-              onClick={() => setMenuAnchor(null)}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
-            >
-              <Icon name="copy" size={14} />
-              <span>Full Lead Dossier</span>
-            </Link>
-
-            <a
-              href={whatsappDeepLink(
-                menuAnchor.lead.phone,
-                `Hi ${menuAnchor.lead.name}, this is Kadamba's Designer Studio regarding your ${menuAnchor.lead.service} enquiry.`,
-              )}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => setMenuAnchor(null)}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-700 hover:bg-emerald-500/10 transition cursor-pointer"
-            >
-              <Icon name="message" size={14} />
-              <span>WhatsApp Chat</span>
-            </a>
-
-            <div
-              className="my-1 border-t border-line"
-            />
-
-            <button
-              type="button"
-              onClick={() => {
-                const id = menuAnchor.lead.id;
-                setMenuAnchor(null);
-                onStatusChange(id, 'Completed');
-              }}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-700 hover:bg-emerald-500/10 cursor-pointer"
-            >
-              <Icon name="won" size={14} />
-              <span>Mark Completed</span>
-            </button>
-          </div>
-        </>
-      ) : null}
+      
     </div>
   );
 }

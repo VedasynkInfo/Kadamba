@@ -10,6 +10,7 @@ const footerLinks = [
   { to: '/gallery', label: 'Gallery' },
   { to: '/portfolio', label: 'Portfolio' },
   { to: '/blogs', label: 'Blogs' },
+  { to: '/kurnool', label: 'Kurnool & district' },
   { to: '/contact', label: 'Contact' },
   { to: '/request-service', label: 'Consultation' },
 ];

@@ -34,9 +34,14 @@ export function ReachSection() {
               For overseas commissions we plan two fittings around the trip home, and keep the
               studio reachable between them through the client portal.
             </p>
-            <Link to="/contact" className="link-arrow mt-8 inline-flex text-brand-strong">
-              Plan a fitting from abroad
-            </Link>
+            <div className="mt-8 flex flex-wrap gap-x-8 gap-y-3">
+              <Link to="/contact" className="link-arrow inline-flex text-brand-strong">
+                Plan a fitting from abroad
+              </Link>
+              <Link to="/kurnool" className="link-arrow inline-flex text-brand-strong">
+                Kurnool &amp; the district
+              </Link>
+            </div>
           </Reveal>
 
           <Reveal delay={0.12} className="mt-10 lg:hidden">

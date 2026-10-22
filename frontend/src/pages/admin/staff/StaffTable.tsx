@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react';
 import type { Staff } from '@/services/staff/staffService';
-import { Icon } from '@/components/icons';
 import { SPECIALIZATIONS } from './types';
 import { whatsappDeepLink } from '@/utils/whatsapp';
 import { EmptyState } from '../components/EmptyState';
 import { Skeleton } from '../components/Skeleton';
 import { cn } from '@/utils/cn';
+import { RowActionsMenu } from '@/components/ui';
 
 const SKELETON_ROWS = 6;
 
@@ -32,47 +31,6 @@ export function StaffTable({
   onReactivate,
   onNewStaff,
 }: StaffTableProps) {
-  const [menuAnchor, setMenuAnchor] = useState<{
-    staff: Staff;
-    top: number;
-    right: number;
-    showAbove: boolean;
-  } | null>(null);
-
-  useEffect(() => {
-    if (!menuAnchor) return;
-    const handleClose = () => setMenuAnchor(null);
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setMenuAnchor(null);
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('scroll', handleClose, true);
-    window.addEventListener('resize', handleClose);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('scroll', handleClose, true);
-      window.removeEventListener('resize', handleClose);
-    };
-  }, [menuAnchor]);
-
-  function handleOpenMenu(e: React.MouseEvent<HTMLButtonElement>, s: Staff) {
-    e.stopPropagation();
-    if (menuAnchor?.staff.id === s.id) {
-      setMenuAnchor(null);
-      return;
-    }
-    const rect = e.currentTarget.getBoundingClientRect();
-    const menuHeight = 200;
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const showAbove = spaceBelow < menuHeight && rect.top > menuHeight;
-
-    setMenuAnchor({
-      staff: s,
-      top: showAbove ? rect.top - 6 : rect.bottom + 6,
-      right: window.innerWidth - rect.right,
-      showAbove,
-    });
-  }
 
   function getInitials(name: string) {
     return name
@@ -121,7 +79,6 @@ export function StaffTable({
               className="stagger-rows divide-y border-line"
             >
               {items.map((s) => {
-                const isMenuOpen = menuAnchor?.staff.id === s.id;
                 const specs = s.specializations || [];
 
                 return (
@@ -234,20 +191,16 @@ export function StaffTable({
 
                     {/* Actions Menu */}
                     <td className="py-3 px-4 text-right whitespace-nowrap w-[70px]">
-                      <button
-                        type="button"
-                        onClick={(e) => handleOpenMenu(e, s)}
-                        className={cn(
-                          'inline-flex h-8 w-8 items-center justify-center rounded-lg border transition cursor-pointer',
-                          isMenuOpen
-                            ? 'bg-brand/15 text-brand-strong font-bold'
-                            : 'hover:bg-current/[0.08]', isMenuOpen ? 'border-brand' : 'border-line'
-                        )}
-                        aria-label="Actions menu"
-                        aria-expanded={isMenuOpen}
-                      >
-                        <span className="text-base leading-none font-bold">⋮</span>
-                      </button>
+                      <RowActionsMenu
+                        label={`Actions for ${s.fullName}`}
+                        row={s}
+                        actions={[
+                          { id: 'view', label: 'View Artisan Dossier', icon: 'view', onSelect: (row) => onPreview(row) },
+                          { id: 'edit', label: 'Edit Staff Details', icon: 'edit', onSelect: (row) => onEdit(row) },
+                          { id: 'whatsapp', label: 'Send WhatsApp', icon: 'whatsapp', hidden: (row) => !row.phone, onSelect: (row) => window.open(whatsappDeepLink(row.phone || '', `Hello ${row.fullName}, update from Kadamba's Designer Studio workshop:`), '_blank', 'noopener,noreferrer') },
+                          { id: 'status', label: s.status === 'active' ? 'Deactivate Member' : 'Reactivate Member', icon: s.status === 'active' ? 'idle' : 'play', divider: true, tone: s.status === 'active' ? 'danger' : 'default', onSelect: (row) => (row.status === 'active' ? onDeactivate(row) : onReactivate(row)) },
+                        ]}
+                      />
                     </td>
                   </tr>
                 );
@@ -257,99 +210,7 @@ export function StaffTable({
         </div>
       )}
 
-      {/* Floating Action Dropdown */}
-      {menuAnchor ? (
-        <>
-          <div
-            className="fixed inset-0 z-40 bg-transparent"
-            onClick={() => setMenuAnchor(null)}
-          />
-
-          <div
-            className="fixed z-50 w-52 rounded-xl border p-1 shadow-2xl animate-fade-in text-left text-xs bg-surface-raised border-line text-ink-raised"
-            style={{
-              top: menuAnchor.showAbove ? undefined : `${menuAnchor.top}px`,
-              bottom: menuAnchor.showAbove ? `${window.innerHeight - menuAnchor.top}px` : undefined,
-              right: `${menuAnchor.right}px`,
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              type="button"
-              onClick={() => {
-                const target = menuAnchor.staff;
-                setMenuAnchor(null);
-                onPreview(target);
-              }}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
-            >
-              <Icon name="view" size={14} />
-              <span>View Artisan Dossier</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                const target = menuAnchor.staff;
-                setMenuAnchor(null);
-                onEdit(target);
-              }}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
-            >
-              <Icon name="edit" size={14} />
-              <span>Edit Staff Details</span>
-            </button>
-
-            {menuAnchor.staff.phone ? (
-              <a
-                href={whatsappDeepLink(
-                  menuAnchor.staff.phone,
-                  `Hello ${menuAnchor.staff.fullName}, update from Kadamba's Designer Studio workshop:`,
-                )}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setMenuAnchor(null)}
-                className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-700 hover:bg-emerald-500/10 transition cursor-pointer"
-              >
-                <Icon name="whatsapp" size={14} />
-                <span>Send WhatsApp</span>
-              </a>
-            ) : null}
-
-            <div
-              className="my-1 border-t border-line"
-            />
-
-            {menuAnchor.staff.status === 'active' ? (
-              <button
-                type="button"
-                onClick={() => {
-                  const target = menuAnchor.staff;
-                  setMenuAnchor(null);
-                  onDeactivate(target);
-                }}
-                className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-rose-700 hover:bg-rose-500/10 transition cursor-pointer"
-              >
-                <Icon name="idle" size={14} />
-                <span>Deactivate Member</span>
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={() => {
-                  const target = menuAnchor.staff;
-                  setMenuAnchor(null);
-                  onReactivate(target);
-                }}
-                className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium text-emerald-400 hover:bg-emerald-500/10 transition cursor-pointer"
-              >
-                <Icon name="play" size={14} />
-                <span>Reactivate Member</span>
-              </button>
-            )}
-          </div>
-        </>
-      ) : null}
+      
     </div>
   );
 }

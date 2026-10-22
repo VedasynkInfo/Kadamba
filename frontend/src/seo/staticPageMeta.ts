@@ -61,6 +61,11 @@ export const staticPageMeta = {
     path: '/request-service',
     description: `Request bridal, traditional, or custom tailoring from ${brand.name} in ${brand.location}.`,
   },
+  kurnool: {
+    title: 'Kurnool & the district',
+    path: '/kurnool',
+    description: `One studio in Kurnool city, and the district it dresses — visit counts, what to bring, and an honest note for every town within reach of ${brand.shortName}.`,
+  },
   designSystem: {
     title: 'Design System',
     path: '/design-system',

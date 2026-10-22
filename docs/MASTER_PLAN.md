@@ -617,10 +617,10 @@ Unplanned work, requested after the phase plan was written: the console read as 
 | 11A.7 | Home page: fifteen sections, each with a scroll-driven entrance | ✅ |
 | 11A.8 | Accessibility gate (axe) over the public site, the console and the portal | ✅ |
 | 11A.9 | Invoice redesign — a document, not a screen | ✅ |
-| 11A.10 | A shared row menu, so every desk offers the same actions | ⬜ |
+| 11A.10 | A shared row menu, so every desk offers the same actions | ✅ |
 | 11A.11 | Sitemap and robots generated from the live catalogue | ✅ |
 | 11A.12 | The journal: sixty articles, Kurnool first | ✅ |
-| 11A.13 | Kurnool locality pages, FAQ schema, a journal index by cluster | ⬜ |
+| 11A.13 | Kurnool locality pages, FAQ schema, a journal index by cluster | ✅ |
 | 11A.14 | Product and service pages: the same scroll treatment as the home page | ✅ |
 
 **11A.1 - one light scheme, and a deliberate exception**
@@ -646,10 +646,12 @@ Unplanned work, requested after the phase plan was written: the console read as 
 - A payment bar says how far along the payment is, which is the question a client actually has.
 - The print rules live in `index.css`: A4 margins, a repeating table header, and a rule that keeps a row from splitting across a page. The invoice keeps its own paper palette in every shell, because a PDF has to look like the page it was printed from.
 
-**11A.10 - one row menu (in progress)**
+**11A.10 - one row menu**
 - Every desk offered the same actions — view, edit, publish, copy, delete — and every desk wrote its own dropdown: eleven copies, each with its own labels, its own icons, and a raw `⋮` glyph for the trigger that no icon system could restyle.
-- `RowActionsMenu` is the one version: a labelled button that opens a real menu (`role="menu"`, arrow keys, Escape, focus returned to the trigger), anchored to the viewport because a table scrolls horizontally and a menu inside one is clipped by it. The gallery, blogs, portfolio and services desks use it.
-- The other seven desks still carry their own copy; the migration is mechanical and the remaining work is to move them over, one desk at a time, checking that no action is lost.
+- `RowActionsMenu` is the one version: a labelled button that opens a real menu (`role="menu"`, arrow keys, Escape, focus returned to the trigger), anchored to the viewport because a table scrolls horizontally and a menu inside one is clipped by it. All eleven desks use it: gallery, blogs, portfolio and services, plus customers, finance expenses, invoices, payments, leads, measurements and staff.
+- `RowAction` gained `hidden?: (row) => boolean`, so an action that has no meaning for a row — a payment reminder on a settled invoice, a WhatsApp receipt with no number, an approve action on a finished fit — is absent rather than disabled. The menu counts only the visible actions when deciding whether to open upwards.
+- The migration removed each desk's anchor state, click-outside effect, positioning handler and floating panel with the trigger. Navigation actions use `useNavigate` inside `onSelect`, because the menu's contract is actions rather than links.
+- The trigger now names its row (`Actions for …`). The blog table had been passing the literal string `Actions for item.title`; that was fixed in the same pass.
 
 **11A.11 - the sitemap is written, not hand-kept**
 - `frontend/scripts/generate-sitemap.mjs` reads the live catalogue — the products, the articles, the services — and adds them to the static routes, and writes `robots.txt` with it. A sitemap written by hand is wrong within a week: a product is published, an article is posted, and neither is in the file.
@@ -682,8 +684,8 @@ Unplanned work, requested after the phase plan was written: the console read as 
 | 11B.5 | Placeholder plates and demo-media normalisation | ✅ |
 | 11B.6 | Controls and media audit: no native widgets, no image URLs | ✅ |
 | 11B.7 | API connection audit across public and console | ✅ |
-| 11B.8 | Finish the shared row menu on the remaining seven desks | ⬜ (11A.10) |
-| 11B.9 | Kurnool locality pages and the journal by cluster | ⬜ (11A.13) |
+| 11B.8 | Finish the shared row menu on the remaining seven desks | ✅ (11A.10) |
+| 11B.9 | Kurnool locality pages and the journal by cluster | ✅ (11A.13) |
 
 **11B.1 — eighteen sections, and an arc rather than a list**
 - The home page runs: banner, manifesto, services, collections, marquee, atelier, bridal, making, gallery rail, reach, record, principles, cloth, journal, Kurnool, questions, enquiry, closing band. The order is fixed and documented at the top of `HomePage.tsx`, because a story with the locality section before the atelier is a different story.
@@ -720,11 +722,21 @@ Unplanned work, requested after the phase plan was written: the console read as 
 - The 404s seen during the audit were guessed paths (`/admin/products`, `/admin/reports/summary`); the console calls `/admin/products/categories`, `/admin/products/product-types` and named report slugs, and those are the ones above.
 - Home collections, the journal, the gallery rail, the enquiry form and the FAQ band all read live data. The editorial copy of the home page (the manifesto, the principles, the reach list) lives in `content.ts`, not the CMS; that is a content-model gap, not a wiring gap, and is recorded as such.
 
-**Verification:** frontend `npm run lint`, `npm run typecheck` and the production build pass; Vitest passes 248 tests and backend Vitest passes 403. Manual pass over `/`, `/about`, `/services`, `/collections`, `/products`, `/gallery`, `/portfolio`, `/blogs`, `/contact` and `/consultation` at desktop and mobile widths, plus `/products?category=BRIDAL` for the deep link.
+**11B.8 — the last seven row menus**
+- Customers, finance expenses, invoices, payments, leads, measurements and staff were the desks still carrying a hand-written dropdown. Each was migrated by locating its trigger and its floating panel, deleting the panel with the state and effect that existed only to position it, and writing the same actions into `RowActionsMenu`.
+- Conditional actions became `hidden` predicates: a reminder on an unpaid invoice, a receipt on a payment that has a phone number, an approve action on a pending fit, a WhatsApp action on a staff member with a number, and the archive label that changes with the row's status. The visible count feeds the height calculation, so a two-action menu near the bottom of the viewport still opens upwards.
+- The actions were checked desk by desk before the old panel was removed: preview, profile and measurements, WhatsApp, print, record payment, lead dossier, status change, duplicate, archive, deactivate and reactivate. No action was dropped.
+- The trigger's accessible name now includes the row; the blog desk had been rendering the literal string `Actions for item.title`.
+
+**11B.9 — Kurnool & the district, and the journal by cluster**
+- `/kurnool` is an index, and `/kurnool/:slug` gives five locality pages: Kurnool City, Adoni, Nandyal, Yemmiganur and Dhone. They are not branch pages. Every one says that the studio is in Kurnool city and the garment is cut there; what changes is the journey — how many visits a commission takes, what to bring, and whether the date is realistic before someone travels.
+- Each locality page carries its practical note, the studio address and hours from Settings, the services that make sense from there, and its own question list. That list is also the page's `FAQPage` markup through `faqJsonLd`, so the accordion and the search result cannot drift apart.
+- The journal gained a second index at `/blogs/cluster/:cluster`: Bridal, Traditional, Tailoring, Kurnool, Fabric & care and Wedding season. A cluster cuts across the four categories because a reader arrives with a question ("a Kurnool summer wedding"), not with the studio's taxonomy. `BlogClustersSection` puts the counts and links on `/blogs`.
+- The sitemap script now writes the locality and cluster routes, and the footer and the home page's reach section link to `/kurnool`.
+
+**Verification:** frontend `npm run lint`, `npm run typecheck` and the production build pass; Vitest passes 258 tests (the ten new ones cover locality data integrity and cluster matching) and backend Vitest passes 403. Manual pass over `/`, `/about`, `/services`, `/collections`, `/products`, `/gallery`, `/portfolio`, `/blogs`, `/contact` and `/consultation` at desktop and mobile widths, plus `/products?category=BRIDAL` for the deep link. The new routes were checked at 1440px: `/kurnool`, `/kurnool/adoni`, `/blogs` and `/blogs/cluster/kurnool` render with live data, the locality page emits one `FAQPage` block, `/blogs` exposes six cluster links, and the generated sitemap contains 25 static URLs.
 
 **Open, recorded honestly**
-- 11A.10 is still open for customers, finance expenses, invoices, payments, leads, measurements and staff. The shared menu exists and four desks use it; the rest still carry their own copy.
-- 11A.13 is still open: Kurnool locality pages, the journal index by cluster, and `faqJsonLd` on the locality pages.
 - The home page's editorial copy is code, not CMS. Moving it into `SiteSettings` would make it editable without a deploy and is the next content-model step.
 - The Phase 8 Lighthouse gate still needs a deployed build with a live API and a seeded catalogue; it cannot be measured honestly against a dev server.
 

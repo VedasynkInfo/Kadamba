@@ -177,7 +177,7 @@ export function BlogsTable({
                     {/* Row Actions (Three-Dot Menu) */}
                     <td className="py-2.5 px-4 text-right whitespace-nowrap w-[70px]">
                       <RowActionsMenu
-                        label={`Actions for item.title`}
+                        label={`Actions for ${item.title}`}
                         row={item}
                         actions={[
           {

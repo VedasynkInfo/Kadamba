@@ -23,8 +23,11 @@ export const PortfolioPage = lazy(() => import('@/pages/portfolio/PortfolioPage'
 export const PortfolioDetailPage = lazy(() => import('@/pages/portfolio/PortfolioDetailPage'));
 export const BlogsPage = lazy(() => import('@/pages/blogs/BlogsPage'));
 export const BlogDetailPage = lazy(() => import('@/pages/blogs/BlogDetailPage'));
+export const ClusterPage = lazy(() => import('@/pages/blogs/ClusterPage'));
 export const ContactPage = lazy(() => import('@/pages/contact/ContactPage'));
 export const RequestServicePage = lazy(() => import('@/pages/request-service/RequestServicePage'));
+export const KurnoolPage = lazy(() => import('@/pages/locality/KurnoolPage'));
+export const LocalityPage = lazy(() => import('@/pages/locality/LocalityPage'));
 export const DesignSystemPage = lazy(() => import('@/pages/design-system/DesignSystemPage'));
 export const AdminLoginPage = lazy(() => import('@/pages/admin/AdminLoginPage'));
 export const ForgotPasswordPage = lazy(() => import('@/pages/admin/ForgotPasswordPage'));

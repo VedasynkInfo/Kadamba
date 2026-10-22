@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
 import { Icon } from '@/components/icons';
+import { RowActionsMenu } from '@/components/ui';
 import type { GalleryItem } from '@/pages/gallery/data';
 import { EmptyState } from '../components/EmptyState';
 import { Skeleton } from '../components/Skeleton';
@@ -33,49 +33,6 @@ export function GalleryTable({
   onCopyUrl,
   onDelete,
 }: GalleryTableProps) {
-  const [menuAnchor, setMenuAnchor] = useState<{
-    item: GalleryItem;
-    top: number;
-    right: number;
-    showAbove: boolean;
-  } | null>(null);
-
-  // Close active dropdown on escape, scroll, or resize
-  useEffect(() => {
-    if (!menuAnchor) return;
-    const handleClose = () => setMenuAnchor(null);
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setMenuAnchor(null);
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('scroll', handleClose, true);
-    window.addEventListener('resize', handleClose);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('scroll', handleClose, true);
-      window.removeEventListener('resize', handleClose);
-    };
-  }, [menuAnchor]);
-
-  function handleOpenMenu(e: React.MouseEvent<HTMLButtonElement>, item: GalleryItem) {
-    e.stopPropagation();
-    if (menuAnchor?.item.id === item.id) {
-      setMenuAnchor(null);
-      return;
-    }
-    const rect = e.currentTarget.getBoundingClientRect();
-    const menuHeight = 220;
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const showAbove = spaceBelow < menuHeight && rect.top > menuHeight;
-
-    setMenuAnchor({
-      item,
-      top: showAbove ? rect.top - 6 : rect.bottom + 6,
-      right: window.innerWidth - rect.right,
-      showAbove,
-    });
-  }
-
   return (
     <div
       className="rounded-xl border shadow-xs overflow-visible transition-colors bg-surface-raised border-line text-ink-raised"
@@ -121,7 +78,6 @@ export function GalleryTable({
               {items.map((item) => {
                 const isVideo = item.mediaType === 'video';
                 const displaySrc = isVideo ? item.poster || item.src : item.src;
-                const isMenuOpen = menuAnchor?.item.id === item.id;
 
                 return (
                   <tr
@@ -221,20 +177,44 @@ export function GalleryTable({
 
                     {/* Row Actions (Three-Dot Menu) */}
                     <td className="py-2.5 px-4 text-right whitespace-nowrap w-[70px]">
-                      <button
-                        type="button"
-                        onClick={(e) => handleOpenMenu(e, item)}
-                        className={cn(
-                          'inline-flex h-8 w-8 items-center justify-center rounded-lg border transition cursor-pointer',
-                          isMenuOpen
-                            ? 'bg-brand/15 text-brand-strong font-bold'
-                            : 'hover:bg-current/[0.08]', isMenuOpen ? 'border-brand' : 'border-line'
-                        )}
-                        aria-label="Actions menu"
-                        aria-expanded={isMenuOpen}
-                      >
-                        <span className="text-base leading-none font-bold">⋮</span>
-                      </button>
+                      <RowActionsMenu
+                        label={`Actions for ${item.title}`}
+                        row={item}
+                        actions={[
+                          {
+                            id: 'preview',
+                            label: 'Quick Preview',
+                            icon: 'view',
+                            onSelect: (row) => onPreview(row),
+                          },
+                          {
+                            id: 'edit',
+                            label: 'Edit Details',
+                            icon: 'edit',
+                            onSelect: (row) => onEdit(row),
+                          },
+                          {
+                            id: 'publish',
+                            label: item.published ? 'Unpublish to Draft' : 'Publish Live',
+                            iconFor: (row) => (row.published ? 'archived' : 'publish'),
+                            onSelect: (row) => onTogglePublished(row),
+                          },
+                          {
+                            id: 'copy',
+                            label: 'Copy Image URL',
+                            icon: 'copy',
+                            onSelect: (row) => onCopyUrl(row.src),
+                          },
+                          {
+                            id: 'delete',
+                            label: 'Delete Item',
+                            icon: 'delete',
+                            tone: 'danger',
+                            divider: true,
+                            onSelect: (row) => onDelete(row),
+                          },
+                        ]}
+                      />
                     </td>
                   </tr>
                 );
@@ -243,95 +223,6 @@ export function GalleryTable({
           </table>
         </div>
       )}
-
-      {/* Viewport-Anchored Dropdown Menu (Prevents Table Overflow/Clipping & Alignment Disruption) */}
-      {menuAnchor ? (
-        <>
-          <div
-            className="fixed inset-0 z-40 bg-transparent"
-            onClick={() => setMenuAnchor(null)}
-          />
-
-          <div
-            className="fixed z-50 w-48 rounded-xl border p-1 shadow-2xl animate-fade-in text-left text-xs bg-surface-raised border-line text-ink-raised"
-            style={{
-              top: menuAnchor.showAbove ? undefined : `${menuAnchor.top}px`,
-              bottom: menuAnchor.showAbove ? `${window.innerHeight - menuAnchor.top}px` : undefined,
-              right: `${menuAnchor.right}px`,
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              type="button"
-              onClick={() => {
-                const itm = menuAnchor.item;
-                setMenuAnchor(null);
-                onPreview(itm);
-              }}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
-            >
-              <Icon name="view" size={14} />
-              <span>Quick Preview</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                const itm = menuAnchor.item;
-                setMenuAnchor(null);
-                onEdit(itm);
-              }}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
-            >
-              <Icon name="edit" size={14} />
-              <span>Edit Details</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                const itm = menuAnchor.item;
-                setMenuAnchor(null);
-                onTogglePublished(itm);
-              }}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
-            >
-              <Icon name={menuAnchor.item.published ? 'archived' : 'publish'} size={14} />
-              <span>{menuAnchor.item.published ? 'Unpublish to Draft' : 'Publish Live'}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                const src = menuAnchor.item.src;
-                setMenuAnchor(null);
-                onCopyUrl(src);
-              }}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
-            >
-              <Icon name="copy" size={14} />
-              <span>Copy Image URL</span>
-            </button>
-
-            <div
-              className="my-1 border-t border-line"
-            />
-
-            <button
-              type="button"
-              onClick={() => {
-                const itm = menuAnchor.item;
-                setMenuAnchor(null);
-                onDelete(itm);
-              }}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-semibold text-rose-500 transition hover:bg-rose-500/10 cursor-pointer"
-            >
-              <Icon name="delete" size={14} />
-              <span>Delete Item</span>
-            </button>
-          </div>
-        </>
-      ) : null}
     </div>
   );
 }

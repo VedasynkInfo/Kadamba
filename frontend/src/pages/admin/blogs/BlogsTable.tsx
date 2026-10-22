@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { RowActionsMenu } from '@/components/ui';
 import { Icon } from '@/components/icons';
 import type { BlogPost } from '@/pages/blogs/data';
 import { EmptyState } from '../components/EmptyState';
@@ -33,47 +33,6 @@ export function BlogsTable({
   onCopyUrl,
   onDelete,
 }: BlogsTableProps) {
-  const [menuAnchor, setMenuAnchor] = useState<{
-    item: BlogPost;
-    top: number;
-    right: number;
-    showAbove: boolean;
-  } | null>(null);
-
-  useEffect(() => {
-    if (!menuAnchor) return;
-    const handleClose = () => setMenuAnchor(null);
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setMenuAnchor(null);
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('scroll', handleClose, true);
-    window.addEventListener('resize', handleClose);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('scroll', handleClose, true);
-      window.removeEventListener('resize', handleClose);
-    };
-  }, [menuAnchor]);
-
-  function handleOpenMenu(e: React.MouseEvent<HTMLButtonElement>, item: BlogPost) {
-    e.stopPropagation();
-    if (menuAnchor?.item.id === item.id) {
-      setMenuAnchor(null);
-      return;
-    }
-    const rect = e.currentTarget.getBoundingClientRect();
-    const menuHeight = 220;
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const showAbove = spaceBelow < menuHeight && rect.top > menuHeight;
-
-    setMenuAnchor({
-      item,
-      top: showAbove ? rect.top - 6 : rect.bottom + 6,
-      right: window.innerWidth - rect.right,
-      showAbove,
-    });
-  }
 
   return (
     <div
@@ -118,7 +77,6 @@ export function BlogsTable({
               className="stagger-rows divide-y border-line"
             >
               {items.map((item) => {
-                const isMenuOpen = menuAnchor?.item.id === item.id;
 
                 return (
                   <tr
@@ -218,20 +176,44 @@ export function BlogsTable({
 
                     {/* Row Actions (Three-Dot Menu) */}
                     <td className="py-2.5 px-4 text-right whitespace-nowrap w-[70px]">
-                      <button
-                        type="button"
-                        onClick={(e) => handleOpenMenu(e, item)}
-                        className={cn(
-                          'inline-flex h-8 w-8 items-center justify-center rounded-lg border transition cursor-pointer',
-                          isMenuOpen
-                            ? 'bg-brand/15 text-brand-strong font-bold'
-                            : 'hover:bg-current/[0.08]', isMenuOpen ? 'border-brand' : 'border-line'
-                        )}
-                        aria-label="Actions menu"
-                        aria-expanded={isMenuOpen}
-                      >
-                        <span className="text-base leading-none font-bold">⋮</span>
-                      </button>
+                      <RowActionsMenu
+                        label={`Actions for item.title`}
+                        row={item}
+                        actions={[
+          {
+            id: 'onPreview',
+            label: 'Quick Preview',
+            icon: 'view',
+            onSelect: (row) => onPreview(row),
+          },
+          {
+            id: 'onEdit',
+            label: 'Edit Article',
+            icon: 'edit',
+            onSelect: (row) => onEdit(row),
+          },
+          {
+            id: 'onTogglePublished',
+            label: item.published ? 'Unpublish to Draft' : 'Publish Live',
+iconFor: (row) => (row.published ? 'archived' : 'publish'),
+            onSelect: (row) => onTogglePublished(row),
+          },
+          {
+            id: 'onCopyUrl',
+            label: 'Copy Article Link',
+            icon: 'copy',
+            onSelect: (row) => onCopyUrl(row.slug),
+          },
+          {
+            id: 'onDelete',
+            label: 'Delete Article',
+            icon: 'delete',
+            divider: true,
+            tone: 'danger',
+            onSelect: (row) => onDelete(row),
+          },
+                        ]}
+                      />
                     </td>
                   </tr>
                 );
@@ -242,93 +224,7 @@ export function BlogsTable({
       )}
 
       {/* Floating Action Dropdown Menu */}
-      {menuAnchor ? (
-        <>
-          <div
-            className="fixed inset-0 z-40 bg-transparent"
-            onClick={() => setMenuAnchor(null)}
-          />
-
-          <div
-            className="fixed z-50 w-48 rounded-xl border p-1 shadow-2xl animate-fade-in text-left text-xs bg-surface-raised border-line text-ink-raised"
-            style={{
-              top: menuAnchor.showAbove ? undefined : `${menuAnchor.top}px`,
-              bottom: menuAnchor.showAbove ? `${window.innerHeight - menuAnchor.top}px` : undefined,
-              right: `${menuAnchor.right}px`,
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              type="button"
-              onClick={() => {
-                const itm = menuAnchor.item;
-                setMenuAnchor(null);
-                onPreview(itm);
-              }}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
-            >
-              <Icon name="view" size={14} />
-              <span>Quick Preview</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                const itm = menuAnchor.item;
-                setMenuAnchor(null);
-                onEdit(itm);
-              }}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
-            >
-              <Icon name="edit" size={14} />
-              <span>Edit Article</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                const itm = menuAnchor.item;
-                setMenuAnchor(null);
-                onTogglePublished(itm);
-              }}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
-            >
-              <Icon name={menuAnchor.item.published ? 'archived' : 'publish'} size={14} />
-              <span>{menuAnchor.item.published ? 'Unpublish to Draft' : 'Publish Live'}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                const slug = menuAnchor.item.slug;
-                setMenuAnchor(null);
-                onCopyUrl(slug);
-              }}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-medium transition hover:bg-current/[0.06] text-inherit cursor-pointer"
-            >
-              <Icon name="copy" size={14} />
-              <span>Copy Article Link</span>
-            </button>
-
-            <div
-              className="my-1 border-t border-line"
-            />
-
-            <button
-              type="button"
-              onClick={() => {
-                const itm = menuAnchor.item;
-                setMenuAnchor(null);
-                onDelete(itm);
-              }}
-              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 font-semibold text-rose-500 transition hover:bg-rose-500/10 cursor-pointer"
-            >
-              <Icon name="delete" size={14} />
-              <span>Delete Article</span>
-            </button>
-          </div>
-        </>
-      ) : null}
+      
     </div>
   );
 }

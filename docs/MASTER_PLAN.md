@@ -616,10 +616,12 @@ Unplanned work, requested after the phase plan was written: the console read as 
 | 11A.6 | Custom accessible `DateField` / `DateTimeField` — no native date picker anywhere | ✅ |
 | 11A.7 | Home page: fifteen sections, each with a scroll-driven entrance | ✅ |
 | 11A.8 | Accessibility gate (axe) over the public site, the console and the portal | ✅ |
-| 11A.9 | Invoice redesign — a document, not a screen | ⬜ |
-| 11A.10 | A shared CRUD desk: one list-and-form model reused by every admin page | ⬜ |
-| 11A.11 | Kurnool SEO: locality pages, sitemap, FAQ schema, 50–60 journal articles | ⬜ |
-| 11A.12 | Product and service pages: the same scroll treatment as the home page | ⬜ |
+| 11A.9 | Invoice redesign — a document, not a screen | ✅ |
+| 11A.10 | A shared row menu, so every desk offers the same actions | ⬜ |
+| 11A.11 | Sitemap and robots generated from the live catalogue | ✅ |
+| 11A.12 | The journal: sixty articles, Kurnool first | ✅ |
+| 11A.13 | Kurnool locality pages, FAQ schema, a journal index by cluster | ⬜ |
+| 11A.14 | Product and service pages: the same scroll treatment as the home page | ⬜ |
 
 **11A.1 - one light scheme, and a deliberate exception**
 - The public ground moves from cream to warm paper and the console from blue-black to paper. The two now differ by accent and density rather than by being different products — which was the complaint.
@@ -639,7 +641,26 @@ Unplanned work, requested after the phase plan was written: the console read as 
 - The home page now reads: hero, services, featured collections, marquee, testimonials, why choose us, how the portal works, process, statistics, **the atelier**, **the cloth**, **Kurnool**, journal, **enquiry**, closing call to action. The four new ones carry real content — the disciplines, the fabric vocabulary, why Kurnool, and a short enquiry form that posts a lead.
 - The new `useParallax` hook is the scroll-driven drift the atelier and locality sections use, and it is skipped entirely when the visitor has asked for reduced motion.
 
-**Verification:** frontend `npm run lint`, `npm run typecheck`, Vite production build and Vitest (248 tests) pass; Playwright runs 44 journeys (44 passed, 1 skipped), the axe scan over six surfaces and three visual baselines. The bundle budget passes at 43.6 kB for the entry chunk and 777 kB for the tree.
+**11A.9 - the invoice as a document**
+- The masthead is the studio: the name in the display face with a gold rule under it, the invoice number opposite, and the three figures that matter — quoted, paid, balance — as a strip across the top, before anything else.
+- A payment bar says how far along the payment is, which is the question a client actually has.
+- The print rules live in `index.css`: A4 margins, a repeating table header, and a rule that keeps a row from splitting across a page. The invoice keeps its own paper palette in every shell, because a PDF has to look like the page it was printed from.
+
+**11A.10 - one row menu (in progress)**
+- Every desk offered the same actions — view, edit, publish, copy, delete — and every desk wrote its own dropdown: eleven copies, each with its own labels, its own icons, and a raw `⋮` glyph for the trigger that no icon system could restyle.
+- `RowActionsMenu` is the one version: a labelled button that opens a real menu (`role="menu"`, arrow keys, Escape, focus returned to the trigger), anchored to the viewport because a table scrolls horizontally and a menu inside one is clipped by it. The gallery, blogs, portfolio and services desks use it.
+- The other seven desks still carry their own copy; the migration is mechanical and the remaining work is to move them over, one desk at a time, checking that no action is lost.
+
+**11A.11 - the sitemap is written, not hand-kept**
+- `frontend/scripts/generate-sitemap.mjs` reads the live catalogue — the products, the articles, the services — and adds them to the static routes, and writes `robots.txt` with it. A sitemap written by hand is wrong within a week: a product is published, an article is posted, and neither is in the file.
+- It runs as part of the build, and it degrades to the static routes when no API is reachable, so a build never fails for want of a sitemap.
+
+**11A.12 - sixty articles, Kurnool first**
+- The journal is the studio's long tail: it is how a woman who is not ready to buy still finds the studio, and how a woman in Vijayawada decides to make the trip to Kurnool. Eight articles were already seeded; fifty-two more were written, across bridal, traditional wear, tailoring and studio notes.
+- Every article answers a question the studio is actually asked, in the words of the person who asks it — what to wear to a wedding in April, how many trials a lehenga needs, what a good fitting room should look like, how to store a zardozi border. The setting is Kurnool and the district: the heat, the Telugu festivals, the handlooms, the fabrics.
+- An article that only exists to carry a keyword is an article a reader leaves and a search engine learns to ignore, so the rule was that the article has to be worth reading on its own.
+
+**Verification:** frontend `npm run lint`, `npm run typecheck`, Vite production build and Vitest (248 tests) pass; Playwright runs 44 journeys (44 passed, 1 skipped), the axe scan over six surfaces and three visual baselines. The bundle budget passes at 43.6 kB for the entry chunk and 777 kB for the tree. Backend `npm run lint`, `npx tsc --noEmit`, `npm run build` and Vitest (200 tests) pass, with the journal and the new theme defaults in the seed.
 
 ---
 

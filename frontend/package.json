@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node scripts/generate-sitemap.mjs",
     "preview": "vite preview",
     "lint": "oxlint",
     "typecheck": "tsc -b",
@@ -21,7 +21,8 @@
     "check:contract": "node ../scripts/sync-shared.mjs --check",
     "check:bundle": "node scripts/check-bundle-budget.mjs",
     "check:lighthouse": "lhci autorun",
-    "build:prerender": "npm run build && node scripts/prerender.mjs"
+    "build:prerender": "npm run build && node scripts/prerender.mjs",
+    "build:sitemap": "node scripts/generate-sitemap.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

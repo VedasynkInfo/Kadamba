@@ -9,6 +9,7 @@ export {
 export { Input, type InputProps } from './Input';
 export { Textarea, type TextareaProps } from './Textarea';
 export { Select, type SelectProps, type SelectOption } from './Select';
+export { RowActionsMenu, type RowActionsMenuProps, type RowAction } from './RowActionsMenu';
 export { DateField, type DateFieldProps } from './DateField';
 export { DateTimeField, type DateTimeFieldProps } from './DateTimeField';
 export { Checkbox, type CheckboxProps } from './Checkbox';

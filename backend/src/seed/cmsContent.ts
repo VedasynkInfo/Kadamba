@@ -23,7 +23,14 @@
  *   - `sortOrder` is set from each array's index for collections whose frontend
  *     source had no explicit `sortOrder` (services, portfolio) so the intended
  *     display order is preserved.
+ *
+ * The one import here is the journal, which is plain data in its own module.
+ * It is kept separate because the article set is long, and because it is
+ * written rather than ported — the eight articles that were ported from the
+ * frontend's demo data stay at the top of `blogs`, and the journal follows.
  */
+
+import { journalArticles } from './journal';
 
 export type GallerySeedCategory =
   | 'Bridal'
@@ -1331,6 +1338,30 @@ const blogs: BlogSeedItem[] = [
 ];
 
 /**
+ * The journal, in full.
+ *
+ * The eight articles above are the studio's founding set. The journal module
+ * holds the rest — the long tail that is how a woman who is not ready to
+ * buy still finds the studio, and how a woman in Vijayawada decides to make
+ * the trip to Kurnool.
+ */
+const journal: BlogSeedItem[] = journalArticles.map((article) => ({
+  slug: article.slug,
+  title: article.title,
+  excerpt: article.excerpt,
+  content: article.content,
+  category: article.category,
+  tags: article.tags,
+  coverImage: blogMedia[article.cover],
+  coverAlt: article.alt,
+  date: new Date(article.date),
+  readMinutes: article.readMinutes,
+  author: "Kadamba's Designer Studio",
+  ...(article.featured ? { featured: true } : {}),
+  published: true,
+}));
+
+/**
  * Website settings — mirrors `defaultWebsiteSettings` in
  * frontend/src/pages/admin/data.ts, with `brand`/`studioContact`/`socialLinks`
  * values inlined from frontend/src/pages/home/data.ts and contact/data.ts.
@@ -1436,25 +1467,27 @@ const settings: WebsiteSettingsSeed = {
     ],
   },
   theme: {
-    primary: '#000000',
-    primaryHover: '#1a1a1a',
-    primaryText: '#ffffff',
-    accent: '#b59410',
-    publicBg: '#fffdd0',
-    publicText: '#171717',
+    // The studio's light scheme: warm paper for the site and the console,
+    // gold for the actions, and one type family for everything.
+    primary: '#b8892b',
+    primaryHover: '#a67a20',
+    primaryText: '#17140f',
+    accent: '#b8892b',
+    publicBg: '#faf7f1',
+    publicText: '#17140f',
     publicCard: '#ffffff',
-    publicCardText: '#171717',
-    publicSurface: '#fafafa',
-    adminBg: '#0b0f17',
-    adminText: '#f3f4f6',
-    adminCard: '#1f2937',
-    adminCardText: '#f3f4f6',
-    adminSidebar: '#111827',
-    adminSidebarText: '#f3f4f6',
-    adminPrimary: '#b59410',
-    adminPrimaryText: '#000000',
-    adminAccent: '#ffd700',
-    fontFamily: 'Manrope, sans-serif',
+    publicCardText: '#17140f',
+    publicSurface: '#f3efe7',
+    adminBg: '#f6f4f0',
+    adminText: '#1b1815',
+    adminCard: '#ffffff',
+    adminCardText: '#1b1815',
+    adminSidebar: '#fbf8f2',
+    adminSidebarText: '#1b1815',
+    adminPrimary: '#b8892b',
+    adminPrimaryText: '#17140f',
+    adminAccent: '#c9a227',
+    fontFamily: 'Syne, sans-serif',
   },
 };
 
@@ -1462,6 +1495,6 @@ export const cmsSeedContent: CmsSeedContent = {
   gallery,
   services,
   portfolio,
-  blogs,
+  blogs: [...blogs, ...journal],
   settings,
 };

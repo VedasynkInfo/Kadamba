@@ -297,7 +297,7 @@ describe('order lifecycle', () => {
 
   it('converts a lead into an order', async () => {
     const token = await registerAdminAndGetToken(app);
-    const customer = await seedCustomer();
+    await seedCustomer();
 
     const lead = await Lead.create({
       name: 'Converted Lead',

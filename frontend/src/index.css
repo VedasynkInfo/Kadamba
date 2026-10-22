@@ -266,6 +266,49 @@
   --color-danger: #b42318;
 }
 
+/*
+  Printing the invoice.
+
+  A bill is a document, and a document has to survive the printer: the paper
+  margins belong to the sheet, a line item must not be split across two
+  pages, and the table header has to repeat when it does. These are the
+  rules for that, and they only apply to paper.
+*/
+@page {
+  size: A4;
+  margin: 14mm;
+}
+
+@media print {
+  .invoice-document {
+    box-shadow: none !important;
+    border: 0 !important;
+    max-width: none !important;
+  }
+
+  .invoice-document thead {
+    display: table-header-group;
+  }
+
+  .invoice-document tr,
+  .invoice-document .invoice-keep-together {
+    break-inside: avoid;
+  }
+
+  .invoice-document h1,
+  .invoice-document h2,
+  .invoice-document h3 {
+    break-after: avoid;
+  }
+
+  /* The browser's own headers and footers would print the page number over
+     the studio's masthead. */
+  .invoice-document header::before,
+  .invoice-document header::after {
+    content: none;
+  }
+}
+
 *,
 *::before,
 *::after {

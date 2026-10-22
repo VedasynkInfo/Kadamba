@@ -262,7 +262,8 @@ describe('shared contract round-trip', () => {
   });
 
   it('rejects a response that is missing a field it declares', () => {
-    const { width: _width, ...withoutWidth } = GALLERY_ITEM;
+    const withoutWidth = { ...GALLERY_ITEM };
+    delete (withoutWidth as Partial<typeof GALLERY_ITEM>).width;
     const result = galleryItemSchema.safeParse(withoutWidth);
     expect(result.success).toBe(false);
   });

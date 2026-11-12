@@ -26,10 +26,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 20
+      - name: Setup Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 
@@ -73,7 +73,7 @@ jobs:
             git reset --hard origin/main
             cd backend
             npm ci
-            npm run build
+            NODE_OPTIONS="--max-old-space-size=1024" npm run build
             sudo systemctl restart kadamba
             sudo systemctl is-active --quiet kadamba
             echo "Backend restarted successfully"
@@ -89,10 +89,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 20
+      - name: Setup Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 

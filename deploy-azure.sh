@@ -16,7 +16,8 @@ SUFFIX="${SUFFIX:-$((1000 + RANDOM % 9000))}"
 BLOB_CONTAINER="${BLOB_CONTAINER:-kadamba-media}"
 APP_SERVICE_PLAN="${APP_SERVICE_PLAN:-kadamba-app-plan}"
 VM_NAME="${VM_NAME:-kadamba-api-vm}"
-VM_SIZE="${VM_SIZE:-Standard_B1s}"
+VM_SIZE="${VM_SIZE:-}"
+VM_LOCATION="${VM_LOCATION:-$LOCATION}"
 FRONTEND_CORS_ORIGINS="${FRONTEND_CORS_ORIGINS:-*}"
 
 # 1. Verify Azure CLI session
@@ -53,7 +54,7 @@ echo " Resource Group : $RESOURCE_GROUP ($LOCATION)"
 echo " Storage        : $STORAGE_ACCOUNT (container: $BLOB_CONTAINER)"
 echo " Frontend App   : $WEB_APP_NAME.azurewebsites.net"
 echo " ACR            : $ACR_NAME.azurecr.io"
-echo " Backend VM     : $VM_NAME ($VM_SIZE)"
+echo " Backend VM     : $VM_NAME (${VM_SIZE:-auto-select} in $VM_LOCATION)"
 echo "=================================================================="
 
 # 3. Azure Storage Account + Blob Container + CORS
@@ -168,16 +169,36 @@ fi
 echo ""
 echo "[5/5] Ensuring Azure Linux VM '$VM_NAME' for Backend API..."
 if ! az vm show --resource-group "$RESOURCE_GROUP" --name "$VM_NAME" --output none 2>/dev/null; then
-  az vm create \
-    --resource-group "$RESOURCE_GROUP" \
-    --name "$VM_NAME" \
-    --location "$LOCATION" \
-    --image Ubuntu2204 \
-    --size "$VM_SIZE" \
-    --admin-username azureuser \
-    --generate-ssh-keys \
-    --public-ip-sku Standard \
-    --output table
+  if [ -n "$VM_SIZE" ]; then
+    CANDIDATE_SIZES=("$VM_SIZE")
+  else
+    CANDIDATE_SIZES=("Standard_B2s" "Standard_B1ms" "Standard_B2ats_v2" "Standard_D2s_v3" "Standard_D2as_v4" "Standard_D2s_v5" "Standard_B1s")
+  fi
+
+  VM_CREATED=false
+  for candidate in "${CANDIDATE_SIZES[@]}"; do
+    echo "[*] Trying VM size '$candidate' in '$VM_LOCATION'..."
+    if az vm create \
+      --resource-group "$RESOURCE_GROUP" \
+      --name "$VM_NAME" \
+      --location "$VM_LOCATION" \
+      --image Ubuntu2204 \
+      --size "$candidate" \
+      --admin-username azureuser \
+      --generate-ssh-keys \
+      --public-ip-sku Standard \
+      --output table; then
+      VM_SIZE="$candidate"
+      VM_CREATED=true
+      break
+    fi
+    echo "[!] VM size '$candidate' unavailable in '$VM_LOCATION', trying next size..."
+  done
+
+  if [ "$VM_CREATED" != "true" ]; then
+    echo "[!] Could not create VM in '$VM_LOCATION' with candidate sizes. Try: VM_LOCATION=southindia ./deploy-azure.sh"
+    exit 1
+  fi
 else
   echo "[✓] Reusing existing VM '$VM_NAME'"
 fi

@@ -15,7 +15,8 @@ $Location = if ($env:LOCATION) { $env:LOCATION } else { "centralindia" }
 $AppServicePlan = if ($env:APP_SERVICE_PLAN) { $env:APP_SERVICE_PLAN } else { "kadamba-app-plan" }
 $BlobContainer = if ($env:BLOB_CONTAINER) { $env:BLOB_CONTAINER } else { "kadamba-media" }
 $VmName = if ($env:VM_NAME) { $env:VM_NAME } else { "kadamba-api-vm" }
-$VmSize = if ($env:VM_SIZE) { $env:VM_SIZE } else { "Standard_B1s" }
+$VmSize = if ($env:VM_SIZE) { $env:VM_SIZE } else { "" }
+$VmLocation = if ($env:VM_LOCATION) { $env:VM_LOCATION } else { $Location }
 $CorsOrigins = if ($env:FRONTEND_CORS_ORIGINS) { $env:FRONTEND_CORS_ORIGINS } else { "*" }
 
 # 1. Login check
@@ -155,16 +156,30 @@ if ($LASTEXITCODE -ne 0) {
 Write-Host "`n[5/5] Ensuring Azure Linux VM '$VmName'..." -ForegroundColor Cyan
 az vm show --resource-group $ResourceGroup --name $VmName --output none 2>$null
 if ($LASTEXITCODE -ne 0) {
-    az vm create `
-      --resource-group $ResourceGroup `
-      --name $VmName `
-      --location $Location `
-      --image Ubuntu2204 `
-      --size $VmSize `
-      --admin-username azureuser `
-      --generate-ssh-keys `
-      --public-ip-sku Standard `
-      --output table
+    $CandidateSizes = if ($VmSize) { @($VmSize) } else { @("Standard_B2s", "Standard_B1ms", "Standard_B2ats_v2", "Standard_D2s_v3", "Standard_D2as_v4", "Standard_D2s_v5", "Standard_B1s") }
+    $VmCreated = $false
+    foreach ($Candidate in $CandidateSizes) {
+        Write-Host "[*] Trying VM size '$Candidate' in '$VmLocation'..." -ForegroundColor Yellow
+        az vm create `
+          --resource-group $ResourceGroup `
+          --name $VmName `
+          --location $VmLocation `
+          --image Ubuntu2204 `
+          --size $Candidate `
+          --admin-username azureuser `
+          --generate-ssh-keys `
+          --public-ip-sku Standard `
+          --output table
+        if ($LASTEXITCODE -eq 0) {
+            $VmSize = $Candidate
+            $VmCreated = $true
+            break
+        }
+        Write-Host "[!] VM size '$Candidate' unavailable in '$VmLocation', trying next size..." -ForegroundColor DarkYellow
+    }
+    if (-not $VmCreated) {
+        throw "Could not create VM in '$VmLocation' with candidate sizes. Try setting `$env:VM_LOCATION='southindia'."
+    }
 } else {
     Write-Host "[OK] Reusing existing VM '$VmName'" -ForegroundColor Green
 }

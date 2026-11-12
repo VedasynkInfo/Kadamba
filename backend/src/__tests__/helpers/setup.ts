@@ -10,6 +10,12 @@ import { ensurePhase10Indexes } from '../../services/phase10Bootstrap';
 // Ensure a test environment before any app module reads config.
 process.env.NODE_ENV = 'test';
 process.env.JWT_SECRET = process.env.JWT_SECRET || 'test_jwt_secret_min_32_chars_1234567890';
+// Keep unit/integration tests on local throwaway storage even when `.env`
+// configures Azure Blob Storage for local dev.
+process.env.UPLOAD_STORAGE = 'local';
+delete process.env.AZURE_STORAGE_CONNECTION_STRING;
+delete process.env.AZURE_STORAGE_ACCOUNT;
+delete process.env.AZURE_STORAGE_KEY;
 
 /**
  * Point uploads at a throwaway directory.

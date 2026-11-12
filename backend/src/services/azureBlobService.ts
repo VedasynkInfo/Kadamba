@@ -7,15 +7,23 @@ let cachedSignature = '';
 const ensuredContainers = new Map<string, Promise<void>>();
 
 function readAzureConfig() {
+  const useEnvFallback = !env.isTest;
   const connectionString =
-    process.env.AZURE_STORAGE_CONNECTION_STRING?.trim() || env.azureStorage.connectionString;
-  const account = process.env.AZURE_STORAGE_ACCOUNT?.trim() || env.azureStorage.account;
-  const key = process.env.AZURE_STORAGE_KEY?.trim() || env.azureStorage.key;
+    process.env.AZURE_STORAGE_CONNECTION_STRING?.trim() ||
+    (useEnvFallback ? env.azureStorage.connectionString : '');
+  const account =
+    process.env.AZURE_STORAGE_ACCOUNT?.trim() ||
+    (useEnvFallback ? env.azureStorage.account : '');
+  const key =
+    process.env.AZURE_STORAGE_KEY?.trim() ||
+    (useEnvFallback ? env.azureStorage.key : '');
   const container =
-    process.env.AZURE_STORAGE_CONTAINER?.trim() || env.azureStorage.container || 'kadamba-media';
+    process.env.AZURE_STORAGE_CONTAINER?.trim() ||
+    (useEnvFallback ? env.azureStorage.container : '') ||
+    'kadamba-media';
   const publicUrl = (
     process.env.AZURE_STORAGE_PUBLIC_URL?.trim() ||
-    env.azureStorage.publicUrl ||
+    (useEnvFallback ? env.azureStorage.publicUrl : '') ||
     ''
   ).replace(/\/$/, '');
 
@@ -75,7 +83,8 @@ export function isAzureBlobConfigured(): boolean {
 
 /** True when `UPLOAD_STORAGE` selects Azure (or auto-selected) and credentials are present. */
 export function isAzureStorageActive(): boolean {
-  const mode = (process.env.UPLOAD_STORAGE?.trim() || env.uploadStorage).toLowerCase();
+  const fallbackMode = env.isTest ? 'local' : env.uploadStorage;
+  const mode = (process.env.UPLOAD_STORAGE?.trim() || fallbackMode).toLowerCase();
   if (mode === 'local') return false;
   if (mode === 'azure' || mode === 'blob') {
     return isAzureBlobConfigured();

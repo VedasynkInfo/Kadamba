@@ -122,7 +122,7 @@ az webapp create \
 az webapp config set \
   --resource-group "$RESOURCE_GROUP" \
   --name "$WEB_APP_NAME" \
-  --startup-file "npx serve -s dist -l 8080" \
+  --startup-file "npx --yes serve -s dist -l 8080" \
   --output none
 
 echo "[✓] Frontend App URL: https://${WEB_APP_NAME}.azurewebsites.net"
@@ -169,16 +169,22 @@ cat > "$ENV_OUT" <<EOF
 # Copy these into backend/.env (local test) or /etc/kadamba.env (production VM)
 # DO NOT commit this file to git.
 
-FRONTEND_URL=https://${WEB_APP_NAME}.azurewebsites.net
-UPLOAD_STORAGE=azure
-AZURE_STORAGE_ACCOUNT=${STORAGE_ACCOUNT}
-AZURE_STORAGE_KEY=${STORAGE_KEY}
-AZURE_STORAGE_CONNECTION_STRING=${STORAGE_CONN}
-AZURE_STORAGE_CONTAINER=${BLOB_CONTAINER}
+RESOURCE_GROUP="${RESOURCE_GROUP}"
+WEB_APP_NAME="${WEB_APP_NAME}"
+VM_NAME="${VM_NAME}"
+VM_IP="${VM_IP}"
+ACR_NAME="${ACR_NAME}"
+
+FRONTEND_URL="https://${WEB_APP_NAME}.azurewebsites.net"
+UPLOAD_STORAGE="azure"
+AZURE_STORAGE_ACCOUNT="${STORAGE_ACCOUNT}"
+AZURE_STORAGE_KEY="${STORAGE_KEY}"
+AZURE_STORAGE_CONNECTION_STRING="${STORAGE_CONN}"
+AZURE_STORAGE_CONTAINER="${BLOB_CONTAINER}"
 
 # Frontend build variable (frontend/.env.production):
-VITE_API_URL=http://${VM_IP}:4000/api
-VITE_SITE_URL=https://${WEB_APP_NAME}.azurewebsites.net
+VITE_API_URL="http://${VM_IP}:4000/api"
+VITE_SITE_URL="https://${WEB_APP_NAME}.azurewebsites.net"
 EOF
 
 echo ""

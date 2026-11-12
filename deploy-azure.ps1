@@ -107,7 +107,7 @@ az webapp create `
 az webapp config set `
   --resource-group $ResourceGroup `
   --name $WebAppName `
-  --startup-file "npx serve -s dist -l 8080" `
+  --startup-file "npx --yes serve -s dist -l 8080" `
   --output none
 
 # 5. Azure Container Registry (ACR)

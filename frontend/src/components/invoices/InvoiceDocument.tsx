@@ -293,7 +293,7 @@ export function InvoiceDocument({ invoice, className, footerNote }: InvoiceDocum
             ) : (
               lineItems.map((item, idx) => (
                 <tr key={`${item.name}-${idx}`} className="border-b border-line/8">
-                  <td className="py-3 pr-3 align-top tabular-nums text-ink/55">{idx + 1}</td>
+                  <td className="py-3 pr-3 align-top tabular-nums text-ink/70">{idx + 1}</td>
                   <td className="py-3 pr-3 align-top">
                     <p className="font-medium text-ink">{item.name}</p>
                     {item.productTypeCode ? (
@@ -386,7 +386,7 @@ export function InvoiceDocument({ invoice, className, footerNote }: InvoiceDocum
           {footerNote ||
             `Thank you for choosing ${studio.name}. For billing questions, contact the boutique in ${studio.location}.`}
         </p>
-        <p className="mt-3 text-[0.6rem] uppercase tracking-[0.24em] text-ink/55">
+        <p className="mt-3 text-[0.6rem] uppercase tracking-[0.24em] text-ink/70">
           {invoice.invoiceNumber} · {formatDate(invoice.invoiceDate)}
         </p>
       </footer>

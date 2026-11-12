@@ -3,7 +3,7 @@ import path from 'path';
 import type { Types } from 'mongoose';
 import { Blog } from '../models/Blog';
 import { GalleryItem } from '../models/GalleryItem';
-import { ImageAsset, type IImageAsset } from '../models/ImageAsset';
+import { ImageAsset, type IImageAsset, type ImageVariant } from '../models/ImageAsset';
 import { MeasurementProfile } from '../models/MeasurementProfile';
 import { Portfolio } from '../models/Portfolio';
 import { ProductType } from '../models/ProductType';
@@ -12,10 +12,19 @@ import { Staff } from '../models/Staff';
 import { WebsiteSettings } from '../models/WebsiteSettings';
 import { logger } from '../config/logger';
 import { assetVariantDir, isInsideUploads, publicUploadUrl, uploadsDir } from '../config/storage';
-import { hashFile, processImageFile } from '../utils/imagePipeline';
+import { hashFile, processImageFile, variantContentType } from '../utils/imagePipeline';
 import { imageJobPool } from './jobPool';
 import { ALLOWED_UPLOAD_MIMES, detectFileType } from '../utils/fileSignature';
 import { ApiError } from '../utils/ApiError';
+import {
+  deleteBlob,
+  deleteBlobsByPrefix,
+  downloadBlobToFile,
+  isAzureBlobConfigured,
+  isAzureBlobUrl,
+  isAzureStorageActive,
+  uploadFileToBlob,
+} from './azureBlobService';
 
 /**
  * Where an uploaded file can be referenced. Kept as data rather than bespoke
@@ -261,15 +270,51 @@ export async function storeUploadedBuffer(input: {
   });
 }
 
+function safeFolderSegment(folder?: string): string {
+  const cleaned = (folder || 'general').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 60);
+  return cleaned || 'general';
+}
+
+async function uploadVariantsToAzure(
+  hash: string,
+  variants: ImageVariant[],
+): Promise<ImageVariant[]> {
+  if (variants.length === 0) return [];
+  const dir = assetVariantDir(hash);
+
+  const uploaded = await Promise.all(
+    variants.map(async (variant): Promise<ImageVariant | null> => {
+      const variantFile = path.basename(variant.url);
+      const localVariantPath = path.join(dir, variantFile);
+      const blobName = `uploads/optimized/${hash}/${variantFile}`;
+      try {
+        const url = await uploadFileToBlob(blobName, localVariantPath, {
+          contentType: variantContentType(variant.format),
+        });
+        return { ...variant, url };
+      } catch (err) {
+        logger.warn({ err, blobName }, 'Failed to upload image variant to Azure Blob');
+        return null;
+      }
+    }),
+  );
+
+  return uploaded.filter((item): item is ImageVariant => item !== null);
+}
+
 /**
  * Record an upload: hash it, generate variants, and upsert the `ImageAsset`.
+ *
+ * When Azure Blob Storage is active (`UPLOAD_STORAGE=azure`), both the
+ * original and generated variants are pushed to Azure Blob Storage and the
+ * temporary local files are removed afterwards.
  *
  * The original file is never modified. Variant generation failure is logged and
  * swallowed — the upload still succeeds, it simply serves the original only.
  */
 export async function registerUploadedFile(input: RegisterUploadInput): Promise<IImageAsset> {
   const filename = path.basename(input.absPath);
-  const originalUrl = publicUploadUrl(filename);
+  const useAzure = isAzureStorageActive();
 
   const hash = await hashFile(input.absPath);
   const stat = await fs.stat(input.absPath);
@@ -285,15 +330,44 @@ export async function registerUploadedFile(input: RegisterUploadInput): Promise<
         });
 
   // Identical bytes already stored → reuse the existing variants, just record
-  // this occurrence (the file on disk is a distinct copy with its own URL).
+  // this occurrence (the file on disk / blob is a distinct copy with its own URL).
   const existing = await ImageAsset.findOne({ hash }).lean();
+
+  let originalUrl = publicUploadUrl(filename);
+  let variantsToStore: ImageVariant[] = existing?.variants?.length
+    ? existing.variants
+    : processed.variants;
+
+  if (useAzure) {
+    const folderSeg = safeFolderSegment(input.folder);
+    const originalBlobName = `uploads/${folderSeg}/${filename}`;
+    originalUrl = await uploadFileToBlob(originalBlobName, input.absPath, {
+      contentType: input.mimeType,
+    });
+
+    const reuseExistingAzureVariants =
+      Boolean(existing?.variants?.length) &&
+      existing!.variants.every((v) => isAzureBlobUrl(v.url));
+
+    if (reuseExistingAzureVariants) {
+      variantsToStore = existing!.variants;
+    } else {
+      variantsToStore = await uploadVariantsToAzure(hash, processed.variants);
+    }
+
+    // Remove temporary local files after successful Azure Blob upload.
+    await fs.unlink(input.absPath).catch(() => undefined);
+    if (isInsideUploads(assetVariantDir(hash))) {
+      await fs.rm(assetVariantDir(hash), { recursive: true, force: true }).catch(() => undefined);
+    }
+  }
 
   const doc = await ImageAsset.findOneAndUpdate(
     { hash },
     {
       $set: {
         kind: processed.kind,
-        // Latest URL wins for display; earlier copies are still valid on disk.
+        // Latest URL wins for display; earlier copies are still valid.
         originalUrl,
         originalName: input.originalName,
         mimeType: input.mimeType,
@@ -306,13 +380,13 @@ export async function registerUploadedFile(input: RegisterUploadInput): Promise<
         dominantColor:
           existing?.dominantColor ??
           ('dominantColor' in processed ? processed.dominantColor : undefined),
-        variants: existing?.variants?.length ? existing.variants : processed.variants,
+        variants: variantsToStore,
         folder: input.folder,
         uploadedBy: input.uploadedBy,
       },
       $setOnInsert: { hash },
     },
-    { upsert: true, new: true, setDefaultsOnInsert: true },
+    { upsert: true, returnDocument: 'after', setDefaultsOnInsert: true },
   ).lean();
 
   return doc as IImageAsset;
@@ -417,6 +491,16 @@ export async function deleteMedia(
     }
   }
 
+  const hasAzureVariants =
+    isAzureBlobUrl(asset.originalUrl) || asset.variants.some((v) => isAzureBlobUrl(v.url));
+  if (hasAzureVariants && isAzureBlobConfigured()) {
+    try {
+      removedFiles += await deleteBlobsByPrefix(`uploads/optimized/${asset.hash}/`);
+    } catch (err) {
+      logger.warn({ err, hash: asset.hash }, 'Failed to delete Azure Blob variants');
+    }
+  }
+
   if (options.force && !options.keepOriginal) {
     const abs = path.join(uploadsDir, basenameOf(asset.originalUrl));
     // Verify containment so a poisoned database record can never make the
@@ -429,6 +513,16 @@ export async function deleteMedia(
         /* already gone */
       }
     }
+
+    if (isAzureBlobUrl(asset.originalUrl) && isAzureBlobConfigured()) {
+      try {
+        if (await deleteBlob(asset.originalUrl)) {
+          removedFiles += 1;
+        }
+      } catch (err) {
+        logger.warn({ err, url: asset.originalUrl }, 'Failed to delete Azure Blob original');
+      }
+    }
   }
 
   await ImageAsset.deleteOne({ _id: asset._id });
@@ -436,7 +530,7 @@ export async function deleteMedia(
 }
 
 export async function updateMediaAlt(id: string, alt: string) {
-  return ImageAsset.findByIdAndUpdate(id, { $set: { alt } }, { new: true }).lean();
+  return ImageAsset.findByIdAndUpdate(id, { $set: { alt } }, { returnDocument: 'after' }).lean();
 }
 
 /** Distinct folders present in the library (for the filter UI). */
@@ -472,7 +566,7 @@ export interface ResolvedAsset {
  */
 export async function resolveAssets(urls: string[]): Promise<Record<string, ResolvedAsset>> {
   const wanted = [...new Set(urls)]
-    .filter((url) => typeof url === 'string' && url.includes('/uploads/'))
+    .filter((url) => typeof url === 'string' && (url.includes('/uploads/') || isAzureBlobUrl(url)))
     .slice(0, 60);
 
   if (wanted.length === 0) return {};
@@ -512,8 +606,25 @@ export async function regenerateVariants(id: string) {
   const asset = await ImageAsset.findById(id).lean();
   if (!asset) return null;
 
-  const abs = path.join(uploadsDir, basenameOf(asset.originalUrl));
+  let abs = path.join(uploadsDir, basenameOf(asset.originalUrl));
   if (!isInsideUploads(abs)) return null;
+
+  let downloadedTemp = false;
+  try {
+    await fs.access(abs);
+  } catch {
+    if (isAzureBlobUrl(asset.originalUrl) && isAzureBlobConfigured()) {
+      await fs.mkdir(uploadsDir, { recursive: true });
+      const tmpPath = path.join(uploadsDir, `tmp-regen-${Date.now()}-${basenameOf(asset.originalUrl)}`);
+      if (!isInsideUploads(tmpPath)) return null;
+      const ok = await downloadBlobToFile(asset.originalUrl, tmpPath);
+      if (!ok) return null;
+      abs = tmpPath;
+      downloadedTemp = true;
+    } else {
+      return null;
+    }
+  }
 
   try {
     await fs.rm(assetVariantDir(asset.hash), { recursive: true, force: true });
@@ -521,23 +632,40 @@ export async function regenerateVariants(id: string) {
     /* fine */
   }
 
-  const processed = await imageJobPool.run(`regenerate:${asset.hash}`, () =>
-    processImageFile(abs, asset.hash),
-  );
-  return ImageAsset.findByIdAndUpdate(
-    id,
-    {
-      $set: {
-        width: processed.width,
-        height: processed.height,
-        aspectRatio: processed.aspectRatio,
-        blurhash: processed.blurhash,
-        dominantColor: processed.dominantColor,
-        variants: processed.variants,
+  try {
+    const processed = await imageJobPool.run(`regenerate:${asset.hash}`, () =>
+      processImageFile(abs, asset.hash),
+    );
+
+    let variants = processed.variants;
+    if (isAzureStorageActive() || isAzureBlobUrl(asset.originalUrl)) {
+      if (isAzureBlobConfigured()) {
+        variants = await uploadVariantsToAzure(asset.hash, processed.variants);
+        if (isInsideUploads(assetVariantDir(asset.hash))) {
+          await fs.rm(assetVariantDir(asset.hash), { recursive: true, force: true }).catch(() => undefined);
+        }
+      }
+    }
+
+    return ImageAsset.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          width: processed.width,
+          height: processed.height,
+          aspectRatio: processed.aspectRatio,
+          blurhash: processed.blurhash,
+          dominantColor: processed.dominantColor,
+          variants,
+        },
       },
-    },
-    { new: true },
-  ).lean();
+      { returnDocument: 'after' },
+    ).lean();
+  } finally {
+    if (downloadedTemp) {
+      await fs.unlink(abs).catch(() => undefined);
+    }
+  }
 }
 
 export type MediaId = Types.ObjectId;

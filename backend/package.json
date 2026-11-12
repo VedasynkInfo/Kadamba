@@ -11,6 +11,7 @@
     "seed:cms": "tsx src/scripts/seedCms.ts",
     "uploads:migrate": "tsx src/scripts/migrateUploads.ts",
     "uploads:optimize": "tsx src/scripts/optimizeExisting.ts",
+    "uploads:sync-azure": "tsx src/scripts/syncAzureBlob.ts",
     "assets:placeholders": "tsx src/scripts/generatePlaceholders.ts",
     "lint": "eslint .",
     "format": "prettier --write .",
@@ -20,6 +21,12 @@
     "check:contract": "node ../scripts/sync-shared.mjs --check",
     "data:backfill-product-slugs": "tsx src/scripts/backfillProductSlugs.ts",
     "data:backfill-product-template-refs": "tsx src/scripts/backfillProductTemplateRefs.ts",
+    "data:enrich-storefront": "tsx src/scripts/enrichProductStorefront.ts",
+    "data:apply-photos": "tsx src/scripts/applyStockPhotography.ts",
+    "data:fix-public": "tsx src/scripts/fixPublicData.ts",
+    "data:cleanup-audit": "tsx src/scripts/cleanupAuditSubmissions.ts",
+    "data:enrich-blogs": "tsx src/scripts/enrichBlogPosts.ts",
+    "data:fix-seo": "tsx src/scripts/fixSeoMeta.ts",
     "data:backup": "tsx src/scripts/backupDatabase.ts"
   },
   "keywords": [
@@ -31,6 +38,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@azure/storage-blob": "^12.34.0",
     "bcryptjs": "^3.0.3",
     "blurhash": "^2.0.5",
     "cookie-parser": "^1.4.7",

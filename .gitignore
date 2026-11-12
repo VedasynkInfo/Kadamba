@@ -16,6 +16,7 @@ build/
 
 # Temp files
 commit_msg.txt
+kadamba-azure-env.txt
 
 # Logs
 logs/

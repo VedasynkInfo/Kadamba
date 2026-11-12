@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { OptimizedImage } from '@/components/media/OptimizedImage';
 import { Icon } from '@/components/icons';
 import { Button, Input, useToast } from '@/components/ui';
 import { useAuth } from '@/hooks/useAuth';
@@ -101,11 +102,15 @@ export default function AdminLoginPage() {
             transition={{ duration: reduced ? 0 : 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="mx-auto w-full max-w-md"
           >
+            <OptimizedImage
+              src="/media/brand/kadamba-logo.png"
+              alt="Kadamba's Designer Studio"
+              responsive={false}
+              priority
+              className="mb-8 h-16 w-auto max-w-[260px] object-contain"
+            />
             <p className="font-heading text-[0.62rem] uppercase tracking-[0.42em] text-brand-strong">
               {loginCopy.locationLine}
-            </p>
-            <p className="mt-4 font-heading text-4xl tracking-[0.06em] text-ink">
-              {loginCopy.brandName}
             </p>
 
             {mfaChallenge ? (

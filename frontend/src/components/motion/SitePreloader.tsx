@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { OptimizedImage } from '@/components/media/OptimizedImage';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 const SESSION_KEY = 'kadamba.preloaded.v1';
@@ -82,7 +83,13 @@ export function SitePreloader() {
           role="status"
           aria-label="Preparing the studio"
         >
-          <p className="font-heading text-3xl tracking-[0.18em] sm:text-4xl">Kadamba</p>
+          <OptimizedImage
+            src="/media/brand/kadamba-logo-gold.png"
+            alt="Kadamba's Designer Studio"
+            responsive={false}
+            priority
+            className="h-20 w-auto max-w-[300px] object-contain"
+          />
           <span className="relative block h-px w-32 overflow-hidden bg-gold/25">
             <motion.span
               className="absolute inset-y-0 left-0 bg-gold"

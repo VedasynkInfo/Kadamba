@@ -271,7 +271,7 @@ export function Select({
             {searchable ? (
               <div className="border-b border-line p-2">
                 <div className="relative">
-                  <span className="pointer-events-none absolute inset-y-0 left-2.5 flex items-center text-ink/40">
+                  <span className="pointer-events-none absolute inset-y-0 left-2.5 flex items-center text-ink/65">
                     <Icon name="search" size={13} />
                   </span>
                   <input

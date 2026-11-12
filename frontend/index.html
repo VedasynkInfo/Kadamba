@@ -2,34 +2,28 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#faf7f1" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" href="/fonts/syne-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/cormorant-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link
+      rel="preload"
+      href="/fonts/cormorant-latin-italic.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <!--
       Two families, with a job each.
 
       Cormorant Garamond is the editorial voice: the public site's display
       headings, the wordmark, the pull-quotes. Syne is the working voice: body
-      copy, controls, and the whole console and portal. The pairing gives a
-      marketing page its classic register without making a desk of orders
-      harder to read — `.public-shell` re-points `--font-heading`, so the
-      console never sees the serif.
+      copy, controls, and the whole console and portal. Both are self-hosted
+      through @fontsource (see main.tsx) so the first paint never waits on a
+      third-party font origin.
     -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Syne:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-      media="print"
-      onload="this.media = 'all'"
-    />
-    <noscript>
-      <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Syne:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet"
-      />
-    </noscript>
     <title data-static>Kadamba's Designer Studio | Kurnool — Traditional &amp; Bridal Wear</title>
     <meta
       data-static

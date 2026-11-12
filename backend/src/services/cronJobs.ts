@@ -8,6 +8,7 @@ import { Order } from '../models/Order';
 import { PortalMessage } from '../models/PortalMessage';
 import { RefreshToken } from '../models/RefreshToken';
 import { uploadsDir } from '../config/storage';
+import { blobExists, isAzureBlobConfigured, isAzureBlobUrl } from './azureBlobService';
 import { enqueueEmail } from './emailOutboxService';
 import { resolveAdminInbox } from './notificationService';
 import { runBackup } from './backupService';
@@ -312,11 +313,27 @@ export async function cleanupOrphans(
   }
 
   const referencedFiles = new Set<string>();
-  const deadAssets = assets.filter((asset) => {
+  const azureConfigured = isAzureBlobConfigured();
+  const deadAssets: typeof assets = [];
+
+  for (const asset of assets) {
+    if (isAzureBlobUrl(asset.originalUrl)) {
+      if (!azureConfigured) continue;
+      try {
+        const exists = await blobExists(asset.originalUrl);
+        if (!exists) deadAssets.push(asset);
+      } catch {
+        // Network/auth blip — never delete metadata on a transient check failure.
+      }
+      continue;
+    }
+
     const file = path.basename(asset.originalUrl);
     referencedFiles.add(file);
-    return !onDisk.has(file);
-  });
+    if (!onDisk.has(file)) {
+      deadAssets.push(asset);
+    }
+  }
 
   if (deadAssets.length > 0 && !dryRun) {
     const deleted = await ImageAsset.deleteMany({ _id: { $in: deadAssets.map((a) => a._id) } });

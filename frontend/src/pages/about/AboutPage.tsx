@@ -23,11 +23,12 @@ export default function AboutPage() {
       <PageMeta {...staticPageMeta.about} />
 
       <PageHero
+        variant="portrait"
         eyebrow="About the house"
         title="Fifteen years"
         accent="in one room."
         description="Kadamba is a boutique and tailoring house in Kurnool. We dress women for weddings, festivals and the days a family remembers — and we make every garment here."
-        image="/media/placeholders/bridal.jpg"
+        image="/media/photos/bridal-red-lehenga.jpg"
         imageAlt="Bridal silk with a hand-worked border"
         facts={[
           { label: 'In Kurnool', value: '15+ years' },
@@ -49,7 +50,7 @@ export default function AboutPage() {
         title="The kettle is on."
         accent="The table is clear."
         copy="Come and see the cloth in daylight, bring the photographs you have saved, and leave with an honest answer about what is possible before your date."
-        image="/media/placeholders/boutique.jpg"
+        image="/media/photos/boutique-racks.jpg"
         action={{ label: 'Book a visit', to: '/request-service' }}
       />
     </>

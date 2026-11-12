@@ -7,6 +7,7 @@ export { FaqSection } from './FaqSection';
 export { GalleryRailSection } from './GalleryRailSection';
 export { JournalSection } from './JournalSection';
 export { LetterSection } from './LetterSection';
+export { LocalSeoSection } from './LocalSeoSection';
 export { MakingSection } from './MakingSection';
 export { MarqueeBand } from './MarqueeBand';
 export { PortalSection } from './PortalSection';

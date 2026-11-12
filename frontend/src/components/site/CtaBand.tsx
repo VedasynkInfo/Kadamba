@@ -5,6 +5,7 @@ import { Button } from '@/components/ui';
 import { usePublicContent } from '@/hooks/usePublicContent';
 import { cn } from '@/utils/cn';
 import { Reveal } from './Reveal';
+import { Parallax } from '@/components/motion/Parallax';
 
 export interface CtaBandProps {
   eyebrow?: string;
@@ -22,10 +23,8 @@ export interface CtaBandProps {
 /**
  * The closing panel.
  *
- * Every page ends in the same room — an oxblood plate, a serif invitation, two
- * doors out (book a consultation, or speak to the studio on WhatsApp). Repeating
- * it is the point: by the third page a visitor knows exactly where the page is
- * going to leave them.
+ * One full-bleed photograph, a very large invitation, and two doors out. The
+ * image is the ground, not a card; the type sits on it like a magazine cover.
  */
 export function CtaBand({
   eyebrow = 'Begin',
@@ -41,54 +40,86 @@ export function CtaBand({
   const { whatsappHref } = usePublicContent();
 
   return (
-    <section className={cn('relative isolate overflow-hidden bg-espresso text-ink-inverse', className)}>
-      <div className="grid lg:grid-cols-2">
-        <div className="relative min-h-[22rem] lg:min-h-[34rem]">
-          <OptimizedImage
-            src={image}
-            alt=""
-            sizes="(min-width: 1024px) 50vw, 100vw"
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-espresso/30 to-espresso lg:bg-gradient-to-r lg:from-transparent lg:to-espresso" />
-          <div className="absolute inset-0 bg-espresso/20 lg:hidden" />
-        </div>
+    <section
+      className={cn(
+        'on-dark relative isolate flex min-h-[min(84svh,820px)] overflow-hidden bg-[#120d0b] text-ink-inverse',
+        className,
+      )}
+    >
+      <Parallax speed={0.16} scale={1.16} className="absolute inset-0">
+        <OptimizedImage
+          src={image}
+          alt=""
+          sizes="100vw"
+          className="h-full w-full object-cover"
+        />
+      </Parallax>
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,13,11,0.58)_0%,rgba(18,13,11,0.2)_32%,rgba(18,13,11,0.92)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(18,13,11,0.78)_0%,transparent_62%)]" />
 
-        <div className="on-dark flex items-center px-6 py-16 sm:px-10 lg:px-16 lg:py-24">
-          <Reveal className="w-full max-w-xl">
-            <p className="eyebrow text-gold/85">{eyebrow}</p>
-            <h2 className="display-lg mt-6 text-ink-inverse">
-              {title}
-              {accent ? <> <span className="display-accent">{accent}</span></> : null}
-            </h2>
-            <p className="mt-6 max-w-md text-[0.98rem] leading-relaxed text-ink-inverse/65">{copy}</p>
+      <span
+        className="pointer-events-none absolute -right-4 top-20 hidden select-none font-heading text-[16rem] leading-none text-transparent [-webkit-text-stroke:1px_rgba(212,166,42,0.18)] xl:block"
+        aria-hidden
+      >
+        Begin
+      </span>
 
-            <div className="mt-10 flex flex-wrap items-center gap-3">
-              <Button
-                variant="primary"
-                size="lg"
-                className="rounded-none px-7 py-3 text-[0.7rem] font-semibold uppercase tracking-[0.18em]"
-                onClick={() => navigate(action.to)}
+      <div className="house-container relative z-10 flex min-h-[inherit] flex-col justify-end pb-14 pt-32 lg:pb-20">
+        <Reveal className="max-w-4xl">
+          <div className="flex items-center gap-4">
+            <span className="h-px w-10 bg-gold/70" aria-hidden />
+            <p className="eyebrow text-gold/90">{eyebrow}</p>
+          </div>
+          <h2 className="mt-7 max-w-[15ch] font-heading text-[clamp(2.8rem,6.6vw,6.4rem)] font-light leading-[0.92] tracking-[-0.04em] text-ink-inverse">
+            {title}
+            {accent ? (
+              <>
+                {' '}
+                <span className="display-accent">{accent}</span>
+              </>
+            ) : null}
+          </h2>
+          <p className="mt-7 max-w-xl text-[0.98rem] leading-[1.8] text-ink-inverse/72">{copy}</p>
+
+          <div className="mt-9 flex flex-wrap items-center gap-3">
+            <Button
+              variant="primary"
+              size="lg"
+              className="group rounded-none px-7 py-3.5 text-[0.68rem] font-semibold uppercase tracking-[0.2em]"
+              onClick={() => navigate(action.to)}
+            >
+              {action.label}
+              <span
+                className="ml-2 inline-block transition-transform duration-300 group-hover:translate-x-1"
+                aria-hidden
               >
-                {action.label}
+                →
+              </span>
+            </Button>
+            {whatsapp ? (
+              <Button
+                variant="secondary"
+                size="lg"
+                className="rounded-none border-ink-inverse/30 px-7 py-3.5 text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-ink-inverse hover:border-gold hover:text-gold"
+                onClick={() => window.open(whatsappHref(), '_blank', 'noopener,noreferrer')}
+              >
+                WhatsApp
               </Button>
-              {whatsapp ? (
-                <Button
-                  variant="secondary"
-                  size="lg"
-                  className="rounded-none border-ink-inverse/25 px-7 py-3 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-ink-inverse hover:border-gold hover:text-gold"
-                  onClick={() => window.open(whatsappHref(), '_blank', 'noopener,noreferrer')}
-                >
-                  WhatsApp
-                </Button>
-              ) : null}
-            </div>
+            ) : null}
+          </div>
 
-            <p className="mt-10 border-t border-ink-inverse/15 pt-6 text-[0.62rem] uppercase tracking-[0.24em] text-ink-inverse/40">
-              By appointment &middot; Kurnool, Andhra Pradesh &middot; Serving India and the world
-            </p>
-          </Reveal>
-        </div>
+          <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-2 border-t border-ink-inverse/15 pt-6 text-[0.58rem] font-semibold uppercase tracking-[0.24em] text-ink-inverse/55">
+            <span>By appointment</span>
+            <span className="text-gold/60" aria-hidden>
+              /
+            </span>
+            <span>Kurnool, Andhra Pradesh</span>
+            <span className="text-gold/60" aria-hidden>
+              /
+            </span>
+            <span>Serving India &amp; the world</span>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

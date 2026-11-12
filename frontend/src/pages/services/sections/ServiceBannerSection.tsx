@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { OptimizedImage } from '@/components/media/OptimizedImage';
+import { ParallaxImage } from '@/components/motion/ParallaxImage';
 import { Button } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import type { ServiceDetail } from '../data';
@@ -28,14 +28,15 @@ export function ServiceBannerSection({ service }: ServiceBannerSectionProps) {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: reduced ? 0 : 1.15, ease: [0.22, 1, 0.36, 1] }}
         >
-          <OptimizedImage
+          <ParallaxImage
             sizes="100vw"
             src={service.bannerImage}
             alt={service.bannerAlt}
-            className="h-full w-full object-cover"
+            className="h-full w-full"
             width={2400}
             height={1600}
             priority
+            speed={0.08}
           />
           <div
             className="absolute inset-0 bg-[radial-gradient(ellipse_at_25%_65%,rgba(255,215,0,0.12),transparent_48%),linear-gradient(105deg,rgba(0,0,0,0.88)_0%,rgba(0,0,0,0.5)_45%,rgba(0,0,0,0.3)_100%)]"

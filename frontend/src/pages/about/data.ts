@@ -4,14 +4,14 @@ export { brand };
 
 /** Fashion / atelier placeholders until gallery assets are wired. */
 const img = {
-  hero: '/media/placeholders/bridal.jpg',
-  story: '/media/placeholders/boutique.jpg',
+  hero: '/media/photos/bridal-red-lehenga.jpg',
+  story: '/media/photos/boutique-racks.jpg',
   portrait1:
-    '/media/placeholders/portrait-1.jpg',
+    '/media/photos/saree-portrait-1.jpg',
   portrait2:
-    '/media/placeholders/portrait-2.jpg',
+    '/media/photos/saree-portrait-2.jpg',
   portrait3:
-    '/media/placeholders/portrait-3.jpg',
+    '/media/photos/saree-portrait-3.jpg',
 };
 
 export const aboutHero = {

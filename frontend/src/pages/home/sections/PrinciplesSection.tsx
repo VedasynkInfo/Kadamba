@@ -28,11 +28,11 @@ export function PrinciplesSection() {
               className="group bg-surface p-7 transition-colors duration-500 hover:bg-surface-sunken md:p-9"
             >
               <div className="flex items-baseline justify-between gap-4">
-                <span className="font-heading text-4xl text-ink/15 transition-colors duration-500 group-hover:text-brand-strong/40">
+                <span className="font-heading text-4xl text-ink/65 transition-colors duration-500 group-hover:text-brand-strong">
                   {String(index + 1).padStart(2, '0')}
                 </span>
                 <span className="h-px flex-1 bg-ink/10" aria-hidden />
-                <span className="text-[0.55rem] font-semibold uppercase tracking-[0.26em] text-ink/35">
+                <span className="text-[0.55rem] font-semibold uppercase tracking-[0.26em] text-ink/65">
                   The house
                 </span>
               </div>

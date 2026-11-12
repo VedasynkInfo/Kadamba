@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { OptimizedImage } from '@/components/media/OptimizedImage';
+import { ParallaxImage } from '@/components/motion/ParallaxImage';
 import { Reveal, SectionHead } from '@/components/site';
 import { usePublicCatalog } from '@/hooks/usePublicProducts';
 import { productImage } from '@/pages/products/data';
@@ -19,6 +19,14 @@ const LAYOUT = [
   'lg:col-span-4 lg:h-[27rem]',
   'lg:col-span-4 lg:h-[27rem]',
 ];
+
+const FALLBACK_IMAGE: Record<string, string> = {
+  BRIDAL: '/media/photos/bridal-red-lehenga.jpg',
+  BLOUSES: '/media/photos/fabric-embroidery.jpg',
+  KURTIS: '/media/photos/saree-portrait-2.jpg',
+  GOWNS: '/media/photos/gown-red.jpg',
+  CUSTOM: '/media/photos/atelier-sewing.jpg',
+};
 
 /**
  * The collections.
@@ -45,7 +53,7 @@ export function CollectionsSection() {
         code,
         title: category?.name ?? code,
         count: items.length,
-        image: lead ? productImage(lead) : `/media/placeholders/${code.toLowerCase()}.jpg`,
+        image: lead ? productImage(lead) : FALLBACK_IMAGE[code] ?? '/media/photos/bridal-red-lehenga.jpg',
         sample: lead?.name ?? null,
       };
     }).filter((entry) => entry.count > 0 || !isLoading);
@@ -83,11 +91,13 @@ export function CollectionsSection() {
                 to={`/products?category=${collection.code}`}
                 className="plate plate-frame plate-hover group relative block h-full w-full overflow-hidden"
               >
-                <OptimizedImage
+                <ParallaxImage
                   src={collection.image}
                   alt={`${collection.title} from the Kadamba atelier`}
                   sizes="(min-width: 1024px) 40vw, 100vw"
-                  className="h-full w-full object-cover transition-transform duration-[1200ms] ease-luxury group-hover:scale-[1.04]"
+                  className="absolute inset-0"
+                  imageClassName="transition-transform duration-[1200ms] ease-luxury group-hover:scale-[1.04]"
+                  speed={0.08 + (index % 3) * 0.015}
                 />
 
                 {/* The scrim is explicit rather than inherited from `plate-veil`:
@@ -129,7 +139,7 @@ export function CollectionsSection() {
           ))}
         </div>
 
-        <Reveal className="mt-10 flex flex-col gap-4 border-t border-ink/12 pt-6 text-sm text-ink/55 sm:flex-row sm:items-center sm:justify-between">
+        <Reveal className="mt-10 flex flex-col gap-4 border-t border-ink/12 pt-6 text-sm text-ink/70 sm:flex-row sm:items-center sm:justify-between">
           <p>
             Everything is made to order. Lead times run from three days for an alteration to
             sixteen weeks for hand-worked bridal.

@@ -1,4 +1,4 @@
-import { PageMeta, staticPageMeta } from '@/seo';
+import { JsonLd, PageMeta, localBusinessJsonLd, staticPageMeta } from '@/seo';
 import { PageHero } from '@/components/site';
 import {
   ContactChannelsSection,
@@ -18,13 +18,15 @@ export default function ContactPage() {
   return (
     <>
       <PageMeta {...staticPageMeta.contact} />
+      <JsonLd data={localBusinessJsonLd()} />
 
       <PageHero
+        variant="contact"
         eyebrow="Contact"
         title="The studio,"
         accent="in Kurnool."
-        description="Near Main Road. By appointment, Monday to Saturday. If you are travelling from another city, tell us the days you will be here and we will plan the fitting around them."
-        image="/media/placeholders/boutique.jpg"
+        description="Near Gulp, Sreenivas Nagar. By appointment, Monday to Saturday. If you are travelling from another city, tell us the days you will be here and we will plan the fitting around them."
+        image="/media/photos/boutique-racks.jpg"
         imageAlt="The boutique entrance, framed by a warm arch"
         facts={[
           { label: 'Open', value: 'Mon – Sat' },

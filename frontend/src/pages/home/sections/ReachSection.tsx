@@ -30,7 +30,7 @@ export function ReachSection() {
               fitting and flying out with the lehenga. The measurements are taken in this room; the
               wedding can be anywhere in the world.
             </p>
-            <p className="mt-6 max-w-md text-sm leading-relaxed text-ink/52">
+            <p className="mt-6 max-w-md text-sm leading-relaxed text-ink/65">
               For overseas commissions we plan two fittings around the trip home, and keep the
               studio reachable between them through the client portal.
             </p>
@@ -52,7 +52,7 @@ export function ReachSection() {
                   className="flex items-baseline justify-between gap-4 border-b border-ink/12 py-3.5"
                 >
                   <span className="font-heading text-lg text-ink">{city.city}</span>
-                  <span className="text-[0.58rem] uppercase tracking-[0.2em] text-ink/45">
+                  <span className="text-[0.58rem] uppercase tracking-[0.2em] text-ink/65">
                     {city.region}
                   </span>
                 </li>
@@ -185,17 +185,17 @@ export function ReachSection() {
                 })}
               </svg>
 
-              <p className="absolute bottom-4 right-5 text-[0.52rem] uppercase tracking-[0.24em] text-ink/35">
+              <p className="absolute bottom-4 right-5 text-[0.52rem] uppercase tracking-[0.24em] text-ink/65">
                 A drawing of reach &middot; not to scale
               </p>
             </div>
           </Reveal>
 
           <Reveal delay={0.1} className="mt-4 flex items-center justify-between gap-4">
-            <p className="text-[0.58rem] uppercase tracking-[0.24em] text-ink/40">
+            <p className="text-[0.58rem] uppercase tracking-[0.24em] text-ink/65">
               {home.city} &middot; {home.region}
             </p>
-            <p className="text-[0.58rem] uppercase tracking-[0.24em] text-ink/40">
+            <p className="text-[0.58rem] uppercase tracking-[0.24em] text-ink/65">
               {elsewhere.length} cities &middot; five countries
             </p>
           </Reveal>

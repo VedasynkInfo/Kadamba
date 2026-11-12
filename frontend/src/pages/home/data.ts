@@ -103,15 +103,15 @@ export const brand = {
 
 /** Fashion / bridal placeholders until gallery API is wired. */
 const img = {
-  bridal: '/media/placeholders/bridal.jpg',
-  lehenga: '/media/placeholders/lehenga.jpg',
-  saree: '/media/placeholders/saree.jpg',
-  fabric: '/media/placeholders/fabric.jpg',
-  stitching: '/media/placeholders/stitching.jpg',
-  jewelry: '/media/placeholders/jewelry.jpg',
-  boutique: '/media/placeholders/boutique.jpg',
-  detail: '/media/placeholders/fabric.jpg',
-  embroidery: '/media/placeholders/embroidery.jpg',
+  bridal: '/media/photos/bridal-red-lehenga.jpg',
+  lehenga: '/media/photos/bridal-seated.jpg',
+  saree: '/media/photos/saree-jodhpur.jpg',
+  fabric: '/media/photos/fabric-ivory.jpg',
+  stitching: '/media/photos/atelier-machine.jpg',
+  jewelry: '/media/photos/jewelry-bridal.jpg',
+  boutique: '/media/photos/boutique-racks.jpg',
+  detail: '/media/photos/fabric-ivory.jpg',
+  embroidery: '/media/photos/fabric-embroidery.jpg',
 };
 
 export const heroSlides: HeroSlide[] = [

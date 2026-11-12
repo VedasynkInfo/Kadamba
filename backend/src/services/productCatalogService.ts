@@ -11,6 +11,7 @@ import { MeasurementTemplate } from '../models/MeasurementTemplate';
 import { Service } from '../models/Service';
 import { Order } from '../models/Order';
 import { seedData, seedTemplates } from './measurementTemplateService';
+import { buildStorefrontMeta, publicDescriptionFor } from '../seed/productStorefront';
 import { ApiError } from '../utils/ApiError';
 import { searchRegex } from '../utils/query';
 import { slugify, uniqueSlug } from '../utils/slugify';
@@ -45,7 +46,7 @@ export async function updateCategory(
       throw new ApiError(409, `Category with code ${data.code} already exists`);
     }
   }
-  return ProductCategory.findByIdAndUpdate(id, data, { new: true });
+  return ProductCategory.findByIdAndUpdate(id, data, { returnDocument: 'after' });
 }
 
 /* ------------------------------- product types ------------------------------ */
@@ -401,7 +402,7 @@ export async function updateProductType(
   if (unset.length > 0) {
     update.$unset = Object.fromEntries(unset.map((field) => [field, 1]));
   }
-  const updated = await ProductType.findByIdAndUpdate(id, update, { new: true }).populate([
+  const updated = await ProductType.findByIdAndUpdate(id, update, { returnDocument: 'after' }).populate([
     ...PRODUCT_POPULATE,
   ]);
   return updated ? serializeAdminProduct(updated) : null;
@@ -937,6 +938,16 @@ export async function seedCatalog(): Promise<{ categoriesSeeded: number; typesSe
         categoryId = seededCategoriesMap.get('Custom Tailoring');
       }
 
+      const categoryCode =
+        defaultCategories.find((category) => category.name === t.category)?.code ?? 'CUSTOM';
+      const storefront = buildStorefrontMeta({
+        categoryCode,
+        code: t.code,
+        name: t.name,
+        description: t.description,
+        seed: true,
+      });
+
       const root = slugify(t.name);
       let slug = root;
       let n = 2;
@@ -952,16 +963,22 @@ export async function seedCatalog(): Promise<{ categoriesSeeded: number; typesSe
         name: t.name,
         categoryId,
         description: t.description,
-        publicDescription: t.description,
+        publicDescription: publicDescriptionFor(t.name, t.description),
         measurementTemplateId: templateByCode.get(t.code),
-        gallery: [],
-        variants: [],
-        leadTimeDays: t.category === 'Bridal Collection' ? 45 : 21,
+        gallery: storefront.gallery,
+        variants: storefront.variants,
+        indicativePriceRange: storefront.indicativePriceRange,
+        leadTimeDays: storefront.leadTimeDays,
+        leadTimeNote: storefront.leadTimeNote,
         tags: [t.category],
         featured: featuredCodes.has(t.code),
         active: true,
         sortOrder: 0,
         defaultStages: ['measurements', 'cutting', 'stitching', 'finishing'],
+        seo: {
+          metaTitle: `${t.name} in Kurnool`,
+          metaDescription: `${publicDescriptionFor(t.name, t.description)} Indicative range ${storefront.indicativePriceRange}.`,
+        },
       };
     });
 

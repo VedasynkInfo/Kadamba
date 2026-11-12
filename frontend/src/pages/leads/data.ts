@@ -86,7 +86,7 @@ export const leadsBanner = {
   headline: 'Leads in one atelier desk',
   copy: 'Track bridal and traditional enquiries from first message to completed fitting.',
   image:
-    '/media/placeholders/fabric.jpg',
+    '/media/photos/fabric-ivory.jpg',
   alt: 'Fabric and atelier tools on a studio worktable',
 } as const;
 

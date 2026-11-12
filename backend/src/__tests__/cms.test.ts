@@ -29,7 +29,7 @@ describe('CMS content lifecycle', () => {
         title: 'A Studio Note',
         excerpt: 'What we learned this season.',
         category: 'Studio Notes',
-        coverImage: '/media/placeholders/fabric.jpg',
+        coverImage: '/media/photos/fabric-ivory.jpg',
         coverAlt: 'Fabric',
       });
     expect(created.status).toBe(201);
@@ -64,7 +64,7 @@ describe('CMS content lifecycle', () => {
         title: 'A Draft',
         excerpt: 'Not ready yet.',
         category: 'Studio Notes',
-        coverImage: '/media/placeholders/fabric.jpg',
+        coverImage: '/media/photos/fabric-ivory.jpg',
         coverAlt: 'Fabric',
         published: false,
       });
@@ -92,7 +92,7 @@ describe('CMS content lifecycle', () => {
       title: 'A Studio Note',
       excerpt: 'What we learned this season.',
       category: 'Studio Notes',
-      coverImage: '/media/placeholders/fabric.jpg',
+      coverImage: '/media/photos/fabric-ivory.jpg',
       coverAlt: 'Fabric',
     };
 
@@ -116,7 +116,7 @@ describe('CMS content lifecycle', () => {
       slug: 'a-studio-note',
       excerpt: 'What we learned this season.',
       category: 'Studio Notes',
-      coverImage: '/media/placeholders/fabric.jpg',
+      coverImage: '/media/photos/fabric-ivory.jpg',
       coverAlt: 'Fabric',
     };
 
@@ -142,9 +142,9 @@ describe('CMS content lifecycle', () => {
         title: 'A Wedding',
         category: 'Bridal',
         summary: 'A bride in a red lehenga.',
-        bannerImage: '/media/placeholders/saree.jpg',
+        bannerImage: '/media/photos/saree-jodhpur.jpg',
         bannerAlt: 'Saree',
-        coverImage: '/media/placeholders/saree.jpg',
+        coverImage: '/media/photos/saree-jodhpur.jpg',
         coverAlt: 'Saree',
       });
     expect(created.status).toBe(201);
@@ -171,7 +171,7 @@ describe('CMS content lifecycle', () => {
       .send({
         title: 'A Piece',
         category: 'Bridal',
-        src: '/media/placeholders/bridal.jpg',
+        src: '/media/photos/bridal-red-lehenga.jpg',
         alt: 'A bridal piece',
         width: 1200,
         height: 1600,
@@ -201,9 +201,9 @@ describe('CMS content lifecycle', () => {
         title: 'Bridal Consultation',
         category: 'Boutique',
         summary: 'An hour of styling.',
-        bannerImage: '/media/placeholders/embroidery.jpg',
+        bannerImage: '/media/photos/fabric-embroidery.jpg',
         bannerAlt: 'Embroidery',
-        cardImage: '/media/placeholders/embroidery.jpg',
+        cardImage: '/media/photos/fabric-embroidery.jpg',
       });
     expect(created.status).toBe(201);
 
@@ -228,9 +228,9 @@ describe('CMS content lifecycle', () => {
       category: 'Boutique',
       summary: 'Made to measure.',
       description: [],
-      bannerImage: '/media/placeholders/embroidery.jpg',
+      bannerImage: '/media/photos/fabric-embroidery.jpg',
       bannerAlt: 'Embroidery',
-      cardImage: '/media/placeholders/embroidery.jpg',
+      cardImage: '/media/photos/fabric-embroidery.jpg',
       icon: 'boutique',
       gallery: [],
       features: [],
@@ -287,7 +287,7 @@ describe('CMS content lifecycle', () => {
       category: 'Bridal',
       alt: 'Bridal',
       mediaType: 'image',
-      src: '/media/placeholders/bridal.jpg',
+      src: '/media/photos/bridal-red-lehenga.jpg',
       width: 1200,
       height: 1600,
       published: true,
@@ -299,7 +299,7 @@ describe('CMS content lifecycle', () => {
       category: 'Traditional',
       alt: 'Traditional',
       mediaType: 'image',
-      src: '/media/placeholders/saree.jpg',
+      src: '/media/photos/saree-jodhpur.jpg',
       width: 1200,
       height: 1600,
       published: false,

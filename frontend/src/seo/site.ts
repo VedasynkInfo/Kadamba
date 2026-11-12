@@ -9,7 +9,7 @@ export const SITE_URL = (import.meta.env.VITE_SITE_URL || 'https://kadambastudio
 export const SITE_NAME = brand.name;
 
 /** Default share image (hero bridal placeholder until studio OG asset is set). */
-export const DEFAULT_OG_IMAGE = '/media/placeholders/bridal.jpg';
+export const DEFAULT_OG_IMAGE = '/media/photos/bridal-red-lehenga.jpg';
 
 export function absoluteUrl(path = '/'): string {
   if (/^https?:\/\//i.test(path)) return path;

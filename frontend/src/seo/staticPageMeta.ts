@@ -1,5 +1,5 @@
 import { brand } from '@/pages/home/data';
-import { DEFAULT_OG_IMAGE, defaultDescription } from './site';
+import { DEFAULT_OG_IMAGE } from './site';
 
 export interface SeoMeta {
   title?: string;
@@ -17,54 +17,56 @@ export interface SeoMeta {
 /** Static marketing-route SEO copy. */
 export const staticPageMeta = {
   home: {
+    title: 'Bridal Boutique & Tailoring in Kurnool',
     path: '/',
-    description: defaultDescription,
+    description:
+      'Kadamba’s Designer Studio is a bridal boutique and custom tailoring studio in Kurnool. Bridal lehengas, designer blouses, sarees, festive wear and made-to-measure pieces.',
     image: DEFAULT_OG_IMAGE,
   },
   about: {
-    title: 'About',
+    title: 'About the Kurnool Atelier',
     path: '/about',
-    description: `Meet ${brand.name} in ${brand.location} — a trusted boutique for women's traditional wear, bridal fittings, and custom tailoring.`,
+    description: `Meet ${brand.name} in ${brand.location} — a boutique for bridal lehengas, traditional wear, designer blouses and custom tailoring, with fittings in the studio.`,
   },
   services: {
-    title: 'Services',
+    title: 'Bridal & Custom Tailoring',
     path: '/services',
-    description: `Bridal wear, traditional ethnic, custom tailoring, and boutique styling at ${brand.name}, ${brand.location}.`,
+    description: `Bridal couture, traditional wear, designer blouse stitching and custom tailoring at ${brand.name}, ${brand.location}. Two fittings included.`,
   },
   products: {
-    title: 'Collections',
+    title: 'Bridal Lehengas & Blouses',
     path: '/products',
-    description: `Explore bridal lehengas, designer blouses, kurtis, gowns, and custom tailoring from ${brand.name} in ${brand.location}.`,
+    description: `Explore bridal lehengas, designer blouses, kurtis, gowns and made-to-measure collections from ${brand.name} in ${brand.location}.`,
   },
   gallery: {
-    title: 'Gallery',
+    title: 'Bridal & Traditional Gallery',
     path: '/gallery',
-    description: `Browse bridal lehengas, festive sarees, and atelier finishes from ${brand.name} in ${brand.location}.`,
+    description: `Browse bridal lehengas, festive sarees, maggam work and atelier finishes from ${brand.name} in ${brand.location}.`,
   },
   portfolio: {
-    title: 'Portfolio',
+    title: 'Kurnool Bridal Portfolio',
     path: '/portfolio',
-    description: `Client stories and finished looks — bridal and traditional wear crafted at ${brand.name}, ${brand.location}.`,
+    description: `Client stories and finished bridal looks — lehengas, sarees and custom tailoring crafted at ${brand.name}, ${brand.location}.`,
   },
   blogs: {
-    title: 'Journal',
+    title: 'Bridal & Fabric Journal',
     path: '/blogs',
-    description: `Bridal fitting tips, fabric guidance, and festive trends from ${brand.name} in ${brand.location}.`,
+    description: `Bridal fitting tips, fabric guidance, blouse fitting notes and festive trends from ${brand.name} in ${brand.location}.`,
   },
   contact: {
-    title: 'Contact',
+    title: 'Contact the Kurnool Studio',
     path: '/contact',
-    description: `Visit or message ${brand.name} in ${brand.location} for measurements, trials, and bridal appointments.`,
+    description: `Visit or message ${brand.name} in ${brand.location} for bridal appointments, measurements, blouse stitching and consultations.`,
   },
   requestService: {
-    title: 'Request a Service',
+    title: 'Book a Bridal Consultation',
     path: '/request-service',
-    description: `Request bridal, traditional, or custom tailoring from ${brand.name} in ${brand.location}.`,
+    description: `Request bridal, traditional or custom tailoring from ${brand.name} in ${brand.location}. Share the date, occasion and budget to plan your fitting.`,
   },
   kurnool: {
-    title: 'Kurnool & the district',
+    title: 'Boutique in Kurnool',
     path: '/kurnool',
-    description: `One studio in Kurnool city, and the district it dresses — visit counts, what to bring, and an honest note for every town within reach of ${brand.shortName}.`,
+    description: `One studio in Kurnool city, and the district it dresses — what a bridal commission takes and how to plan a fitting from Adoni, Nandyal, Yemmiganur or Dhone.`,
   },
   designSystem: {
     title: 'Design System',

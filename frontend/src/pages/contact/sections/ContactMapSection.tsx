@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Section, SectionIntro } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { usePublicContent } from '@/hooks/usePublicContent';
 import { fadeUp } from '@/motion/variants';
 import { studioContact } from '../data';
 
@@ -9,6 +10,13 @@ import { studioContact } from '../data';
  */
 export function ContactMapSection() {
   const reduced = usePrefersReducedMotion();
+  const { settings } = usePublicContent();
+  const mapEmbedUrl = settings.mapEmbedUrl || studioContact.mapEmbedUrl;
+  const mapLink = settings.mapLink || studioContact.mapLink;
+  const addressLines =
+    settings.addressLines.filter(Boolean).length > 0
+      ? settings.addressLines
+      : studioContact.addressLines;
 
   return (
     <Section tone="dark" contained={false} className="overflow-hidden py-0">
@@ -22,10 +30,10 @@ export function ContactMapSection() {
           <SectionIntro
             tone="dark"
             title="Find us in Kurnool"
-            description={studioContact.addressLines.join(' · ')}
+            description={addressLines.join(' · ')}
             actions={
               <a
-                href={studioContact.mapLink}
+                href={mapLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm text-gold transition-colors hover:text-ink-inverse"
@@ -40,7 +48,7 @@ export function ContactMapSection() {
       <div className="relative h-[min(56vh,420px)] w-full md:h-[min(62vh,520px)]">
         <iframe
           title="Kadamba's Designer Studio location map — Kurnool"
-          src={studioContact.mapEmbedUrl}
+          src={mapEmbedUrl}
           className="absolute inset-0 h-full w-full border-0 grayscale-[35%] contrast-[1.05]"
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"

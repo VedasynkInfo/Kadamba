@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { OptimizedImage } from '@/components/media/OptimizedImage';
+import { ParallaxImage } from '@/components/motion/ParallaxImage';
 import { ContentEmpty, ContentLoading } from '@/components/feedback/ContentState';
 import { Reveal, SectionHead } from '@/components/site';
 import { usePublicContent } from '@/hooks/usePublicContent';
@@ -62,14 +62,15 @@ export function JournalSection() {
             <Reveal>
               <Link to={`/blogs/${lead.slug}`} className="group block">
                 <div className="plate plate-frame plate-frame-dark plate-hover aspect-[16/10] w-full">
-                  <OptimizedImage
+                  <ParallaxImage
                     src={lead.coverImage}
                     alt={lead.coverAlt || lead.title}
                     sizes="(min-width: 1024px) 58vw, 100vw"
-                    className="h-full w-full object-cover"
+                    className="absolute inset-0"
+                    speed={0.09}
                   />
                 </div>
-                <div className="mt-6 flex items-center gap-3 text-[0.58rem] font-semibold uppercase tracking-[0.24em] text-ink/40">
+                <div className="mt-6 flex items-center gap-3 text-[0.58rem] font-semibold uppercase tracking-[0.24em] text-ink/65">
                   <span className="text-brand-strong">{lead.category}</span>
                   <span className="h-px w-5 bg-ink/20" aria-hidden />
                   <time dateTime={lead.date}>{formatDate(lead.date)}</time>
@@ -90,11 +91,13 @@ export function JournalSection() {
                 <Reveal key={post.id} delay={0.08 + index * 0.06}>
                   <Link to={`/blogs/${post.slug}`} className="group grid grid-cols-[5.5rem_1fr] gap-5">
                     <div className="plate aspect-[4/5] w-full">
-                      <OptimizedImage
+                      <ParallaxImage
                         src={post.coverImage}
                         alt={post.coverAlt || post.title}
                         sizes="120px"
-                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        className="absolute inset-0"
+                        imageClassName="transition-transform duration-700 group-hover:scale-105"
+                        speed={0.05}
                       />
                     </div>
                     <div className="min-w-0">
@@ -104,7 +107,7 @@ export function JournalSection() {
                       <h3 className="mt-2 font-heading text-lg leading-snug text-ink transition-colors group-hover:text-brand-strong">
                         {post.title}
                       </h3>
-                      <p className="mt-2 flex items-center gap-2 text-[0.6rem] uppercase tracking-[0.2em] text-ink/40">
+                      <p className="mt-2 flex items-center gap-2 text-[0.6rem] uppercase tracking-[0.2em] text-ink/65">
                         <time dateTime={post.date}>{formatDate(post.date)}</time>
                         <span aria-hidden>&middot;</span>
                         <span>{post.readMinutes} min</span>

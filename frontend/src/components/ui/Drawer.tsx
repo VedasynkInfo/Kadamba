@@ -11,6 +11,8 @@ export interface DrawerProps {
   title: string;
   children: ReactNode;
   side?: 'left' | 'right';
+  /** `dark` is used by the full-screen public menu; the console keeps light. */
+  tone?: 'light' | 'dark';
   className?: string;
 }
 
@@ -23,7 +25,7 @@ export interface DrawerProps {
  * hand-rolled. As with `Modal`, focus restore is ours because the controlled
  * `open` prop has no `Dialog.Trigger` to return to.
  */
-export function Drawer({ open, onClose, title, children, side = 'right', className }: DrawerProps) {
+export function Drawer({ open, onClose, title, children, side = 'right', tone = 'light', className }: DrawerProps) {
   const previouslyFocused = useRef<HTMLElement | null>(null);
 
   return (
@@ -49,14 +51,19 @@ export function Drawer({ open, onClose, title, children, side = 'right', classNa
               previouslyFocused.current?.focus();
             }}
             className={cn(
-              'fixed top-0 z-50 flex h-full w-full max-w-[24rem] flex-col border-l border-line bg-surface-raised text-ink-raised shadow-soft outline-none',
+              'fixed top-0 z-50 flex h-full w-full max-w-[24rem] flex-col border-l shadow-soft outline-none',
+              tone === 'dark'
+                ? 'border-white/10 bg-[#120d0b] text-ink-inverse'
+                : 'border-line bg-surface-raised text-ink-raised',
               'transition-transform duration-300 ease-luxury animate-fade-in-up',
               side === 'right' ? 'right-0' : 'left-0',
               className,
             )}
           >
             <div className="flex items-center justify-between border-b border-line px-5 py-4">
-              <Dialog.Title className="font-heading text-xl text-brand-strong">
+              <Dialog.Title
+                className={cn('font-heading text-xl', tone === 'dark' ? 'text-gold' : 'text-brand-strong')}
+              >
                 {title}
               </Dialog.Title>
               <Dialog.Close asChild>
@@ -70,7 +77,9 @@ export function Drawer({ open, onClose, title, children, side = 'right', classNa
                 </Button>
               </Dialog.Close>
             </div>
-            <div className="flex-1 overflow-y-auto px-5 py-4">{children}</div>
+            <div className={cn('flex-1 overflow-y-auto px-5 py-4', tone === 'dark' && 'text-ink-inverse')}>
+              {children}
+            </div>
           </Dialog.Content>
         </PortalShell>
       </Dialog.Portal>

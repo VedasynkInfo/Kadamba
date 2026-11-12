@@ -124,7 +124,7 @@ export function EnquirySection() {
 
             <dl className="mt-10 space-y-5 border-t border-ink/12 pt-8">
               <div>
-                <dt className="text-[0.55rem] font-semibold uppercase tracking-[0.24em] text-ink/35">
+                <dt className="text-[0.55rem] font-semibold uppercase tracking-[0.24em] text-ink/65">
                   The studio
                 </dt>
                 <dd className="mt-2 text-sm leading-relaxed text-ink/70">
@@ -134,7 +134,7 @@ export function EnquirySection() {
                 </dd>
               </div>
               <div>
-                <dt className="text-[0.55rem] font-semibold uppercase tracking-[0.24em] text-ink/35">
+                <dt className="text-[0.55rem] font-semibold uppercase tracking-[0.24em] text-ink/65">
                   Telephone
                 </dt>
                 <dd className="mt-2">
@@ -147,7 +147,7 @@ export function EnquirySection() {
                 </dd>
               </div>
               <div>
-                <dt className="text-[0.55rem] font-semibold uppercase tracking-[0.24em] text-ink/35">
+                <dt className="text-[0.55rem] font-semibold uppercase tracking-[0.24em] text-ink/65">
                   Prefer to write?
                 </dt>
                 <dd className="mt-2 flex flex-wrap gap-x-5 gap-y-2 text-sm">
@@ -169,7 +169,7 @@ export function EnquirySection() {
               </div>
             </dl>
 
-            <p className="mt-8 text-[0.58rem] uppercase tracking-[0.22em] text-ink/35">
+            <p className="mt-8 text-[0.58rem] uppercase tracking-[0.22em] text-ink/65">
               By appointment &middot; Monday to Saturday
             </p>
           </Reveal>
@@ -181,7 +181,7 @@ export function EnquirySection() {
               <p className="text-[0.55rem] font-semibold uppercase tracking-[0.26em] text-brand-strong">
                 Consultation request
               </p>
-              <p className="mt-2 text-sm text-ink/55">
+              <p className="mt-2 text-sm text-ink/70">
                 We reply within one working day, during studio hours.
               </p>
             </div>
@@ -270,7 +270,7 @@ export function EnquirySection() {
               <Button type="submit" variant="primary" size="lg" loading={submitting}>
                 Send the request
               </Button>
-              <p className="text-xs text-ink/55">
+              <p className="text-xs text-ink/70">
                 No deposit is taken until you have seen the estimate.
               </p>
             </div>

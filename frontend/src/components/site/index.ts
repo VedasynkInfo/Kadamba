@@ -4,8 +4,10 @@ export { EditorialIndex, StatBand, type IndexEntry, type StatEntry } from './Edi
 export { Figure } from './Figure';
 export { FilterRow, type FilterOption } from './FilterRow';
 export { HeroBanner, type BannerSlide } from './HeroBanner';
+export { ImageReveal } from './ImageReveal';
 export { Marquee } from './Marquee';
 export { PageHero } from './PageHero';
 export { QuoteBlock } from './QuoteBlock';
 export { Reveal } from './Reveal';
 export { SectionHead } from './SectionHead';
+export { WordReveal } from './WordReveal';

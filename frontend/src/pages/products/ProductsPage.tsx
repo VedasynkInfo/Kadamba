@@ -32,14 +32,15 @@ export default function ProductsPage() {
       ) : null}
 
       <PageHero
+        variant="catalogue"
         eyebrow="The collections"
         title="Made to order,"
         accent="never off a rail."
         description="Bridal, blouses, kurtis, gowns and tailoring — the range of the house, each piece cut for the person who will wear it."
-        image="/media/placeholders/lehenga.jpg"
+        image="/media/photos/bridal-seated.jpg"
         imageAlt="Oxblood silk with a hand-worked buti field"
         facts={[
-          { label: 'Silhouettes', value: '20+' },
+          { label: 'Silhouettes', value: `${products.length}+` },
           { label: 'Lead time', value: '3 days – 16 weeks' },
           { label: 'Fittings', value: '2 included' },
           { label: 'Made in', value: 'Kurnool' },
@@ -53,7 +54,7 @@ export default function ProductsPage() {
         title="Choose the occasion."
         accent="We will find the silhouette."
         copy="Bring a photograph, a fabric, or just a date. The studio will tell you what can be made properly in the time you have — and what to do instead if it cannot."
-        image="/media/placeholders/boutique.jpg"
+        image="/media/photos/boutique-racks.jpg"
         action={{ label: 'Book a consultation', to: '/request-service' }}
       />
     </>

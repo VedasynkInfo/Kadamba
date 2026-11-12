@@ -1,0 +1,482 @@
+[
+  {
+    "name": "bridal-red-lehenga",
+    "src": "/media/photos/bridal-red-lehenga.jpg",
+    "alt": "Bride in a red and gold lehenga photographed outdoors",
+    "category": "bridal",
+    "provider": "unsplash",
+    "source": "https://unsplash.com/photos/yHAUBxPnl8g",
+    "credit": "sagar shrestha",
+    "license": "Unsplash License"
+  },
+  {
+    "name": "bridal-steps",
+    "src": "/media/photos/bridal-steps.jpg",
+    "alt": "Bride in an ornate red lehenga standing on stone steps",
+    "category": "bridal",
+    "provider": "unsplash",
+    "source": "https://unsplash.com/photos/ojJDGZafBHA",
+    "credit": "Tasnim Chowdhury",
+    "license": "Unsplash License"
+  },
+  {
+    "name": "bridal-red-jewels",
+    "src": "/media/photos/bridal-red-jewels.jpg",
+    "alt": "Indian bride in red bridal attire and gold jewellery",
+    "category": "bridal",
+    "provider": "unsplash",
+    "source": "https://unsplash.com/photos/AY1vwtfa9MU",
+    "credit": "Deepak Vedwal",
+    "license": "Unsplash License"
+  },
+  {
+    "name": "bridal-portrait",
+    "src": "/media/photos/bridal-portrait.jpg",
+    "alt": "Close portrait of an Indian bride in yellow and gold",
+    "category": "bridal",
+    "provider": "unsplash",
+    "source": "https://unsplash.com/photos/4XLxCjyBeNw",
+    "credit": "Rohit Dey",
+    "license": "Unsplash License"
+  },
+  {
+    "name": "bridal-veil",
+    "src": "/media/photos/bridal-veil.jpg",
+    "alt": "Bride in a red and gold bridal outfit under a veil",
+    "category": "bridal",
+    "provider": "unsplash",
+    "source": "https://unsplash.com/photos/xdn8XwMtu7Y",
+    "credit": "Unsplash",
+    "license": "Unsplash License"
+  },
+  {
+    "name": "bridal-pink",
+    "src": "/media/photos/bridal-pink.jpg",
+    "alt": "Bride in a pink and gold traditional wedding outfit",
+    "category": "bridal",
+    "provider": "unsplash",
+    "source": "https://unsplash.com/photos/hUtBiMMF5Zo",
+    "credit": "Rejaul Karim",
+    "license": "Unsplash License"
+  },
+  {
+    "name": "bridal-seated",
+    "src": "/media/photos/bridal-seated.jpg",
+    "alt": "Bride seated in a dark embroidered lehenga",
+    "category": "bridal",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/38823686/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "bridal-venue",
+    "src": "/media/photos/bridal-venue.jpg",
+    "alt": "Bride in a red lehenga at a decorated wedding venue",
+    "category": "bridal",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/37615677/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "bridal-walk",
+    "src": "/media/photos/bridal-walk.jpg",
+    "alt": "Bride walking in a sparkling traditional lehenga",
+    "category": "bridal",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/35635695/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "bridal-window",
+    "src": "/media/photos/bridal-window.jpg",
+    "alt": "Bride in a red lehenga by a curtained window",
+    "category": "bridal",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/36721897/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "saree-jodhpur",
+    "src": "/media/photos/saree-jodhpur.jpg",
+    "alt": "Woman in a yellow and brown saree in Jodhpur",
+    "category": "traditional",
+    "provider": "unsplash",
+    "source": "https://unsplash.com/photos/09fUy4cAjCU",
+    "credit": "Sonu Agvan",
+    "license": "Unsplash License"
+  },
+  {
+    "name": "saree-green",
+    "src": "/media/photos/saree-green.jpg",
+    "alt": "Woman in a green saree with gold jewellery",
+    "category": "traditional",
+    "provider": "unsplash",
+    "source": "https://unsplash.com/photos/Tu-aK8z8nQI",
+    "credit": "Unsplash",
+    "license": "Unsplash License"
+  },
+  {
+    "name": "saree-portrait-1",
+    "src": "/media/photos/saree-portrait-1.jpg",
+    "alt": "Portrait of an Indian woman in a vibrant saree",
+    "category": "traditional",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/40273416/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "saree-portrait-2",
+    "src": "/media/photos/saree-portrait-2.jpg",
+    "alt": "Woman in a traditional saree outdoors",
+    "category": "traditional",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/39322129/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "saree-portrait-3",
+    "src": "/media/photos/saree-portrait-3.jpg",
+    "alt": "Woman in a red saree in a garden",
+    "category": "traditional",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/32161001/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "saree-portrait-4",
+    "src": "/media/photos/saree-portrait-4.jpg",
+    "alt": "Woman in a colourful saree with a peacock feather",
+    "category": "traditional",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/38998845/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "jewelry-bridal",
+    "src": "/media/photos/jewelry-bridal.jpg",
+    "alt": "Indian bridal jewellery and makeup close-up",
+    "category": "jewellery",
+    "provider": "unsplash",
+    "source": "https://unsplash.com/photos/V7BqhD45b38",
+    "credit": "AL Kaium",
+    "license": "Unsplash License"
+  },
+  {
+    "name": "jewelry-necklace",
+    "src": "/media/photos/jewelry-necklace.jpg",
+    "alt": "Bride wearing an Indian gold necklace",
+    "category": "jewellery",
+    "provider": "unsplash",
+    "source": "https://unsplash.com/photos/ACAHBwOsRSM",
+    "credit": "Amish Thakkar",
+    "license": "Unsplash License"
+  },
+  {
+    "name": "jewelry-gold",
+    "src": "/media/photos/jewelry-gold.jpg",
+    "alt": "Traditional gold necklace on blue velvet",
+    "category": "jewellery",
+    "provider": "unsplash",
+    "source": "https://unsplash.com/photos/u1DhoJNcmqM",
+    "credit": "Zayed Ahmed Zadu",
+    "license": "Unsplash License"
+  },
+  {
+    "name": "jewelry-bangles",
+    "src": "/media/photos/jewelry-bangles.jpg",
+    "alt": "Gold bangles with red stones",
+    "category": "jewellery",
+    "provider": "unsplash",
+    "source": "https://unsplash.com/photos/zz6-LqiW4mY",
+    "credit": "Samar Ahmad",
+    "license": "Unsplash License"
+  },
+  {
+    "name": "jewelry-display",
+    "src": "/media/photos/jewelry-display.jpg",
+    "alt": "Gold necklace and earring set on display",
+    "category": "jewellery",
+    "provider": "unsplash",
+    "source": "https://unsplash.com/photos/vLIeyl_ml8s",
+    "credit": "Unsplash",
+    "license": "Unsplash License"
+  },
+  {
+    "name": "fabric-embroidery",
+    "src": "/media/photos/fabric-embroidery.jpg",
+    "alt": "Close-up of red and gold embroidered fabric",
+    "category": "fabric",
+    "provider": "unsplash",
+    "source": "https://unsplash.com/photos/sOga_fHfoek",
+    "credit": "Unsplash",
+    "license": "Unsplash License"
+  },
+  {
+    "name": "fabric-red",
+    "src": "/media/photos/fabric-red.jpg",
+    "alt": "Detail of red bridal fabric with gold embroidery",
+    "category": "fabric",
+    "provider": "unsplash",
+    "source": "https://unsplash.com/photos/z8dUDjXEdno",
+    "credit": "Unsplash",
+    "license": "Unsplash License"
+  },
+  {
+    "name": "fabric-ivory",
+    "src": "/media/photos/fabric-ivory.jpg",
+    "alt": "Soft ivory silk fabric with elegant folds",
+    "category": "fabric",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/35993328/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "fabric-white",
+    "src": "/media/photos/fabric-white.jpg",
+    "alt": "Close-up of white silk fabric with soft folds",
+    "category": "fabric",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/36726420/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "fabric-blue",
+    "src": "/media/photos/fabric-blue.jpg",
+    "alt": "Vivid blue silk fabric in elegant folds",
+    "category": "fabric",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/34833659/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "fabric-purple",
+    "src": "/media/photos/fabric-purple.jpg",
+    "alt": "Purple and red silk fabric folds",
+    "category": "fabric",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/36095039/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "atelier-machine",
+    "src": "/media/photos/atelier-machine.jpg",
+    "alt": "Hands guiding fabric through a sewing machine",
+    "category": "atelier",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/7147610/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "atelier-seamstress",
+    "src": "/media/photos/atelier-seamstress.jpg",
+    "alt": "Seamstress working at a sewing machine in an atelier",
+    "category": "atelier",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/7147640/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "atelier-detail",
+    "src": "/media/photos/atelier-detail.jpg",
+    "alt": "Close-up of hands threading a sewing machine",
+    "category": "atelier",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/7147608/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "atelier-sewing",
+    "src": "/media/photos/atelier-sewing.jpg",
+    "alt": "Tailor sewing a garment in a bright studio",
+    "category": "atelier",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/7147621/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "boutique-racks",
+    "src": "/media/photos/boutique-racks.jpg",
+    "alt": "Colourful dresses on racks in a fashion boutique",
+    "category": "boutique",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/38093978/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "boutique-neutral",
+    "src": "/media/photos/boutique-neutral.jpg",
+    "alt": "Neutral garments on wooden racks in a boutique",
+    "category": "boutique",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/35717265/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "boutique-warm",
+    "src": "/media/photos/boutique-warm.jpg",
+    "alt": "Warmly lit fashion store interior with clothing displays",
+    "category": "boutique",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/35045844/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "boutique-interior",
+    "src": "/media/photos/boutique-interior.jpg",
+    "alt": "Modern clothing boutique interior with shelves and racks",
+    "category": "boutique",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/7618822/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "gown-black",
+    "src": "/media/photos/gown-black.jpg",
+    "alt": "Woman in a sleek black evening gown",
+    "category": "gowns",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/36001592/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "gown-blue",
+    "src": "/media/photos/gown-blue.jpg",
+    "alt": "Woman in a blue and gold evening gown",
+    "category": "gowns",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/40529892/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "gown-red",
+    "src": "/media/photos/gown-red.jpg",
+    "alt": "Woman in a red evening gown against a marble wall",
+    "category": "gowns",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/39296106/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "gown-white",
+    "src": "/media/photos/gown-white.jpg",
+    "alt": "Portrait of a woman in a white evening gown",
+    "category": "gowns",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/32100350/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "kids-lehenga",
+    "src": "/media/photos/kids-lehenga.jpg",
+    "alt": "Young girl in a colourful traditional lehenga",
+    "category": "kids",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/28133554/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "kids-festive",
+    "src": "/media/photos/kids-festive.jpg",
+    "alt": "Girl in a red and gold festive outfit outdoors",
+    "category": "kids",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/40427592/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "kids-twirl",
+    "src": "/media/photos/kids-twirl.jpg",
+    "alt": "Child twirling in a purple traditional dress",
+    "category": "kids",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/30723693/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "kids-yellow",
+    "src": "/media/photos/kids-yellow.jpg",
+    "alt": "Girl in a yellow embroidered traditional dress",
+    "category": "kids",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/40092085/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "wedding-couple",
+    "src": "/media/photos/wedding-couple.jpg",
+    "alt": "Bride and groom in traditional Indian wedding attire",
+    "category": "wedding",
+    "provider": "unsplash",
+    "source": "https://unsplash.com/photos/vm-lJOYgKPQ",
+    "credit": "Unsplash",
+    "license": "Unsplash License"
+  },
+  {
+    "name": "wedding-three",
+    "src": "/media/photos/wedding-three.jpg",
+    "alt": "Three women in traditional Indian wedding attire",
+    "category": "wedding",
+    "provider": "unsplash",
+    "source": "https://unsplash.com/photos/fA_BqsFgAPA",
+    "credit": "Unsplash",
+    "license": "Unsplash License"
+  },
+  {
+    "name": "lehenga-hanging",
+    "src": "/media/photos/lehenga-hanging.jpg",
+    "alt": "Red bridal lehenga hanging in a garden",
+    "category": "bridal",
+    "provider": "unsplash",
+    "source": "https://unsplash.com/photos/CqVyCHUL0Ps",
+    "credit": "Unsplash",
+    "license": "Unsplash License"
+  },
+  {
+    "name": "lehenga-palm",
+    "src": "/media/photos/lehenga-palm.jpg",
+    "alt": "Embroidered bridal lehenga draped over a palm tree",
+    "category": "bridal",
+    "provider": "pexels",
+    "source": "https://www.pexels.com/photo/36489477/",
+    "credit": "Pexels",
+    "license": "Pexels License"
+  },
+  {
+    "name": "sewing-vintage",
+    "src": "/media/photos/sewing-vintage.jpg",
+    "alt": "Vintage black sewing machine in an atelier",
+    "category": "atelier",
+    "provider": "unsplash",
+    "source": "https://unsplash.com/s/photos/sewing-machine",
+    "credit": "Unsplash",
+    "license": "Unsplash License"
+  }
+]

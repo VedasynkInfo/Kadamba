@@ -41,7 +41,7 @@ export function ServiceQuestionsSection({ service }: { service: ServiceDetail })
                   <Icon
                     name="chevronDown"
                     size={18}
-                    className={isOpen ? 'shrink-0 rotate-180 text-brand-strong' : 'shrink-0 text-ink/50'}
+                    className={isOpen ? 'shrink-0 rotate-180 text-brand-strong' : 'shrink-0 text-ink/65'}
                   />
                 </button>
               </h3>

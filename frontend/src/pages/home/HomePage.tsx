@@ -1,5 +1,5 @@
 import { JsonLd, PageMeta, localBusinessJsonLd, staticPageMeta } from '@/seo';
-import { CtaBand, HeroBanner } from '@/components/site';
+import { CtaBand, HeroBanner, ImageReveal } from '@/components/site';
 import {
   AtelierSection,
   BridalSection,
@@ -10,6 +10,7 @@ import {
   GalleryRailSection,
   JournalSection,
   LetterSection,
+  LocalSeoSection,
   MakingSection,
   MarqueeBand,
   PortalSection,
@@ -67,8 +68,17 @@ export default function HomePage() {
       <RecordSection />
       <JournalSection />
       <PortalSection />
+      <LocalSeoSection />
       <FaqSection />
       <EnquirySection />
+      <ImageReveal
+        image={plate.bridalAlt}
+        alt="Bridal silk in the Kadamba fitting room"
+        eyebrow="The commission"
+        title="Every garment leaves the studio"
+        accent="with a name on it."
+        copy="Measured, cut, and finished for one person — and for the photographs that will still be looked at in twenty years."
+      />
       <CtaBand
         eyebrow="The next celebration"
         title="Every wedding begins"

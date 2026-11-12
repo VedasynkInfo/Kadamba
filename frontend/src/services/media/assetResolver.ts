@@ -43,9 +43,9 @@ function apiBase(): string {
   return raw.replace(/\/$/, '');
 }
 
-/** Only our own uploads can have variants. */
+/** Only our own uploads (local `/uploads/` or Azure Blob Storage) can have variants. */
 export function isResolvableUrl(url: string): boolean {
-  return url.includes('/uploads/');
+  return url.includes('/uploads/') || /\.blob\.core\./i.test(url);
 }
 
 function settle(url: string, asset: ResolvedAsset | null, cacheResult: boolean): void {

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { OptimizedImage } from '@/components/media/OptimizedImage';
+import { ParallaxImage } from '@/components/motion/ParallaxImage';
 import { cn } from '@/utils/cn';
 
 export interface FigureProps {
@@ -19,6 +20,9 @@ export interface FigureProps {
   sizes?: string;
   className?: string;
   imageClassName?: string;
+  /** Slow scroll drift inside the plate. Off for portraits that must not move. */
+  parallax?: boolean;
+  parallaxSpeed?: number;
   children?: ReactNode;
 }
 
@@ -42,6 +46,8 @@ export function Figure({
   sizes = '(min-width: 1024px) 33vw, 100vw',
   className,
   imageClassName,
+  parallax = true,
+  parallaxSpeed = 0.08,
   children,
 }: FigureProps) {
   return (
@@ -55,19 +61,31 @@ export function Figure({
           hover && 'plate-hover',
         )}
       >
-        <OptimizedImage
-          src={src}
-          alt={alt}
-          priority={priority}
-          sizes={sizes}
-          className={cn('h-full w-full object-cover', imageClassName)}
-        />
+        {parallax ? (
+          <ParallaxImage
+            src={src}
+            alt={alt}
+            priority={priority}
+            sizes={sizes}
+            speed={parallaxSpeed}
+            className="absolute inset-0"
+            imageClassName={imageClassName}
+          />
+        ) : (
+          <OptimizedImage
+            src={src}
+            alt={alt}
+            priority={priority}
+            sizes={sizes}
+            className={cn('h-full w-full object-cover', imageClassName)}
+          />
+        )}
         {children}
       </div>
       {(kicker || caption) && (
         <figcaption className="mt-4 flex items-baseline justify-between gap-4">
           {kicker ? (
-            <span className="text-[0.62rem] font-semibold uppercase tracking-[0.28em] text-ink/45">
+            <span className="text-[0.62rem] font-semibold uppercase tracking-[0.28em] text-ink/65">
               {kicker}
             </span>
           ) : (

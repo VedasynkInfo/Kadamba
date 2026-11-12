@@ -10,22 +10,22 @@
  */
 
 const plate = {
-  bridal: '/media/placeholders/bridal.jpg',
-  bridalAlt: '/media/placeholders/bridal-alt.jpg',
-  lehenga: '/media/placeholders/lehenga.jpg',
-  saree: '/media/placeholders/saree.jpg',
-  sareeAlt: '/media/placeholders/saree-alt.jpg',
-  fabric: '/media/placeholders/fabric.jpg',
-  stitching: '/media/placeholders/stitching.jpg',
-  jewelry: '/media/placeholders/jewelry.jpg',
-  boutique: '/media/placeholders/boutique.jpg',
-  embroidery: '/media/placeholders/embroidery.jpg',
-  fitting: '/media/placeholders/fitting.jpg',
-  runway: '/media/placeholders/runway.jpg',
-  festive: '/media/placeholders/festive.jpg',
-  atelier: '/media/placeholders/atelier.jpg',
-  portrait1: '/media/placeholders/portrait-1.jpg',
-  portrait2: '/media/placeholders/portrait-2.jpg',
+  bridal: '/media/photos/bridal-red-lehenga.jpg',
+  bridalAlt: '/media/photos/bridal-steps.jpg',
+  lehenga: '/media/photos/bridal-seated.jpg',
+  saree: '/media/photos/saree-jodhpur.jpg',
+  sareeAlt: '/media/photos/saree-green.jpg',
+  fabric: '/media/photos/fabric-ivory.jpg',
+  stitching: '/media/photos/atelier-machine.jpg',
+  jewelry: '/media/photos/jewelry-bridal.jpg',
+  boutique: '/media/photos/boutique-racks.jpg',
+  embroidery: '/media/photos/fabric-embroidery.jpg',
+  fitting: '/media/photos/atelier-seamstress.jpg',
+  runway: '/media/photos/gown-red.jpg',
+  festive: '/media/photos/wedding-three.jpg',
+  atelier: '/media/photos/atelier-sewing.jpg',
+  portrait1: '/media/photos/saree-portrait-1.jpg',
+  portrait2: '/media/photos/saree-portrait-2.jpg',
 } as const;
 
 export { plate };
@@ -35,7 +35,7 @@ export const bannerSlides: BannerSlide[] = [
   {
     id: 'b1',
     image: plate.bridal,
-    alt: 'Bridal silk with hand-worked zari detail',
+    alt: 'Bride in a red and gold lehenga photographed outdoors',
     kicker: 'Kurnool · Est. 2009',
     title: 'The bridal',
     accent: 'commission',
@@ -47,7 +47,7 @@ export const bannerSlides: BannerSlide[] = [
   {
     id: 'b2',
     image: plate.lehenga,
-    alt: 'Festive lehenga in deep oxblood silk',
+    alt: 'Bride seated in a dark embroidered lehenga',
     kicker: 'Bridal · Ceremony',
     title: 'Cut for',
     accent: 'the ceremony',
@@ -71,7 +71,7 @@ export const bannerSlides: BannerSlide[] = [
   {
     id: 'b4',
     image: plate.festive,
-    alt: 'Gold silk with a hand-worked buti field',
+    alt: 'Three women in traditional Indian wedding attire',
     kicker: 'Traditional wear',
     title: 'The silk',
     accent: 'inheritance',
@@ -312,6 +312,36 @@ export const homeFaqs: AccordionItem[] = [
     question: 'How do I follow the progress of my order?',
     answer:
       'Every confirmed commission receives a reference ID and access to the client portal, where you can see the stage, the fitting dates, the invoices and the studio’s notes — and message the team directly.',
+  },
+  {
+    id: 'f6',
+    question: 'Where can I buy a bridal lehenga in Kurnool?',
+    answer:
+      'Kadamba’s Designer Studio is a bridal boutique in Kurnool city, near Gulp in Sreenivas Nagar. We do not sell ready-made stock: a bridal lehenga is designed, cut and hand-finished for your measurements, usually over two or three fittings. Book a consultation before you buy fabric so the silhouette and timeline can be planned together.',
+  },
+  {
+    id: 'f7',
+    question: 'Do you stitch blouses from customer fabric?',
+    answer:
+      'Yes. Bring your own saree, fabric length or inherited piece and the studio will check whether it can carry the neckline, lining and finishing you want. We take fresh measurements, cut a personal pattern and include fittings so the blouse sits properly at the armhole and back.',
+  },
+  {
+    id: 'f8',
+    question: 'Do you offer saree fall and pico in Kurnool?',
+    answer:
+      'Yes. Fall and pico are available for silk, cotton and blended sarees, along with blouse stitching and alterations. If the saree is new, bring it with the blouse fabric; if it is an heirloom, tell us before any cutting so we can preserve the border and pallu.',
+  },
+  {
+    id: 'f9',
+    question: 'How much does bridal blouse stitching cost in Kurnool?',
+    answer:
+      'Most blouses sit between ₹1,800 and ₹8,500 depending on the neckline, lining, embroidery and finish; bridal lehengas begin around ₹18,000. These are indicative ranges, not a quotation. The studio gives a written estimate after the consultation and before any deposit.',
+  },
+  {
+    id: 'f10',
+    question: 'Can I book a consultation online?',
+    answer:
+      'Yes. Use the consultation form or WhatsApp the studio. The first appointment can happen in Kurnool or by video call; for outstation brides we plan measurements and trials around the trip home.',
   },
 ];
 

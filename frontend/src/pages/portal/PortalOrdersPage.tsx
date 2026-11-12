@@ -279,7 +279,7 @@ export function PortalOrderDetailPage() {
                           ? 'border-gold bg-gold/15 text-gold'
                           : done
                             ? 'border-gold/25 text-ink-inverse/80'
-                            : 'border-white/5 text-ink-inverse/30',
+                            : 'border-white/5 text-ink-inverse/60',
                       )}
                     >
                       <p className="text-[0.55rem] uppercase leading-tight tracking-[0.08em]">

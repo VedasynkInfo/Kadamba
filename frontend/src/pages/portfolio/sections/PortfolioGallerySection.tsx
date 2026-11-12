@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { OptimizedImage } from '@/components/media/OptimizedImage';
+import { ParallaxImage } from '@/components/motion/ParallaxImage';
 import { Section, SectionIntro } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { fadeUp, staggerChildren } from '@/motion/variants';
@@ -37,16 +37,18 @@ export function PortfolioGallerySection({ project }: PortfolioGallerySectionProp
             className={index === 0 ? 'sm:col-span-2 lg:col-span-2' : undefined}
           >
             <figure className="group relative overflow-hidden bg-surface-sunken">
-              <OptimizedImage
-                sizes="(min-width: 1200px) 368px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                src={item.image}
-                alt={item.alt}
-                className={`w-full object-cover transition duration-700 group-hover:scale-[1.03] ${
-                  index === 0 ? 'aspect-[16/10]' : 'aspect-[4/5]'
-                }`}
-                width={index === 0 ? 1400 : 800}
-                height={index === 0 ? 875 : 1000}
-              />
+              <div className={`relative w-full ${index === 0 ? 'aspect-[16/10]' : 'aspect-[4/5]'}`}>
+                <ParallaxImage
+                  sizes="(min-width: 1200px) 368px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  src={item.image}
+                  alt={item.alt}
+                  className="absolute inset-0"
+                  imageClassName="transition duration-700 group-hover:scale-[1.03]"
+                  width={index === 0 ? 1400 : 800}
+                  height={index === 0 ? 875 : 1000}
+                  speed={0.06 + (index % 3) * 0.015}
+                />
+              </div>
               {item.caption ? (
                 <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4 font-heading text-sm text-ink-inverse">
                   {item.caption}

@@ -36,7 +36,7 @@ export function PortalSection() {
                 delay={index * 0.04}
                 className="flex items-baseline gap-5 border-b border-ink/12 py-4"
               >
-                <span className="font-mono text-[0.58rem] tabular-nums tracking-[0.16em] text-brand-strong/70">
+                <span className="font-mono text-[0.58rem] tabular-nums tracking-[0.16em] text-brand-strong">
                   {String(index + 1).padStart(2, '0')}
                 </span>
                 <span className="text-[0.9rem] leading-relaxed text-ink/70">{item}</span>
@@ -48,7 +48,7 @@ export function PortalSection() {
             <Link to="/portal/activate" className="link-arrow text-brand-strong">
               Open the client portal
             </Link>
-            <span className="text-[0.58rem] uppercase tracking-[0.22em] text-ink/35">
+            <span className="text-[0.58rem] uppercase tracking-[0.22em] text-ink/65">
               Reference ID required
             </span>
           </Reveal>
@@ -58,11 +58,11 @@ export function PortalSection() {
           <div className="well relative overflow-hidden p-7 sm:p-9">
             <div className="flex items-start justify-between gap-6 border-b border-ink/12 pb-6">
               <div>
-                <p className="text-[0.55rem] font-semibold uppercase tracking-[0.26em] text-ink/40">
+                <p className="text-[0.55rem] font-semibold uppercase tracking-[0.26em] text-ink/65">
                   Commission
                 </p>
                 <p className="mt-2 font-heading text-2xl text-ink">Bridal Lehenga</p>
-                <p className="mt-1 font-mono text-[0.62rem] uppercase tracking-[0.18em] text-ink/45">
+                <p className="mt-1 font-mono text-[0.62rem] uppercase tracking-[0.18em] text-ink/65">
                   KDS &middot; 2026 &middot; 0142
                 </p>
               </div>
@@ -98,18 +98,18 @@ export function PortalSection() {
                             ? 'block text-[0.82rem] font-semibold text-ink'
                             : done
                               ? 'block text-[0.82rem] text-ink/65'
-                              : 'block text-[0.82rem] text-ink/35'
+                              : 'block text-[0.82rem] text-ink/65'
                         }
                       >
                         {stage}
                       </span>
                       {current ? (
-                        <span className="mt-1 block text-[0.68rem] text-ink/50">
+                        <span className="mt-1 block text-[0.68rem] text-ink/65">
                           Second fitting &middot; Thursday, 4:30 pm
                         </span>
                       ) : null}
                     </span>
-                    <span className="font-mono text-[0.55rem] uppercase tracking-[0.16em] text-ink/30">
+                    <span className="font-mono text-[0.55rem] uppercase tracking-[0.16em] text-ink/65">
                       {index < 2 ? 'done' : current ? 'now' : '—'}
                     </span>
                   </li>
@@ -119,20 +119,20 @@ export function PortalSection() {
 
             <div className="mt-6 grid grid-cols-2 gap-4 border-t border-ink/12 pt-6">
               <div>
-                <p className="text-[0.52rem] font-semibold uppercase tracking-[0.22em] text-ink/35">
+                <p className="text-[0.52rem] font-semibold uppercase tracking-[0.22em] text-ink/65">
                   Balance
                 </p>
                 <p className="mt-1 font-heading text-xl text-ink">₹0</p>
               </div>
               <div>
-                <p className="text-[0.52rem] font-semibold uppercase tracking-[0.22em] text-ink/35">
+                <p className="text-[0.52rem] font-semibold uppercase tracking-[0.22em] text-ink/65">
                   Delivery
                 </p>
                 <p className="mt-1 font-heading text-xl text-ink">12 Nov</p>
               </div>
             </div>
 
-            <p className="mt-6 text-[0.58rem] uppercase tracking-[0.22em] text-ink/30">
+            <p className="mt-6 text-[0.58rem] uppercase tracking-[0.22em] text-ink/65">
               A sample of the client portal
             </p>
           </div>

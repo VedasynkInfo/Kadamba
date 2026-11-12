@@ -37,7 +37,7 @@ export function BlogClustersSection() {
                   <span className="font-mono text-[0.6rem] tabular-nums tracking-[0.24em] text-brand-strong">
                     {String(index + 1).padStart(2, '0')}
                   </span>
-                  <span className="text-[0.58rem] uppercase tracking-[0.2em] text-ink/35">
+                  <span className="text-[0.58rem] uppercase tracking-[0.2em] text-ink/65">
                     {String(count).padStart(2, '0')} essays
                   </span>
                 </div>

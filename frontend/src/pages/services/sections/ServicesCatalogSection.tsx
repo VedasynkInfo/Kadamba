@@ -1,14 +1,13 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { OptimizedImage } from '@/components/media/OptimizedImage';
+import { ParallaxImage } from '@/components/motion/ParallaxImage';
 import { Icon } from '@/components/icons';
 import { Button, Input, Section } from '@/components/ui';
 import { FilterRow, SectionHead } from '@/components/site';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { usePublicContent } from '@/hooks/usePublicContent';
 import { ContentEmpty, ContentError, ContentLoading } from '@/components/feedback/ContentState';
-import { fadeUp, staggerChildren } from '@/motion/variants';
 import { cn } from '@/utils/cn';
 import {
   filterServices,
@@ -84,7 +83,7 @@ export function ServicesCatalogSection() {
         accent="can make."
         description={servicesCatalogIntro.description}
         actions={
-          <span className="text-[0.6rem] uppercase tracking-[0.24em] text-ink/40">
+          <span className="text-[0.6rem] uppercase tracking-[0.24em] text-ink/65">
             {String(filtered.length).padStart(2, '0')} services
           </span>
         }
@@ -152,14 +151,12 @@ export function ServicesCatalogSection() {
               <motion.ul
                 key={`${category}-${query}`}
                 className="mt-12 grid gap-x-6 gap-y-14 sm:grid-cols-2"
-                variants={reduced ? undefined : staggerChildren}
-                initial={reduced ? false : 'hidden'}
-                animate={reduced ? undefined : 'visible'}
               >
-                {filtered.map((service) => (
+                {filtered.map((service, index) => (
                   <ServiceCard
                     key={service.id}
                     service={service}
+                    index={index}
                     reduced={reduced}
                     onOpen={() => navigate(`/services/${service.slug}`)}
                   />
@@ -175,15 +172,22 @@ export function ServicesCatalogSection() {
 
 function ServiceCard({
   service,
+  index,
   reduced,
   onOpen,
 }: {
   service: ServiceDetail;
+  index: number;
   reduced: boolean;
   onOpen: () => void;
 }) {
   return (
-    <motion.li variants={reduced ? undefined : fadeUp}>
+    <motion.li
+      initial={reduced ? false : { opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-8%' }}
+      transition={{ duration: 0.85, delay: reduced ? 0 : Math.min(index * 0.06, 0.3), ease: [0.22, 1, 0.36, 1] }}
+    >
       <button
         type="button"
         onClick={onOpen}
@@ -193,13 +197,15 @@ function ServiceCard({
         )}
       >
         <div className="plate plate-frame plate-hover relative aspect-[16/11] w-full">
-          <OptimizedImage
+          <ParallaxImage
             sizes="(min-width: 1200px) 620px, 50vw"
             src={service.cardImage}
             alt={service.bannerAlt}
-            className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
+            className="absolute inset-0"
+            imageClassName="transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
             width={1600}
             height={1100}
+            speed={0.07}
           />
           <div
             className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent"
@@ -220,7 +226,7 @@ function ServiceCard({
           <p className="font-heading text-lg text-ink">
             From <span className="text-brand-strong">{service.pricing.startingFrom}</span>
           </p>
-          <span className="link-arrow text-[0.6rem] text-ink/55 transition-colors group-hover:text-brand-strong">
+          <span className="link-arrow text-[0.6rem] text-ink/70 transition-colors group-hover:text-brand-strong">
             View details &amp; pricing
             <Icon name="arrowRight" size={14} />
           </span>

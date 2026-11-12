@@ -16,7 +16,7 @@ export function SearchInput({
 
   return (
     <div className={cn('relative min-w-[200px] flex-1 max-w-xs', containerClassName)}>
-      <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink/30">
+      <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink/65">
         <Icon name="search" size={16} />
       </span>
       <input

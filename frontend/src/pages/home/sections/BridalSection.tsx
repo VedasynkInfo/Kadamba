@@ -20,14 +20,15 @@ export function BridalSection() {
   const navigate = useNavigate();
   const reduced = usePrefersReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1.08, 1, 1.06]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1.12, 1.02, 1.1]);
+  const y = useTransform(scrollYProgress, [0, 1], ['-5%', '5%']);
 
   return (
     <section
       ref={ref}
       className="on-dark relative isolate overflow-hidden bg-espresso text-ink-inverse"
     >
-      <motion.div className="absolute inset-0" style={reduced ? undefined : { scale }} aria-hidden>
+      <motion.div className="absolute inset-0" style={reduced ? undefined : { scale, y }} aria-hidden>
         <OptimizedImage
           src={plate.lehenga}
           alt=""
@@ -75,7 +76,7 @@ export function BridalSection() {
             >
               Begin a bridal commission
             </Button>
-            <p className="text-[0.62rem] uppercase tracking-[0.22em] text-ink-inverse/45">
+            <p className="text-[0.62rem] uppercase tracking-[0.22em] text-ink-inverse/60">
               Eight to sixteen weeks &middot; two fittings
             </p>
           </Reveal>

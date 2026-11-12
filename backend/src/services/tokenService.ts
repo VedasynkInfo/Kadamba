@@ -171,7 +171,7 @@ export async function rotateSession(
         replacedByHash: nextHash,
       },
     },
-    { new: true },
+    { returnDocument: 'after' },
   );
 
   if (!rotated) {

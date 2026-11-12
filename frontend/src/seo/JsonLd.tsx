@@ -36,12 +36,29 @@ export function localBusinessJsonLd(): JsonLdObject {
     email: studioContact.email,
     address: {
       '@type': 'PostalAddress',
-      addressLocality: brand.location,
+      streetAddress:
+        'First Floor, H.No. 40/808 B1, near Gulp, Sreenivas Nagar, Prakash Nagar',
+      addressLocality: 'Kurnool',
       addressRegion: 'Andhra Pradesh',
+      postalCode: '518004',
       addressCountry: 'IN',
     },
-    areaServed: brand.location,
-    priceRange: '$$',
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: 15.83866,
+      longitude: 78.038834,
+    },
+    hasMap: studioContact.mapLink,
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+        opens: '10:00',
+        closes: '19:00',
+      },
+    ],
+    areaServed: ['Kurnool', 'Adoni', 'Nandyal', 'Yemmiganur', 'Dhone'],
+    priceRange: '₹₹',
   };
 }
 
@@ -63,7 +80,7 @@ export function articleJsonLd(input: {
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,
-      logo: { '@type': 'ImageObject', url: absoluteUrl('/favicon.svg') },
+      logo: { '@type': 'ImageObject', url: absoluteUrl('/media/brand/kadamba-logo.png') },
     },
     mainEntityOfPage: absoluteUrl(input.path),
   };
@@ -180,5 +197,22 @@ export function itemListJsonLd(input: {
       name: item.name,
       url: absoluteUrl(item.path),
     })),
+  };
+}
+
+/** A gallery of studio work, so image search can associate the plates. */
+export function imageGalleryJsonLd(input: {
+  name: string;
+  description: string;
+  path: string;
+  images: readonly { url: string; alt: string }[];
+}): JsonLdObject {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ImageGallery',
+    name: input.name,
+    description: input.description,
+    url: absoluteUrl(input.path),
+    image: input.images.map((image) => absoluteUrl(image.url)),
   };
 }

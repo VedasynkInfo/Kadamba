@@ -6,21 +6,21 @@ import type { PublicProduct } from '@/services/products/publicProductService';
  *
  * Product types carry an optional `image` field, but most workshop records do
  * not: they were created for measurement and order entry, not for the website.
- * A category-level placeholder keeps the storefront composed until the studio
- * uploads a photograph per garment.
+ * A category-level photograph keeps the storefront composed until the studio
+ * uploads a photograph of every garment.
  */
 const categoryImages: Record<string, string> = {
-  BRIDAL: '/media/placeholders/bridal.jpg',
-  BLOUSES: '/media/placeholders/embroidery.jpg',
-  KURTIS: '/media/placeholders/stitching.jpg',
-  GOWNS: '/media/placeholders/lehenga.jpg',
-  SALWAR: '/media/placeholders/saree.jpg',
-  SKIRTS: '/media/placeholders/fabric.jpg',
-  KIDS: '/media/placeholders/fitting.jpg',
-  CUSTOM: '/media/placeholders/boutique.jpg',
+  BRIDAL: '/media/photos/bridal-red-lehenga.jpg',
+  BLOUSES: '/media/photos/fabric-embroidery.jpg',
+  KURTIS: '/media/photos/saree-portrait-2.jpg',
+  GOWNS: '/media/photos/gown-red.jpg',
+  SALWAR: '/media/photos/saree-green.jpg',
+  SKIRTS: '/media/photos/fabric-ivory.jpg',
+  KIDS: '/media/photos/kids-lehenga.jpg',
+  CUSTOM: '/media/photos/atelier-sewing.jpg',
 };
 
-const fallback = '/media/placeholders/lehenga.jpg';
+const fallback = '/media/photos/bridal-red-lehenga.jpg';
 
 export function productImage(product: PublicProduct): string {
   if (product.image) return product.image;
@@ -33,7 +33,7 @@ export function productPath(product: Pick<PublicProduct, 'slug'>): string {
 }
 
 export const productsHero = {
-  image: '/media/placeholders/bridal.jpg',
+  image: '/media/photos/bridal-red-lehenga.jpg',
   alt: 'Bridal and traditional garments from the Kadamba atelier',
   eyebrow: `${brand.location} - Made to measure`,
   headline: 'The collection, garment by garment',

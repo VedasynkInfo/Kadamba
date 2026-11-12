@@ -16,7 +16,7 @@ export function Pagination({ page, totalPages, onPageChange, className }: Pagina
   if (totalPages <= 1) return null;
 
   return (
-    <nav aria-label="Pagination" className={cn('flex items-center gap-2', className)}>
+    <nav aria-label="Pagination" className={cn('flex flex-wrap items-center gap-2', className)}>
       <Button
         variant="secondary"
         size="sm"
@@ -25,7 +25,7 @@ export function Pagination({ page, totalPages, onPageChange, className }: Pagina
         aria-label="Previous page"
         className="text-ink border-line hover:border-gold"
       >
-        Prev
+        Previous
       </Button>
       <ul className="flex items-center gap-1">
         {pageWindow(page, totalPages).map((entry, index) =>

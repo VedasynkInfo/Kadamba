@@ -59,7 +59,7 @@ export async function acquireCronLock(
         },
         $inc: { runCount: 1 },
       },
-      { upsert: true, new: true },
+      { upsert: true, returnDocument: 'after' },
     );
     if (doc) return { name, token, owner };
   } catch (error) {

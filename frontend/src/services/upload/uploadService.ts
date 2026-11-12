@@ -7,7 +7,7 @@ export interface UploadResult {
   originalName?: string;
   mimeType?: string;
   size?: number;
-  storage?: 'local';
+  storage?: 'local' | 'azure';
 }
 
 /**

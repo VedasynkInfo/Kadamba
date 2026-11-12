@@ -1,14 +1,19 @@
 import { motion } from 'framer-motion';
 import { Section, SectionIntro } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { usePublicContent } from '@/hooks/usePublicContent';
 import { fadeUp, staggerChildren } from '@/motion/variants';
-import { socialLinks } from '../data';
 
 /**
- * Social presence — simple link row, matching brand footer tone.
+ * Social presence — settings-driven, and absent until the studio has real
+ * profiles. Linking to instagram.com/ is worse than showing no link at all.
  */
 export function ContactSocialSection() {
   const reduced = usePrefersReducedMotion();
+  const { settings } = usePublicContent();
+  const socialLinks = settings.social ?? [];
+
+  if (socialLinks.length === 0) return null;
 
   return (
     <Section tone="light" className="border-t border-line/8 py-16 md:py-20">

@@ -347,7 +347,7 @@ export function DateField({
                     onFocus={() => setFocusedDay(iso)}
                     className={cn(
                       'rounded-md py-1.5 text-xs tabular-nums transition',
-                      inMonth ? 'text-ink' : 'text-ink/30',
+                      inMonth ? 'text-ink' : 'text-ink/65',
                       isSelected
                         ? 'bg-brand font-semibold text-ink-on-brand'
                         : isToday

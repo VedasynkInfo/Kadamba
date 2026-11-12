@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { OptimizedImage } from '@/components/media/OptimizedImage';
+import { ParallaxImage } from '@/components/motion/ParallaxImage';
 import { Section, SectionIntro } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { fadeUp } from '@/motion/variants';
@@ -38,19 +38,20 @@ export function ServiceDescriptionSection({ service }: ServiceDescriptionSection
         </motion.div>
 
         <motion.div
-          className="relative aspect-[4/5] w-full overflow-hidden md:aspect-[5/6]"
+          className="relative aspect-[4/5] w-full overflow-hidden md:aspect-[5/6] lg:sticky lg:top-28"
           initial={reduced ? false : { opacity: 0, y: 28 }}
           whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
-          <OptimizedImage
+          <ParallaxImage
             sizes="(min-width: 1200px) 552px, 50vw"
             src={service.cardImage}
             alt={service.bannerAlt}
-            className="h-full w-full object-cover"
+            className="absolute inset-0"
             width={1600}
             height={2000}
+            speed={0.1}
           />
         </motion.div>
       </div>

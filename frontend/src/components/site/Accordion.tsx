@@ -57,7 +57,7 @@ export function Accordion({ items, defaultOpen = -1, className, tone = 'light' }
                   <span
                     className={cn(
                       'mt-1 font-mono text-[0.62rem] tabular-nums tracking-[0.18em]',
-                      dark ? 'text-ink-inverse/40' : 'text-ink/35',
+                      dark ? 'text-ink-inverse/60' : 'text-ink/65',
                     )}
                   >
                     {String(index + 1).padStart(2, '0')}
@@ -69,7 +69,7 @@ export function Accordion({ items, defaultOpen = -1, className, tone = 'light' }
                 <span
                   className={cn(
                     'relative mt-1 size-4 shrink-0',
-                    expanded ? 'text-gold' : dark ? 'text-ink-inverse/50' : 'text-ink/40',
+                    expanded ? 'text-gold' : dark ? 'text-ink-inverse/60' : 'text-ink/65',
                   )}
                   aria-hidden
                 >

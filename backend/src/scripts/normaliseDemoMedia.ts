@@ -18,19 +18,19 @@ import { Blog } from '../models/Blog';
 import { GalleryItem } from '../models/GalleryItem';
 
 const GALLERY_PLATES: Record<string, string> = {
-  Bridal: '/media/placeholders/bridal.jpg',
-  Traditional: '/media/placeholders/saree.jpg',
-  Festive: '/media/placeholders/festive.jpg',
-  Tailoring: '/media/placeholders/stitching.jpg',
-  Details: '/media/placeholders/embroidery.jpg',
+  Bridal: '/media/photos/bridal-red-lehenga.jpg',
+  Traditional: '/media/photos/saree-jodhpur.jpg',
+  Festive: '/media/photos/wedding-three.jpg',
+  Tailoring: '/media/photos/atelier-machine.jpg',
+  Details: '/media/photos/fabric-embroidery.jpg',
 };
 
 const BLOG_PLATES: Record<string, string> = {
-  Bridal: '/media/placeholders/bridal.jpg',
-  Traditional: '/media/placeholders/saree.jpg',
-  Tailoring: '/media/placeholders/stitching.jpg',
-  Styling: '/media/placeholders/jewelry.jpg',
-  'Studio Notes': '/media/placeholders/atelier.jpg',
+  Bridal: '/media/photos/bridal-red-lehenga.jpg',
+  Traditional: '/media/photos/saree-jodhpur.jpg',
+  Tailoring: '/media/photos/atelier-machine.jpg',
+  Styling: '/media/photos/jewelry-bridal.jpg',
+  'Studio Notes': '/media/photos/atelier-sewing.jpg',
 };
 
 function isUpload(value?: string): boolean {
@@ -46,7 +46,7 @@ async function main() {
   for (const item of gallery) {
     if (!isUpload(item.src) && !isUpload(item.poster)) continue;
 
-    const plate = GALLERY_PLATES[item.category] ?? '/media/placeholders/bridal.jpg';
+    const plate = GALLERY_PLATES[item.category] ?? '/media/photos/bridal-red-lehenga.jpg';
     item.src = plate;
     if (isUpload(item.poster)) item.poster = plate;
     if (!item.alt || item.alt.length < 6) {
@@ -62,7 +62,7 @@ async function main() {
   for (const post of blogs) {
     if (!isUpload(post.coverImage)) continue;
 
-    post.coverImage = BLOG_PLATES[post.category] ?? '/media/placeholders/atelier.jpg';
+    post.coverImage = BLOG_PLATES[post.category] ?? '/media/photos/atelier-sewing.jpg';
     if (!post.coverAlt || post.coverAlt.length < 6) {
       post.coverAlt = `${post.title} — the Kadamba journal`;
     }

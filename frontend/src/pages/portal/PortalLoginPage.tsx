@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { OptimizedImage } from '@/components/media/OptimizedImage';
 import { Button, Input, useToast } from '@/components/ui';
 import { usePortalAuth } from '@/hooks/usePortalAuth';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
@@ -50,13 +51,19 @@ export default function PortalLoginPage() {
           className="relative hidden overflow-hidden lg:block"
           style={{
             backgroundImage:
-              'linear-gradient(120deg, color-mix(in srgb, var(--color-espresso) 55%, transparent), color-mix(in srgb, var(--color-espresso) 85%, transparent)), url(/media/placeholders/bridal.jpg)',
+              'linear-gradient(120deg, color-mix(in srgb, var(--color-espresso) 55%, transparent), color-mix(in srgb, var(--color-espresso) 85%, transparent)), url(/media/photos/bridal-red-lehenga.jpg)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
         >
           <div className="absolute inset-x-0 bottom-0 p-10">
-            <p className="font-heading text-3xl text-gold">{brand.name}</p>
+            <OptimizedImage
+              src="/media/brand/kadamba-logo-gold.png"
+              alt={brand.name}
+              responsive={false}
+              priority
+              className="mb-4 h-16 w-auto max-w-[240px] object-contain"
+            />
             <p className="mt-2 max-w-sm text-sm text-ink-inverse/70">{brand.tagline}</p>
           </div>
         </div>

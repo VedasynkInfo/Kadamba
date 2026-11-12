@@ -138,6 +138,18 @@ async function publicRoutes() {
     '/blogs',
     '/contact',
     '/request-service',
+    '/kurnool',
+    '/kurnool/kurnool-city',
+    '/kurnool/adoni',
+    '/kurnool/nandyal',
+    '/kurnool/yemmiganur',
+    '/kurnool/dhone',
+    '/blogs/cluster/bridal',
+    '/blogs/cluster/traditional',
+    '/blogs/cluster/tailoring',
+    '/blogs/cluster/kurnool',
+    '/blogs/cluster/fabric-and-care',
+    '/blogs/cluster/wedding-season',
   ]);
 
   const collections = [
@@ -236,11 +248,23 @@ async function main() {
         await page.goto(`${origin}${route}`, { waitUntil: 'networkidle', timeout: 45_000 });
         await page.waitForSelector('main, #main-content', { timeout: 15_000 });
         await page.waitForTimeout(100);
-        const html = await page.content();
+        const html = (await page.content())
+          // Chromium injects modulepreload links using the prerender server's
+          // origin. Strip it so the deployed HTML points at the same-origin
+          // asset paths instead of 127.0.0.1:4173.
+          .replaceAll(`http://127.0.0.1:${port}`, '')
+          .replaceAll(`http://localhost:${port}`, '');
         const file =
           route === '/' ? path.join(dist, 'index.html') : path.join(dist, route, 'index.html');
         await mkdir(path.dirname(file), { recursive: true });
         await writeFile(file, html, 'utf8');
+        // A flat sibling (`about.html`) lets clean-URL hosts such as Vercel
+        // serve the prerendered page without a directory-index rewrite.
+        if (route !== '/') {
+          const flat = path.join(dist, `${route}.html`);
+          await mkdir(path.dirname(flat), { recursive: true });
+          await writeFile(flat, html, 'utf8');
+        }
         written += 1;
         console.log(`[prerender] ${route}`);
       } catch (error) {

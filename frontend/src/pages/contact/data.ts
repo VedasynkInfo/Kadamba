@@ -6,9 +6,9 @@ export { brand };
 /** Atelier / visit imagery — placeholders until studio photography is wired. */
 const img = {
   banner:
-    '/media/placeholders/fabric.jpg',
+    '/media/photos/fabric-ivory.jpg',
   visit:
-    '/media/placeholders/boutique.jpg',
+    '/media/photos/boutique-racks.jpg',
 };
 
 /**
@@ -28,19 +28,23 @@ export const contactBanner = {
 export const studioContact = {
   title: 'Studio details',
   lede: 'Personal service for traditional and bridal wear — we respond during boutique hours.',
-  addressLines: ['Kadamba\'s Designer Studio', 'Kurnool, Andhra Pradesh', 'India'],
-  /** Update with the live studio number when confirmed. */
-  phoneDisplay: '+91 98765 43210',
-  phoneTel: '+919876543210',
+  addressLines: [
+    "Kadamba's Designer Studio",
+    'First Floor, H.No. 40/808 B1, near Gulp',
+    'Sreenivas Nagar, Prakash Nagar',
+    'Kurnool, Andhra Pradesh 518004',
+  ],
+  phoneDisplay: '+91 90540 69489',
+  phoneTel: '+919054069489',
   email: 'hello@kadambastudio.com',
   hours: [
-    { day: 'Mon – Sat', time: '10:00 AM – 7:00 PM' },
+    { day: 'Monday – Saturday', time: '10:00 AM – 7:00 PM' },
     { day: 'Sunday', time: 'By appointment' },
   ],
   mapEmbedUrl:
-    'https://maps.google.com/maps?q=Kurnool%2C%20Andhra%20Pradesh&z=13&output=embed',
-  mapLink: 'https://www.google.com/maps/search/?api=1&query=Kurnool%2C+Andhra+Pradesh',
-  whatsappNumber: '919876543210',
+    'https://maps.google.com/maps?q=15.83866%2C78.038834&z=17&output=embed',
+  mapLink: 'https://www.google.com/maps/search/?api=1&query=15.83866%2C78.038834',
+  whatsappNumber: '919054069489',
   whatsappPrefill:
     "Hi Kadamba's Designer Studio — I'd like to enquire about traditional / bridal wear.",
 } as const;
@@ -67,11 +71,12 @@ export const whatsappBanner = {
   imageAlt: 'Boutique interior with curated traditional wear',
 } as const;
 
-export const socialLinks = [
-  { href: 'https://www.instagram.com/', label: 'Instagram' },
-  { href: 'https://www.facebook.com/', label: 'Facebook' },
-  { href: 'https://www.pinterest.com/', label: 'Pinterest' },
-] as const;
+/**
+ * Social profiles are added from Settings once the studio has verified
+ * handles. An empty list hides the row; linking to a platform home page is
+ * worse than showing nothing.
+ */
+export const socialLinks: ReadonlyArray<{ href: string; label: string }> = [];
 
 export const channelsIntro = {
   title: 'Ways to reach us',

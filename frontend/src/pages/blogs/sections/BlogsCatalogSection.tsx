@@ -40,7 +40,7 @@ export function BlogsCatalogSection() {
         accent="the workroom."
         description={blogsCatalogIntro.description}
         actions={
-          <span className="text-[0.6rem] uppercase tracking-[0.24em] text-ink/40">
+          <span className="text-[0.6rem] uppercase tracking-[0.24em] text-ink/65">
             {String(filtered.length).padStart(2, '0')} essays
           </span>
         }

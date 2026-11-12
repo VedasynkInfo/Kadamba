@@ -55,29 +55,29 @@ export type GalleryFilter = (typeof galleryCategories)[number];
 /** Fashion / bridal placeholders until real gallery assets are uploaded. */
 const media = {
   bridal:
-    '/media/placeholders/bridal.jpg',
+    '/media/photos/bridal-red-lehenga.jpg',
   bridal2:
-    '/media/placeholders/bridal-alt.jpg',
+    '/media/photos/bridal-steps.jpg',
   lehenga:
-    '/media/placeholders/lehenga.jpg',
+    '/media/photos/bridal-seated.jpg',
   saree:
-    '/media/placeholders/saree.jpg',
+    '/media/photos/saree-jodhpur.jpg',
   saree2:
-    '/media/placeholders/saree-alt.jpg',
+    '/media/photos/saree-green.jpg',
   fabric:
-    '/media/placeholders/fabric.jpg',
+    '/media/photos/fabric-ivory.jpg',
   stitching:
-    '/media/placeholders/stitching.jpg',
+    '/media/photos/atelier-machine.jpg',
   jewelry:
-    '/media/placeholders/jewelry.jpg',
+    '/media/photos/jewelry-bridal.jpg',
   embroidery:
-    '/media/placeholders/embroidery.jpg',
+    '/media/photos/fabric-embroidery.jpg',
   festive:
-    '/media/placeholders/festive.jpg',
+    '/media/photos/wedding-three.jpg',
   detail:
-    '/media/placeholders/atelier.jpg',
+    '/media/photos/atelier-sewing.jpg',
   atelier:
-    '/media/placeholders/fitting.jpg',
+    '/media/photos/atelier-seamstress.jpg',
 };
 
 export const galleryHero = {

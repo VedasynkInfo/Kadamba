@@ -49,7 +49,7 @@ export const LOCALITIES: Locality[] = [
     visit:
       'Book an appointment before you come, so the fitting room and the cutter are both free. Bring the date, a budget range and any photographs you have saved.',
     covers: ['Bellary Road', 'Gandhi Nagar', 'Kothapeta', 'Budhawarpet', 'Venkataramana Colony'],
-    image: '/media/placeholders/boutique.jpg',
+    image: '/media/photos/boutique-racks.jpg',
     imageAlt: 'Cloth studies and fittings in the Kurnool studio',
     serviceSlugs: ['bridal-wear', 'traditional-wear', 'custom-tailoring', 'boutique-styling'],
     faqs: [
@@ -85,7 +85,7 @@ export const LOCALITIES: Locality[] = [
     visit:
       'Plan the first visit around your event date. If the date is close, tell us at the enquiry stage — we will say plainly whether the timeline is realistic before you travel.',
     covers: ['Adoni', 'Adoni town'],
-    image: '/media/placeholders/saree.jpg',
+    image: '/media/photos/saree-jodhpur.jpg',
     imageAlt: 'A saree and border study for a festive commission',
     serviceSlugs: ['bridal-wear', 'traditional-wear', 'custom-tailoring'],
     faqs: [
@@ -127,7 +127,7 @@ export const LOCALITIES: Locality[] = [
     visit:
       'Bring every date in the wedding week, not only the muhurtham. A reception outfit is finished against a different deadline from the bride’s, and the order is planned around all of them.',
     covers: ['Nandyal', 'Nandyal town'],
-    image: '/media/placeholders/bridal.jpg',
+    image: '/media/photos/bridal-red-lehenga.jpg',
     imageAlt: 'Bridal silk with a hand-worked border',
     serviceSlugs: ['bridal-wear', 'traditional-wear', 'boutique-styling'],
     faqs: [
@@ -163,7 +163,7 @@ export const LOCALITIES: Locality[] = [
     visit:
       'Bring the fabric with you, not a photograph of it. A photograph cannot tell us the weight, the drape or whether the dye will behave under a hot iron.',
     covers: ['Yemmiganur', 'Yemmiganur town'],
-    image: '/media/placeholders/fabric.jpg',
+    image: '/media/photos/fabric-ivory.jpg',
     imageAlt: 'A study of woven cloth and its border',
     serviceSlugs: ['traditional-wear', 'custom-tailoring', 'bridal-wear'],
     faqs: [
@@ -199,7 +199,7 @@ export const LOCALITIES: Locality[] = [
     visit:
       'Send the occasion, the date and a rough budget on WhatsApp first. We will tell you which service fits the timeline and whether one visit is enough.',
     covers: ['Dhone', 'Dhone town'],
-    image: '/media/placeholders/fitting.jpg',
+    image: '/media/photos/atelier-seamstress.jpg',
     imageAlt: 'A fitting in progress at the studio',
     serviceSlugs: ['custom-tailoring', 'traditional-wear', 'boutique-styling'],
     faqs: [

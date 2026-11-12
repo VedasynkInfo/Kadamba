@@ -46,7 +46,7 @@ export function ExpectationsSection() {
               delay={index * 0.06}
               className="bg-surface p-7 md:p-9"
             >
-              <p className="font-mono text-[0.6rem] tabular-nums tracking-[0.2em] text-brand-strong/75">
+              <p className="font-mono text-[0.6rem] tabular-nums tracking-[0.2em] text-brand-strong">
                 {item.step}
               </p>
               <h3 className="mt-5 font-heading text-2xl text-ink">{item.title}</h3>

@@ -159,13 +159,13 @@ describe('409 — conflict', () => {
     const first = await request(app)
       .post('/api/gallery')
       .set('Authorization', `Bearer ${token}`)
-      .send({ title: 'Conflict Piece', category: 'Bridal', src: '/media/placeholders/bridal.jpg', slug: 'conflict-piece' });
+      .send({ title: 'Conflict Piece', category: 'Bridal', src: '/media/photos/bridal-red-lehenga.jpg', slug: 'conflict-piece' });
     expect(first.status).toBe(201);
 
     const second = await request(app)
       .post('/api/gallery')
       .set('Authorization', `Bearer ${token}`)
-      .send({ title: 'Another Piece', category: 'Bridal', src: '/media/placeholders/bridal.jpg', slug: 'conflict-piece' });
+      .send({ title: 'Another Piece', category: 'Bridal', src: '/media/photos/bridal-red-lehenga.jpg', slug: 'conflict-piece' });
 
     expectErrorEnvelope(second, 409, 'CONFLICT');
     expect(String(second.body.message)).toContain('conflict-piece-2');

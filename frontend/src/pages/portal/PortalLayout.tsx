@@ -54,7 +54,7 @@ function PortalShell() {
   const { user, logout } = usePortalAuth();
   const notify = usePortalNotify();
   const { logoDarkUrl, logoUrl } = useTheme();
-  const activeLogo = logoDarkUrl || logoUrl;
+  const activeLogo = logoDarkUrl || logoUrl || '/media/brand/kadamba-logo-gold.png';
   const [unreadChat, setUnreadChat] = useState(0);
 
   const refreshUnread = useCallback(async () => {
@@ -82,14 +82,18 @@ function PortalShell() {
     <div className="portal-shell min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--color-ember)_0%,_var(--color-espresso)_55%)] text-ink-inverse">
       <header className="on-dark border-b border-gold/20 bg-espresso/40 backdrop-blur-md">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-          <Link to="/portal/dashboard" className="flex items-center gap-3 min-w-0">
+          <Link
+            to="/portal/dashboard"
+            aria-label="Kadamba's Designer Studio — portal home"
+            className="flex items-center gap-3 min-w-0"
+          >
             {activeLogo ? (
               <OptimizedImage
                 src={activeLogo}
                 alt={brand.shortName}
                 responsive={false}
                 priority
-                className="h-8 w-auto object-contain"
+                className="h-10 w-auto max-w-[180px] object-contain"
               />
             ) : (
               <p className="font-heading text-xl tracking-wide text-gold sm:text-2xl">

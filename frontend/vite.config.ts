@@ -13,25 +13,11 @@ export default defineConfig({
       includeAssets: ['favicon.svg', 'icons.svg', 'robots.txt', 'sitemap.xml'],
       manifest: false,
       workbox: {
-        navigateFallback: '/index.html',
-        navigateFallbackDenylist: [/^\/api/, /^\/admin/],
+        // No `navigateFallback`: the public routes are prerendered, and a
+        // blanket fallback to `/index.html` would serve the home page's head
+        // on every deep link. Navigation requests go to the network (or the
+        // precached HTML when available); unknown routes still use the SPA.
         runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'google-fonts-stylesheets',
-              expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 },
-            },
-          },
-          {
-            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'google-fonts-webfonts',
-              expiration: { maxEntries: 20, maxAgeSeconds: 60 * 60 * 24 * 365 },
-            },
-          },
           {
             // Studio media served by our own API. The backend already sends
             // long-lived immutable cache headers for generated variants, so

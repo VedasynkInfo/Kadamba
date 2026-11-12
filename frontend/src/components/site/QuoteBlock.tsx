@@ -59,7 +59,7 @@ export function QuoteBlock({
         <figcaption className="mt-9 flex items-center gap-4 border-t border-ink/12 pt-6">
           <span className="font-heading text-lg text-ink">{name}</span>
           <span className="h-px w-8 bg-brand-strong/60" aria-hidden />
-          <span className="text-[0.62rem] uppercase tracking-[0.24em] text-ink/45">{detail}</span>
+          <span className="text-[0.62rem] uppercase tracking-[0.24em] text-ink/65">{detail}</span>
         </figcaption>
       </Reveal>
     </div>

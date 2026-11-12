@@ -30,14 +30,14 @@ export function MakingSection() {
 
           <Reveal delay={0.1} className="mt-12 hidden lg:block">
             <div className="well p-6">
-              <p className="text-[0.6rem] font-semibold uppercase tracking-[0.26em] text-ink/40">
+              <p className="text-[0.6rem] font-semibold uppercase tracking-[0.26em] text-ink/65">
                 A note on timing
               </p>
               <p className="mt-3 font-heading text-lg italic leading-snug text-ink/80">
                 &ldquo;Tell us the date before the design. A beautiful garment that arrives on the
                 wrong day is not a beautiful garment.&rdquo;
               </p>
-              <p className="mt-4 text-[0.6rem] uppercase tracking-[0.24em] text-ink/40">
+              <p className="mt-4 text-[0.6rem] uppercase tracking-[0.24em] text-ink/65">
                 The fitting room
               </p>
             </div>
@@ -62,7 +62,7 @@ export function MakingSection() {
               <div className="border-b border-ink/12 pb-9 last:border-0 last:pb-0">
                 <div className="flex flex-wrap items-baseline justify-between gap-3">
                   <h3 className="font-heading text-2xl text-ink md:text-[1.8rem]">{step.title}</h3>
-                  <span className="text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-brand-strong/75">
+                  <span className="text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
                     {step.note}
                   </span>
                 </div>

@@ -42,7 +42,7 @@ export function TeamSection() {
             </p>
             <h3 className="mt-2 font-heading text-2xl leading-snug">{member.name}</h3>
             <p className="mt-3 text-base leading-relaxed text-ink/70">{member.bio}</p>
-            <p className="mt-4 border-t border-ink/10 pt-3 text-[0.55rem] uppercase tracking-[0.22em] text-ink/35">
+            <p className="mt-4 border-t border-ink/10 pt-3 text-[0.55rem] uppercase tracking-[0.22em] text-ink/65">
               Cloth study &middot; Kadamba studio
             </p>
           </motion.li>

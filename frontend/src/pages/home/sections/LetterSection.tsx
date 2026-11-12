@@ -1,5 +1,5 @@
 import { OptimizedImage } from '@/components/media/OptimizedImage';
-import { Reveal, StatBand } from '@/components/site';
+import { Reveal, StatBand, WordReveal } from '@/components/site';
 import { plate, houseStats, manifesto } from '../content';
 
 /**
@@ -31,7 +31,7 @@ export function LetterSection() {
                 className="h-full w-full object-cover"
               />
             </div>
-            <p className="mt-4 flex items-baseline justify-between gap-4 text-[0.6rem] uppercase tracking-[0.26em] text-ink/40">
+            <p className="mt-4 flex items-baseline justify-between gap-4 text-[0.6rem] uppercase tracking-[0.26em] text-ink/65">
               <span>The atelier</span>
               <span>Kurnool, A.P.</span>
             </p>
@@ -39,7 +39,11 @@ export function LetterSection() {
 
           <Reveal delay={0.1} className="flex flex-col justify-between">
             <div className="space-y-6">
-              {manifesto.paragraphs.map((paragraph) => (
+              <WordReveal
+                text={manifesto.paragraphs[0]}
+                className="font-heading text-[clamp(1.45rem,2.7vw,2.35rem)] font-light leading-[1.35] tracking-[-0.01em] text-ink/90"
+              />
+              {manifesto.paragraphs.slice(1).map((paragraph) => (
                 <p key={paragraph.slice(0, 24)} className="text-[1.02rem] leading-[1.85] text-ink/72">
                   {paragraph}
                 </p>
@@ -48,7 +52,7 @@ export function LetterSection() {
 
             <div className="mt-11 border-t border-ink/12 pt-8">
               <p className="font-heading text-2xl italic text-ink">{manifesto.signature}</p>
-              <p className="mt-2 text-[0.62rem] uppercase tracking-[0.26em] text-ink/40">
+              <p className="mt-2 text-[0.62rem] uppercase tracking-[0.26em] text-ink/65">
                 {manifesto.signatureNote}
               </p>
             </div>

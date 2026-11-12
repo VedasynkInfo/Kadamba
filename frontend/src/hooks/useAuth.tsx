@@ -73,6 +73,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let cancelled = false;
 
+    // Public pages have no admin session to restore. Firing the refresh there
+    // guaranteed a 401 on every cold load, polluted the console and spent the
+    // refresh budget that a real console session needs. The portal provider
+    // already gates on `/portal`; the admin provider now does the same.
+    if (typeof window === 'undefined' || !window.location.pathname.startsWith('/admin')) {
+      setLoading(false);
+      return () => {
+        cancelled = true;
+      };
+    }
+
     (async () => {
       try {
         const response = await authApi.refresh();

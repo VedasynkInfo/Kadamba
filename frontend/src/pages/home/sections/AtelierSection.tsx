@@ -24,8 +24,9 @@ export function AtelierSection() {
     <section ref={ref} className="on-dark relative overflow-hidden bg-espresso text-ink-inverse">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(201,162,39,0.16),transparent_55%)]" aria-hidden />
 
-      <div className="house-container relative grid gap-14 py-[var(--section-y)] lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:gap-20">
-        <Reveal>
+      <div className="house-container relative grid gap-14 py-[var(--section-y)] lg:grid-cols-[1.02fr_0.98fr] lg:items-start lg:gap-20">
+        <div className="lg:sticky lg:top-24 lg:self-start">
+          <Reveal>
           <div className="plate plate-frame aspect-[5/6] w-full overflow-hidden">
             <motion.div className="h-full w-full" style={reduced ? undefined : { y }}>
               <OptimizedImage
@@ -41,6 +42,7 @@ export function AtelierSection() {
             </p>
           </div>
         </Reveal>
+        </div>
 
         <div>
           <Reveal>
@@ -70,7 +72,7 @@ export function AtelierSection() {
                   <span className="block font-heading text-xl text-ink-inverse md:text-2xl">
                     {discipline.title}
                   </span>
-                  <span className="mt-2 block max-w-md text-sm leading-relaxed text-ink-inverse/55">
+                  <span className="mt-2 block max-w-md text-sm leading-relaxed text-ink-inverse/65">
                     {discipline.description}
                   </span>
                 </span>

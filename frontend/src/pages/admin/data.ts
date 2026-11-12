@@ -9,7 +9,7 @@ export { brand };
 /** Horizon console filmstrip — atelier still, not a marketing hero. */
 export const adminHorizonMedia = {
   image:
-    '/media/placeholders/fabric.jpg',
+    '/media/photos/fabric-ivory.jpg',
   alt: 'Fabric folds and atelier tools on a studio worktable',
 } as const;
 

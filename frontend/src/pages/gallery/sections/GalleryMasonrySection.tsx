@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { OptimizedImage } from '@/components/media/OptimizedImage';
+import { ParallaxImage } from '@/components/motion/ParallaxImage';
 import { Button, Section } from '@/components/ui';
 import { FilterRow, SectionHead } from '@/components/site';
 import { ContentEmpty, ContentError, ContentLoading } from '@/components/feedback/ContentState';
@@ -47,7 +47,7 @@ export function GalleryMasonrySection() {
           accent="& atelier details."
           description="Every frame reflects custom tailoring from the Kurnool studio — fittings, finished commissions and the details in between."
           actions={
-            <span className="text-[0.6rem] uppercase tracking-[0.24em] text-ink-inverse/40">
+            <span className="text-[0.6rem] uppercase tracking-[0.24em] text-ink-inverse/60">
               {String(filtered.length).padStart(2, '0')} pieces
             </span>
           }
@@ -140,10 +140,11 @@ function MasonryTile({
     <motion.li
       layout
       className="mb-3 break-inside-avoid sm:mb-4"
-      initial={reduced ? false : { opacity: 0, y: 18 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={reduced ? false : { opacity: 0, y: 26 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-6%' }}
       exit={{ opacity: 0, scale: 0.97 }}
-      transition={{ duration: 0.4, delay: reduced ? 0 : Math.min(index * 0.04, 0.35) }}
+      transition={{ duration: 0.7, delay: reduced ? 0 : Math.min(index * 0.04, 0.35), ease: [0.22, 1, 0.36, 1] }}
     >
       <button
         type="button"
@@ -153,17 +154,20 @@ function MasonryTile({
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus',
         )}
         style={{ aspectRatio: `${item.width} / ${item.height}` }}
-        aria-label={`Open ${item.title}`}
+        aria-describedby={`gallery-desc-${item.id}`}
       >
+        <span className="sr-only">Open </span>
         {item.mediaType === 'video' ? (
           <>
-            <OptimizedImage
+            <ParallaxImage
               sizes="(min-width: 1200px) 368px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
               src={item.poster ?? item.src}
-              alt={item.alt}
-              className="h-full w-full object-cover transition-transform duration-700 ease-luxury group-hover:scale-105"
+              alt=""
+              className="absolute inset-0"
+              imageClassName="transition-transform duration-700 ease-luxury group-hover:scale-105"
               width={item.width}
               height={item.height}
+              speed={0.06 + (index % 3) * 0.02}
             />
             <span
               className="on-dark absolute inset-0 flex items-center justify-center bg-espresso/25"
@@ -177,13 +181,15 @@ function MasonryTile({
             </span>
           </>
         ) : (
-          <OptimizedImage
+          <ParallaxImage
             sizes="(min-width: 1200px) 368px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             src={item.src}
-            alt={item.alt}
-            className="h-full w-full object-cover transition-transform duration-700 ease-luxury group-hover:scale-105"
+            alt=""
+            className="absolute inset-0"
+            imageClassName="transition-transform duration-700 ease-luxury group-hover:scale-105"
             width={item.width}
             height={item.height}
+            speed={0.06 + (index % 3) * 0.02}
           />
         )}
 
@@ -192,11 +198,19 @@ function MasonryTile({
           aria-hidden
         />
         <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
-          <p className="font-heading text-lg text-ink-inverse sm:text-xl">{item.title}</p>
-          <p className="mt-1 text-[0.65rem] uppercase tracking-[0.2em] text-gold">
+          <p id={`gallery-title-${item.id}`} className="font-heading text-lg text-ink-inverse sm:text-xl">
+            {item.title}
+          </p>
+          <p
+            id={`gallery-category-${item.id}`}
+            className="mt-1 text-[0.65rem] uppercase tracking-[0.2em] text-gold"
+          >
             {item.category}
           </p>
         </div>
+        <span id={`gallery-desc-${item.id}`} className="sr-only">
+          {item.alt}
+        </span>
       </button>
     </motion.li>
   );

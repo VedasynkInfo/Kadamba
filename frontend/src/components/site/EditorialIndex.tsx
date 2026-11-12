@@ -54,7 +54,7 @@ export function EditorialIndex({ entries, className }: EditorialIndexProps) {
               <span
                 className={cn(
                   'mt-1 font-mono text-[0.62rem] tabular-nums tracking-[0.18em] transition-colors',
-                  active === index ? 'text-brand-strong' : 'text-ink/35',
+                  active === index ? 'text-brand-strong' : 'text-ink/65',
                 )}
               >
                 {String(index + 1).padStart(2, '0')}
@@ -71,7 +71,7 @@ export function EditorialIndex({ entries, className }: EditorialIndexProps) {
                   {entry.meta.map((fact) => (
                     <span
                       key={fact}
-                      className="text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-ink/50"
+                      className="text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-ink/65"
                     >
                       {fact}
                     </span>
@@ -94,7 +94,7 @@ export function EditorialIndex({ entries, className }: EditorialIndexProps) {
                   'mt-1 flex size-10 shrink-0 items-center justify-center rounded-full border transition-all duration-500',
                   active === index
                     ? 'border-brand-strong text-brand-strong'
-                    : 'border-ink/15 text-ink/40',
+                    : 'border-ink/15 text-ink/65',
                 )}
                 aria-hidden
               >
@@ -135,7 +135,7 @@ export function EditorialIndex({ entries, className }: EditorialIndexProps) {
             </AnimatePresence>
           </div>
           <div className="mt-4 flex items-baseline justify-between gap-4">
-            <span className="text-[0.6rem] font-semibold uppercase tracking-[0.26em] text-ink/40">
+            <span className="text-[0.6rem] font-semibold uppercase tracking-[0.26em] text-ink/65">
               Plate {String(active + 1).padStart(2, '0')}
             </span>
             <span className="font-heading text-sm italic text-ink/60">{current.title}</span>
@@ -174,7 +174,7 @@ export function StatBand({ items, tone = 'light', columns = 4, className }: Stat
   const dark = tone === 'dark';
 
   return (
-    <dl
+    <div
       className={cn(
         'grid grid-cols-2 gap-y-10',
         columns === 4 && 'lg:grid-cols-4',
@@ -195,15 +195,15 @@ export function StatBand({ items, tone = 'light', columns = 4, className }: Stat
             dark ? 'border-ink-inverse/15' : 'border-ink/12',
           )}
         >
-          <dd className="figure text-4xl md:text-5xl">{item.value}</dd>
-          <dt className="mt-3 text-[0.6rem] font-semibold uppercase tracking-[0.24em] text-current/45">
+          <p className="figure text-4xl md:text-5xl">{item.value}</p>
+          <p className="mt-3 text-[0.6rem] font-semibold uppercase tracking-[0.24em] text-current/70">
             {item.label}
-          </dt>
+          </p>
           {item.note ? (
             <p
               className={cn(
                 'mt-2 text-xs leading-relaxed',
-                dark ? 'text-ink-inverse/45' : 'text-ink/45',
+                dark ? 'text-ink-inverse/60' : 'text-ink/65',
               )}
             >
               {item.note}
@@ -211,6 +211,6 @@ export function StatBand({ items, tone = 'light', columns = 4, className }: Stat
           ) : null}
         </div>
       ))}
-    </dl>
+    </div>
   );
 }

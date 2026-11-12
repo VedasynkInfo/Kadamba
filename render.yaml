@@ -61,6 +61,10 @@ services:
       # generated AVIF/WebP/JPEG variants — are stored under this path.
       - key: UPLOAD_DIR
         value: /var/data/uploads
+      # Nightly database archives must live on the Persistent Disk too, or they
+      # are wiped on every deploy/restart.
+      - key: BACKUP_DIR
+        value: /var/data/backups
       - key: IMAGE_OPTIMIZE
         value: "true"
       - key: IMAGE_WIDTHS

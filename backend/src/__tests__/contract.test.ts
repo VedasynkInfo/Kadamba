@@ -70,7 +70,7 @@ describe('shared response contract', () => {
       .send({
         title: 'Contract Piece',
         category: 'Bridal',
-        src: '/media/placeholders/bridal.jpg',
+        src: '/media/photos/bridal-red-lehenga.jpg',
         alt: 'A bridal piece',
         width: 1200,
         height: 1600,
@@ -100,9 +100,9 @@ describe('shared response contract', () => {
         title: 'Contract Service',
         category: 'Bridal',
         summary: 'A service written by the contract test.',
-        bannerImage: '/media/placeholders/embroidery.jpg',
+        bannerImage: '/media/photos/fabric-embroidery.jpg',
         bannerAlt: 'Embroidery',
-        cardImage: '/media/placeholders/embroidery.jpg',
+        cardImage: '/media/photos/fabric-embroidery.jpg',
       });
 
     expect(created.status).toBe(201);
@@ -124,9 +124,9 @@ describe('shared response contract', () => {
         title: 'Contract Project',
         category: 'Traditional',
         summary: 'A project written by the contract test.',
-        bannerImage: '/media/placeholders/saree.jpg',
+        bannerImage: '/media/photos/saree-jodhpur.jpg',
         bannerAlt: 'Saree',
-        coverImage: '/media/placeholders/saree.jpg',
+        coverImage: '/media/photos/saree-jodhpur.jpg',
         coverAlt: 'Saree',
       });
 
@@ -149,7 +149,7 @@ describe('shared response contract', () => {
         title: 'Contract Post',
         excerpt: 'A post written by the contract test.',
         category: 'Studio Notes',
-        coverImage: '/media/placeholders/fabric.jpg',
+        coverImage: '/media/photos/fabric-ivory.jpg',
         coverAlt: 'Fabric',
       });
 

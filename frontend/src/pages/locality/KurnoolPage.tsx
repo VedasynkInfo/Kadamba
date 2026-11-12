@@ -3,7 +3,7 @@ import { OptimizedImage } from '@/components/media/OptimizedImage';
 import { CtaBand, PageHero, Reveal, SectionHead } from '@/components/site';
 import { Section } from '@/components/ui';
 import { usePublicContent } from '@/hooks/usePublicContent';
-import { PageMeta, staticPageMeta } from '@/seo';
+import { JsonLd, PageMeta, localBusinessJsonLd, staticPageMeta } from '@/seo';
 import { LOCALITIES, localityIntro } from './data';
 
 const travellingSteps = [
@@ -38,14 +38,16 @@ export default function KurnoolPage() {
   return (
     <>
       <PageMeta {...staticPageMeta.kurnool} />
+      <JsonLd data={localBusinessJsonLd()} />
 
       <PageHero
+        variant="atlas"
         eyebrow={localityIntro.eyebrow}
         title="The studio,"
         accent="and the district around it."
         description={localityIntro.description}
-        image="/media/placeholders/atelier.jpg"
-        imageAlt="The cutting table in the Kurnool atelier"
+        image="/media/photos/boutique-warm.jpg"
+        imageAlt="The warm-lit Kadamba boutique in Kurnool"
         trail={[{ label: 'Kurnool' }]}
         facts={[
           { label: 'Studio', value: 'Kurnool city' },
@@ -84,13 +86,13 @@ export default function KurnoolPage() {
           <Reveal delay={0.08}>
             <div className="plate plate-frame plate-frame-dark aspect-[4/5]">
               <OptimizedImage
-                src="/media/placeholders/fabric.jpg"
+                src="/media/photos/fabric-ivory.jpg"
                 alt="Cloth on the cutting table, ready to be measured"
                 sizes="(min-width: 1024px) 44vw, 100vw"
                 className="h-full w-full object-cover"
               />
             </div>
-            <p className="mt-4 flex items-baseline justify-between gap-4 text-[0.6rem] uppercase tracking-[0.26em] text-ink/40">
+            <p className="mt-4 flex items-baseline justify-between gap-4 text-[0.6rem] uppercase tracking-[0.26em] text-ink/65">
               <span>Cloth study</span>
               <span>Kurnool, A.P.</span>
             </p>
@@ -105,7 +107,7 @@ export default function KurnoolPage() {
           accent="travel from."
           description="Each page says how many visits a commission takes and what to bring. Nothing more is claimed."
           actions={
-            <span className="text-[0.6rem] uppercase tracking-[0.24em] text-ink/40">
+            <span className="text-[0.6rem] uppercase tracking-[0.24em] text-ink/65">
               {String(LOCALITIES.length).padStart(2, '0')} places
             </span>
           }
@@ -125,12 +127,12 @@ export default function KurnoolPage() {
                 </div>
                 <div className="mt-5 flex items-baseline justify-between gap-4 border-b border-ink/12 pb-3">
                   <h3 className="font-heading text-2xl text-ink">{locality.name}</h3>
-                  <span className="text-[0.58rem] uppercase tracking-[0.2em] text-ink/40">
+                  <span className="text-[0.58rem] uppercase tracking-[0.2em] text-ink/65">
                     {String(index + 1).padStart(2, '0')}
                   </span>
                 </div>
                 <p className="mt-3 text-sm leading-relaxed text-ink/60">{locality.tagline}</p>
-                <p className="mt-3 text-[0.58rem] uppercase tracking-[0.2em] text-ink/35">
+                <p className="mt-3 text-[0.58rem] uppercase tracking-[0.2em] text-ink/65">
                   {locality.covers.join(' · ')}
                 </p>
                 <span className="link-arrow mt-5 inline-flex text-brand-strong">Read the page</span>
@@ -220,7 +222,7 @@ export default function KurnoolPage() {
                 </div>
               ))}
             </dl>
-            <p className="mt-6 text-sm leading-relaxed text-ink/55">
+            <p className="mt-6 text-sm leading-relaxed text-ink/70">
               The studio works by appointment. Call or message before travelling from another town
               so the fitting room and the cutter are free.
             </p>
@@ -233,7 +235,7 @@ export default function KurnoolPage() {
         title="Tell us the town."
         accent="We will tell you the visits."
         copy="Send the occasion, the date and where you are travelling from. We will answer with the service that fits and the first appointment available."
-        image="/media/placeholders/fitting.jpg"
+        image="/media/photos/atelier-seamstress.jpg"
         action={{ label: 'Book a consultation', to: '/request-service' }}
       />
     </>

@@ -40,7 +40,7 @@ export function RecordSection() {
           <figcaption className="mt-8 flex items-center gap-4">
             <span className="font-heading text-lg text-ink-inverse">Ananya R.</span>
             <span className="h-px w-8 bg-gold/50" aria-hidden />
-            <span className="text-[0.58rem] uppercase tracking-[0.24em] text-ink-inverse/45">
+            <span className="text-[0.58rem] uppercase tracking-[0.24em] text-ink-inverse/60">
               Bridal client &middot; Kurnool
             </span>
           </figcaption>

@@ -37,11 +37,12 @@ export default function ClusterPage() {
       />
 
       <PageHero
+        variant="mosaic"
         eyebrow={cluster.eyebrow}
         title={cluster.label}
         accent="in the journal."
         description={cluster.description}
-        image={cover || '/media/placeholders/atelier.jpg'}
+        image={cover || '/media/photos/atelier-sewing.jpg'}
         imageAlt={posts[0]?.coverAlt || 'Cloth on the cutting table'}
         trail={[{ label: 'Journal', to: '/blogs' }, { label: cluster.label }]}
         facts={[
@@ -59,7 +60,7 @@ export default function ClusterPage() {
           accent="in full."
           description={cluster.description}
           actions={
-            <span className="text-[0.6rem] uppercase tracking-[0.24em] text-ink/40">
+            <span className="text-[0.6rem] uppercase tracking-[0.24em] text-ink/65">
               {String(posts.length).padStart(2, '0')} essays
             </span>
           }
@@ -70,7 +71,7 @@ export default function ClusterPage() {
             <li>
               <Link
                 to="/blogs"
-                className="text-[0.68rem] uppercase tracking-[0.2em] text-ink/45 transition hover:text-brand-strong"
+                className="text-[0.68rem] uppercase tracking-[0.2em] text-ink/65 transition hover:text-brand-strong"
               >
                 All essays
               </Link>
@@ -85,7 +86,7 @@ export default function ClusterPage() {
                     className={
                       active
                         ? 'text-[0.68rem] uppercase tracking-[0.2em] text-brand-strong underline decoration-brand/50 underline-offset-[6px]'
-                        : 'text-[0.68rem] uppercase tracking-[0.2em] text-ink/45 transition hover:text-brand-strong'
+                        : 'text-[0.68rem] uppercase tracking-[0.2em] text-ink/65 transition hover:text-brand-strong'
                     }
                   >
                     {item.label}
@@ -124,7 +125,7 @@ export default function ClusterPage() {
                       className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]"
                     />
                   </div>
-                  <div className="mt-5 flex items-baseline justify-between gap-4 text-[0.58rem] uppercase tracking-[0.2em] text-ink/40">
+                  <div className="mt-5 flex items-baseline justify-between gap-4 text-[0.58rem] uppercase tracking-[0.2em] text-ink/65">
                     <span>{post.category}</span>
                     <span>{post.readMinutes} min</span>
                   </div>
@@ -134,7 +135,7 @@ export default function ClusterPage() {
                   <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-ink/60">
                     {post.excerpt}
                   </p>
-                  <p className="mt-4 flex items-baseline justify-between gap-4 text-[0.58rem] uppercase tracking-[0.2em] text-ink/35">
+                  <p className="mt-4 flex items-baseline justify-between gap-4 text-[0.58rem] uppercase tracking-[0.2em] text-ink/65">
                     <span>{formatBlogDate(post.date)}</span>
                     <span className="link-arrow text-brand-strong">Read</span>
                   </p>
@@ -150,7 +151,7 @@ export default function ClusterPage() {
         title="Read first."
         accent="Then come in."
         copy="An hour with the journal will make the first appointment shorter: the questions are the ones the studio would have asked you anyway."
-        image="/media/placeholders/fabric.jpg"
+        image="/media/photos/fabric-ivory.jpg"
         action={{ label: 'Book a consultation', to: '/request-service' }}
       />
     </>

@@ -74,7 +74,7 @@ export function PortfolioBannerSection({ project }: PortfolioBannerSectionProps)
               <div className="max-w-3xl">
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[0.65rem] uppercase tracking-[0.28em] text-gold/90">
                   <span>{project.category}</span>
-                  <span className="text-ink-inverse/30" aria-hidden>
+                  <span className="text-ink-inverse/60" aria-hidden>
                     /
                   </span>
                   <span className="text-ink-inverse/70">

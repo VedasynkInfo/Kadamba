@@ -113,7 +113,7 @@ async function registerFailedLogin(user: IUser): Promise<void> {
   const updated = await User.findOneAndUpdate(
     { _id: userId },
     { $inc: { failedLoginAttempts: 1 } },
-    { new: true },
+    { returnDocument: 'after' },
   ).select('failedLoginAttempts');
 
   const attempts = updated?.failedLoginAttempts ?? (user.failedLoginAttempts ?? 0) + 1;

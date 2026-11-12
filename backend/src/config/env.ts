@@ -106,13 +106,31 @@ export const env = {
   trustProxy: Number(process.env.TRUST_PROXY || (isProduction ? 1 : 0)),
   logLevel: optional('LOG_LEVEL', isTest ? 'silent' : isProduction ? 'info' : 'debug'),
   /**
-   * Upload backend. Only `local` (disk / Render Persistent Disk) is
-   * implemented — the third-party CDN path was removed in Phase 4 so that all
-   * media lives on infrastructure we control, per the project constraints.
-   * The value is still read so an old deployment with `cloudinary` set gets a
-   * loud warning instead of silently changing behaviour.
+   * Upload backend:
+   *  - `local`: disk / Render Persistent Disk (`uploadsDir`)
+   *  - `azure`: Azure Blob Storage (`AZURE_STORAGE_CONNECTION_STRING` or account + key)
+   *
+   * When `UPLOAD_STORAGE` is unset and Azure credentials are provided outside
+   * tests, Azure Blob Storage is selected automatically.
    */
-  uploadStorage: optional('UPLOAD_STORAGE', 'local').toLowerCase(),
+  uploadStorage: (() => {
+    const raw = optional('UPLOAD_STORAGE').toLowerCase();
+    if (raw) return raw;
+    const hasAzureCreds = Boolean(
+      optional('AZURE_STORAGE_CONNECTION_STRING') ||
+        (optional('AZURE_STORAGE_ACCOUNT') && optional('AZURE_STORAGE_KEY')),
+    );
+    return hasAzureCreds && !isTest ? 'azure' : 'local';
+  })(),
+  /** Azure Blob Storage configuration (active when UPLOAD_STORAGE=azure). */
+  azureStorage: {
+    connectionString: optional('AZURE_STORAGE_CONNECTION_STRING'),
+    account: optional('AZURE_STORAGE_ACCOUNT'),
+    key: optional('AZURE_STORAGE_KEY'),
+    container: optional('AZURE_STORAGE_CONTAINER', 'kadamba-media'),
+    /** Optional CDN / custom HTTPS origin for Azure Blob URLs (without trailing slash). */
+    publicUrl: optional('AZURE_STORAGE_PUBLIC_URL').replace(/\/$/, ''),
+  },
   /**
    * Absolute path to the canonical uploads directory.
    *

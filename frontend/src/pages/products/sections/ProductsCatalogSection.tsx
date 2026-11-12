@@ -1,8 +1,8 @@
 import { useMemo, type ReactNode } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { OptimizedImage } from '@/components/media/OptimizedImage';
+import { ParallaxImage } from '@/components/motion/ParallaxImage';
 import { ContentEmpty, ContentError, ContentLoading } from '@/components/feedback/ContentState';
-import { SectionHead } from '@/components/site';
+import { Reveal, SectionHead } from '@/components/site';
 import { usePublicCatalog } from '@/hooks/usePublicProducts';
 import { cn } from '@/utils/cn';
 import { productImage, productPath, productsCatalogIntro } from '../data';
@@ -59,7 +59,7 @@ export function ProductsCatalogSection() {
           accent="made for you."
           description={productsCatalogIntro.description}
           actions={
-            <span className="text-[0.6rem] uppercase tracking-[0.24em] text-ink/40">
+            <span className="text-[0.6rem] uppercase tracking-[0.24em] text-ink/65">
               {String(filtered.length).padStart(2, '0')} pieces
             </span>
           }
@@ -84,7 +84,7 @@ export function ProductsCatalogSection() {
           ))}
         </div>
 
-        <p className="mt-4 text-[0.6rem] uppercase tracking-[0.24em] text-ink/35" aria-live="polite">
+        <p className="mt-4 text-[0.6rem] uppercase tracking-[0.24em] text-ink/65" aria-live="polite">
           Showing {activeName}
         </p>
 
@@ -108,8 +108,8 @@ export function ProductsCatalogSection() {
 
           {!isLoading && !error && filtered.length > 0 ? (
             <ul className="grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-              {filtered.map((product) => (
-                <li key={product.id}>
+              {filtered.map((product, index) => (
+                <Reveal as="li" key={product.id} delay={Math.min(index * 0.04, 0.28)}>
                   <div>
                     <Link
                       to={productPath(product)}
@@ -117,13 +117,15 @@ export function ProductsCatalogSection() {
                       className="group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2"
                     >
                       <div className="plate plate-frame plate-hover relative aspect-[4/5] overflow-hidden bg-surface-sunken">
-                        <OptimizedImage
+                        <ParallaxImage
                           src={productImage(product)}
                           alt={product.gallery[0]?.alt || `${product.name} from Kadamba`}
                           sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw"
                           width={900}
                           height={1125}
-                          className="h-full w-full object-cover transition-transform duration-700 ease-luxury group-hover:scale-105"
+                          className="absolute inset-0"
+                          imageClassName="transition-transform duration-700 ease-luxury group-hover:scale-105"
+                          speed={0.07}
                         />
                         <div
                           className="absolute inset-0 z-[1] bg-gradient-to-t from-espresso/60 via-transparent to-transparent"
@@ -144,14 +146,14 @@ export function ProductsCatalogSection() {
                           <h3 className="font-heading text-2xl leading-tight text-ink transition-colors group-hover:text-brand-strong">
                             {product.name}
                           </h3>
-                          <p className="mt-2 line-clamp-2 max-w-md text-sm leading-relaxed text-ink/55">
+                          <p className="mt-2 line-clamp-2 max-w-md text-sm leading-relaxed text-ink/70">
                             {product.publicDescription ||
                               product.description ||
                               'Made to measure in Kurnool.'}
                           </p>
                         </div>
                         <span
-                          className="mt-1 flex size-9 shrink-0 items-center justify-center rounded-full border border-ink/15 text-ink/40 transition-colors group-hover:border-brand-strong group-hover:text-brand-strong"
+                          className="mt-1 flex size-9 shrink-0 items-center justify-center rounded-full border border-ink/15 text-ink/65 transition-colors group-hover:border-brand-strong group-hover:text-brand-strong"
                           aria-hidden
                         >
                           <svg viewBox="0 0 24 24" className="size-3.5" fill="none">
@@ -166,7 +168,7 @@ export function ProductsCatalogSection() {
                         </span>
                       </div>
 
-                      <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1 border-t border-ink/10 pt-3 text-[0.58rem] uppercase tracking-[0.18em] text-ink/45">
+                      <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1 border-t border-ink/10 pt-3 text-[0.58rem] uppercase tracking-[0.18em] text-ink/65">
                         <span>
                           {product.indicativePriceRange ?? 'Price on consultation'}
                         </span>
@@ -177,14 +179,14 @@ export function ProductsCatalogSection() {
                       </div>
                     </Link>
                   </div>
-                </li>
+                </Reveal>
               ))}
             </ul>
           ) : null}
         </div>
 
         <div className="mt-16 flex flex-col gap-4 border-t border-ink/12 pt-8 sm:flex-row sm:items-center sm:justify-between">
-          <p className="max-w-xl text-sm leading-relaxed text-ink/55">
+          <p className="max-w-xl text-sm leading-relaxed text-ink/70">
             Nothing here is sold off a shelf. Choose a silhouette, book a fitting, and the studio
             will draft the pattern to your measurements in the cloth you choose.
           </p>
@@ -216,7 +218,7 @@ function FilterButton({
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2',
         active
           ? 'border-brand-strong text-ink'
-          : 'border-transparent text-ink/40 hover:text-ink/75',
+          : 'border-transparent text-ink/65 hover:text-ink/75',
       )}
     >
       {children}

@@ -5,23 +5,23 @@ export { brand };
 /** Fashion / atelier placeholders until gallery assets are wired. */
 const img = {
   bridal:
-    '/media/placeholders/bridal.jpg',
+    '/media/photos/bridal-red-lehenga.jpg',
   lehenga:
-    '/media/placeholders/lehenga.jpg',
+    '/media/photos/bridal-seated.jpg',
   saree:
-    '/media/placeholders/saree.jpg',
+    '/media/photos/saree-jodhpur.jpg',
   fabric:
-    '/media/placeholders/fabric.jpg',
+    '/media/photos/fabric-ivory.jpg',
   stitching:
-    '/media/placeholders/stitching.jpg',
+    '/media/photos/atelier-machine.jpg',
   boutique:
-    '/media/placeholders/boutique.jpg',
+    '/media/photos/boutique-racks.jpg',
   embroidery:
-    '/media/placeholders/embroidery.jpg',
+    '/media/photos/fabric-embroidery.jpg',
   jewelry:
-    '/media/placeholders/jewelry.jpg',
+    '/media/photos/jewelry-bridal.jpg',
   detail:
-    '/media/placeholders/fabric.jpg',
+    '/media/photos/fabric-ivory.jpg',
 };
 
 export type ServiceCategory = 'Bridal' | 'Traditional' | 'Tailoring' | 'Boutique';

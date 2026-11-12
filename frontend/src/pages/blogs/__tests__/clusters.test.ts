@@ -11,7 +11,7 @@ function post(overrides: Partial<BlogPost>): BlogPost {
     content: [],
     category: 'Bridal',
     tags: [],
-    coverImage: '/media/placeholders/bridal.jpg',
+    coverImage: '/media/photos/bridal-red-lehenga.jpg',
     coverAlt: 'Cloth',
     date: '2026-01-01',
     readMinutes: 4,

@@ -5,7 +5,7 @@ export { brand, whatsappHref };
 
 /** Soft fabric detail for the split invitation banner. */
 const bannerImage =
-  '/media/placeholders/lehenga.jpg';
+  '/media/photos/bridal-seated.jpg';
 
 /**
  * Request Service banner — personal atelier invitation (split, compact).

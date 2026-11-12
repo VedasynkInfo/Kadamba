@@ -15,11 +15,12 @@ export default function RequestServicePage() {
     <>
       <PageMeta {...staticPageMeta.requestService} />
       <PageHero
+        variant="consultation"
         eyebrow="Private consultation"
         title="Tell us about"
         accent="your occasion."
         description="A garment begins with a conversation, not a catalogue. Share the date, the idea and the budget, and the studio will prepare for your visit."
-        image="/media/placeholders/lehenga.jpg"
+        image="/media/photos/bridal-seated.jpg"
         imageAlt="Festive lehenga detail prepared for a personal fitting"
         size="standard"
         facts={[

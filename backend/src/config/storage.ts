@@ -29,12 +29,21 @@ export const optimizedDir = path.join(uploadsDir, 'optimized');
 /** Public URL prefix that maps to `uploadsDir`. */
 export const UPLOAD_URL_PREFIX = '/uploads';
 
-if (env.uploadStorage !== 'local') {
-  // Only local disk storage is implemented (see config/env.ts). Surface the
-  // misconfiguration loudly rather than silently writing somewhere unexpected.
+if (env.uploadStorage === 'azure' || env.uploadStorage === 'blob') {
+  const hasCreds = Boolean(
+    env.azureStorage.connectionString ||
+      (env.azureStorage.account && env.azureStorage.key),
+  );
+  if (!hasCreds) {
+    logger.warn(
+      { uploadStorage: env.uploadStorage, uploadsDir },
+      'UPLOAD_STORAGE is set to Azure, but AZURE_STORAGE_CONNECTION_STRING or AZURE_STORAGE_ACCOUNT/KEY is missing — falling back to local disk',
+    );
+  }
+} else if (env.uploadStorage !== 'local') {
   logger.warn(
     { uploadStorage: env.uploadStorage, uploadsDir },
-    'UPLOAD_STORAGE is not "local"; only local disk storage is implemented — using local disk',
+    'UPLOAD_STORAGE is unknown; supported values are "local" and "azure" — using local disk',
   );
 }
 

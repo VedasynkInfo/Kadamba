@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { OptimizedImage } from '@/components/media/OptimizedImage';
+import { ParallaxImage } from '@/components/motion/ParallaxImage';
 import { Reveal, SectionHead } from '@/components/site';
 import { usePublicContent } from '@/hooks/usePublicContent';
 import { plate } from '../content';
@@ -60,11 +60,12 @@ export function GalleryRailSection() {
               className="group relative w-[76vw] shrink-0 sm:w-[42vw] lg:w-[26vw]"
             >
               <div className="plate plate-frame plate-hover aspect-[4/5] w-full">
-                <OptimizedImage
+                <ParallaxImage
                   src={item.src}
                   alt={`${item.title} — ${item.category}`}
                   sizes="(min-width: 1024px) 26vw, 76vw"
-                  className="h-full w-full object-cover"
+                  className="absolute inset-0"
+                  speed={0.06 + (index % 3) * 0.02}
                 />
                 <span className="absolute inset-x-0 bottom-0 z-[3] bg-gradient-to-t from-espresso/85 via-espresso/30 to-transparent p-5">
                   <span className="block text-[0.55rem] font-semibold uppercase tracking-[0.26em] text-gold/85">
@@ -75,7 +76,7 @@ export function GalleryRailSection() {
                   </span>
                 </span>
               </div>
-              <span className="mt-3 flex items-center justify-between text-[0.55rem] uppercase tracking-[0.24em] text-ink/40">
+              <span className="mt-3 flex items-center justify-between text-[0.55rem] uppercase tracking-[0.24em] text-ink/65">
                 <span>{String(index + 1).padStart(2, '0')}</span>
                 <span className="flex items-center gap-2 transition-colors group-hover:text-brand-strong">
                   View
@@ -88,7 +89,7 @@ export function GalleryRailSection() {
       </Reveal>
 
       <div className="house-container mt-6">
-        <p className="text-[0.58rem] uppercase tracking-[0.26em] text-ink/35">
+        <p className="text-[0.58rem] uppercase tracking-[0.26em] text-ink/65">
           Drag or scroll sideways &middot; {items.length} plates
         </p>
       </div>

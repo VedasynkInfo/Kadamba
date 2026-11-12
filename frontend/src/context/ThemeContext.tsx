@@ -56,12 +56,19 @@ export function applyThemeVariables(theme: WebsiteSettings['theme']) {
   }
   if (theme.accent) {
     // Text and icons cannot use the raw accent: a studio's gold may read on
-    // espresso and vanish on cream. Derive the text-safe variant from the pair
-    // actually in use, so every theme change keeps links legible.
-    root.style.setProperty(
-      '--color-brand-strong',
-      readableOn(theme.publicBg || DEFAULT_THEME_TOKENS.publicBg, theme.accent),
+    // espresso and vanish on cream. Derive the text-safe variant from every
+    // light surface actually in use — page, sunken band and card — so a link
+    // that passes on the page background does not fail on the darker band.
+    const lightSurfaces = [
+      theme.publicBg || DEFAULT_THEME_TOKENS.publicBg,
+      theme.publicSurface || DEFAULT_THEME_TOKENS.publicSurface,
+      theme.publicCard || DEFAULT_THEME_TOKENS.publicCard,
+    ];
+    const textSafe = lightSurfaces.reduce(
+      (colour, background) => readableOn(background, colour, 5),
+      theme.accent,
     );
+    root.style.setProperty('--color-brand-strong', textSafe);
   }
   if (theme.adminBg) {
     root.style.setProperty('--admin-bg', theme.adminBg);

@@ -48,7 +48,7 @@ export const DEFAULT_THEME_TOKENS: Required<WebsiteSettings['theme']> = {
   adminPrimary: '#b8892b',
   adminPrimaryText: '#17140f',
   adminAccent: '#c9a227',
-  fontFamily: 'Syne, sans-serif',
+  fontFamily: "'Syne Variable', sans-serif",
 };
 
 /**

@@ -1,13 +1,12 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { OptimizedImage } from '@/components/media/OptimizedImage';
+import { ParallaxImage } from '@/components/motion/ParallaxImage';
 import { ClipReveal } from '@/components/motion/ClipReveal';
 import { Button, Input, Section, SectionIntro } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { usePublicContent } from '@/hooks/usePublicContent';
 import { ContentEmpty, ContentError, ContentLoading } from '@/components/feedback/ContentState';
-import { fadeUp, staggerChildren } from '@/motion/variants';
 import { cn } from '@/utils/cn';
 import {
   filterProjects,
@@ -102,12 +101,15 @@ export function PortfolioCatalogSection() {
           <motion.ul
             key={`${category}-${query}`}
             className="mt-12 grid list-none grid-cols-1 gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3"
-            variants={reduced ? undefined : staggerChildren}
-            initial={reduced ? false : 'hidden'}
-            animate="visible"
           >
-            {filtered.map((project) => (
-              <motion.li key={project.id} variants={reduced ? undefined : fadeUp}>
+            {filtered.map((project, index) => (
+              <motion.li
+                key={project.id}
+                initial={reduced ? false : { opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-8%' }}
+                transition={{ duration: 0.9, delay: reduced ? 0 : Math.min(index * 0.06, 0.35), ease: [0.22, 1, 0.36, 1] }}
+              >
                 <ProjectTile
                   project={project}
                   onOpen={() => navigate(`/portfolio/${project.slug}`)}
@@ -132,13 +134,15 @@ function ProjectTile({ project, onOpen }: { project: PortfolioProject; onOpen: (
       )}
     >
       <ClipReveal className="relative aspect-[3/4] bg-surface-sunken">
-        <OptimizedImage
+        <ParallaxImage
           sizes="(min-width: 1200px) 368px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
           src={project.coverImage}
           alt={project.coverAlt}
-          className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
+          className="absolute inset-0"
+          imageClassName="transition duration-700 ease-out group-hover:scale-[1.04]"
           width={900}
           height={1200}
+          speed={0.08}
         />
         <div
           className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent opacity-80 transition group-hover:opacity-95"

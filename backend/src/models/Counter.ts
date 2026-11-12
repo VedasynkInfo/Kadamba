@@ -23,7 +23,7 @@ export async function getNextSequence(key: string, initialFallback?: number): Pr
   const counter = await Counter.findByIdAndUpdate(
     key,
     incUpdate,
-    { new: true, upsert: true }
+    { returnDocument: 'after', upsert: true }
   );
 
   if (initialFallback !== undefined && counter.seq < initialFallback) {
@@ -31,7 +31,7 @@ export async function getNextSequence(key: string, initialFallback?: number): Pr
     const updated = await Counter.findByIdAndUpdate(
       key,
       setUpdate,
-      { new: true }
+      { returnDocument: 'after' }
     );
     return updated?.seq ?? initialFallback;
   }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { OptimizedImage } from '@/components/media/OptimizedImage';
+import { ParallaxImage } from '@/components/motion/ParallaxImage';
 import { Section, SectionIntro } from '@/components/ui';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { fadeUp, staggerChildren } from '@/motion/variants';
@@ -44,13 +44,15 @@ export function ServiceGallerySection({ service }: ServiceGallerySectionProps) {
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus',
               )}
             >
-              <OptimizedImage
+              <ParallaxImage
                 sizes="(min-width: 1200px) 276px, (min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                 src={item.image}
                 alt={item.alt}
-                className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
+                className="absolute inset-0"
+                imageClassName="transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
                 width={800}
                 height={1000}
+                speed={0.07}
               />
               <div
                 className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-90"

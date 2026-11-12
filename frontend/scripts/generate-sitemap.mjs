@@ -20,8 +20,19 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
 
-const siteOrigin = (process.env.SITEMAP_SITE_URL || 'https://kadambastudio.com').replace(/\/$/, '');
-const apiOrigin = process.env.SITEMAP_API_URL?.replace(/\/$/, '');
+const siteOrigin = (
+  process.env.SITEMAP_SITE_URL ||
+  process.env.VITE_SITE_URL ||
+  'https://kadambastudio.com'
+).replace(/\/$/, '');
+let apiOrigin = (
+  process.env.SITEMAP_API_URL ||
+  process.env.PRERENDER_API_URL ||
+  process.env.VITE_API_URL
+)?.replace(/\/$/, '');
+// PRERENDER_API_URL is documented as an origin (no `/api`), while
+// SITEMAP_API_URL is the API base. Accept either shape.
+if (apiOrigin && !/\/api$/i.test(apiOrigin)) apiOrigin = `${apiOrigin}/api`;
 
 /**
  * The static, indexable routes.
@@ -114,10 +125,11 @@ async function fetchList(pathname, params = {}) {
 async function collect() {
   const routes = [...STATIC_ROUTES];
 
-  const [products, blogs, services] = await Promise.all([
-    fetchList('/products', { limit: 500 }),
-    fetchList('/blogs', { limit: 500 }),
-    fetchList('/services', { limit: 200 }),
+  const [products, blogs, services, portfolio] = await Promise.all([
+    fetchList('/products', { limit: 500, published: true }),
+    fetchList('/blogs', { limit: 500, published: true }),
+    fetchList('/services', { limit: 200, published: true }),
+    fetchList('/portfolio', { limit: 200, published: true }),
   ]);
 
   const seen = new Set(routes.map((route) => route.path));
@@ -139,6 +151,9 @@ async function collect() {
   }
   for (const service of services) {
     add(service, '/services', '0.8', 'monthly', service?.updatedAt);
+  }
+  for (const project of portfolio) {
+    add(project, '/portfolio', '0.7', 'monthly', project?.updatedAt);
   }
 
   return routes;

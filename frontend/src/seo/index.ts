@@ -15,6 +15,7 @@ export {
   serviceJsonLd,
   creativeWorkJsonLd,
   productJsonLd,
+  imageGalleryJsonLd,
   faqJsonLd,
   itemListJsonLd,
 } from './JsonLd';

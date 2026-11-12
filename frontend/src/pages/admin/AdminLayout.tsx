@@ -44,7 +44,7 @@ export function AdminLayout() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, []);
 
-  const activeLogo = logoDarkUrl || logoUrl;
+  const activeLogo = logoUrl || logoDarkUrl || '/media/brand/kadamba-logo.png';
 
   const toggleCollapse = () => {
     setCollapsed((prev) => {
@@ -95,7 +95,7 @@ export function AdminLayout() {
                           alt={brand.shortName}
                           responsive={false}
                           priority
-                          className="h-7 w-auto object-contain"
+                          className="h-10 w-auto max-w-[170px] object-contain"
                         />
                       ) : (
                         <p className="font-heading text-xl font-bold tracking-wide text-brand-strong">

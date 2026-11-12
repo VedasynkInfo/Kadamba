@@ -61,8 +61,8 @@ export function FilterRow({
                   ? 'border-gold text-gold'
                   : 'border-brand-strong text-ink'
                 : dark
-                  ? 'border-transparent text-ink-inverse/45 hover:text-ink-inverse/80'
-                  : 'border-transparent text-ink/40 hover:text-ink/75',
+                  ? 'border-transparent text-ink-inverse/60 hover:text-ink-inverse/80'
+                  : 'border-transparent text-ink/65 hover:text-ink/75',
             )}
           >
             {option.label}

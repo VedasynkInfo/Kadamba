@@ -15,7 +15,11 @@ const skipInTest = () => env.isTest;
 /** Broad limiter mounted on the whole API to blunt scraping / abuse. */
 export const globalApiRateLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 300,
+  // A cold public page load costs 6–7 reads, so the old 300 budget was spent
+  // after ~45 page views and every collection then failed with 429. 1,500 is
+  // still a bounded scrape guard but leaves room for a real browsing session
+  // (roughly 200+ cold page views) plus admin/portal traffic.
+  max: 1500,
   standardHeaders: true,
   legacyHeaders: false,
   validate,

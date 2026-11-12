@@ -3,7 +3,7 @@ import { OptimizedImage } from '@/components/media/OptimizedImage';
 import { Accordion, CtaBand, PageHero, Reveal, SectionHead } from '@/components/site';
 import { Section } from '@/components/ui';
 import { usePublicContent } from '@/hooks/usePublicContent';
-import { faqJsonLd, JsonLd, PageMeta } from '@/seo';
+import { faqJsonLd, JsonLd, localBusinessJsonLd, PageMeta } from '@/seo';
 import { getLocality, LOCALITIES, serviceLabels, type Locality } from './data';
 
 /**
@@ -23,23 +23,35 @@ export default function LocalityPage() {
   if (!locality) return <Navigate to="/kurnool" replace />;
 
   const path = `/kurnool/${locality.slug}`;
+  const rawDescription = `${locality.tagline} ${locality.visit}`;
+  const metaDescription =
+    rawDescription.length > 158
+      ? `${rawDescription
+          .slice(0, 159)
+          .replace(/\s+\S*$/, '')
+          .replace(/[,.;:!?\s]+$/, '')}…`
+      : rawDescription;
   const others = LOCALITIES.filter((item) => item.slug !== locality.slug);
 
   return (
     <>
       <PageMeta
-        title={`${locality.name} — bridal & tailoring`}
-        description={`${locality.tagline} ${locality.visit}`}
+        title={`${locality.name} - bridal & tailoring`}
+        description={metaDescription}
         path={path}
         image={locality.image}
       />
       <JsonLd
-        data={faqJsonLd(
-          locality.faqs.map((item) => ({ question: item.question, answer: item.answer })),
-        )}
+        data={[
+          localBusinessJsonLd(),
+          faqJsonLd(
+            locality.faqs.map((item) => ({ question: item.question, answer: item.answer })),
+          ),
+        ]}
       />
 
       <PageHero
+        variant="atlas"
         eyebrow="Kurnool & the district"
         title={`Dressing ${locality.shortName},`}
         accent="from one studio."
@@ -69,7 +81,7 @@ export default function LocalityPage() {
             </div>
 
             <div className="mt-9 border-t border-ink/12 pt-6">
-              <p className="text-[0.58rem] uppercase tracking-[0.24em] text-ink/40">
+              <p className="text-[0.58rem] uppercase tracking-[0.24em] text-ink/65">
                 This page speaks to
               </p>
               <p className="mt-3 font-heading text-lg text-ink">{locality.covers.join(' · ')}</p>
@@ -85,7 +97,7 @@ export default function LocalityPage() {
                 className="h-full w-full object-cover"
               />
             </div>
-            <p className="mt-4 flex items-baseline justify-between gap-4 text-[0.6rem] uppercase tracking-[0.26em] text-ink/40">
+            <p className="mt-4 flex items-baseline justify-between gap-4 text-[0.6rem] uppercase tracking-[0.26em] text-ink/65">
               <span>Cloth study</span>
               <span>Kurnool, A.P.</span>
             </p>
@@ -141,7 +153,7 @@ export default function LocalityPage() {
 
           <Reveal delay={0.08}>
             <div className="border border-ink/12 bg-surface-raised p-7">
-              <p className="text-[0.58rem] uppercase tracking-[0.24em] text-ink/40">The studio</p>
+              <p className="text-[0.58rem] uppercase tracking-[0.24em] text-ink/65">The studio</p>
               <div className="mt-4 space-y-1 text-sm leading-relaxed text-ink/70">
                 {(settings.addressLines.length
                   ? settings.addressLines
@@ -163,7 +175,7 @@ export default function LocalityPage() {
                     key={row.day}
                     className="flex items-baseline justify-between gap-6 border-b border-ink/12 py-3"
                   >
-                    <dt className="text-xs text-ink/55">{row.day}</dt>
+                    <dt className="text-xs text-ink/70">{row.day}</dt>
                     <dd className="text-xs tabular-nums text-ink/80">{row.time}</dd>
                   </div>
                 ))}
@@ -214,7 +226,7 @@ export default function LocalityPage() {
                 className="flex items-baseline justify-between gap-6 py-4 transition hover:text-brand-strong"
               >
                 <span className="font-heading text-xl text-ink">{item.name}</span>
-                <span className="text-[0.66rem] uppercase tracking-[0.18em] text-ink/45">
+                <span className="text-[0.66rem] uppercase tracking-[0.18em] text-ink/65">
                   Read the page
                 </span>
               </Link>
@@ -228,7 +240,7 @@ export default function LocalityPage() {
         title="Send the date."
         accent="We will send the plan."
         copy="Tell us the occasion, the date and where you are travelling from. The studio will answer with the service that fits and the first appointment available."
-        image="/media/placeholders/atelier.jpg"
+        image="/media/photos/atelier-sewing.jpg"
         action={{ label: 'Book a consultation', to: '/request-service' }}
       />
     </>

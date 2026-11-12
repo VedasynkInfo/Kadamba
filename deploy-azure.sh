@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# Kadamba Designer Studio — Automated Azure Cloud Shell Deployment Script
-# Provisions:
+# Kadamba Designer Studio — Idempotent Azure Cloud Shell Deployment Script
+# Provisions (or reuses existing resources in RESOURCE_GROUP):
 #   1. Resource Group
 #   2. Azure Storage Account + Public Blob Container (kadamba-media) + CORS
-#   3. Azure App Service (Frontend Hosting)
+#   3. Azure App Service (Frontend Hosting, auto-detecting supported Node LTS)
 #   4. Azure Container Registry (ACR)
 #   5. Azure Linux Virtual Machine (Backend API + Nginx)
 # ==============================================================================
@@ -13,28 +13,13 @@ set -euo pipefail
 RESOURCE_GROUP="${RESOURCE_GROUP:-kadamba-prod-rg}"
 LOCATION="${LOCATION:-centralindia}"
 SUFFIX="${SUFFIX:-$((1000 + RANDOM % 9000))}"
-
-APP_SERVICE_PLAN="${APP_SERVICE_PLAN:-kadamba-app-plan}"
-WEB_APP_NAME="${WEB_APP_NAME:-kadamba-web-${SUFFIX}}"
-STORAGE_ACCOUNT="${STORAGE_ACCOUNT:-kadambastore${SUFFIX}}"
 BLOB_CONTAINER="${BLOB_CONTAINER:-kadamba-media}"
-ACR_NAME="${ACR_NAME:-kadambaacr${SUFFIX}}"
+APP_SERVICE_PLAN="${APP_SERVICE_PLAN:-kadamba-app-plan}"
 VM_NAME="${VM_NAME:-kadamba-api-vm}"
 VM_SIZE="${VM_SIZE:-Standard_B1s}"
 FRONTEND_CORS_ORIGINS="${FRONTEND_CORS_ORIGINS:-*}"
 
-echo "=================================================================="
-echo " Kadamba Designer Studio — Azure Infrastructure Provisioning"
-echo "=================================================================="
-echo " Resource Group : $RESOURCE_GROUP"
-echo " Location       : $LOCATION"
-echo " Storage        : $STORAGE_ACCOUNT (container: $BLOB_CONTAINER)"
-echo " Frontend App   : $WEB_APP_NAME.azurewebsites.net"
-echo " ACR            : $ACR_NAME.azurecr.io"
-echo " Backend VM     : $VM_NAME ($VM_SIZE)"
-echo "=================================================================="
-
-# 1. Verify Azure CLI session (Azure Cloud Shell is pre-authenticated)
+# 1. Verify Azure CLI session
 if ! az account show --output none 2>/dev/null; then
   echo "[*] Logging into Azure..."
   az login
@@ -45,24 +30,48 @@ echo "[✓] Active Subscription: $SUBSCRIPTION_NAME"
 
 # 2. Resource Group
 echo ""
-echo "[1/5] Creating Resource Group '$RESOURCE_GROUP' in '$LOCATION'..."
+echo "[1/5] Ensuring Resource Group '$RESOURCE_GROUP' in '$LOCATION'..."
 az group create \
   --name "$RESOURCE_GROUP" \
   --location "$LOCATION" \
   --output table
 
+# Reuse existing storage account / webapp / acr in the RG if already created
+EXISTING_STORAGE=$(az storage account list -g "$RESOURCE_GROUP" --query "[0].name" -o tsv 2>/dev/null || true)
+STORAGE_ACCOUNT="${STORAGE_ACCOUNT:-${EXISTING_STORAGE:-kadambastore${SUFFIX}}}"
+
+EXISTING_WEBAPP=$(az webapp list -g "$RESOURCE_GROUP" --query "[0].name" -o tsv 2>/dev/null || true)
+WEB_APP_NAME="${WEB_APP_NAME:-${EXISTING_WEBAPP:-kadamba-web-${SUFFIX}}}"
+
+EXISTING_ACR=$(az acr list -g "$RESOURCE_GROUP" --query "[0].name" -o tsv 2>/dev/null || true)
+ACR_NAME="${ACR_NAME:-${EXISTING_ACR:-kadambaacr${SUFFIX}}}"
+
+echo "=================================================================="
+echo " Kadamba Designer Studio — Azure Infrastructure Provisioning"
+echo "=================================================================="
+echo " Resource Group : $RESOURCE_GROUP ($LOCATION)"
+echo " Storage        : $STORAGE_ACCOUNT (container: $BLOB_CONTAINER)"
+echo " Frontend App   : $WEB_APP_NAME.azurewebsites.net"
+echo " ACR            : $ACR_NAME.azurecr.io"
+echo " Backend VM     : $VM_NAME ($VM_SIZE)"
+echo "=================================================================="
+
 # 3. Azure Storage Account + Blob Container + CORS
 echo ""
-echo "[2/5] Creating Azure Storage Account '$STORAGE_ACCOUNT' & Blob Container '$BLOB_CONTAINER'..."
-az storage account create \
-  --name "$STORAGE_ACCOUNT" \
-  --resource-group "$RESOURCE_GROUP" \
-  --location "$LOCATION" \
-  --sku Standard_LRS \
-  --kind StorageV2 \
-  --allow-blob-public-access true \
-  --min-tls-version TLS1_2 \
-  --output table
+echo "[2/5] Ensuring Azure Storage Account '$STORAGE_ACCOUNT' & Container '$BLOB_CONTAINER'..."
+if ! az storage account show --name "$STORAGE_ACCOUNT" --resource-group "$RESOURCE_GROUP" --output none 2>/dev/null; then
+  az storage account create \
+    --name "$STORAGE_ACCOUNT" \
+    --resource-group "$RESOURCE_GROUP" \
+    --location "$LOCATION" \
+    --sku Standard_LRS \
+    --kind StorageV2 \
+    --allow-blob-public-access true \
+    --min-tls-version TLS1_2 \
+    --output table
+else
+  echo "[✓] Reusing existing Storage Account '$STORAGE_ACCOUNT'"
+fi
 
 STORAGE_KEY=$(az storage account keys list \
   --resource-group "$RESOURCE_GROUP" \
@@ -87,7 +96,7 @@ echo "[*] Configuring CORS rules on Blob service..."
 az storage cors clear \
   --services b \
   --account-name "$STORAGE_ACCOUNT" \
-  --account-key "$STORAGE_KEY" || true
+  --account-key "$STORAGE_KEY" 2>/dev/null || true
 
 az storage cors add \
   --services b \
@@ -104,20 +113,33 @@ echo "[✓] Blob Storage ready: https://${STORAGE_ACCOUNT}.blob.core.windows.net
 # 4. Azure App Service (Frontend)
 echo ""
 echo "[3/5] Provisioning Azure App Service for Frontend..."
-az appservice plan create \
-  --name "$APP_SERVICE_PLAN" \
-  --resource-group "$RESOURCE_GROUP" \
-  --location "$LOCATION" \
-  --sku B1 \
-  --is-linux \
-  --output table
+if ! az appservice plan show --name "$APP_SERVICE_PLAN" --resource-group "$RESOURCE_GROUP" --output none 2>/dev/null; then
+  az appservice plan create \
+    --name "$APP_SERVICE_PLAN" \
+    --resource-group "$RESOURCE_GROUP" \
+    --location "$LOCATION" \
+    --sku B1 \
+    --is-linux \
+    --output table
+else
+  echo "[✓] Reusing existing App Service Plan '$APP_SERVICE_PLAN'"
+fi
 
-az webapp create \
-  --name "$WEB_APP_NAME" \
-  --resource-group "$RESOURCE_GROUP" \
-  --plan "$APP_SERVICE_PLAN" \
-  --runtime "NODE:20-lts" \
-  --output table
+# Auto-detect supported Node LTS Linux runtime (NODE:20-lts / NODE:22-lts / NODE:24-lts)
+NODE_RUNTIME=$(az webapp list-runtimes --os-type linux -o tsv 2>/dev/null | grep -E '^NODE:[0-9]+-lts$' | sort -V | tail -n 1 || true)
+NODE_RUNTIME="${NODE_RUNTIME:-NODE:22-lts}"
+echo "[*] Using Linux App Service runtime: $NODE_RUNTIME"
+
+if ! az webapp show --name "$WEB_APP_NAME" --resource-group "$RESOURCE_GROUP" --output none 2>/dev/null; then
+  az webapp create \
+    --name "$WEB_APP_NAME" \
+    --resource-group "$RESOURCE_GROUP" \
+    --plan "$APP_SERVICE_PLAN" \
+    --runtime "$NODE_RUNTIME" \
+    --output table
+else
+  echo "[✓] Reusing existing Web App '$WEB_APP_NAME'"
+fi
 
 az webapp config set \
   --resource-group "$RESOURCE_GROUP" \
@@ -129,28 +151,36 @@ echo "[✓] Frontend App URL: https://${WEB_APP_NAME}.azurewebsites.net"
 
 # 5. Azure Container Registry (ACR)
 echo ""
-echo "[4/5] Creating Azure Container Registry '$ACR_NAME'..."
-az acr create \
-  --name "$ACR_NAME" \
-  --resource-group "$RESOURCE_GROUP" \
-  --location "$LOCATION" \
-  --sku Basic \
-  --admin-enabled true \
-  --output table
+echo "[4/5] Ensuring Azure Container Registry '$ACR_NAME'..."
+if ! az acr show --name "$ACR_NAME" --resource-group "$RESOURCE_GROUP" --output none 2>/dev/null; then
+  az acr create \
+    --name "$ACR_NAME" \
+    --resource-group "$RESOURCE_GROUP" \
+    --location "$LOCATION" \
+    --sku Basic \
+    --admin-enabled true \
+    --output table
+else
+  echo "[✓] Reusing existing ACR '$ACR_NAME'"
+fi
 
 # 6. Azure Linux Compute VM (Backend API)
 echo ""
-echo "[5/5] Creating Azure Linux VM '$VM_NAME' for Backend API..."
-az vm create \
-  --resource-group "$RESOURCE_GROUP" \
-  --name "$VM_NAME" \
-  --location "$LOCATION" \
-  --image Ubuntu2204 \
-  --size "$VM_SIZE" \
-  --admin-username azureuser \
-  --generate-ssh-keys \
-  --public-ip-sku Standard \
-  --output table
+echo "[5/5] Ensuring Azure Linux VM '$VM_NAME' for Backend API..."
+if ! az vm show --resource-group "$RESOURCE_GROUP" --name "$VM_NAME" --output none 2>/dev/null; then
+  az vm create \
+    --resource-group "$RESOURCE_GROUP" \
+    --name "$VM_NAME" \
+    --location "$LOCATION" \
+    --image Ubuntu2204 \
+    --size "$VM_SIZE" \
+    --admin-username azureuser \
+    --generate-ssh-keys \
+    --public-ip-sku Standard \
+    --output table
+else
+  echo "[✓] Reusing existing VM '$VM_NAME'"
+fi
 
 echo "[*] Opening ports 80 (HTTP), 443 (HTTPS), and 4000 (API) on '$VM_NAME'..."
 az vm open-port --resource-group "$RESOURCE_GROUP" --name "$VM_NAME" --port 80 --priority 1001 --output none
@@ -197,8 +227,3 @@ echo " Blob Container : https://${STORAGE_ACCOUNT}.blob.core.windows.net/${BLOB_
 echo " ACR Server     : ${ACR_NAME}.azurecr.io"
 echo " Saved env vars : ${ENV_OUT} (keep private, do not commit)"
 echo "=================================================================="
-echo ""
-echo "Next steps:"
-echo "  1. Copy the AZURE_STORAGE_* variables from ${ENV_OUT} into your backend .env."
-echo "  2. Point your MongoDB Atlas allow-list to ${VM_IP}."
-echo "  3. Bootstrap the VM following docs/AZURE_DEPLOYMENT.md."
